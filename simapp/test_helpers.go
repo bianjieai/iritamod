@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/stretchr/testify/require"
+
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/ed25519"
@@ -20,16 +20,17 @@ import (
 	tmtypes "github.com/tendermint/tendermint/types"
 	dbm "github.com/tendermint/tm-db"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator"
-
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/simapp/helpers"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin"
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator"
 )
 
 const BondDenom = sdk.DefaultBondDenom
@@ -62,11 +63,13 @@ func Setup(isCheckTx bool) *SimApp {
 
 		// add root admin
 		adminGenState := admin.GetGenesisStateFromAppState(app.appCodec, genesisState)
-		adminGenState.RoleAccounts = append(adminGenState.RoleAccounts,
+		adminGenState.RoleAccounts = append(
+			adminGenState.RoleAccounts,
 			admin.RoleAccount{
 				Address: sdk.AccAddress(tmhash.SumTruncated([]byte("rootAdmin"))),
 				Roles:   []admin.Role{admin.RoleRootAdmin},
-			})
+			},
+		)
 		adminGenStateBz := app.cdc.MustMarshalJSON(adminGenState)
 		genesisState[admin.ModuleName] = adminGenStateBz
 
@@ -82,13 +85,11 @@ func Setup(isCheckTx bool) *SimApp {
 		}
 
 		// Initialize the chain
-		app.InitChain(
-			abci.RequestInitChain{
-				Validators:      []abci.ValidatorUpdate{},
-				ConsensusParams: DefaultConsensusParams,
-				AppStateBytes:   stateBytes,
-			},
-		)
+		app.InitChain(abci.RequestInitChain{
+			Validators:      []abci.ValidatorUpdate{},
+			ConsensusParams: DefaultConsensusParams,
+			AppStateBytes:   stateBytes,
+		})
 	}
 
 	return app
@@ -150,13 +151,11 @@ func SetupWithGenesisValSet(t *testing.T, valSet *tmtypes.ValidatorSet, genAccs 
 	require.NoError(t, err)
 
 	// init chain will set the validator set and initialize the genesis accounts
-	app.InitChain(
-		abci.RequestInitChain{
-			Validators:      []abci.ValidatorUpdate{},
-			ConsensusParams: DefaultConsensusParams,
-			AppStateBytes:   stateBytes,
-		},
-	)
+	app.InitChain(abci.RequestInitChain{
+		Validators:      []abci.ValidatorUpdate{},
+		ConsensusParams: DefaultConsensusParams,
+		AppStateBytes:   stateBytes,
+	})
 
 	// commit genesis changes
 	app.Commit()
@@ -195,13 +194,11 @@ func SetupWithGenesisAccounts(genAccs []authtypes.GenesisAccount, balances ...ba
 		panic(err)
 	}
 
-	app.InitChain(
-		abci.RequestInitChain{
-			Validators:      []abci.ValidatorUpdate{},
-			ConsensusParams: DefaultConsensusParams,
-			AppStateBytes:   stateBytes,
-		},
-	)
+	app.InitChain(abci.RequestInitChain{
+		Validators:      []abci.ValidatorUpdate{},
+		ConsensusParams: DefaultConsensusParams,
+		AppStateBytes:   stateBytes,
+	})
 
 	app.Commit()
 	app.BeginBlock(abci.RequestBeginBlock{Header: tmproto.Header{Height: app.LastBlockHeight() + 1}})
@@ -281,8 +278,7 @@ func addTestAddrs(app *SimApp, ctx sdk.Context, accNum int, accAmt sdk.Int, stra
 func saveAccount(app *SimApp, ctx sdk.Context, addr sdk.AccAddress, initCoins sdk.Coins) {
 	acc := app.AccountKeeper.NewAccountWithAddress(ctx, addr)
 	app.AccountKeeper.SetAccount(ctx, acc)
-	_, err := app.BankKeeper.AddCoins(ctx, addr, initCoins)
-	if err != nil {
+	if _, err := app.BankKeeper.AddCoins(ctx, addr, initCoins); err != nil {
 		panic(err)
 	}
 }
@@ -380,7 +376,10 @@ func SignCheckDeliver(
 // GenSequenceOfTxs generates a set of signed transactions of messages, such
 // that they differ only by having the sequence numbers incremented between
 // every transaction.
-func GenSequenceOfTxs(txGen client.TxConfig, msgs []sdk.Msg, accNums []uint64, initSeqNums []uint64, numToGenerate int, priv ...crypto.PrivKey) ([]sdk.Tx, error) {
+func GenSequenceOfTxs(
+	txGen client.TxConfig, msgs []sdk.Msg, accNums []uint64,
+	initSeqNums []uint64, numToGenerate int, priv ...crypto.PrivKey,
+) ([]sdk.Tx, error) {
 	txs := make([]sdk.Tx, numToGenerate)
 	var err error
 	for i := 0; i < numToGenerate; i++ {

@@ -23,9 +23,7 @@ var _ paramtypes.ParamSet = (*Params)(nil)
 
 // NewParams creates a new Params instance
 func NewParams(historicalEntries uint32) Params {
-	return Params{
-		HistoricalEntries: historicalEntries,
-	}
+	return Params{HistoricalEntries: historicalEntries}
 }
 
 // Implements params.ParamSet
@@ -37,9 +35,7 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
-	return NewParams(
-		DefaultHistoricalEntries,
-	)
+	return NewParams(DefaultHistoricalEntries)
 }
 
 // unmarshal the current staking params value from store key or panic
@@ -48,25 +44,18 @@ func MustUnmarshalParams(cdc *codec.LegacyAmino, value []byte) Params {
 	if err != nil {
 		panic(err)
 	}
-
 	return params
 }
 
 // unmarshal the current staking params value from store key
 func UnmarshalParams(cdc *codec.LegacyAmino, value []byte) (params Params, err error) {
 	err = cdc.UnmarshalBinaryBare(value, &params)
-	if err != nil {
-		return
-	}
-
 	return
 }
 
 func validateHistoricalEntries(i interface{}) error {
-	_, ok := i.(uint32)
-	if !ok {
+	if _, ok := i.(uint32); !ok {
 		return fmt.Errorf("invalid parameter type: %T", i)
 	}
-
 	return nil
 }

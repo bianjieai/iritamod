@@ -3,14 +3,14 @@ package types
 import (
 	"testing"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/require"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	cautil "gitlab.bianjie.ai/irita-pro/iritamod/utils/ca"
 )
 
-var (
-	certStr = `-----BEGIN CERTIFICATE-----
+const certStr = `-----BEGIN CERTIFICATE-----
 MIIBazCCAR0CFGTwvE8oG+N3uNm1gonJBh6pie5TMAUGAytlcDBYMQswCQYDVQQG
 EwJDTjENMAsGA1UECAwEcm9vdDENMAsGA1UEBwwEcm9vdDENMAsGA1UECgwEcm9v
 dDENMAsGA1UECwwEcm9vdDENMAsGA1UEAwwEcm9vdDAeFw0yMDA2MTkwNzAyMzla
@@ -20,6 +20,8 @@ VQQDDAR0ZXN0MCowBQYDK2VwAyEA27WvK0goa1sSjsp6eb/xCkgjBEoPC9vfL/6h
 f0hqjHYwBQYDK2VwA0EA0fo8y+saUl+8UiyKpKdjv2DsqYWqmqJDz9u3NaioOvrQ
 Z0mOxdgj9wfO0t3voldCRUw3hCekjC+GEOoXH5ysDQ==
 -----END CERTIFICATE-----`
+
+var (
 	cert, _ = cautil.ReadCertificateFromMem([]byte(certStr))
 	pk, _   = cautil.GetPubkeyFromCert(cert)
 	addr    = pk.Address()

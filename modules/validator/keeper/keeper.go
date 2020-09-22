@@ -3,6 +3,8 @@ package keeper
 import (
 	"fmt"
 
+	gogotypes "github.com/gogo/protobuf/types"
+
 	"github.com/tendermint/tendermint/crypto/tmhash"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
@@ -12,11 +14,9 @@ import (
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	stakingexported "github.com/cosmos/cosmos-sdk/x/staking/exported"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
-	gogotypes "github.com/gogo/protobuf/types"
-
-	cautil "gitlab.bianjie.ai/irita-pro/iritamod/utils/ca"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
+	cautil "gitlab.bianjie.ai/irita-pro/iritamod/utils/ca"
 )
 
 // keeper of the validator store
@@ -399,7 +399,7 @@ func (k *Keeper) TotalBondedTokens(ctx sdk.Context) sdk.Int {
 	total := sdk.NewInt(0)
 	k.IterateValidators(ctx,
 		func(index int64, validator stakingexported.ValidatorI) bool {
-			if validator.IsJailed() == false {
+			if !validator.IsJailed() {
 				total = total.Sub(validator.GetTokens())
 			}
 			return false
@@ -408,8 +408,10 @@ func (k *Keeper) TotalBondedTokens(ctx sdk.Context) sdk.Int {
 	return total
 }
 
-func (k *Keeper) IterateDelegations(ctx sdk.Context, delegator sdk.AccAddress, fn func(index int64, delegation stakingexported.DelegationI) (stop bool)) {
-	return
+func (k *Keeper) IterateDelegations(
+	ctx sdk.Context, delegator sdk.AccAddress,
+	fn func(index int64, delegation stakingexported.DelegationI) (stop bool),
+) {
 }
 
 func (k *Keeper) VerifyCert(ctx sdk.Context, certStr string) (cert cautil.Cert, err error) {
@@ -424,9 +426,9 @@ func (k *Keeper) VerifyCert(ctx sdk.Context, certStr string) (cert cautil.Cert, 
 		return cert, sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
 	}
 
-	err = cert.VerifyCertFromRoot(rootCert)
-	if err != nil {
+	if err = cert.VerifyCertFromRoot(rootCert); err != nil {
 		return cert, sdkerrors.Wrapf(types.ErrInvalidCert, "cannot be verified by root certificate, err: %s", err.Error())
 	}
+
 	return cert, nil
 }

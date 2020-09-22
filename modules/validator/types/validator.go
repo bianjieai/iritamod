@@ -4,11 +4,11 @@ import (
 	"sort"
 	"strings"
 
+	"github.com/tendermint/tendermint/crypto"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingexported "github.com/cosmos/cosmos-sdk/x/staking/exported"
-	"github.com/tendermint/tendermint/crypto"
 )
 
 var _ stakingexported.ValidatorI = Validator{}
@@ -17,12 +17,14 @@ var _ stakingexported.ValidatorI = Validator{}
 const DoNotModifyDesc = "[do-not-modify]"
 
 // NewValidator creates a new MsgCreateValidator instance.
-func NewValidator(id tmbytes.HexBytes,
+func NewValidator(
+	id tmbytes.HexBytes,
 	name, description string,
 	pubKey crypto.PubKey,
 	cert string,
 	power int64,
-	operator sdk.AccAddress) Validator {
+	operator sdk.AccAddress,
+) Validator {
 	var pkStr string
 	if pubKey != nil {
 		pkStr = sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pubKey)

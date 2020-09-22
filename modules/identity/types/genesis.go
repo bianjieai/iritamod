@@ -1,12 +1,8 @@
 package types
 
 // NewGenesisState constructs a new GenesisState instance
-func NewGenesisState(
-	identities []Identity,
-) *GenesisState {
-	return &GenesisState{
-		Identities: identities,
-	}
+func NewGenesisState(identities []Identity) *GenesisState {
+	return &GenesisState{Identities: identities}
 }
 
 // DefaultGenesisState gets the raw genesis raw message for testing

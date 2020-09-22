@@ -26,8 +26,7 @@ func NewHandler(k Keeper) sdk.Handler {
 }
 
 func handleMsgCreateIdentity(ctx sdk.Context, k Keeper, msg *MsgCreateIdentity) (*sdk.Result, error) {
-	err := k.CreateIdentity(ctx, msg.Id, msg.PubKey, msg.Certificate, msg.Credentials, msg.Owner)
-	if err != nil {
+	if err := k.CreateIdentity(ctx, msg.Id, msg.PubKey, msg.Certificate, msg.Credentials, msg.Owner); err != nil {
 		return nil, err
 	}
 
@@ -48,8 +47,7 @@ func handleMsgCreateIdentity(ctx sdk.Context, k Keeper, msg *MsgCreateIdentity) 
 }
 
 func handleMsgUpdateIdentity(ctx sdk.Context, k Keeper, msg *MsgUpdateIdentity) (*sdk.Result, error) {
-	err := k.UpdateIdentity(ctx, msg.Id, msg.PubKey, msg.Certificate, msg.Credentials, msg.Owner)
-	if err != nil {
+	if err := k.UpdateIdentity(ctx, msg.Id, msg.PubKey, msg.Certificate, msg.Credentials, msg.Owner); err != nil {
 		return nil, err
 	}
 

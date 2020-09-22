@@ -48,21 +48,27 @@ func (q Querier) Validators(c context.Context, req *types.QueryValidatorsRequest
 	var validators []types.Validator
 
 	validatorStore := prefix.NewStore(store, types.ValidatorsKey)
-	pageRes, err := query.Paginate(validatorStore, req.Pagination, func(key []byte, value []byte) error {
-		var validator types.Validator
-		err := q.cdc.UnmarshalBinaryBare(value, &validator)
-		if err != nil {
-			return err
-		}
+	pageRes, err := query.Paginate(
+		validatorStore,
+		req.Pagination,
+		func(key []byte, value []byte) error {
+			var validator types.Validator
+			if err := q.cdc.UnmarshalBinaryBare(value, &validator); err != nil {
+				return err
+			}
 
-		validators = append(validators, validator)
-		return nil
-	})
+			validators = append(validators, validator)
+			return nil
+		},
+	)
 	if err != nil {
 		return nil, err
 	}
 
-	return &types.QueryValidatorsResponse{Validators: validators, Pagination: pageRes}, nil
+	return &types.QueryValidatorsResponse{
+		Validators: validators,
+		Pagination: pageRes,
+	}, nil
 }
 
 // Params queries the parameters of the validator module

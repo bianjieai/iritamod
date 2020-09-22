@@ -7,14 +7,16 @@ import (
 	"os"
 	"strings"
 
+	"github.com/spf13/cobra"
+	flag "github.com/spf13/pflag"
+	"github.com/spf13/viper"
+
+	cfg "github.com/tendermint/tendermint/config"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/spf13/cobra"
-	flag "github.com/spf13/pflag"
-	"github.com/spf13/viper"
-	cfg "github.com/tendermint/tendermint/config"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
 )
@@ -55,7 +57,7 @@ func NewCreateValidatorCmd() *cobra.Command {
 
 			txf := tx.NewFactoryCLI(clientCtx, cmd.Flags()).WithTxConfig(clientCtx.TxConfig).WithAccountRetriever(clientCtx.AccountRetriever)
 
-			txf, msg, err := BuildCreateValidatorMsg(clientCtx, txf)
+			_, msg, err := BuildCreateValidatorMsg(clientCtx, txf)
 			if err != nil {
 				return err
 			}
@@ -95,7 +97,6 @@ func NewUpdateValidatorCmd() *cobra.Command {
 			}
 
 			certPath := viper.GetString(FlagCert)
-
 			data, _ := ioutil.ReadFile(certPath)
 
 			id, err := hex.DecodeString(args[0])
@@ -122,7 +123,6 @@ func NewUpdateValidatorCmd() *cobra.Command {
 
 	cmd.Flags().AddFlagSet(FsUpdate)
 	flags.AddTxFlagsToCmd(cmd)
-
 	_ = cmd.MarkFlagRequired(flags.FlagFrom)
 
 	return cmd
@@ -173,21 +173,16 @@ func CreateValidatorMsgHelpers(ipDefault string) (fs *flag.FlagSet, pubkeyFlag, 
 
 	fsCreateValidator.AddFlagSet(FsCreate)
 
-	defaultsDesc = fmt.Sprintf(`
-	power:         %d
-`, defaultPower)
+	defaultsDesc = fmt.Sprintf("\n	power:		%d\n", defaultPower)
 
 	return fsCreateValidator, FlagCert, FlagPower, defaultsDesc
 }
 
 // prepare flags in config
-func PrepareFlagsForTxCreateValidator(
-	config *cfg.Config, nodeID, chainID string, cert string,
-) {
+func PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID, chainID string, cert string) {
 	ip := viper.GetString(FlagIP)
 	if ip == "" {
-		_, _ = fmt.Fprintf(os.Stderr, "couldn't retrieve an external IP; "+
-			"the tx's memo field will be unset")
+		_, _ = fmt.Fprintf(os.Stderr, "couldn't retrieve an external IP; the tx's memo field will be unset")
 	}
 
 	if len(strings.TrimSpace(viper.GetString(FlagNodeID))) > 0 {

@@ -16,8 +16,9 @@ var (
 )
 
 // NewMsgCreateValidator creates a new MsgCreateValidator instance.
-func NewMsgCreateValidator(name, description string, cert string, power int64,
-	operator sdk.AccAddress) *MsgCreateValidator {
+func NewMsgCreateValidator(
+	name, description string, cert string, power int64, operator sdk.AccAddress,
+) *MsgCreateValidator {
 	return &MsgCreateValidator{
 		Name:        name,
 		Certificate: cert,
@@ -64,8 +65,9 @@ func (m MsgCreateValidator) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateValidator creates a new MsgUpdateValidator instance.
-func NewMsgUpdateValidator(id tmbytes.HexBytes, name, description string, cert string, power int64,
-	operator sdk.AccAddress) *MsgUpdateValidator {
+func NewMsgUpdateValidator(
+	id tmbytes.HexBytes, name, description string, cert string, power int64, operator sdk.AccAddress,
+) *MsgUpdateValidator {
 	return &MsgUpdateValidator{
 		Id:          id,
 		Name:        name,

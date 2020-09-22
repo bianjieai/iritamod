@@ -1,11 +1,10 @@
 package keeper
 
 import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
-
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // GetHistoricalInfo gets the historical info at a given height
@@ -93,8 +92,7 @@ func (k Keeper) TrackHistoricalInfo(ctx sdk.Context) {
 	// over the historical entries starting from the most recent version to be pruned
 	// and then return at the first empty entry.
 	for i := ctx.BlockHeight() - int64(entryNum); i >= 0; i-- {
-		_, found := k.GetHistoricalInfo(ctx, i)
-		if found {
+		if _, found := k.GetHistoricalInfo(ctx, i); found {
 			k.DeleteHistoricalInfo(ctx, i)
 		} else {
 			break

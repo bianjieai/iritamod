@@ -3,11 +3,10 @@ package cli
 import (
 	"context"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
-
-	"github.com/spf13/cobra"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
 )

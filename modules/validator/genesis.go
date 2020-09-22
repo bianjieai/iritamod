@@ -4,14 +4,14 @@ import (
 	"errors"
 	"fmt"
 
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 
-	cautil "gitlab.bianjie.ai/irita-pro/iritamod/utils/ca"
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
+	cautil "gitlab.bianjie.ai/irita-pro/iritamod/utils/ca"
 )
 
 // InitGenesis - store genesis validator set
@@ -81,8 +81,7 @@ func validateGenesisStateValidators(rootCert cautil.Cert, validators []Validator
 			return sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
 		}
 
-		err = cautil.VerifyCertFromRoot(cert, rootCert)
-		if err != nil {
+		if err = cautil.VerifyCertFromRoot(cert, rootCert); err != nil {
 			return sdkerrors.Wrapf(types.ErrInvalidCert, "cannot be verified by root certificate, err: %s", err.Error())
 		}
 

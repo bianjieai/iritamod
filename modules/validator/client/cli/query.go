@@ -4,14 +4,12 @@ import (
 	"context"
 	"encoding/hex"
 	"fmt"
-	"strings"
 
-	"github.com/cosmos/cosmos-sdk/version"
+	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-
-	"github.com/spf13/cobra"
+	"github.com/cosmos/cosmos-sdk/version"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
 )
@@ -47,8 +45,7 @@ func GetCmdQueryValidator() *cobra.Command {
 			}
 
 			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err = client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
-			if err != nil {
+			if clientCtx, err = client.ReadQueryCommandFlags(clientCtx, cmd.Flags()); err != nil {
 				return err
 			}
 
@@ -86,9 +83,7 @@ func GetCmdQueryValidators() *cobra.Command {
 
 			res, err := queryClient.Validators(
 				context.Background(),
-				&types.QueryValidatorsRequest{
-					Pagination: pageReq,
-				},
+				&types.QueryValidatorsRequest{Pagination: pageReq},
 			)
 			if err != nil {
 				return err
@@ -106,18 +101,11 @@ func GetCmdQueryValidators() *cobra.Command {
 // GetCmdQueryParams implements the params query command.
 func GetCmdQueryParams() *cobra.Command {
 	return &cobra.Command{
-		Use:   "params",
-		Args:  cobra.NoArgs,
-		Short: "Query the current validator parameters information",
-		Long: strings.TrimSpace(
-			fmt.Sprintf(`Query values set as validator parameters.
-
-Example:
-$ %s query validator params
-`,
-				version.AppName,
-			),
-		),
+		Use:     "params",
+		Args:    cobra.NoArgs,
+		Short:   "Query the current validator parameters information",
+		Long:    "Query values set as validator parameters.",
+		Example: fmt.Sprintf("$ %s query validator params", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())

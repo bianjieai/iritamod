@@ -226,15 +226,21 @@ func (k Keeper) GetIdentity(ctx sdk.Context, id tmbytes.HexBytes) (identity type
 	pubKeys := make([]types.PubKeyInfo, 0)
 	certificates := make([]string, 0)
 
-	k.IteratePubKeys(ctx, id, func(pubKey types.PubKeyInfo) (stop bool) {
-		pubKeys = append(pubKeys, pubKey)
-		return false
-	})
+	k.IteratePubKeys(
+		ctx, id,
+		func(pubKey types.PubKeyInfo) (stop bool) {
+			pubKeys = append(pubKeys, pubKey)
+			return false
+		},
+	)
 
-	k.IterateCertificates(ctx, id, func(cert string) (stop bool) {
-		certificates = append(certificates, cert)
-		return false
-	})
+	k.IterateCertificates(
+		ctx, id,
+		func(cert string) (stop bool) {
+			certificates = append(certificates, cert)
+			return false
+		},
+	)
 
 	credentials, _ := k.GetCredentials(ctx, id)
 

@@ -4,31 +4,19 @@ import (
 	"fmt"
 	"net/http"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/client/utils"
-
 	"github.com/gorilla/mux"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/client/utils"
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
 )
 
 func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
-	r.HandleFunc(
-		fmt.Sprintf("/validator/validators/{%s}", paramValidatorID),
-		queryValidator(clientCtx),
-	).Methods("GET")
-
-	r.HandleFunc(
-		"/validator/validators",
-		queryValidators(clientCtx),
-	).Methods("GET")
-
-	r.HandleFunc(
-		"/validator/parameters",
-		queryParameters(clientCtx),
-	).Methods("GET")
+	r.HandleFunc(fmt.Sprintf("/validator/validators/{%s}", paramValidatorID), queryValidator(clientCtx)).Methods("GET")
+	r.HandleFunc("/validator/validators", queryValidators(clientCtx)).Methods("GET")
+	r.HandleFunc("/validator/parameters", queryParameters(clientCtx)).Methods("GET")
 }
 
 // http request handler to query signing info

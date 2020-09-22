@@ -26,8 +26,7 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 // Validators must submit a transaction to unjail itself after
 // having been jailed (and thus unbonded) for downtime
 func handleMsgUnjail(ctx sdk.Context, msg MsgUnjailValidator, k Keeper) (*sdk.Result, error) {
-	err := k.HandleUnjail(ctx, msg)
-	if err != nil {
+	if err := k.HandleUnjail(ctx, msg); err != nil {
 		return nil, err
 	}
 	ctx.EventManager().EmitEvent(

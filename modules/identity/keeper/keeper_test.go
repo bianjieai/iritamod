@@ -15,10 +15,9 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/simapp"
-
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/keeper"
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/types"
+	"gitlab.bianjie.ai/irita-pro/iritamod/simapp"
 )
 
 var (

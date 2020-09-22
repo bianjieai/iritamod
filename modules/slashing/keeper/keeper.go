@@ -38,8 +38,7 @@ func (k Keeper) HandleValidatorSignature(ctx sdk.Context, addr crypto.Address, p
 	}
 
 	// fetch signing info
-	_, found := k.GetValidatorSigningInfo(ctx, consAddr)
-	if !found {
+	if _, found := k.GetValidatorSigningInfo(ctx, consAddr); !found {
 		logger.Info(fmt.Sprintf("Expected signing info for validator %s but not found", consAddr))
 		return
 	}

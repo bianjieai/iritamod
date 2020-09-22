@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/spf13/cobra"
+
 	"github.com/cosmos/cosmos-sdk/client"
-
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
-
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/spf13/cobra"
+
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
 )
 
 func NewTxCmd() *cobra.Command {
@@ -37,12 +37,16 @@ func NewTxCmd() *cobra.Command {
 func NewAddRolesCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "add-roles [address] [roles]",
-		Long: strings.TrimSpace(
-			fmt.Sprintf(`Add roles to an account.
-Auth options: %s, %s, %s, %s, %s, %s, %s
-`, types.RolePermAdmin, types.RoleBlacklistAdmin, types.RoleNodeAdmin, types.RoleParamAdmin, types.RolePowerUser,
-				types.RoleRelayerUser, types.RoleIDAdmin,
-			)),
+		Long: strings.TrimSpace(fmt.Sprintf(
+			"Add roles to an account.\n\n Auth options: %s, %s, %s, %s, %s, %s, %s\n",
+			types.RolePermAdmin,
+			types.RoleBlacklistAdmin,
+			types.RoleNodeAdmin,
+			types.RoleParamAdmin,
+			types.RolePowerUser,
+			types.RoleRelayerUser,
+			types.RoleIDAdmin,
+		)),
 		Args: cobra.MinimumNArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
@@ -85,11 +89,14 @@ Auth options: %s, %s, %s, %s, %s, %s, %s
 func NewRemoveRolesCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "remove-roles [address] [roles]",
-		Long: strings.TrimSpace(
-			fmt.Sprintf(`Remove roles from an account.
-Auth options: %s, %s, %s, %s, %s
-`, types.RolePermAdmin, types.RoleBlacklistAdmin, types.RoleNodeAdmin, types.RoleParamAdmin, types.RolePowerUser,
-			)),
+		Long: strings.TrimSpace(fmt.Sprintf(
+			"Remove roles from an account.\n\nAuth options: %s, %s, %s, %s, %s",
+			types.RolePermAdmin,
+			types.RoleBlacklistAdmin,
+			types.RoleNodeAdmin,
+			types.RoleParamAdmin,
+			types.RolePowerUser,
+		)),
 		Args: cobra.MinimumNArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
