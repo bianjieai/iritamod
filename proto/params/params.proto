@@ -1,0 +1,24 @@
+syntax = "proto3";
+package iritamod.params;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/params/types";
+option (gogoproto.goproto_getters_all) = false;
+
+// MsgUpdateParams defines an SDK message for updating params.
+message MsgUpdateParams {
+  option (gogoproto.equal) = true;
+
+  repeated ParamChange changes = 1 [(gogoproto.nullable) = false];
+  bytes operator               = 2 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+}
+
+// ParamChange defines a parameter change.
+message ParamChange {
+  option (gogoproto.equal) = true;
+
+  string subspace = 1;
+  string key      = 2;
+  string value    = 3;
+}

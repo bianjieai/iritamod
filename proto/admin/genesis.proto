@@ -1,0 +1,25 @@
+syntax = "proto3";
+package iritamod.admin;
+
+import "admin/admin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types";
+
+// GenesisState defines the admin module's genesis state.
+message GenesisState {
+    repeated RoleAccount role_accounts = 1 [
+      (gogoproto.moretags) = "yaml:\"role_accounts\"",
+      (gogoproto.nullable) = false
+    ];
+    repeated bytes black_list = 2 [
+      (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress",
+      (gogoproto.moretags) = "yaml:\"black_list\""
+    ];
+}
+
+// RoleAccount represents an account with roles.
+message RoleAccount {
+    bytes address = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+    repeated Role roles = 2;
+}

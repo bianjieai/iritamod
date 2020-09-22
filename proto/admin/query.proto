@@ -1,0 +1,39 @@
+syntax = "proto3";
+package iritamod.admin;
+
+import "admin/admin.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types";
+
+// Query defines the gRPC querier service for record module
+service Query {
+    // Roles queries the roles of a given address
+    rpc Roles (QueryRolesRequest) returns (QueryRolesResponse) {
+    }
+
+    // Blacklist queries the black list
+    rpc Blacklist (QueryBlacklistRequest) returns (QueryBlacklistResponse) {
+    }
+}
+
+// QueryRolesRequest is request type for the Query/Roles RPC method
+message QueryRolesRequest {
+    bytes address = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+}
+
+// QueryRolesResponse is response type for the Query/Roles RPC method
+message QueryRolesResponse {
+    repeated Role roles = 1;
+}
+
+// QueryBlacklistRequest is request type for the Query/Blacklist RPC method
+message QueryBlacklistRequest {
+}
+
+// QueryBlacklistResponse is response type for the Query/Blacklist RPC method
+message QueryBlacklistResponse {
+    repeated bytes addresses = 1 [
+        (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"
+    ];
+}
