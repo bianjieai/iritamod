@@ -1,13 +1,14 @@
 package cli
 
 import (
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/client/utils"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/types"
+	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
-	"github.com/spf13/cobra"
+
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/client/utils"
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/types"
 )
 
 func NewTxCmd() *cobra.Command {

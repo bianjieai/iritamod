@@ -3,9 +3,9 @@ package validator
 import (
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/keeper"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/keeper"
 )
 
 // BeginBlocker will persist the current header and validator set as a historical entry

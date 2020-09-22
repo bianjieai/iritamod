@@ -6,7 +6,7 @@ const (
 	EventTypeUpdateValidator = "update_validator"
 	EventTypeRemoveValidator = "remove_validator"
 
+	AttributeValueCategory = ModuleName
 	AttributeKeyValidator  = "validator"
 	AttributeKeyPubkey     = "pubkey"
-	AttributeValueCategory = ModuleName
 )

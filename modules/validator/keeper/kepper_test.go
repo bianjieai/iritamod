@@ -3,17 +3,17 @@ package keeper_test
 import (
 	"testing"
 
+	"github.com/stretchr/testify/suite"
+
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/stretchr/testify/suite"
-
-	"gitlab.bianjie.ai/irita-pro/iritamod/simapp"
-	cautil "gitlab.bianjie.ai/irita-pro/iritamod/utils/ca"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/keeper"
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
+	"gitlab.bianjie.ai/irita-pro/iritamod/simapp"
+	cautil "gitlab.bianjie.ai/irita-pro/iritamod/utils/ca"
 )
 
 type KeeperTestSuite struct {
@@ -69,12 +69,15 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 	suite.Equal(1, len(validators))
 	suite.Equal(validator, validators[0])
 
-	suite.keeper.IterateUpdateValidators(suite.ctx, func(index int64, pubkey string, power int64) bool {
-		suite.Equal(int64(0), index)
-		suite.Equal(sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pk), pubkey)
-		suite.Equal(msg.Power, power)
-		return false
-	})
+	suite.keeper.IterateUpdateValidators(
+		suite.ctx,
+		func(index int64, pubkey string, power int64) bool {
+			suite.Equal(int64(0), index)
+			suite.Equal(sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pk), pubkey)
+			suite.Equal(msg.Power, power)
+			return false
+		},
+	)
 }
 
 func (suite *KeeperTestSuite) TestUpdateValidator() {
@@ -161,12 +164,15 @@ func (suite *KeeperTestSuite) TestRemoveValidator() {
 	validators := suite.keeper.GetAllValidators(suite.ctx)
 	suite.Equal(0, len(validators))
 
-	suite.keeper.IterateUpdateValidators(suite.ctx, func(index int64, pubkey string, power int64) bool {
-		suite.Equal(int64(0), index)
-		suite.Equal(sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pk), pubkey)
-		suite.Equal(int64(0), power)
-		return false
-	})
+	suite.keeper.IterateUpdateValidators(
+		suite.ctx,
+		func(index int64, pubkey string, power int64) bool {
+			suite.Equal(int64(0), index)
+			suite.Equal(sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pk), pubkey)
+			suite.Equal(int64(0), power)
+			return false
+		},
+	)
 }
 
 const (

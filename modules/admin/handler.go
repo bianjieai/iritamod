@@ -29,8 +29,7 @@ func NewHandler(k Keeper) sdk.Handler {
 }
 
 func handleMsgAddRoles(ctx sdk.Context, msg *MsgAddRoles, k Keeper) (*sdk.Result, error) {
-	err := k.AddRoles(ctx, msg.Address, msg.Operator, msg.Roles...)
-	if err != nil {
+	if err := k.AddRoles(ctx, msg.Address, msg.Operator, msg.Roles...); err != nil {
 		return nil, err
 	}
 
@@ -50,8 +49,7 @@ func handleMsgAddRoles(ctx sdk.Context, msg *MsgAddRoles, k Keeper) (*sdk.Result
 }
 
 func handleMsgRemoveRoles(ctx sdk.Context, msg *MsgRemoveRoles, k Keeper) (*sdk.Result, error) {
-	err := k.RemoveRoles(ctx, msg.Address, msg.Operator, msg.Roles...)
-	if err != nil {
+	if err := k.RemoveRoles(ctx, msg.Address, msg.Operator, msg.Roles...); err != nil {
 		return nil, err
 	}
 
@@ -71,8 +69,7 @@ func handleMsgRemoveRoles(ctx sdk.Context, msg *MsgRemoveRoles, k Keeper) (*sdk.
 }
 
 func handleMsgBlockAccount(ctx sdk.Context, msg *MsgBlockAccount, k Keeper) (*sdk.Result, error) {
-	err := k.BlockAccount(ctx, msg.Address)
-	if err != nil {
+	if err := k.BlockAccount(ctx, msg.Address); err != nil {
 		return nil, err
 	}
 
@@ -92,8 +89,7 @@ func handleMsgBlockAccount(ctx sdk.Context, msg *MsgBlockAccount, k Keeper) (*sd
 }
 
 func handleMsgUnblockAccount(ctx sdk.Context, msg *MsgUnblockAccount, k Keeper) (*sdk.Result, error) {
-	err := k.UnblockAccount(ctx, msg.Address)
-	if err != nil {
+	if err := k.UnblockAccount(ctx, msg.Address); err != nil {
 		return nil, err
 	}
 

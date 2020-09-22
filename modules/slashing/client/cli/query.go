@@ -1,8 +1,9 @@
 package cli
 
 import (
-	slashingcli "github.com/cosmos/cosmos-sdk/x/slashing/client/cli"
 	"github.com/spf13/cobra"
+
+	slashingcli "github.com/cosmos/cosmos-sdk/x/slashing/client/cli"
 )
 
 // GetQueryCmd returns the cli query commands for this module

@@ -22,7 +22,5 @@ type QueryValidatorParams struct {
 }
 
 func NewQueryValidatorParams(id string) QueryValidatorParams {
-	return QueryValidatorParams{
-		ID: id,
-	}
+	return QueryValidatorParams{ID: id}
 }

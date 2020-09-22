@@ -27,7 +27,7 @@ var (
 func NewMsgCreateIdentity(
 	id tmbytes.HexBytes,
 	pubKey *PubKeyInfo,
-	certificate,
+	certificate string,
 	credentials string,
 	owner sdk.AccAddress,
 ) *MsgCreateIdentity {
@@ -72,7 +72,7 @@ func (msg MsgCreateIdentity) GetSigners() []sdk.AccAddress {
 func NewMsgUpdateIdentity(
 	id tmbytes.HexBytes,
 	pubKey *PubKeyInfo,
-	certificate,
+	certificate string,
 	credentials string,
 	owner sdk.AccAddress,
 ) *MsgUpdateIdentity {
@@ -117,7 +117,7 @@ func (msg MsgUpdateIdentity) GetSigners() []sdk.AccAddress {
 func ValidateIdentityFields(
 	id tmbytes.HexBytes,
 	pubKey *PubKeyInfo,
-	certificate,
+	certificate string,
 	credentials string,
 	owner sdk.AccAddress,
 ) error {

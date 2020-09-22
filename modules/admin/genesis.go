@@ -4,10 +4,11 @@ import (
 	"errors"
 	"fmt"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
+	abci "github.com/tendermint/tendermint/abci/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	abci "github.com/tendermint/tendermint/abci/types"
+
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
 )
 
 // InitGenesis - store genesis account role set

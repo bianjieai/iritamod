@@ -18,16 +18,11 @@ type Keeper struct {
 }
 
 // NewKeeper creates a new identity Keeper instance
-func NewKeeper(
-	cdc codec.Marshaler,
-	key sdk.StoreKey,
-) Keeper {
-	keeper := Keeper{
+func NewKeeper(cdc codec.Marshaler, key sdk.StoreKey) Keeper {
+	return Keeper{
 		storeKey: key,
 		cdc:      cdc,
 	}
-
-	return keeper
 }
 
 // Logger returns a module-specific logger.

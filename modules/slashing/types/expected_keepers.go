@@ -3,9 +3,10 @@
 package types
 
 import (
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingexported "github.com/cosmos/cosmos-sdk/x/staking/exported"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 )
 
 // AccountKeeper expected account keeper

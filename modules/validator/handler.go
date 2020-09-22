@@ -49,8 +49,7 @@ func handleMsgCreateValidator(ctx sdk.Context, msg *MsgCreateValidator, k keeper
 }
 
 func handleMsgUpdateValidator(ctx sdk.Context, msg *MsgUpdateValidator, k keeper.Keeper) (*sdk.Result, error) {
-	err := k.UpdateValidator(ctx, *msg)
-	if err != nil {
+	if err := k.UpdateValidator(ctx, *msg); err != nil {
 		return nil, err
 	}
 
@@ -70,8 +69,7 @@ func handleMsgUpdateValidator(ctx sdk.Context, msg *MsgUpdateValidator, k keeper
 }
 
 func handleMsgRemoveValidator(ctx sdk.Context, msg *MsgRemoveValidator, k keeper.Keeper) (*sdk.Result, error) {
-	err := k.RemoveValidator(ctx, *msg)
-	if err != nil {
+	if err := k.RemoveValidator(ctx, *msg); err != nil {
 		return nil, err
 	}
 

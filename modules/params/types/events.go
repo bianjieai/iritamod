@@ -4,6 +4,6 @@ package types
 const (
 	EventTypeUpdateParams = "update_params"
 
-	AttributeKeyParamKey   = "param_key"
 	AttributeValueCategory = ModuleName
+	AttributeKeyParamKey   = "param_key"
 )

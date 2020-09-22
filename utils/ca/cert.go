@@ -7,11 +7,12 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/tjfoc/gmsm/sm2"
+
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/algo"
 	ed25519util "github.com/tendermint/tendermint/crypto/ed25519"
 	tmsm2 "github.com/tendermint/tendermint/crypto/sm2"
-	"github.com/tjfoc/gmsm/sm2"
 )
 
 type Cert interface {
@@ -72,6 +73,8 @@ func GetPubkeyFromCert(cert Cert) (crypto.PubKey, error) {
 }
 
 func UnexpectedPubKeyAlgo(expected string, pubkey interface{}) error {
-	return fmt.Errorf("x509: signature algorithm specifies an %s public key, but have public key of type %T",
-		expected, pubkey)
+	return fmt.Errorf(
+		"x509: signature algorithm specifies an %s public key, but have public key of type %T",
+		expected, pubkey,
+	)
 }

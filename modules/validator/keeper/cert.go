@@ -1,8 +1,9 @@
 package keeper
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	gogotypes "github.com/gogo/protobuf/types"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
 )

@@ -1,11 +1,12 @@
 package keeper
 
 import (
+	abci "github.com/tendermint/tendermint/abci/types"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	abci "github.com/tendermint/tendermint/abci/types"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
 )
@@ -31,8 +32,7 @@ func NewQuerier(keeper Keeper, legacyQuerierCdc *codec.LegacyAmino) sdk.Querier 
 func queryRoles(ctx sdk.Context, req abci.RequestQuery, k Keeper, legacyQuerierCdc *codec.LegacyAmino) ([]byte, error) {
 	var params types.QueryRolesParams
 
-	err := legacyQuerierCdc.UnmarshalJSON(req.Data, &params)
-	if err != nil {
+	if err := legacyQuerierCdc.UnmarshalJSON(req.Data, &params); err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrJSONUnmarshal, err.Error())
 	}
 
@@ -49,8 +49,7 @@ func queryRoles(ctx sdk.Context, req abci.RequestQuery, k Keeper, legacyQuerierC
 func queryBlacklist(ctx sdk.Context, req abci.RequestQuery, k Keeper, legacyQuerierCdc *codec.LegacyAmino) ([]byte, error) {
 	var params types.QueryBlacklistParams
 
-	err := legacyQuerierCdc.UnmarshalJSON(req.Data, &params)
-	if err != nil {
+	if err := legacyQuerierCdc.UnmarshalJSON(req.Data, &params); err != nil {
 		return nil, sdkerrors.Wrap(sdkerrors.ErrJSONUnmarshal, err.Error())
 	}
 

@@ -1,8 +1,9 @@
 package keeper
 
 import (
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	gogotypes "github.com/gogo/protobuf/types"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
 )
@@ -47,12 +48,9 @@ func (k Keeper) IsPermAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
 
 func (k Keeper) IsAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
 	auth := k.GetAuth(ctx, address)
-	if (auth&types.RoleRootAdmin.Auth()) > 0 ||
+	return (auth&types.RoleRootAdmin.Auth()) > 0 ||
 		(auth&types.RolePermAdmin.Auth()) > 0 ||
 		(auth&types.RoleBlacklistAdmin.Auth()) > 0 ||
 		(auth&types.RoleNodeAdmin.Auth()) > 0 ||
-		(auth&types.RoleParamAdmin.Auth()) > 0 {
-		return true
-	}
-	return false
+		(auth&types.RoleParamAdmin.Auth()) > 0
 }

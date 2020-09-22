@@ -1,10 +1,11 @@
 package types
 
 import (
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 )
 
 var (

@@ -3,11 +3,11 @@ package keeper
 import (
 	"fmt"
 
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	gogotypes "github.com/gogo/protobuf/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	gogotypes "github.com/gogo/protobuf/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
 )
@@ -128,8 +128,11 @@ func (k Keeper) GetRoles(ctx sdk.Context) (roleAccounts []types.RoleAccount) {
 func (k Keeper) Access(ctx sdk.Context, signer sdk.AccAddress, auth types.Auth) error {
 	signerAuth := k.GetAuth(ctx, signer)
 	if !auth.Access(signerAuth) {
-		return sdkerrors.Wrapf(types.ErrUnauthorizedOperation,
-			"Required roles: %s; sender roles: %s. ", auth.Roles(), signerAuth.Roles())
+		return sdkerrors.Wrapf(
+			types.ErrUnauthorizedOperation,
+			"Required roles: %s; sender roles: %s. ",
+			auth.Roles(), signerAuth.Roles(),
+		)
 	}
 	return nil
 }

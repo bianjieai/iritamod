@@ -36,16 +36,13 @@ type AppModuleBasic struct {
 	cdc codec.Marshaler
 }
 
-var _ module.AppModuleBasic = AppModuleBasic{}
-
 // RegisterLegacyAminoCodec registers the params module's types for the given codec.
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	types.RegisterLegacyAminoCodec(cdc)
 }
 
 // RegisterGRPCRoutes registers the gRPC Gateway routes for the params module.
-func (a AppModuleBasic) RegisterGRPCRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-}
+func (a AppModuleBasic) RegisterGRPCRoutes(clientCtx client.Context, mux *runtime.ServeMux) {}
 
 // GetTxCmd returns the root tx command for the params module.
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
@@ -57,7 +54,7 @@ func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) 
 	types.RegisterInterfaces(registry)
 }
 
-//____________________________________________________________________________
+// ____________________________________________________________________________
 
 // AppModule implements an application module for the params module.
 type AppModule struct {
@@ -86,8 +83,7 @@ func (AppModule) Name() string {
 }
 
 // RegisterInvariants registers the params module invariants.
-func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {
-}
+func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
 
 // Route returns the message routing key for the params module.
 func (am AppModule) Route() sdk.Route {
@@ -110,29 +106,25 @@ func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONMarshaler, data j
 	return []abci.ValidatorUpdate{}
 }
 
-// ExportGenesis returns the exported genesis state as raw bytes for the params
-// module.
+// ExportGenesis returns the exported genesis state as raw bytes for the params module.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONMarshaler) json.RawMessage {
 	return nil
 }
 
 // BeginBlock returns the begin blocker for the params module.
-func (am AppModule) BeginBlock(ctx sdk.Context, _ abci.RequestBeginBlock) {
-}
+func (am AppModule) BeginBlock(ctx sdk.Context, _ abci.RequestBeginBlock) {}
 
-// EndBlock returns the end blocker for the params module. It returns no params
-// updates.
+// EndBlock returns the end blocker for the params module. It returns no params updates.
 func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
 	return []abci.ValidatorUpdate{}
 }
 
-//____________________________________________________________________________
+// ____________________________________________________________________________
 
 // AppModuleSimulation functions
 
 // GenerateGenesisState creates a randomized GenState of the params module.
-func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
-}
+func (AppModule) GenerateGenesisState(simState *module.SimulationState) {}
 
 // ProposalContents doesn't return any content functions for governance proposals.
 func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
@@ -145,8 +137,7 @@ func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
 }
 
 // RegisterStoreDecoder registers a decoder for params module's types
-func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
-}
+func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {}
 
 // WeightedOperations returns the all the params module operations with their respective weights.
 func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {

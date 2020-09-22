@@ -168,12 +168,16 @@ func NewSimApp(
 	bApp.GRPCQueryRouter().RegisterSimulateService(bApp.Simulate, interfaceRegistry, std.DefaultPublicKeyCodec{})
 
 	keys := sdk.NewKVStoreKeys(
-		authtypes.StoreKey, banktypes.StoreKey, slashingtypes.StoreKey,
+		authtypes.StoreKey,
+		banktypes.StoreKey,
+		slashingtypes.StoreKey,
 		paramstypes.StoreKey,
 		//gov.StoreKey,
 		upgradetypes.StoreKey,
 		evidencetypes.StoreKey,
-		validatortypes.StoreKey, admintypes.StoreKey, identitytypes.StoreKey,
+		validatortypes.StoreKey,
+		admintypes.StoreKey,
+		identitytypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -259,8 +263,10 @@ func NewSimApp(
 	app.mm.SetOrderInitGenesis(
 		admintypes.ModuleName,
 		authtypes.ModuleName,
-		validatortypes.ModuleName, banktypes.ModuleName,
-		slashingtypes.ModuleName, crisistypes.ModuleName,
+		validatortypes.ModuleName,
+		banktypes.ModuleName,
+		slashingtypes.ModuleName,
+		crisistypes.ModuleName,
 		evidencetypes.ModuleName,
 		identitytypes.ModuleName,
 	)
@@ -298,13 +304,11 @@ func NewSimApp(
 	// initialize BaseApp
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
-	app.SetAnteHandler(
-		ante.NewAnteHandler(
-			app.AccountKeeper, app.BankKeeper,
-			ante.DefaultSigVerificationGasConsumer,
-			encodingConfig.TxConfig.SignModeHandler(),
-		),
-	)
+	app.SetAnteHandler(ante.NewAnteHandler(
+		app.AccountKeeper, app.BankKeeper,
+		ante.DefaultSigVerificationGasConsumer,
+		encodingConfig.TxConfig.SignModeHandler(),
+	))
 	app.SetEndBlocker(app.EndBlocker)
 
 	if loadLatest {

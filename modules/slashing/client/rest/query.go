@@ -13,20 +13,9 @@ import (
 )
 
 func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
-	r.HandleFunc(
-		"/slashing/validators/{validatorPubKey}/signing_info",
-		signingInfoHandlerFn(clientCtx),
-	).Methods("GET")
-
-	r.HandleFunc(
-		"/slashing/signing_infos",
-		signingInfoHandlerListFn(clientCtx),
-	).Methods("GET")
-
-	r.HandleFunc(
-		"/slashing/parameters",
-		queryParamsHandlerFn(clientCtx),
-	).Methods("GET")
+	r.HandleFunc("/slashing/validators/{validatorPubKey}/signing_info", signingInfoHandlerFn(clientCtx)).Methods("GET")
+	r.HandleFunc("/slashing/signing_infos", signingInfoHandlerListFn(clientCtx)).Methods("GET")
+	r.HandleFunc("/slashing/parameters", queryParamsHandlerFn(clientCtx)).Methods("GET")
 }
 
 // http request handler to query signing info

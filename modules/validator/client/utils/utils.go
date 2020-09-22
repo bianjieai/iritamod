@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	gogotypes "github.com/gogo/protobuf/types"
+
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	"github.com/cosmos/cosmos-sdk/client"
@@ -16,18 +17,14 @@ func QueryValidator(clientCtx client.Context, param string) (validator types.Val
 	queryValidator := func(id tmbytes.HexBytes) (validator types.Validator, height int64, err error) {
 		res, height, err := clientCtx.QueryStore(types.GetValidatorIDKey(id), types.StoreKey)
 		if err != nil {
-			return validator, height, err
+			return
 		}
 
 		err = types.ModuleCdc.UnmarshalBinaryBare(res, &validator)
-		if err != nil {
-			return validator, height, err
-		}
 		return
 	}
 
-	res, _, err := clientCtx.QueryStore(types.GetValidatorNameKey(param), types.StoreKey)
-	if err == nil && len(res) > 0 {
+	if res, _, err := clientCtx.QueryStore(types.GetValidatorNameKey(param), types.StoreKey); err == nil && len(res) > 0 {
 		var id gogotypes.BytesValue
 		if err := types.ModuleCdc.UnmarshalBinaryBare(res, &id); err != nil {
 			return validator, height, fmt.Errorf("no validator found %s", param)
@@ -39,5 +36,6 @@ func QueryValidator(clientCtx client.Context, param string) (validator types.Val
 	if err != nil {
 		return validator, height, fmt.Errorf("invalid validator id:%s", param)
 	}
+
 	return queryValidator(id)
 }
