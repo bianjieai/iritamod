@@ -1,0 +1,88 @@
+syntax = "proto3";
+package iritamod.identity;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/types";
+option (gogoproto.goproto_getters_all)  = false;
+
+// MsgCreateIdentity defines a message to create an identity
+message MsgCreateIdentity {
+  option (gogoproto.equal) = true;
+
+  bytes id = 1 [
+    (gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes"
+  ];
+  PubKeyInfo pub_key = 2 [
+    (gogoproto.moretags) = "yaml:\"pubkey\"",
+    (gogoproto.jsontag)  = "pubkey"
+  ];
+  string certificate = 3;
+  string credentials = 4;
+  bytes  owner       = 5 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+}
+
+// MsgUpdateIdentity defines a message to update an identity
+message MsgUpdateIdentity {
+  option (gogoproto.equal) = true;
+ 
+  bytes id = 1 [
+    (gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes"
+  ];
+  PubKeyInfo pub_key = 2 [
+    (gogoproto.moretags) = "yaml:\"pubkey\"",
+    (gogoproto.jsontag)  = "pubkey"
+  ];
+  string certificate = 3;
+  string credentials = 4;
+  bytes  owner       = 5 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+}
+
+// Identity defines a struct for an identity
+message Identity {
+  option (gogoproto.equal) = true;
+
+  bytes id = 1 [
+    (gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes"
+  ];
+  repeated PubKeyInfo pub_keys = 2 [
+    (gogoproto.nullable) = false,
+    (gogoproto.moretags) = "yaml:\"pubkeys\"",
+    (gogoproto.jsontag)  = "pubkeys"
+  ];
+  repeated string certificates = 3;
+  string credentials           = 4;
+  bytes owner                  = 5 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+}
+
+// PubKey represents a public key along with the corresponding algorithm
+message PubKeyInfo {
+  option (gogoproto.equal) = true;
+
+  bytes pub_key = 1 [
+    (gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes",
+    (gogoproto.moretags) = "yaml:\"pubkey\"",
+    (gogoproto.jsontag)  = "pubkey"
+  ];
+  PubKeyAlgorithm algorithm = 2;
+}
+
+// PubKeyAlgorithm defines the algorithm names for the public key
+enum PubKeyAlgorithm {
+  option (gogoproto.enum_stringer)         = false;
+  option (gogoproto.goproto_enum_stringer) = false;
+  option (gogoproto.goproto_enum_prefix)   = false;
+
+  // UnknownPubKeyAlgorithm defines an unknown algorithm name
+  UnknownPubKeyAlgorithm = 0 [(gogoproto.enumvalue_customname) = "UnknownPubKeyAlgorithm"];
+  // RSA defines a RSA algorithm name
+  RSA = 1 [(gogoproto.enumvalue_customname) = "RSA"];
+  // DSA defines a DSA algorithm name.
+  DSA = 2 [(gogoproto.enumvalue_customname) = "DSA"];
+  // ECDSA defines an ECDSA algorithm name.
+  ECDSA = 3 [(gogoproto.enumvalue_customname) = "ECDSA"];
+  // ED25519 defines an ED25519 algorithm name.
+  ED25519 = 4 [(gogoproto.enumvalue_customname) = "ED25519"];
+  // SM2 defines an SM2 algorithm name.
+  SM2 = 5 [(gogoproto.enumvalue_customname) = "SM2"];
+}

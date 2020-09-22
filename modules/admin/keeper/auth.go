@@ -1,0 +1,58 @@
+package keeper
+
+import (
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	gogotypes "github.com/gogo/protobuf/types"
+
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
+)
+
+// SetAuth sets the auth for an address
+func (k Keeper) SetAuth(ctx sdk.Context, address sdk.AccAddress, auth types.Auth) {
+	store := ctx.KVStore(k.storeKey)
+	bz := k.cdc.MustMarshalBinaryBare(&gogotypes.Int32Value{Value: int32(auth)})
+	store.Set(types.GetAuthKey(address), bz)
+}
+
+// DeleteAuth deletes the auth for an address
+func (k Keeper) DeleteAuth(ctx sdk.Context, address sdk.AccAddress) {
+	store := ctx.KVStore(k.storeKey)
+	store.Delete(types.GetAuthKey(address))
+}
+
+// GetAuth gets the auth for an address
+func (k Keeper) GetAuth(ctx sdk.Context, address sdk.AccAddress) types.Auth {
+	store := ctx.KVStore(k.storeKey)
+
+	value := store.Get(types.GetAuthKey(address))
+	if value == nil {
+		return 0
+	}
+
+	var role gogotypes.Int32Value
+	k.cdc.MustUnmarshalBinaryBare(value, &role)
+
+	return types.Auth(role.Value)
+}
+
+func (k Keeper) IsRootAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
+	auth := k.GetAuth(ctx, address)
+	return (auth & types.RoleRootAdmin.Auth()) > 0
+}
+
+func (k Keeper) IsPermAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
+	auth := k.GetAuth(ctx, address)
+	return (auth & types.RolePermAdmin.Auth()) > 0
+}
+
+func (k Keeper) IsAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
+	auth := k.GetAuth(ctx, address)
+	if (auth&types.RoleRootAdmin.Auth()) > 0 ||
+		(auth&types.RolePermAdmin.Auth()) > 0 ||
+		(auth&types.RoleBlacklistAdmin.Auth()) > 0 ||
+		(auth&types.RoleNodeAdmin.Auth()) > 0 ||
+		(auth&types.RoleParamAdmin.Auth()) > 0 {
+		return true
+	}
+	return false
+}

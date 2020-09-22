@@ -1,0 +1,26 @@
+syntax = "proto3";
+package iritamod.identity;
+
+import "identity/identity.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+
+option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/types";
+
+// Query defines the gRPC querier service for identity module
+service Query {
+    // Identity queries the identity by the given id
+    rpc Identity (QueryIdentityRequest) returns (QueryIdentityResponse) {
+      option (google.api.http).get = "/cschain/identity/identities/{id}";
+    }
+}
+
+// QueryIdentityRequest is request type for the Query/Identity RPC method
+message QueryIdentityRequest {
+    bytes id = 1 [(gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes"];
+}
+
+// QueryIdentityResponse is response type for the Query/Identity RPC method
+message QueryIdentityResponse {
+    Identity identity = 1;
+}

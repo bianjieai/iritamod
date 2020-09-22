@@ -1,0 +1,87 @@
+package cli
+
+import (
+	"context"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/cosmos/cosmos-sdk/client"
+
+	"github.com/spf13/cobra"
+
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
+)
+
+// GetQueryCmd returns the cli query commands for this module
+func GetQueryCmd() *cobra.Command {
+	validatorQueryCmd := &cobra.Command{
+		Use:                        types.ModuleName,
+		Short:                      "Querying commands for the admin module",
+		DisableFlagParsing:         true,
+		SuggestionsMinimumDistance: 2,
+		RunE:                       client.ValidateCmd,
+	}
+	validatorQueryCmd.AddCommand(
+		GetCmdQueryRoles(),
+		GetCmdQueryBlackList(),
+	)
+
+	return validatorQueryCmd
+}
+
+// GetCmdQueryRoles implements the roles query command.
+func GetCmdQueryRoles() *cobra.Command {
+	return &cobra.Command{
+		Use:   "roles [account]",
+		Short: "Query a account roles",
+		Args:  cobra.ExactArgs(1),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx := client.GetClientContextFromCmd(cmd)
+			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			addr, err := sdk.AccAddressFromBech32(args[0])
+			if err != nil {
+				return err
+			}
+
+			res, err := queryClient.Roles(context.Background(), &types.QueryRolesRequest{Address: addr})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintOutput(res)
+		},
+	}
+}
+
+// GetCmdQueryBlackList implements the black list query command.
+func GetCmdQueryBlackList() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "blacklist",
+		Short: "Query blacklist",
+		Args:  cobra.ExactArgs(0),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx := client.GetClientContextFromCmd(cmd)
+			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			res, err := queryClient.Blacklist(context.Background(), &types.QueryBlacklistRequest{})
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintOutput(res)
+		},
+	}
+
+	return cmd
+}
