@@ -30,13 +30,10 @@ clean:
 distclean: clean
 	rm -rf vendor/
 
-proto-all: proto-tools proto-gen proto-swagger-gen
+proto-all: proto-tools proto-gen
 
 proto-gen:
 	@./scripts/protocgen.sh
-
-proto-swagger-gen:
-	@./scripts/protoc-swagger-gen.sh
 
 ########################################
 ### Testing
