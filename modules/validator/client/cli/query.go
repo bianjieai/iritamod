@@ -34,7 +34,7 @@ func GetQueryCmd() *cobra.Command {
 
 // GetCmdQueryValidator implements the validator query command.
 func GetCmdQueryValidator() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "validator [id]",
 		Short: "Query a validator",
 		Args:  cobra.ExactArgs(1),
@@ -59,6 +59,8 @@ func GetCmdQueryValidator() *cobra.Command {
 			return clientCtx.PrintOutput(res.Validator)
 		},
 	}
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }
 
 // GetCmdQueryValidators implements the query all validators command.
@@ -92,15 +94,14 @@ func GetCmdQueryValidators() *cobra.Command {
 			return clientCtx.PrintOutput(res)
 		},
 	}
-
 	flags.AddPaginationFlagsToCmd(cmd, "validators")
-
+	flags.AddQueryFlagsToCmd(cmd)
 	return cmd
 }
 
 // GetCmdQueryParams implements the params query command.
 func GetCmdQueryParams() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:     "params",
 		Args:    cobra.NoArgs,
 		Short:   "Query the current validator parameters information",
@@ -123,4 +124,6 @@ func GetCmdQueryParams() *cobra.Command {
 			return clientCtx.PrintOutput(&res.Params)
 		},
 	}
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }

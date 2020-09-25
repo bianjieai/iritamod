@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/hex"
 	"fmt"
-	"strings"
 
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/version"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/types"
@@ -33,27 +33,20 @@ func GetQueryCmd() *cobra.Command {
 
 // GetCmdQueryIdentity implements the query identity command.
 func GetCmdQueryIdentity() *cobra.Command {
-	return &cobra.Command{
-		Use:   "identity [id]",
-		Short: "Query an identity",
-		Long: strings.TrimSpace(
-			fmt.Sprintf(`Query details of an identity with the specified ID.
-
-Example:
-$ %s query identity identity <id>
-`,
-				version.AppName,
-			),
-		),
-		Args: cobra.ExactArgs(1),
+	cmd := &cobra.Command{
+		Use:     "identity [id]",
+		Short:   "Query an identity",
+		Long:    "Query details of an identity with the specified ID.",
+		Example: fmt.Sprintf("$ %s query identity identity <id>", version.AppName),
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			id, err := hex.DecodeString(args[0])
+			clientCtx := client.GetClientContextFromCmd(cmd)
+			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
 			if err != nil {
 				return err
 			}
 
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err = client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			id, err := hex.DecodeString(args[0])
 			if err != nil {
 				return err
 			}
@@ -68,4 +61,6 @@ $ %s query identity identity <id>
 			return clientCtx.PrintOutput(res.Identity)
 		},
 	}
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }

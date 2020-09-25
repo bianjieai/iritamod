@@ -4,7 +4,6 @@ import (
 	"encoding/hex"
 	"fmt"
 	"io/ioutil"
-	"strings"
 
 	uuid "github.com/satori/go.uuid"
 	"github.com/spf13/cobra"
@@ -41,15 +40,16 @@ func NewCreateIdentityCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
 		Short: "Create an identity",
-		Long: strings.TrimSpace(
-			fmt.Sprintf(`Create a new identity based on the given params.
-
-Example:
-$ %s tx identity create --id=<id> --pubkey=<public-key> --pubkey-algo=<pubkey-algorithm> 
---cert-file=<certificate-file> --credentials=<credentials-uri> --from mykey
-`,
-				version.AppName,
-			),
+		Long:  "Create a new identity based on the given params.",
+		Example: fmt.Sprintf(
+			"$ %s tx identity create "+
+				"--id=<id> "+
+				"--pubkey=<public-key> "+
+				"--pubkey-algo=<pubkey-algorithm> "+
+				"--cert-file=<certificate-file> "+
+				"--credentials=<credentials-uri> "+
+				"--from=<key>",
+			version.AppName,
 		),
 		PreRunE: preCheckCmd,
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -119,15 +119,15 @@ func NewUpdateIdentityCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update [id]",
 		Short: "Update an identity",
-		Long: strings.TrimSpace(
-			fmt.Sprintf(`Update an existing identity.
-
-Example:
-$ %s tx identity update <id> --pubkey=<public-key> --pubkey-algo=<pubkey-algorithm> 
---cert-file=<certificate-file> --credentials=<credentials-uri> --from mykey
-`,
-				version.AppName,
-			),
+		Long:  "Update an existing identity.",
+		Example: fmt.Sprintf(
+			"$ %s tx identity update <id> "+
+				"--pubkey=<public-key> "+
+				"--pubkey-algo=<pubkey-algorithm> "+
+				"--cert-file=<certificate-file> "+
+				"--credentials=<credentials-uri> "+
+				"--from mykey",
+			version.AppName,
 		),
 		Args:    cobra.ExactArgs(1),
 		PreRunE: preCheckCmd,
@@ -193,10 +193,8 @@ func preCheckCmd(cmd *cobra.Command, _ []string) error {
 		if !flags.Changed(FlagPubKeyAlgo) {
 			return fmt.Errorf("public key algorithm must be provided when the public key set")
 		}
-	} else {
-		if flags.Changed(FlagPubKeyAlgo) {
-			return fmt.Errorf("public key algorithm should not be provided when the public key not set")
-		}
+	} else if flags.Changed(FlagPubKeyAlgo) {
+		return fmt.Errorf("public key algorithm should not be provided when the public key not set")
 	}
 
 	return nil
