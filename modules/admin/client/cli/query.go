@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
@@ -30,7 +31,7 @@ func GetQueryCmd() *cobra.Command {
 
 // GetCmdQueryRoles implements the roles query command.
 func GetCmdQueryRoles() *cobra.Command {
-	return &cobra.Command{
+	cmd := &cobra.Command{
 		Use:   "roles [account]",
 		Short: "Query a account roles",
 		Args:  cobra.ExactArgs(1),
@@ -56,6 +57,8 @@ func GetCmdQueryRoles() *cobra.Command {
 			return clientCtx.PrintOutput(res)
 		},
 	}
+	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
 }
 
 // GetCmdQueryBlackList implements the black list query command.
@@ -81,6 +84,6 @@ func GetCmdQueryBlackList() *cobra.Command {
 			return clientCtx.PrintOutput(res)
 		},
 	}
-
+	flags.AddQueryFlagsToCmd(cmd)
 	return cmd
 }
