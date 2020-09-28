@@ -10,41 +10,41 @@ option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/type
 
 // Query defines the gRPC querier service for validator module
 service Query {
-  // Validator queries the validator by the given id
-  rpc Validator(QueryValidatorRequest) returns (QueryValidatorResponse) {
-    option (google.api.http).get = "/cschain/validator/validators/{id}";
-  }
+    // Validator queries the validator by the given id
+    rpc Validator(QueryValidatorRequest) returns (QueryValidatorResponse) {
+        option (google.api.http).get = "/iritamod/validator/validators/{id}";
+    }
 
-  // Validators queries the validators
-  rpc Validators(QueryValidatorsRequest) returns (QueryValidatorsResponse) {
-    option (google.api.http).get = "/cschain/validator/validators";
-  }
+    // Validators queries the validators
+    rpc Validators(QueryValidatorsRequest) returns (QueryValidatorsResponse) {
+        option (google.api.http).get = "/iritamod/validator/validators";
+    }
 
-  // Params queries the parameters of the validator module
-  rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
-    option (google.api.http).get = "/cschain/validator/params";
-  }
+    // Params queries the parameters of the validator module
+    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+        option (google.api.http).get = "/iritamod/validator/params";
+    }
 }
 
 // QueryValidatorRequest is the request type for the Query/Validator RPC method
 message QueryValidatorRequest {
-  bytes id = 1 [(gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes"];
+    bytes id = 1 [ (gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes" ];
 }
 
 // QueryValidatorResponse is the response type for the Query/Validator RPC method
 message QueryValidatorResponse {
-  Validator validator = 1;
+    Validator validator = 1;
 }
 
 // QueryValidatorsRequest is the request type for the Query/Validators RPC method
 message QueryValidatorsRequest {
-  cosmos.query.PageRequest pagination = 1;
+    cosmos.query.PageRequest pagination = 1;
 }
 
 // QueryValidatorsResponse is the response type for the Query/Validators RPC method
 message QueryValidatorsResponse {
-  repeated Validator validators = 1 [(gogoproto.nullable) = false];
-  cosmos.query.PageResponse   pagination = 2;
+    repeated Validator validators = 1 [ (gogoproto.nullable) = false ];
+    cosmos.query.PageResponse pagination = 2;
 }
 
 // QueryParamsRequest is the request type for the Query/Params RPC method
@@ -52,5 +52,5 @@ message QueryParamsRequest {}
 
 // QueryParamsResponse is the response type for the Query/Params RPC method
 message QueryParamsResponse {
-  Params params = 1 [(gogoproto.nullable) = false];
+    Params params = 1 [ (gogoproto.nullable) = false ];
 }

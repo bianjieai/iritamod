@@ -21,9 +21,9 @@ func init() {
 // RegisterLegacyAminoCodec registers the necessary interfaces and concrete types
 // on the provided Amino codec. These types are used for Amino JSON serialization.
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterConcrete(&MsgCreateValidator{}, "cschain/validator/MsgCreateValidator", nil)
-	cdc.RegisterConcrete(&MsgUpdateValidator{}, "cschain/validator/MsgUpdateValidator", nil)
-	cdc.RegisterConcrete(&MsgRemoveValidator{}, "cschain/validator/MsgRemoveValidator", nil)
+	cdc.RegisterConcrete(&MsgCreateValidator{}, "iritamod/validator/MsgCreateValidator", nil)
+	cdc.RegisterConcrete(&MsgUpdateValidator{}, "iritamod/validator/MsgUpdateValidator", nil)
+	cdc.RegisterConcrete(&MsgRemoveValidator{}, "iritamod/validator/MsgRemoveValidator", nil)
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {

@@ -21,10 +21,10 @@ func init() {
 // RegisterLegacyAminoCodec registers the necessary interfaces and concrete types
 // on the provided Amino codec. These types are used for Amino JSON serialization.
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	cdc.RegisterConcrete(&MsgAddRoles{}, "cschain/admin/MsgAddRoles", nil)
-	cdc.RegisterConcrete(&MsgRemoveRoles{}, "cschain/admin/MsgRemoveRoles", nil)
-	cdc.RegisterConcrete(&MsgBlockAccount{}, "cschain/admin/MsgBlockAccount", nil)
-	cdc.RegisterConcrete(&MsgUnblockAccount{}, "cschain/admin/MsgUnblockAccount", nil)
+	cdc.RegisterConcrete(&MsgAddRoles{}, "iritamod/admin/MsgAddRoles", nil)
+	cdc.RegisterConcrete(&MsgRemoveRoles{}, "iritamod/admin/MsgRemoveRoles", nil)
+	cdc.RegisterConcrete(&MsgBlockAccount{}, "iritamod/admin/MsgBlockAccount", nil)
+	cdc.RegisterConcrete(&MsgUnblockAccount{}, "iritamod/admin/MsgUnblockAccount", nil)
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {
