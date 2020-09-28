@@ -91,7 +91,7 @@ func TestMsgCreateIdentityGetSignBytes(t *testing.T) {
 	msg := NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
 	res := msg.GetSignBytes()
 
-	expected := fmt.Sprintf(`{"type":"cschain/identity/MsgCreateIdentity","value":{"certificate":"%s","credentials":"https://kyc.com/user/10001","id":"%s","owner":"cosmos1w3jhxapddamkuetjkkyjud","pubkey":{"algorithm":"SM2","pubkey":"%s"}}}`, strings.ReplaceAll(testCertificate, "\n", "\\n"), testIDStr, testPubKeySM2Str)
+	expected := fmt.Sprintf(`{"type":"iritamod/identity/MsgCreateIdentity","value":{"certificate":"%s","credentials":"https://kyc.com/user/10001","id":"%s","owner":"cosmos1w3jhxapddamkuetjkkyjud","pubkey":{"algorithm":"SM2","pubkey":"%s"}}}`, strings.ReplaceAll(testCertificate, "\n", "\\n"), testIDStr, testPubKeySM2Str)
 	require.Equal(t, expected, string(res))
 }
 
@@ -168,7 +168,7 @@ func TestMsgUpdateIdentityGetSignBytes(t *testing.T) {
 	msg := NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
 	res := msg.GetSignBytes()
 
-	expected := fmt.Sprintf(`{"type":"cschain/identity/MsgUpdateIdentity","value":{"certificate":"%s","credentials":"https://kyc.com/user/10001","id":"%s","owner":"cosmos1w3jhxapddamkuetjkkyjud","pubkey":{"algorithm":"SM2","pubkey":"%s"}}}`, strings.ReplaceAll(testCertificate, "\n", "\\n"), testIDStr, testPubKeySM2Str)
+	expected := fmt.Sprintf(`{"type":"iritamod/identity/MsgUpdateIdentity","value":{"certificate":"%s","credentials":"https://kyc.com/user/10001","id":"%s","owner":"cosmos1w3jhxapddamkuetjkkyjud","pubkey":{"algorithm":"SM2","pubkey":"%s"}}}`, strings.ReplaceAll(testCertificate, "\n", "\\n"), testIDStr, testPubKeySM2Str)
 	require.Equal(t, expected, string(res))
 }
 
