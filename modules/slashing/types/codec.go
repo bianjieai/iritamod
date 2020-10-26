@@ -8,7 +8,8 @@ import (
 )
 
 var (
-	amino     = codec.NewLegacyAmino()
+	amino = codec.NewLegacyAmino()
+	// ModuleCdc is instance of AminoCodec
 	ModuleCdc = codec.NewAminoCodec(amino)
 )
 
@@ -24,6 +25,8 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgUnjailValidator{}, "iritamod/slashing/MsgUnjailValidator", nil)
 }
 
+// RegisterInterfaces registers the necessary interfaces and concrete types
+// on the provided protobuf codec.
 func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgUnjailValidator{},

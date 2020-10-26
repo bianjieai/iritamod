@@ -1,6 +1,9 @@
 package params
 
 import (
+	"github.com/cosmos/cosmos-sdk/x/params"
+	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
+
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/types"
 )
 
@@ -18,4 +21,14 @@ var (
 	ErrUnknownSubspace  = types.ErrUnknownSubspace
 	ErrSettingParameter = types.ErrSettingParameter
 	ErrUnknownKey       = types.ErrUnknownKey
+
+	// NewQuerier alias cosmos-sdk/x/params/keeper.NewQuerier
+	NewQuerier = paramskeeper.NewQuerier
+)
+
+type (
+	// BaseAppModuleBasic alias cosmos-sdk/x/params.AppModuleBasic
+	BaseAppModuleBasic = params.AppModuleBasic
+	// Keeper alias cosmos-sdk/x/params/keeper.Keeper
+	Keeper = paramskeeper.Keeper
 )

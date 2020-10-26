@@ -22,10 +22,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/slashing"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 	"github.com/cosmos/cosmos-sdk/x/slashing/simulation"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/client/cli"
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/client/rest"
+	slashingtypes "gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/types"
 )
 
 var (
@@ -41,7 +41,7 @@ type AppModuleBasic struct {
 
 // Name returns the slashing module's name.
 func (AppModuleBasic) Name() string {
-	return slashingtypes.ModuleName
+	return ModuleName
 }
 
 // RegisterLegacyAminoCodec registers the slashing module's types for the given codec.
@@ -51,17 +51,17 @@ func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 
 // DefaultGenesis returns default genesis state as raw bytes for the slashing module.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONMarshaler) json.RawMessage {
-	return cdc.MustMarshalJSON(slashingtypes.DefaultGenesisState())
+	return cdc.MustMarshalJSON(DefaultGenesisState())
 }
 
 // ValidateGenesis performs genesis state validation for the slashing module.
 func (AppModuleBasic) ValidateGenesis(cdc codec.JSONMarshaler, config client.TxEncodingConfig, bz json.RawMessage) error {
-	var data slashingtypes.GenesisState
+	var data GenesisState
 	if err := cdc.UnmarshalJSON(bz, &data); err != nil {
-		return fmt.Errorf("failed to unmarshal %s genesis state: %w", slashingtypes.ModuleName, err)
+		return fmt.Errorf("failed to unmarshal %s genesis state: %w", ModuleName, err)
 	}
 
-	return slashingtypes.ValidateGenesis(data)
+	return ValidateGenesis(data)
 }
 
 // RegisterRESTRoutes registers the REST routes for the slashing module.
@@ -71,7 +71,7 @@ func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Rout
 
 // RegisterGRPCRoutes registers the gRPC Gateway routes for the slashing module.
 func (a AppModuleBasic) RegisterGRPCRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	_ = slashingtypes.RegisterQueryHandlerClient(context.Background(), mux, slashingtypes.NewQueryClient(clientCtx))
+	_ = RegisterQueryHandlerClient(context.Background(), mux, NewQueryClient(clientCtx))
 }
 
 // GetTxCmd returns the root tx command for the slashing module.
@@ -96,21 +96,21 @@ type AppModule struct {
 	AppModuleBasic
 
 	keeper        Keeper
-	accountKeeper slashingtypes.AccountKeeper
-	bankKeeper    slashingtypes.BankKeeper
-	stakingKeeper slashingtypes.StakingKeeper
+	accountKeeper AccountKeeper
+	bankKeeper    BankKeeper
+	stakingKeeper StakingKeeper
 }
 
 // RegisterQueryService registers a GRPC query service to respond to the
 // module-specific GRPC queries.
 func (am AppModule) RegisterQueryService(server grpc.Server) {
-	slashingtypes.RegisterQueryServer(server, am.keeper)
+	RegisterQueryServer(server, am.keeper)
 }
 
 // NewAppModule creates a new AppModule object
 func NewAppModule(
-	cdc codec.Marshaler, keeper Keeper, ak slashingtypes.AccountKeeper,
-	bk slashingtypes.BankKeeper, sk slashingtypes.StakingKeeper,
+	cdc codec.Marshaler, keeper Keeper, ak AccountKeeper,
+	bk BankKeeper, sk StakingKeeper,
 ) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{cdc: cdc},
@@ -123,7 +123,7 @@ func NewAppModule(
 
 // Name returns the slashing module's name.
 func (AppModule) Name() string {
-	return slashingtypes.ModuleName
+	return ModuleName
 }
 
 // RegisterInvariants registers the slashing module invariants.
@@ -131,7 +131,7 @@ func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 // Route returns the message routing key for the slashing module.
 func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(slashingtypes.RouterKey, NewHandler(am.keeper))
+	return sdk.NewRoute(RouterKey, NewHandler(am.keeper))
 }
 
 // NewHandler returns an sdk.Handler for the slashing module.
@@ -141,7 +141,7 @@ func (am AppModule) NewHandler() sdk.Handler {
 
 // QuerierRoute returns the slashing module's querier route name.
 func (AppModule) QuerierRoute() string {
-	return slashingtypes.QuerierRoute
+	return QuerierRoute
 }
 
 // LegacyQuerierHandler returns the slashing module sdk.Querier.
@@ -152,7 +152,7 @@ func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sd
 // InitGenesis performs genesis initialization for the slashing module. It returns
 // no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONMarshaler, data json.RawMessage) []abci.ValidatorUpdate {
-	var genesisState slashingtypes.GenesisState
+	var genesisState GenesisState
 	cdc.MustUnmarshalJSON(data, &genesisState)
 	slashing.InitGenesis(ctx, am.keeper.Keeper, am.stakingKeeper, &genesisState)
 	return []abci.ValidatorUpdate{}
