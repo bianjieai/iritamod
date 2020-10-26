@@ -19,8 +19,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/cosmos/cosmos-sdk/x/params"
-	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 )
 
 var (
@@ -31,7 +29,7 @@ var (
 
 // AppModuleBasic defines the basic application module used by the params module.
 type AppModuleBasic struct {
-	params.AppModuleBasic
+	BaseAppModuleBasic
 
 	cdc codec.Marshaler
 }
@@ -60,7 +58,7 @@ func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) 
 type AppModule struct {
 	AppModuleBasic
 
-	keeper paramskeeper.Keeper
+	keeper Keeper
 }
 
 // RegisterQueryService registers a GRPC query service to respond to the
@@ -70,7 +68,7 @@ func (am AppModule) RegisterQueryService(server grpc.Server) {
 }
 
 // NewAppModule creates a new AppModule object
-func NewAppModule(cdc codec.Marshaler, k paramskeeper.Keeper) AppModule {
+func NewAppModule(cdc codec.Marshaler, k Keeper) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{cdc: cdc},
 		keeper:         k,
@@ -97,7 +95,7 @@ func (AppModule) QuerierRoute() string {
 
 // LegacyQuerierHandler returns the params module sdk.Querier.
 func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return paramskeeper.NewQuerier(am.keeper, legacyQuerierCdc)
+	return NewQuerier(am.keeper, legacyQuerierCdc)
 }
 
 // InitGenesis performs genesis initialization for the params module. It returns
