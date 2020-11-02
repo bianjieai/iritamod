@@ -115,8 +115,10 @@ func (k Keeper) GetRoles(ctx sdk.Context) (roleAccounts []types.RoleAccount) {
 	for ; iterator.Valid(); iterator.Next() {
 		var role gogotypes.Int32Value
 		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &role)
+
+		account := sdk.AccAddress(iterator.Key()[len(types.AuthKey):])
 		roleAccounts = append(roleAccounts, types.RoleAccount{
-			Address: iterator.Key()[1:],
+			Address: account.String(),
 			Roles:   types.Auth(role.Value).Roles(),
 		})
 	}

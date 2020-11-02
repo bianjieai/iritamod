@@ -12,14 +12,13 @@ message GenesisState {
       (gogoproto.moretags) = "yaml:\"role_accounts\"",
       (gogoproto.nullable) = false
     ];
-    repeated bytes black_list = 2 [
-      (gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress",
+    repeated string black_list = 2 [
       (gogoproto.moretags) = "yaml:\"black_list\""
     ];
 }
 
 // RoleAccount represents an account with roles.
 message RoleAccount {
-    bytes address = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+    string address = 1;
     repeated Role roles = 2;
 }

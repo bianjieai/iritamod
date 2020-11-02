@@ -7,7 +7,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
 )
@@ -43,13 +42,7 @@ func GetCmdQueryRoles() *cobra.Command {
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
-
-			addr, err := sdk.AccAddressFromBech32(args[0])
-			if err != nil {
-				return err
-			}
-
-			res, err := queryClient.Roles(context.Background(), &types.QueryRolesRequest{Address: addr})
+			res, err := queryClient.Roles(context.Background(), &types.QueryRolesRequest{Address: args[0]})
 			if err != nil {
 				return err
 			}

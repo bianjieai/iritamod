@@ -36,7 +36,7 @@ func (k Keeper) setBlackAccount(ctx sdk.Context, address sdk.AccAddress) {
 	store.Set(types.GetBlackKey(address), bz)
 }
 
-// BlockAccount blocks an account
+// GetBlockAccount return an account blocked
 func (k Keeper) GetBlockAccount(ctx sdk.Context, address sdk.AccAddress) bool {
 	store := ctx.KVStore(k.storeKey)
 
@@ -57,14 +57,15 @@ func (k Keeper) deleteBlackAccount(ctx sdk.Context, address sdk.AccAddress) {
 }
 
 // GetAllBlackAccounts gets the set of all accounts with no limits, used durng genesis dump
-func (k Keeper) GetAllBlackAccounts(ctx sdk.Context) (accounts []sdk.AccAddress) {
+func (k Keeper) GetAllBlackAccounts(ctx sdk.Context) (accounts []string) {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := sdk.KVStorePrefixIterator(store, types.BlackKey)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		accounts = append(accounts, iterator.Key()[1:])
+		account := sdk.AccAddress(iterator.Key()[1:])
+		accounts = append(accounts, account.String())
 	}
 
 	return accounts

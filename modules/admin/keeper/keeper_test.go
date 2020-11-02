@@ -110,10 +110,10 @@ func (suite *KeeperTestSuite) TestAddRoles() {
 	roleAccounts := suite.keeper.GetRoles(suite.ctx)
 	suite.Equal(2, len(roleAccounts))
 	for _, ra := range roleAccounts {
-		if ra.Address.Equals(rootAdmin) {
+		if ra.Address == rootAdmin.String() {
 			continue
 		}
-		suite.Equal(account, ra.Address)
+		suite.Equal(account.String(), ra.Address)
 		suite.Equal(addRoles, ra.Roles)
 	}
 
@@ -137,10 +137,10 @@ func (suite *KeeperTestSuite) TestRemoveRoles() {
 	roleAccounts := suite.keeper.GetRoles(suite.ctx)
 	suite.Equal(2, len(roleAccounts))
 	for _, ra := range roleAccounts {
-		if ra.Address.Equals(rootAdmin) {
+		if ra.Address == rootAdmin.String() {
 			continue
 		}
-		suite.Equal(account, ra.Address)
+		suite.Equal(account.String(), ra.Address)
 		suite.Equal(existingRoles, ra.Roles)
 	}
 
@@ -152,7 +152,7 @@ func (suite *KeeperTestSuite) TestRemoveRoles() {
 	suite.Empty(roles)
 	roleAccounts = suite.keeper.GetRoles(suite.ctx)
 	suite.Equal(1, len(roleAccounts))
-	suite.Equal(roleAccounts[0].Address, rootAdmin)
+	suite.Equal(roleAccounts[0].Address, rootAdmin.String())
 	suite.Equal(roleAccounts[0].Roles, []types.Role{types.RoleRootAdmin})
 }
 
@@ -176,7 +176,7 @@ func (suite *KeeperTestSuite) TestBlockAccount() {
 
 	blackList := suite.keeper.GetAllBlackAccounts(suite.ctx)
 	suite.Equal(1, len(blackList))
-	suite.Equal(account, blackList[0])
+	suite.Equal(account.String(), blackList[0])
 
 	err = suite.keeper.UnblockAccount(suite.ctx, account)
 	suite.NoError(err)

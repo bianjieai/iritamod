@@ -57,7 +57,7 @@ func queryBlacklist(ctx sdk.Context, req abci.RequestQuery, k Keeper, legacyQuer
 
 	start, end := client.Paginate(len(blackAccounts), params.Page, params.Limit, DefaultLimit)
 	if start < 0 || end < 0 {
-		blackAccounts = []sdk.AccAddress{}
+		blackAccounts = []string{}
 	} else {
 		blackAccounts = blackAccounts[start:end]
 	}
