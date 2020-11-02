@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+	"encoding/hex"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -26,9 +27,13 @@ func (q Querier) Validator(c context.Context, req *types.QueryValidatorRequest) 
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
 
-	ctx := sdk.UnwrapSDKContext(c)
+	id, err := hex.DecodeString(req.Id)
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "invalid id")
+	}
 
-	validator, found := q.GetValidator(ctx, req.Id)
+	ctx := sdk.UnwrapSDKContext(c)
+	validator, found := q.GetValidator(ctx, id)
 	if !found {
 		return nil, status.Errorf(codes.NotFound, "validator %s not found", req.Id)
 	}

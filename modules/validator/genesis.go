@@ -1,6 +1,7 @@
 package validator
 
 import (
+	"encoding/hex"
 	"errors"
 	"fmt"
 
@@ -27,7 +28,12 @@ func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) (res []abci.Valid
 		k.SetValidator(ctx, val)
 		pk, _ := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, val.Pubkey)
 
-		k.SetValidatorConsAddrIndex(ctx, val.Id, sdk.GetConsAddress(pk))
+		id, err := hex.DecodeString(val.Id)
+		if err != nil {
+			panic(err)
+		}
+
+		k.SetValidatorConsAddrIndex(ctx, id, sdk.GetConsAddress(pk))
 
 		res = append(res, ABCIValidatorUpdate(
 			sdk.MustGetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, val.Pubkey),
@@ -88,7 +94,7 @@ func validateGenesisStateValidators(rootCert cautil.Cert, validators []Validator
 		pk := sdk.MustGetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, val.Pubkey)
 		strPubkey := string(pk.Bytes())
 
-		if _, ok := nameMap[val.Id.String()]; ok {
+		if _, ok := nameMap[val.Id]; ok {
 			return fmt.Errorf("duplicate validator id in genesis state: ID %v, pubkey %v", val.Id, val.Pubkey)
 		}
 
@@ -106,7 +112,7 @@ func validateGenesisStateValidators(rootCert cautil.Cert, validators []Validator
 
 		pubkeyMap[strPubkey] = true
 		nameMap[val.Name] = true
-		idMap[val.Id.String()] = true
+		idMap[val.Id] = true
 	}
 
 	return nil

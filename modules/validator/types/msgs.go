@@ -24,21 +24,28 @@ func NewMsgCreateValidator(
 		Certificate: cert,
 		Power:       power,
 		Description: description,
-		Operator:    operator,
+		Operator:    operator.String(),
 	}
 }
 
+// Route implement sdk.Msg
 func (m MsgCreateValidator) Route() string {
 	return RouterKey
 }
 
+// Type implement sdk.Msg
 func (m MsgCreateValidator) Type() string {
 	return "create_validator"
 }
 
+// ValidateBasic implement sdk.Msg
 func (m MsgCreateValidator) ValidateBasic() error {
-	if m.Operator.Empty() {
+	if len(m.Operator) == 0 {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "operator missing")
+	}
+
+	if _, err := sdk.AccAddressFromBech32(m.Operator); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "invalid operator")
 	}
 
 	name := strings.TrimSpace(m.Name)
@@ -55,13 +62,19 @@ func (m MsgCreateValidator) ValidateBasic() error {
 	return nil
 }
 
+// GetSignBytes implement sdk.Msg
 func (m MsgCreateValidator) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&m)
 	return sdk.MustSortJSON(bz)
 }
 
+// GetSigners implement sdk.Msg
 func (m MsgCreateValidator) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{m.Operator}
+	signer, err := sdk.AccAddressFromBech32(m.Operator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{signer}
 }
 
 // NewMsgUpdateValidator creates a new MsgUpdateValidator instance.
@@ -69,27 +82,35 @@ func NewMsgUpdateValidator(
 	id tmbytes.HexBytes, name, description string, cert string, power int64, operator sdk.AccAddress,
 ) *MsgUpdateValidator {
 	return &MsgUpdateValidator{
-		Id:          id,
+		Id:          id.String(),
 		Name:        name,
 		Certificate: cert,
 		Power:       power,
 		Description: description,
-		Operator:    operator,
+		Operator:    operator.String(),
 	}
 }
 
+// Route implement sdk.Msg
 func (m MsgUpdateValidator) Route() string {
 	return RouterKey
 }
 
+// Type implement sdk.Msg
 func (m MsgUpdateValidator) Type() string {
 	return "update_validator"
 }
 
+// ValidateBasic implement sdk.Msg
 func (m MsgUpdateValidator) ValidateBasic() error {
-	if m.Operator.Empty() {
+	if len(m.Operator) == 0 {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "operator missing")
 	}
+
+	if _, err := sdk.AccAddressFromBech32(m.Operator); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "invalid operator")
+	}
+
 	if len(m.Id) == 0 {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "validator id cannot be blank")
 	}
@@ -100,46 +121,66 @@ func (m MsgUpdateValidator) ValidateBasic() error {
 	return nil
 }
 
+// GetSignBytes implement sdk.Msg
 func (m MsgUpdateValidator) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&m)
 	return sdk.MustSortJSON(bz)
 }
 
+// GetSigners implement sdk.Msg
 func (m MsgUpdateValidator) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{m.Operator}
+	signer, err := sdk.AccAddressFromBech32(m.Operator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{signer}
 }
 
 // NewMsgRemoveValidator creates a new MsgRemoveValidator instance.
 func NewMsgRemoveValidator(id tmbytes.HexBytes, operator sdk.AccAddress) *MsgRemoveValidator {
 	return &MsgRemoveValidator{
-		Id:       id,
-		Operator: operator,
+		Id:       id.String(),
+		Operator: operator.String(),
 	}
 }
 
+// Route implement sdk.Msg
 func (m MsgRemoveValidator) Route() string {
 	return RouterKey
 }
 
+// Type implement sdk.Msg
 func (m MsgRemoveValidator) Type() string {
 	return "remove_validator"
 }
 
+// ValidateBasic implement sdk.Msg
 func (m MsgRemoveValidator) ValidateBasic() error {
-	if m.Operator.Empty() {
+	if len(m.Operator) == 0 {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "operator missing")
 	}
+
+	if _, err := sdk.AccAddressFromBech32(m.Operator); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "invalid operator")
+	}
+
 	if len(m.Id) == 0 {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "validator id cannot be blank")
 	}
 	return nil
 }
 
+// GetSignBytes implement sdk.Msg
 func (m MsgRemoveValidator) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&m)
 	return sdk.MustSortJSON(bz)
 }
 
+// GetSigners implement sdk.Msg
 func (m MsgRemoveValidator) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{m.Operator}
+	signer, err := sdk.AccAddressFromBech32(m.Operator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{signer}
 }

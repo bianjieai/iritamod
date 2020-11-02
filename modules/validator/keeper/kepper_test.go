@@ -54,7 +54,7 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 
 	validator, found := suite.keeper.GetValidator(suite.ctx, id)
 	suite.True(found)
-	suite.Equal(id, validator.Id)
+	suite.Equal(id.String(), validator.Id)
 	suite.Equal(msg.Name, validator.Name)
 	suite.Equal(msg.Certificate, validator.Certificate)
 	suite.Equal(msg.Power, validator.Power)

@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"encoding/hex"
 	"fmt"
 
 	gogotypes "github.com/gogo/protobuf/types"
@@ -72,22 +73,26 @@ func (k Keeper) CreateValidator(ctx sdk.Context, msg types.MsgCreateValidator) (
 		return nil, types.ErrValidatorPubkeyExists
 	}
 
+	operator, _ := hex.DecodeString(msg.Operator)
+	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+
 	validator := types.NewValidator(
-		tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes())),
+		id,
 		msg.Name,
 		msg.Description,
 		pk,
 		msg.Certificate,
 		msg.Power,
-		msg.Operator,
+		operator,
 	)
+
 	k.SetValidator(ctx, validator)
-	k.SetValidatorConsAddrIndex(ctx, validator.Id, validator.GetConsAddr())
+	k.SetValidatorConsAddrIndex(ctx, id, validator.GetConsAddr())
 	k.EnqueueValidatorsUpdate(ctx, validator, msg.Power)
 
 	k.hooks.AfterValidatorCreated(ctx, validator.GetOperator())
 	k.hooks.AfterValidatorBonded(ctx, validator.GetConsAddr(), validator.GetOperator())
-	return validator.Id, nil
+	return id, nil
 }
 
 // UpdateValidator updates an existing validator record
@@ -96,7 +101,8 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 		return types.ErrValidatorNameExists
 	}
 
-	validator, found := k.GetValidator(ctx, msg.Id)
+	id, _ := hex.DecodeString(msg.Id)
+	validator, found := k.GetValidator(ctx, id)
 	if !found {
 		return types.ErrUnknownValidator
 	}
@@ -119,7 +125,7 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 
 		validator.Pubkey = pkStr
 		validator.Certificate = msg.Certificate
-		k.SetValidatorConsAddrIndex(ctx, validator.Id, validator.GetConsAddr())
+		k.SetValidatorConsAddrIndex(ctx, id, validator.GetConsAddr())
 		k.EnqueueValidatorsUpdate(ctx, validator, validator.Power)
 	}
 	if msg.Power > 0 {
@@ -143,7 +149,8 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 
 // RemoveValidator deletes an existing validator record
 func (k Keeper) RemoveValidator(ctx sdk.Context, msg types.MsgRemoveValidator) error {
-	validator, found := k.GetValidator(ctx, msg.Id)
+	id, _ := hex.DecodeString(msg.Id)
+	validator, found := k.GetValidator(ctx, id)
 	if !found {
 		return types.ErrUnknownValidator
 	}
@@ -160,12 +167,12 @@ func (k Keeper) RemoveValidator(ctx sdk.Context, msg types.MsgRemoveValidator) e
 // SetValidator sets the main record holding validator details
 func (k Keeper) SetValidator(ctx sdk.Context, validator types.Validator) {
 	store := ctx.KVStore(k.storeKey)
-
+	id, _ := hex.DecodeString(validator.Id)
 	// set validator by id
 	bz := k.cdc.MustMarshalBinaryBare(&validator)
-	store.Set(types.GetValidatorIDKey(validator.Id), bz)
+	store.Set(types.GetValidatorIDKey(id), bz)
 
-	bz = k.cdc.MustMarshalBinaryBare(&gogotypes.BytesValue{Value: validator.Id})
+	bz = k.cdc.MustMarshalBinaryBare(&gogotypes.BytesValue{Value: id})
 	store.Set(types.GetValidatorNameKey(validator.Name), bz)
 }
 
@@ -182,7 +189,7 @@ func (k Keeper) GetValidator(ctx sdk.Context, id tmbytes.HexBytes) (validator ty
 	return validator, true
 }
 
-// HasValidatorByName returns true or false with name
+// HasValidatorName returns true or false with name
 func (k Keeper) HasValidatorName(ctx sdk.Context, name string) bool {
 	store := ctx.KVStore(k.storeKey)
 	return store.Has(types.GetValidatorNameKey(name))
@@ -190,8 +197,9 @@ func (k Keeper) HasValidatorName(ctx sdk.Context, name string) bool {
 
 // DeleteValidator deletes the validator with id
 func (k Keeper) DeleteValidator(ctx sdk.Context, validator types.Validator) {
+	id, _ := hex.DecodeString(validator.Id)
 	store := ctx.KVStore(k.storeKey)
-	store.Delete(types.GetValidatorIDKey(validator.Id))
+	store.Delete(types.GetValidatorIDKey(id))
 	store.Delete(types.GetValidatorNameKey(validator.Name))
 }
 
@@ -298,6 +306,7 @@ func (k Keeper) GetAllValidators(ctx sdk.Context) (validators []types.Validator)
 	return validators
 }
 
+// ValidatorByID return the validator imformation by id
 func (k Keeper) ValidatorByID(ctx sdk.Context, id tmbytes.HexBytes) stakingexported.ValidatorI {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.GetValidatorIDKey(id))
@@ -307,10 +316,12 @@ func (k Keeper) ValidatorByID(ctx sdk.Context, id tmbytes.HexBytes) stakingexpor
 	return validator
 }
 
+// Validator return the validator imformation by valAddr
 func (k Keeper) Validator(ctx sdk.Context, valAddr sdk.ValAddress) stakingexported.ValidatorI {
 	return k.ValidatorByConsAddr(ctx, sdk.ConsAddress(valAddr))
 }
 
+// ValidatorByConsAddr return the validator imformation by consAddr
 func (k Keeper) ValidatorByConsAddr(ctx sdk.Context, consAddr sdk.ConsAddress) stakingexported.ValidatorI {
 	validator, found := k.GetValidatorByConsAddr(ctx, consAddr)
 	if !found {
@@ -319,8 +330,10 @@ func (k Keeper) ValidatorByConsAddr(ctx sdk.Context, consAddr sdk.ConsAddress) s
 	return validator
 }
 
+// Slash not implement
 func (k Keeper) Slash(ctx sdk.Context, consAddr sdk.ConsAddress, i int64, i2 int64, dec sdk.Dec) {}
 
+// Jail disable the validator
 func (k Keeper) Jail(ctx sdk.Context, consAddr sdk.ConsAddress) {
 	validator, found := k.GetValidatorByConsAddr(ctx, consAddr)
 	if !found {
@@ -335,6 +348,7 @@ func (k Keeper) Jail(ctx sdk.Context, consAddr sdk.ConsAddress) {
 	k.SetValidator(ctx, validator)
 }
 
+// Unjail enable the validator
 func (k Keeper) Unjail(ctx sdk.Context, consAddr sdk.ConsAddress) {
 	validator, found := k.GetValidatorByConsAddr(ctx, consAddr)
 	if !found {

@@ -165,7 +165,7 @@ func NewRemoveValidatorCmd() *cobra.Command {
 	return cmd
 }
 
-// Return the flagset, particular flags, and a description of defaults
+// CreateValidatorMsgHelpers Return the flagset, particular flags, and a description of defaults
 // this is anticipated to be used with the gen-tx
 func CreateValidatorMsgHelpers(ipDefault string) (fs *flag.FlagSet, pubkeyFlag, powerFlag, defaultsDesc string) {
 	fsCreateValidator := flag.NewFlagSet("", flag.ContinueOnError)
@@ -178,7 +178,7 @@ func CreateValidatorMsgHelpers(ipDefault string) (fs *flag.FlagSet, pubkeyFlag, 
 	return fsCreateValidator, FlagCert, FlagPower, defaultsDesc
 }
 
-// prepare flags in config
+// PrepareFlagsForTxCreateValidator prepare flags in config
 func PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID, chainID string, cert string) {
 	ip := viper.GetString(FlagIP)
 	if ip == "" {
