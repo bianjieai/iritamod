@@ -10,6 +10,7 @@ import (
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/types"
 )
 
+// NewHandler creates an sdk.Handler for all the params type messages
 func NewHandler(k paramskeeper.Keeper) sdk.Handler {
 	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
 		ctx = ctx.WithEventManager(sdk.NewEventManager())
@@ -55,7 +56,7 @@ func handleParametersUpdate(ctx sdk.Context, k paramskeeper.Keeper, msg *types.M
 		sdk.NewEvent(
 			sdk.EventTypeMessage,
 			sdk.NewAttribute(sdk.AttributeKeyModule, AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator.String()),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
 		),
 	})
 
