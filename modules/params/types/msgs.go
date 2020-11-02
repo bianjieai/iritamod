@@ -9,32 +9,44 @@ import (
 func NewMsgUpdateParams(changes []ParamChange, operator sdk.AccAddress) *MsgUpdateParams {
 	return &MsgUpdateParams{
 		Changes:  changes,
-		Operator: operator,
+		Operator: operator.String(),
 	}
 }
 
+// Route implements Msg
 func (m MsgUpdateParams) Route() string {
 	return RouterKey
 }
 
+// Type implements Msg
 func (m MsgUpdateParams) Type() string {
 	return "update_params"
 }
 
+// ValidateBasic implements Msg
 func (m MsgUpdateParams) ValidateBasic() error {
-	if m.Operator.Empty() {
+	if len(m.Operator) == 0 {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "operator missing")
+	}
+	if _, err := sdk.AccAddressFromBech32(m.Operator); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "invalid operator")
 	}
 	return ValidateChanges(m.Changes)
 }
 
+// GetSignBytes implements Msg
 func (m MsgUpdateParams) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&m)
 	return sdk.MustSortJSON(bz)
 }
 
+// GetSigners implements Msg
 func (m MsgUpdateParams) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{m.Operator}
+	singer, err := sdk.AccAddressFromBech32(m.Operator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{singer}
 }
 
 // ValidateChanges performs basic validation checks over a set of ParamChange. It

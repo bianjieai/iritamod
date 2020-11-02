@@ -11,7 +11,7 @@ message MsgUpdateParams {
   option (gogoproto.equal) = true;
 
   repeated ParamChange changes = 1 [(gogoproto.nullable) = false];
-  bytes operator               = 2 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+  string operator              = 2;
 }
 
 // ParamChange defines a parameter change.
