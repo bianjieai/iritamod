@@ -2,7 +2,6 @@ package cli
 
 import (
 	"context"
-	"encoding/hex"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -45,15 +44,8 @@ func GetCmdQueryIdentity() *cobra.Command {
 			if err != nil {
 				return err
 			}
-
-			id, err := hex.DecodeString(args[0])
-			if err != nil {
-				return err
-			}
-
 			queryClient := types.NewQueryClient(clientCtx)
-
-			res, err := queryClient.Identity(context.Background(), &types.QueryIdentityRequest{Id: id})
+			res, err := queryClient.Identity(context.Background(), &types.QueryIdentityRequest{Id: args[0]})
 			if err != nil {
 				return err
 			}

@@ -11,6 +11,7 @@ import (
 	"math/big"
 	"time"
 
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	"github.com/tjfoc/gmsm/sm2"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -66,7 +67,8 @@ func GetPubKeyFromCertificate(cert []byte) *PubKeyInfo {
 	pubKeyAlgo, _ := getPubKeyAlgorithmFromCert(asn1Cert)
 
 	var pki PubKeyInfo
-	pki.PubKey = getPubKey(asn1Cert, pubKeyAlgo)
+
+	pki.PubKey = tmbytes.HexBytes(getPubKey(asn1Cert, pubKeyAlgo)).String()
 	pki.Algorithm = pubKeyAlgo
 
 	return &pki

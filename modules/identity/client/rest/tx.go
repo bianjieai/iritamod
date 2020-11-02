@@ -72,14 +72,8 @@ func createIdentityHandlerFn(clientCtx client.Context) http.HandlerFunc {
 		var pubKeyInfo *types.PubKeyInfo
 
 		if len(req.PubKey) > 0 {
-			pubKey, err := hex.DecodeString(req.PubKey)
-			if err != nil {
-				rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-				return
-			}
-
 			pubKeyInfo = new(types.PubKeyInfo)
-			pubKeyInfo.PubKey = pubKey
+			pubKeyInfo.PubKey = req.PubKey
 			pubKeyInfo.Algorithm = types.PubKeyAlgorithmFromString(req.PubKeyAlgo)
 		}
 
@@ -116,14 +110,8 @@ func updateIdentityHandlerFn(clientCtx client.Context) http.HandlerFunc {
 		var pubKeyInfo *types.PubKeyInfo
 
 		if len(req.PubKey) > 0 {
-			pubKey, err := hex.DecodeString(req.PubKey)
-			if err != nil {
-				rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-				return
-			}
-
 			pubKeyInfo = new(types.PubKeyInfo)
-			pubKeyInfo.PubKey = pubKey
+			pubKeyInfo.PubKey = req.PubKey
 			pubKeyInfo.Algorithm = types.PubKeyAlgorithmFromString(req.PubKeyAlgo)
 		}
 

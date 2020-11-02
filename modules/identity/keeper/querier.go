@@ -1,6 +1,8 @@
 package keeper
 
 import (
+	"encoding/hex"
+
 	abci "github.com/tendermint/tendermint/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -29,9 +31,14 @@ func queryIdentity(ctx sdk.Context, req abci.RequestQuery, k Keeper, legacyQueri
 		return nil, sdkerrors.Wrap(sdkerrors.ErrJSONUnmarshal, err.Error())
 	}
 
-	identity, found := k.GetIdentity(ctx, params.ID)
+	id, err := hex.DecodeString(params.ID)
+	if err != nil {
+		return nil, sdkerrors.Wrap(types.ErrInvalidID, params.ID)
+	}
+
+	identity, found := k.GetIdentity(ctx, id)
 	if !found {
-		return nil, sdkerrors.Wrap(types.ErrUnknownIdentity, params.ID.String())
+		return nil, sdkerrors.Wrap(types.ErrUnknownIdentity, params.ID)
 	}
 
 	bz, err := codec.MarshalJSONIndent(legacyQuerierCdc, identity)

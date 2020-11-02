@@ -3,6 +3,7 @@ package keeper
 import (
 	"bytes"
 	"encoding/binary"
+	"encoding/hex"
 	"strings"
 
 	"github.com/tendermint/tendermint/crypto/tmhash"
@@ -195,11 +196,21 @@ func (k Keeper) HasCertificate(ctx sdk.Context, id tmbytes.HexBytes, certHash []
 }
 
 // SetIdentity sets the given identity
-func (k Keeper) SetIdentity(ctx sdk.Context, identity types.Identity) {
-	k.SetOwner(ctx, identity.Id, identity.Owner)
+func (k Keeper) SetIdentity(ctx sdk.Context, identity types.Identity) error {
+	id, err := hex.DecodeString(identity.Id)
+	if err != nil {
+		return err
+	}
+
+	owner, err := sdk.AccAddressFromBech32(identity.Owner)
+	if err != nil {
+		return err
+	}
+
+	k.SetOwner(ctx, id, owner)
 
 	for _, pk := range identity.PubKeys {
-		k.SetPubKey(ctx, identity.Id, &pk)
+		k.SetPubKey(ctx, id, &pk)
 	}
 
 	for _, cert := range identity.Certificates {
@@ -207,13 +218,14 @@ func (k Keeper) SetIdentity(ctx sdk.Context, identity types.Identity) {
 		certHash := tmhash.Sum([]byte(cert))
 		certPubKey := types.GetPubKeyFromCertificate([]byte(cert))
 
-		k.SetCertificate(ctx, identity.Id, certHash, cert)
-		k.SetPubKey(ctx, identity.Id, certPubKey)
+		k.SetCertificate(ctx, id, certHash, cert)
+		k.SetPubKey(ctx, id, certPubKey)
 	}
 
 	if len(identity.Credentials) > 0 {
-		k.SetCredentials(ctx, identity.Id, identity.Credentials)
+		k.SetCredentials(ctx, id, identity.Credentials)
 	}
+	return nil
 }
 
 // GetIdentity retrieves the identity of the specified ID
@@ -244,11 +256,11 @@ func (k Keeper) GetIdentity(ctx sdk.Context, id tmbytes.HexBytes) (identity type
 
 	credentials, _ := k.GetCredentials(ctx, id)
 
-	identity.Id = id
+	identity.Id = id.String()
 	identity.PubKeys = pubKeys
 	identity.Certificates = certificates
 	identity.Credentials = credentials
-	identity.Owner = owner
+	identity.Owner = owner.String()
 
 	return identity, true
 }
@@ -270,7 +282,7 @@ func (k Keeper) IteratePubKeys(
 		pubKeyAlgo := types.PubKeyAlgorithm(binary.BigEndian.Uint32(pubKeyInfoKey[0:4]))
 		pubKey := pubKeyInfoKey[4:]
 
-		pubKeyInfo := types.PubKeyInfo{PubKey: pubKey, Algorithm: pubKeyAlgo}
+		pubKeyInfo := types.PubKeyInfo{PubKey: tmbytes.HexBytes(pubKey).String(), Algorithm: pubKeyAlgo}
 
 		if stop := op(pubKeyInfo); stop {
 			break

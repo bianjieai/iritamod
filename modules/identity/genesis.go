@@ -11,7 +11,9 @@ func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) {
 	}
 
 	for _, identity := range data.Identities {
-		k.SetIdentity(ctx, identity)
+		if err := k.SetIdentity(ctx, identity); err != nil {
+			panic(err.Error())
+		}
 	}
 }
 
