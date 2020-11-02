@@ -28,7 +28,7 @@ service Query {
 
 // QueryValidatorRequest is the request type for the Query/Validator RPC method
 message QueryValidatorRequest {
-    bytes id = 1 [ (gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes" ];
+    string id = 1 ;
 }
 
 // QueryValidatorResponse is the response type for the Query/Validator RPC method

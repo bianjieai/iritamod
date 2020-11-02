@@ -4,12 +4,9 @@
 package types
 
 import (
-	bytes "bytes"
 	fmt "fmt"
-	github_com_cosmos_cosmos_sdk_types "github.com/cosmos/cosmos-sdk/types"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	github_com_tendermint_tendermint_libs_bytes "github.com/tendermint/tendermint/libs/bytes"
 	types "github.com/tendermint/tendermint/proto/tendermint/types"
 	io "io"
 	math "math"
@@ -29,11 +26,11 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // MsgCreateValidator defines an SDK message for creating a new validator.
 type MsgCreateValidator struct {
-	Name        string                                        `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Certificate string                                        `protobuf:"bytes,2,opt,name=certificate,proto3" json:"certificate,omitempty"`
-	Power       int64                                         `protobuf:"varint,3,opt,name=power,proto3" json:"power,omitempty"`
-	Description string                                        `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
-	Operator    github_com_cosmos_cosmos_sdk_types.AccAddress `protobuf:"bytes,5,opt,name=operator,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"operator,omitempty" yaml:"operator"`
+	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Certificate string `protobuf:"bytes,2,opt,name=certificate,proto3" json:"certificate,omitempty"`
+	Power       int64  `protobuf:"varint,3,opt,name=power,proto3" json:"power,omitempty"`
+	Description string `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	Operator    string `protobuf:"bytes,5,opt,name=operator,proto3" json:"operator,omitempty" yaml:"operator"`
 }
 
 func (m *MsgCreateValidator) Reset()         { *m = MsgCreateValidator{} }
@@ -71,12 +68,12 @@ var xxx_messageInfo_MsgCreateValidator proto.InternalMessageInfo
 
 // MsgUpdateValidator defines an SDK message for updating an existing validator.
 type MsgUpdateValidator struct {
-	Id          github_com_tendermint_tendermint_libs_bytes.HexBytes `protobuf:"bytes,1,opt,name=id,proto3,casttype=github.com/tendermint/tendermint/libs/bytes.HexBytes" json:"id,omitempty"`
-	Name        string                                               `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Certificate string                                               `protobuf:"bytes,3,opt,name=certificate,proto3" json:"certificate,omitempty"`
-	Power       int64                                                `protobuf:"varint,4,opt,name=power,proto3" json:"power,omitempty"`
-	Description string                                               `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	Operator    github_com_cosmos_cosmos_sdk_types.AccAddress        `protobuf:"bytes,6,opt,name=operator,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"operator,omitempty"`
+	Id          string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name        string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Certificate string `protobuf:"bytes,3,opt,name=certificate,proto3" json:"certificate,omitempty"`
+	Power       int64  `protobuf:"varint,4,opt,name=power,proto3" json:"power,omitempty"`
+	Description string `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
+	Operator    string `protobuf:"bytes,6,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
 func (m *MsgUpdateValidator) Reset()         { *m = MsgUpdateValidator{} }
@@ -114,8 +111,8 @@ var xxx_messageInfo_MsgUpdateValidator proto.InternalMessageInfo
 
 // MsgRemoveValidator defines an SDK message for removing an existing validator.
 type MsgRemoveValidator struct {
-	Id       github_com_tendermint_tendermint_libs_bytes.HexBytes `protobuf:"bytes,1,opt,name=id,proto3,casttype=github.com/tendermint/tendermint/libs/bytes.HexBytes" json:"id,omitempty"`
-	Operator github_com_cosmos_cosmos_sdk_types.AccAddress        `protobuf:"bytes,2,opt,name=operator,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"operator,omitempty"`
+	Id       string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Operator string `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
 func (m *MsgRemoveValidator) Reset()         { *m = MsgRemoveValidator{} }
@@ -154,14 +151,14 @@ var xxx_messageInfo_MsgRemoveValidator proto.InternalMessageInfo
 // Request defines a standard for validator. The validator will participate the
 // blockchain consensus, power determines the probability of proposing a new block.
 type Validator struct {
-	Id          github_com_tendermint_tendermint_libs_bytes.HexBytes `protobuf:"bytes,1,opt,name=id,proto3,casttype=github.com/tendermint/tendermint/libs/bytes.HexBytes" json:"id,omitempty"`
-	Name        string                                               `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Pubkey      string                                               `protobuf:"bytes,3,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
-	Certificate string                                               `protobuf:"bytes,4,opt,name=certificate,proto3" json:"certificate,omitempty"`
-	Power       int64                                                `protobuf:"varint,5,opt,name=power,proto3" json:"power,omitempty"`
-	Description string                                               `protobuf:"bytes,6,opt,name=description,proto3" json:"description,omitempty"`
-	Jailed      bool                                                 `protobuf:"varint,7,opt,name=jailed,proto3" json:"jailed,omitempty"`
-	Operator    github_com_cosmos_cosmos_sdk_types.AccAddress        `protobuf:"bytes,8,opt,name=operator,proto3,casttype=github.com/cosmos/cosmos-sdk/types.AccAddress" json:"operator,omitempty"`
+	Id          string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name        string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Pubkey      string `protobuf:"bytes,3,opt,name=pubkey,proto3" json:"pubkey,omitempty"`
+	Certificate string `protobuf:"bytes,4,opt,name=certificate,proto3" json:"certificate,omitempty"`
+	Power       int64  `protobuf:"varint,5,opt,name=power,proto3" json:"power,omitempty"`
+	Description string `protobuf:"bytes,6,opt,name=description,proto3" json:"description,omitempty"`
+	Jailed      bool   `protobuf:"varint,7,opt,name=jailed,proto3" json:"jailed,omitempty"`
+	Operator    string `protobuf:"bytes,8,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
 func (m *Validator) Reset()         { *m = Validator{} }
@@ -287,45 +284,40 @@ func init() {
 func init() { proto.RegisterFile("validator/validator.proto", fileDescriptor_e972accd7c1f0747) }
 
 var fileDescriptor_e972accd7c1f0747 = []byte{
-	// 596 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x94, 0xc1, 0x6e, 0xd3, 0x40,
-	0x10, 0x86, 0x63, 0x27, 0x31, 0xed, 0xb6, 0x80, 0x58, 0x55, 0x95, 0x5b, 0x51, 0x27, 0xca, 0x29,
-	0x97, 0xda, 0xa2, 0x20, 0x84, 0x0a, 0x97, 0x06, 0x90, 0x82, 0x44, 0x25, 0x64, 0x09, 0x0e, 0x15,
-	0x12, 0xac, 0xbd, 0xd3, 0x74, 0x5b, 0xdb, 0x6b, 0xed, 0x6e, 0x0b, 0x79, 0x00, 0xee, 0x3c, 0x02,
-	0x3c, 0x03, 0x2f, 0x91, 0x63, 0x8f, 0x9c, 0x22, 0x68, 0x2e, 0x88, 0x63, 0x8f, 0x3d, 0xa1, 0x78,
-	0x1d, 0xc7, 0x25, 0x22, 0x17, 0x0a, 0x97, 0x64, 0x76, 0x66, 0x67, 0x76, 0xe6, 0xfb, 0xad, 0x41,
-	0x6b, 0x27, 0x24, 0x62, 0x94, 0x28, 0x2e, 0xbc, 0xc2, 0x72, 0x53, 0xc1, 0x15, 0xc7, 0x98, 0x09,
-	0xa6, 0x48, 0xcc, 0xa9, 0x5b, 0x44, 0xd6, 0x57, 0x7a, 0xbc, 0xc7, 0xb3, 0xb0, 0x37, 0xb6, 0xf4,
-	0xcd, 0xf5, 0xdb, 0x0a, 0x12, 0x0a, 0x22, 0x66, 0x89, 0xf2, 0x54, 0x3f, 0x05, 0xa9, 0x7f, 0x75,
-	0xb4, 0xf5, 0xd3, 0x40, 0x78, 0x57, 0xf6, 0x1e, 0x0b, 0x20, 0x0a, 0x5e, 0x4d, 0x4a, 0x61, 0x8c,
-	0x6a, 0x09, 0x89, 0xc1, 0x36, 0x9a, 0x46, 0x7b, 0xd1, 0xcf, 0x6c, 0xdc, 0x44, 0x4b, 0x21, 0x08,
-	0xc5, 0xf6, 0x59, 0x48, 0x14, 0xd8, 0x66, 0x16, 0x2a, 0xbb, 0xf0, 0x0a, 0xaa, 0xa7, 0xfc, 0x1d,
-	0x08, 0xbb, 0xda, 0x34, 0xda, 0x55, 0x5f, 0x1f, 0xc6, 0x79, 0x14, 0x64, 0x28, 0x58, 0xaa, 0x18,
-	0x4f, 0xec, 0x9a, 0xce, 0x2b, 0xb9, 0xf0, 0x5b, 0xb4, 0xc0, 0x53, 0x10, 0xe3, 0x97, 0xed, 0x7a,
-	0xd3, 0x68, 0x2f, 0x77, 0x9e, 0x9c, 0x0f, 0x1b, 0x37, 0xfb, 0x24, 0x8e, 0xb6, 0x5b, 0x93, 0x48,
-	0xeb, 0x62, 0xd8, 0xd8, 0xec, 0x31, 0x75, 0x70, 0x1c, 0xb8, 0x21, 0x8f, 0xbd, 0x90, 0xcb, 0x98,
-	0xcb, 0xfc, 0x6f, 0x53, 0xd2, 0xa3, 0x7c, 0xae, 0x9d, 0x30, 0xdc, 0xa1, 0x54, 0x80, 0x94, 0x7e,
-	0x51, 0x75, 0xbb, 0xf6, 0xe3, 0x53, 0xc3, 0x68, 0x7d, 0x36, 0xb3, 0x61, 0x5f, 0xa6, 0xf4, 0xd2,
-	0xb0, 0x5d, 0x64, 0x32, 0x9a, 0x8d, 0xba, 0xdc, 0x79, 0x70, 0x31, 0x6c, 0xdc, 0x2b, 0xbd, 0x52,
-	0x86, 0x37, 0x35, 0x23, 0x16, 0x48, 0x2f, 0xe8, 0x2b, 0x90, 0x6e, 0x17, 0xde, 0x77, 0xc6, 0x86,
-	0x6f, 0x32, 0x5a, 0x60, 0x33, 0xff, 0x8c, 0xad, 0x3a, 0x07, 0x5b, 0x6d, 0x0e, 0xb6, 0xfa, 0x2c,
-	0xb6, 0xdd, 0x12, 0x36, 0x2b, 0xeb, 0xfe, 0xce, 0xdf, 0x33, 0xfa, 0xa2, 0x3f, 0x08, 0x1f, 0x62,
-	0x7e, 0xf2, 0x4f, 0x18, 0x95, 0xbb, 0x36, 0xaf, 0xaa, 0xeb, 0x81, 0x89, 0x16, 0xff, 0x97, 0xa0,
-	0xab, 0xc8, 0x4a, 0x8f, 0x83, 0x23, 0xe8, 0xe7, 0x5a, 0xe6, 0xa7, 0xdf, 0x85, 0xae, 0xcd, 0x11,
-	0xba, 0x3e, 0x47, 0x68, 0x6b, 0x56, 0xe8, 0x55, 0x64, 0x1d, 0x12, 0x16, 0x01, 0xb5, 0xaf, 0x35,
-	0x8d, 0xf6, 0x82, 0x9f, 0x9f, 0x2e, 0xa1, 0x5c, 0xb8, 0x2a, 0x94, 0x1f, 0x0c, 0x74, 0xa3, 0xcb,
-	0xa4, 0xe2, 0x82, 0x85, 0x24, 0x7a, 0x96, 0xec, 0x73, 0x7c, 0x1f, 0x59, 0x07, 0x40, 0x28, 0x88,
-	0x8c, 0xe9, 0xd2, 0x96, 0xed, 0x4e, 0xd1, 0xb9, 0xba, 0x60, 0x37, 0x8b, 0x77, 0x6a, 0x83, 0x61,
-	0xa3, 0xe2, 0xe7, 0xb7, 0xf1, 0x43, 0x64, 0x9d, 0x90, 0x48, 0x82, 0xb2, 0xcd, 0x66, 0xb5, 0xbd,
-	0xb4, 0xb5, 0xe1, 0xce, 0x6e, 0x2d, 0xb7, 0x90, 0x6d, 0x92, 0xac, 0x53, 0x5a, 0xaf, 0x91, 0xf5,
-	0x82, 0x08, 0x12, 0x4b, 0xfc, 0x1c, 0xe1, 0x83, 0xa2, 0xa1, 0x37, 0x90, 0x28, 0xc1, 0x40, 0x66,
-	0xad, 0x5c, 0xef, 0x6c, 0x9c, 0x0f, 0x1b, 0x6b, 0x7a, 0x51, 0xcc, 0xde, 0x69, 0xf9, 0xb7, 0xa6,
-	0xce, 0xa7, 0xda, 0xa7, 0xa7, 0xec, 0xec, 0x0d, 0xbe, 0x3b, 0x95, 0xc1, 0x99, 0x63, 0x9c, 0x9e,
-	0x39, 0xc6, 0xb7, 0x33, 0xc7, 0xf8, 0x38, 0x72, 0x2a, 0xa7, 0x23, 0xa7, 0xf2, 0x75, 0xe4, 0x54,
-	0xf6, 0x1e, 0xf5, 0x98, 0x8a, 0x48, 0xe0, 0x06, 0x8c, 0x24, 0x87, 0x0c, 0x5c, 0xc2, 0xbc, 0xac,
-	0xf3, 0xcd, 0x54, 0x70, 0x6f, 0x32, 0x83, 0x17, 0x73, 0x7a, 0x1c, 0x81, 0x9c, 0xee, 0x66, 0x0d,
-	0x37, 0xb0, 0xb2, 0xd5, 0x7a, 0xf7, 0x57, 0x00, 0x00, 0x00, 0xff, 0xff, 0x8d, 0xad, 0x9b, 0xd0,
-	0xbf, 0x05, 0x00, 0x00,
+	// 527 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x94, 0x41, 0x6b, 0x13, 0x41,
+	0x14, 0xc7, 0x33, 0x9b, 0xcd, 0x9a, 0x4e, 0xb0, 0xe2, 0x58, 0xca, 0x36, 0xd8, 0x4d, 0xd8, 0x53,
+	0x2e, 0xee, 0x42, 0x05, 0x0f, 0xd5, 0x53, 0x44, 0xa9, 0xa0, 0x20, 0x0b, 0x7a, 0x28, 0x82, 0x4c,
+	0x32, 0xaf, 0xe9, 0xd4, 0xdd, 0x9d, 0x65, 0x76, 0x1a, 0xc9, 0x07, 0xf0, 0xee, 0x47, 0xf0, 0x43,
+	0x78, 0xf1, 0x1b, 0xe4, 0xd8, 0xa3, 0x20, 0x04, 0x4d, 0x2e, 0x9e, 0xfb, 0x09, 0x24, 0x33, 0xc9,
+	0x26, 0x6d, 0xea, 0x42, 0x2f, 0x61, 0xe6, 0xfd, 0xdf, 0x9b, 0xfc, 0x7f, 0x8f, 0xf7, 0x16, 0xef,
+	0x0d, 0x69, 0xcc, 0x19, 0x55, 0x42, 0x86, 0xc5, 0x29, 0xc8, 0xa4, 0x50, 0x82, 0x10, 0x2e, 0xb9,
+	0xa2, 0x89, 0x60, 0x41, 0xa1, 0x34, 0x77, 0x06, 0x62, 0x20, 0xb4, 0x1c, 0xce, 0x4f, 0x26, 0xb3,
+	0xf9, 0x50, 0x41, 0xca, 0x40, 0x26, 0x3c, 0x55, 0xa1, 0x1a, 0x65, 0x90, 0x9b, 0x5f, 0xa3, 0xfa,
+	0x3f, 0x10, 0x26, 0x6f, 0xf2, 0xc1, 0x73, 0x09, 0x54, 0xc1, 0xfb, 0xe5, 0x53, 0x84, 0x60, 0x3b,
+	0xa5, 0x09, 0xb8, 0xa8, 0x8d, 0x3a, 0x5b, 0x91, 0x3e, 0x93, 0x36, 0x6e, 0xf4, 0x41, 0x2a, 0x7e,
+	0xc2, 0xfb, 0x54, 0x81, 0x6b, 0x69, 0x69, 0x3d, 0x44, 0x76, 0x70, 0x2d, 0x13, 0x9f, 0x41, 0xba,
+	0xd5, 0x36, 0xea, 0x54, 0x23, 0x73, 0x99, 0xd7, 0x31, 0xc8, 0xfb, 0x92, 0x67, 0x8a, 0x8b, 0xd4,
+	0xb5, 0x4d, 0xdd, 0x5a, 0x88, 0x84, 0xb8, 0x2e, 0x32, 0x90, 0xf3, 0x7f, 0x76, 0x6b, 0x73, 0xb9,
+	0xfb, 0xe0, 0x72, 0xd2, 0xba, 0x37, 0xa2, 0x49, 0x7c, 0xe8, 0x2f, 0x15, 0x3f, 0x2a, 0x92, 0x0e,
+	0xed, 0xbf, 0xdf, 0x5a, 0xc8, 0xff, 0x6e, 0xbc, 0xbf, 0xcb, 0xd8, 0x15, 0xef, 0xdb, 0xd8, 0xe2,
+	0x6c, 0xe1, 0xdc, 0xe2, 0xac, 0x60, 0xb1, 0xfe, 0xcf, 0x52, 0x2d, 0x61, 0xb1, 0x4b, 0x58, 0x6a,
+	0x9b, 0x2c, 0xcd, 0x35, 0x16, 0x47, 0xcb, 0xd7, 0x6d, 0xbf, 0xd4, 0xae, 0x23, 0x48, 0xc4, 0xb0,
+	0xc4, 0xf5, 0xfa, 0x3b, 0xd6, 0x8d, 0xef, 0xfc, 0x42, 0x78, 0xeb, 0x76, 0xd4, 0xbb, 0xd8, 0xc9,
+	0xce, 0x7b, 0x9f, 0x60, 0xb4, 0x00, 0x5e, 0xdc, 0xae, 0x77, 0xc3, 0x2e, 0xe9, 0x46, 0xad, 0xa4,
+	0x1b, 0xce, 0x66, 0x37, 0x76, 0xb1, 0x73, 0x46, 0x79, 0x0c, 0xcc, 0xbd, 0xd3, 0x46, 0x9d, 0x7a,
+	0xb4, 0xb8, 0x5d, 0xa1, 0xab, 0xdf, 0x48, 0xf7, 0x05, 0xe1, 0xed, 0x23, 0x9e, 0x2b, 0x21, 0x79,
+	0x9f, 0xc6, 0xaf, 0xd2, 0x13, 0x41, 0x9e, 0x60, 0xe7, 0x14, 0x28, 0x03, 0xa9, 0x31, 0x1b, 0x07,
+	0x6e, 0xb0, 0x1a, 0xed, 0xc0, 0x0c, 0xf5, 0x91, 0xd6, 0xbb, 0xf6, 0x78, 0xd2, 0xaa, 0x44, 0x8b,
+	0x6c, 0xf2, 0x14, 0x3b, 0x43, 0x1a, 0xe7, 0xa0, 0x5c, 0xab, 0x5d, 0xed, 0x34, 0x0e, 0xf6, 0x83,
+	0xcd, 0xe5, 0x09, 0x8a, 0x4e, 0x2e, 0x8b, 0x4d, 0x89, 0xff, 0x01, 0x3b, 0x6f, 0xa9, 0xa4, 0x49,
+	0x4e, 0x5e, 0x63, 0x72, 0x5a, 0x18, 0xfa, 0x08, 0xa9, 0x92, 0x1c, 0x72, 0x6d, 0xe5, 0x6e, 0x77,
+	0xff, 0x72, 0xd2, 0xda, 0x33, 0xf3, 0xba, 0x99, 0xe3, 0x47, 0xf7, 0x57, 0xc1, 0x17, 0x26, 0x66,
+	0x28, 0xbb, 0xc7, 0xe3, 0x3f, 0x5e, 0x65, 0x3c, 0xf5, 0xd0, 0xc5, 0xd4, 0x43, 0xbf, 0xa7, 0x1e,
+	0xfa, 0x3a, 0xf3, 0x2a, 0x17, 0x33, 0xaf, 0xf2, 0x73, 0xe6, 0x55, 0x8e, 0x9f, 0x0d, 0xb8, 0x8a,
+	0x69, 0x2f, 0xe8, 0x71, 0x9a, 0x9e, 0x71, 0x08, 0x28, 0x0f, 0xb5, 0xf3, 0x47, 0x99, 0x14, 0xe1,
+	0x92, 0x21, 0x4c, 0x04, 0x3b, 0x8f, 0x21, 0x5f, 0x7d, 0x22, 0xcc, 0x82, 0xf7, 0x1c, 0xbd, 0xe1,
+	0x8f, 0xff, 0x05, 0x00, 0x00, 0xff, 0xff, 0xdb, 0xd6, 0x80, 0xa0, 0x46, 0x04, 0x00, 0x00,
 }
 
 func (this *MsgCreateValidator) Equal(that interface{}) bool {
@@ -359,7 +351,7 @@ func (this *MsgCreateValidator) Equal(that interface{}) bool {
 	if this.Description != that1.Description {
 		return false
 	}
-	if !bytes.Equal(this.Operator, that1.Operator) {
+	if this.Operator != that1.Operator {
 		return false
 	}
 	return true
@@ -383,7 +375,7 @@ func (this *MsgUpdateValidator) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !bytes.Equal(this.Id, that1.Id) {
+	if this.Id != that1.Id {
 		return false
 	}
 	if this.Name != that1.Name {
@@ -398,7 +390,7 @@ func (this *MsgUpdateValidator) Equal(that interface{}) bool {
 	if this.Description != that1.Description {
 		return false
 	}
-	if !bytes.Equal(this.Operator, that1.Operator) {
+	if this.Operator != that1.Operator {
 		return false
 	}
 	return true
@@ -422,10 +414,10 @@ func (this *MsgRemoveValidator) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !bytes.Equal(this.Id, that1.Id) {
+	if this.Id != that1.Id {
 		return false
 	}
-	if !bytes.Equal(this.Operator, that1.Operator) {
+	if this.Operator != that1.Operator {
 		return false
 	}
 	return true
@@ -449,7 +441,7 @@ func (this *Validator) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !bytes.Equal(this.Id, that1.Id) {
+	if this.Id != that1.Id {
 		return false
 	}
 	if this.Name != that1.Name {
@@ -470,7 +462,7 @@ func (this *Validator) Equal(that interface{}) bool {
 	if this.Jailed != that1.Jailed {
 		return false
 	}
-	if !bytes.Equal(this.Operator, that1.Operator) {
+	if this.Operator != that1.Operator {
 		return false
 	}
 	return true
@@ -1120,7 +1112,7 @@ func (m *MsgCreateValidator) Unmarshal(dAtA []byte) error {
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Operator", wireType)
 			}
-			var byteLen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowValidator
@@ -1130,25 +1122,23 @@ func (m *MsgCreateValidator) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				byteLen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if byteLen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthValidator
 			}
-			postIndex := iNdEx + byteLen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthValidator
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Operator = append(m.Operator[:0], dAtA[iNdEx:postIndex]...)
-			if m.Operator == nil {
-				m.Operator = []byte{}
-			}
+			m.Operator = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1207,7 +1197,7 @@ func (m *MsgUpdateValidator) Unmarshal(dAtA []byte) error {
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
-			var byteLen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowValidator
@@ -1217,25 +1207,23 @@ func (m *MsgUpdateValidator) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				byteLen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if byteLen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthValidator
 			}
-			postIndex := iNdEx + byteLen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthValidator
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Id = append(m.Id[:0], dAtA[iNdEx:postIndex]...)
-			if m.Id == nil {
-				m.Id = []byte{}
-			}
+			m.Id = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
@@ -1356,7 +1344,7 @@ func (m *MsgUpdateValidator) Unmarshal(dAtA []byte) error {
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Operator", wireType)
 			}
-			var byteLen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowValidator
@@ -1366,25 +1354,23 @@ func (m *MsgUpdateValidator) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				byteLen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if byteLen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthValidator
 			}
-			postIndex := iNdEx + byteLen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthValidator
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Operator = append(m.Operator[:0], dAtA[iNdEx:postIndex]...)
-			if m.Operator == nil {
-				m.Operator = []byte{}
-			}
+			m.Operator = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1443,7 +1429,7 @@ func (m *MsgRemoveValidator) Unmarshal(dAtA []byte) error {
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
-			var byteLen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowValidator
@@ -1453,31 +1439,29 @@ func (m *MsgRemoveValidator) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				byteLen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if byteLen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthValidator
 			}
-			postIndex := iNdEx + byteLen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthValidator
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Id = append(m.Id[:0], dAtA[iNdEx:postIndex]...)
-			if m.Id == nil {
-				m.Id = []byte{}
-			}
+			m.Id = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Operator", wireType)
 			}
-			var byteLen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowValidator
@@ -1487,25 +1471,23 @@ func (m *MsgRemoveValidator) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				byteLen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if byteLen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthValidator
 			}
-			postIndex := iNdEx + byteLen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthValidator
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Operator = append(m.Operator[:0], dAtA[iNdEx:postIndex]...)
-			if m.Operator == nil {
-				m.Operator = []byte{}
-			}
+			m.Operator = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -1564,7 +1546,7 @@ func (m *Validator) Unmarshal(dAtA []byte) error {
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
 			}
-			var byteLen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowValidator
@@ -1574,25 +1556,23 @@ func (m *Validator) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				byteLen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if byteLen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthValidator
 			}
-			postIndex := iNdEx + byteLen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthValidator
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Id = append(m.Id[:0], dAtA[iNdEx:postIndex]...)
-			if m.Id == nil {
-				m.Id = []byte{}
-			}
+			m.Id = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
@@ -1765,7 +1745,7 @@ func (m *Validator) Unmarshal(dAtA []byte) error {
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Operator", wireType)
 			}
-			var byteLen int
+			var stringLen uint64
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowValidator
@@ -1775,25 +1755,23 @@ func (m *Validator) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				byteLen |= int(b&0x7F) << shift
+				stringLen |= uint64(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			if byteLen < 0 {
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
 				return ErrInvalidLengthValidator
 			}
-			postIndex := iNdEx + byteLen
+			postIndex := iNdEx + intStringLen
 			if postIndex < 0 {
 				return ErrInvalidLengthValidator
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Operator = append(m.Operator[:0], dAtA[iNdEx:postIndex]...)
-			if m.Operator == nil {
-				m.Operator = []byte{}
-			}
+			m.Operator = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex

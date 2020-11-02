@@ -7,6 +7,7 @@ import (
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/keeper"
 )
 
+// NewHandler creates an sdk.Handler for all the validator type messages
 func NewHandler(k keeper.Keeper) sdk.Handler {
 	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
 		ctx = ctx.WithEventManager(sdk.NewEventManager())
@@ -41,7 +42,7 @@ func handleMsgCreateValidator(ctx sdk.Context, msg *MsgCreateValidator, k keeper
 		sdk.NewEvent(
 			sdk.EventTypeMessage,
 			sdk.NewAttribute(sdk.AttributeKeyModule, AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator.String()),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
 		),
 	})
 
@@ -56,12 +57,12 @@ func handleMsgUpdateValidator(ctx sdk.Context, msg *MsgUpdateValidator, k keeper
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			EventTypeUpdateValidator,
-			sdk.NewAttribute(AttributeKeyValidator, msg.Id.String()),
+			sdk.NewAttribute(AttributeKeyValidator, msg.Id),
 		),
 		sdk.NewEvent(
 			sdk.EventTypeMessage,
 			sdk.NewAttribute(sdk.AttributeKeyModule, AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator.String()),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
 		),
 	})
 
@@ -76,12 +77,12 @@ func handleMsgRemoveValidator(ctx sdk.Context, msg *MsgRemoveValidator, k keeper
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			EventTypeRemoveValidator,
-			sdk.NewAttribute(AttributeKeyValidator, msg.Id.String()),
+			sdk.NewAttribute(AttributeKeyValidator, msg.Id),
 		),
 		sdk.NewEvent(
 			sdk.EventTypeMessage,
 			sdk.NewAttribute(sdk.AttributeKeyModule, AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator.String()),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
 		),
 	})
 

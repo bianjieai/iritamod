@@ -15,27 +15,27 @@ message MsgCreateValidator {
     string certificate = 2;
     int64 power = 3;
     string description = 4;
-    bytes operator = 5 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress", (gogoproto.moretags) = "yaml:\"operator\""];
+    string operator = 5 [(gogoproto.moretags) = "yaml:\"operator\""];
 }
 
 // MsgUpdateValidator defines an SDK message for updating an existing validator.
 message MsgUpdateValidator {
     option (gogoproto.equal) = true;
 
-    bytes id = 1 [(gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes"];
+    string id = 1;
     string name = 2;
     string certificate = 3;
     int64 power = 4;
     string description = 5;
-    bytes operator = 6 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+    string operator = 6;
 }
 
 // MsgRemoveValidator defines an SDK message for removing an existing validator.
 message MsgRemoveValidator {
     option (gogoproto.equal) = true;
 
-    bytes id = 1 [(gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes"];
-    bytes operator = 2 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+    string id = 1 ;
+    string operator = 2;
 }
 
 // Request defines a standard for validator. The validator will participate the
@@ -43,14 +43,14 @@ message MsgRemoveValidator {
 message Validator {
     option (gogoproto.equal) = true;
 
-    bytes id = 1 [(gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes"];
+    string id = 1;
     string name = 2;
     string pubkey = 3;
     string certificate = 4;
     int64 power = 5;
     string description = 6;
     bool jailed = 7;
-    bytes operator = 8 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+    string operator = 8;
 }
 
 // HistoricalInfo contains the historical information that gets stored at

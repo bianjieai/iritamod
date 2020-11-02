@@ -2,7 +2,6 @@ package cli
 
 import (
 	"context"
-	"encoding/hex"
 	"fmt"
 
 	"github.com/spf13/cobra"
@@ -39,19 +38,15 @@ func GetCmdQueryValidator() *cobra.Command {
 		Short: "Query a validator",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			id, err := hex.DecodeString(args[0])
-			if err != nil {
-				return err
-			}
-
 			clientCtx := client.GetClientContextFromCmd(cmd)
+			var err error
 			if clientCtx, err = client.ReadQueryCommandFlags(clientCtx, cmd.Flags()); err != nil {
 				return err
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			res, err := queryClient.Validator(context.Background(), &types.QueryValidatorRequest{Id: id})
+			res, err := queryClient.Validator(context.Background(), &types.QueryValidatorRequest{Id: args[0]})
 			if err != nil {
 				return err
 			}
