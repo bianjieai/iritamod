@@ -49,7 +49,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 
 func (suite *KeeperTestSuite) TestCreateValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
-	id, err := suite.keeper.CreateValidator(suite.ctx, *msg)
+	id, err := suite.keeper.Create(suite.ctx, *msg)
 	suite.NoError(err)
 
 	validator, found := suite.keeper.GetValidator(suite.ctx, id)
@@ -82,7 +82,7 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 
 func (suite *KeeperTestSuite) TestUpdateValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
-	id, err := suite.keeper.CreateValidator(suite.ctx, *msg)
+	id, err := suite.keeper.Create(suite.ctx, *msg)
 	suite.NoError(err)
 
 	_, found := suite.keeper.GetValidator(suite.ctx, id)
@@ -100,11 +100,11 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 
 	// error name
 	msg1 := types.NewMsgUpdateValidator([]byte{0x1}, name1, details1, certStr1, power1, operator1)
-	err = suite.keeper.UpdateValidator(suite.ctx, *msg1)
+	err = suite.keeper.Update(suite.ctx, *msg1)
 	suite.Error(err)
 
 	msg2 := types.NewMsgUpdateValidator(id, "", details1, certStr1, power1, operator1)
-	err = suite.keeper.UpdateValidator(suite.ctx, *msg2)
+	err = suite.keeper.Update(suite.ctx, *msg2)
 	suite.NoError(err)
 
 	validator, found := suite.keeper.GetValidator(suite.ctx, id)
@@ -145,14 +145,14 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 
 func (suite *KeeperTestSuite) TestRemoveValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
-	id, err := suite.keeper.CreateValidator(suite.ctx, *msg)
+	id, err := suite.keeper.Create(suite.ctx, *msg)
 	suite.NoError(err)
 
 	_, found := suite.keeper.GetValidator(suite.ctx, id)
 	suite.True(found)
 
 	msg1 := types.NewMsgRemoveValidator(id, operator)
-	err = suite.keeper.RemoveValidator(suite.ctx, *msg1)
+	err = suite.keeper.Remove(suite.ctx, *msg1)
 	suite.NoError(err)
 
 	_, found = suite.keeper.GetValidator(suite.ctx, id)

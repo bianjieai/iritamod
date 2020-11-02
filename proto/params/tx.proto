@@ -1,0 +1,26 @@
+syntax = "proto3";
+package iritamod.params;
+
+import "params/params.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/params/types";
+option (gogoproto.goproto_getters_all) = false;
+
+
+// Msg defines the bank Msg service.
+service Msg {
+  // Unjail defines a method for unjail a validator.
+  rpc Update(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+}
+
+// MsgUpdateParams defines an SDK message for updating params.
+message MsgUpdateParams {
+  option (gogoproto.equal) = true;
+
+  repeated ParamChange changes = 1 [(gogoproto.nullable) = false];
+  string operator              = 2;
+}
+
+// MsgUpdateParamsResponse defines the Msg/Update response type.
+message MsgUpdateParamsResponse { }

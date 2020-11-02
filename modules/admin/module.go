@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"math/rand"
 
-	"github.com/gogo/protobuf/grpc"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
@@ -90,12 +89,6 @@ type AppModule struct {
 	keeper Keeper
 }
 
-// RegisterQueryService registers a GRPC query service to respond to the
-// module-specific GRPC queries.
-func (am AppModule) RegisterQueryService(server grpc.Server) {
-	types.RegisterQueryServer(server, am.keeper)
-}
-
 // NewAppModule creates a new AppModule object
 func NewAppModule(cdc codec.Marshaler, keeper Keeper) AppModule {
 	return AppModule{
@@ -107,6 +100,12 @@ func NewAppModule(cdc codec.Marshaler, keeper Keeper) AppModule {
 // Name returns the admin module's name.
 func (AppModule) Name() string {
 	return ModuleName
+}
+
+// RegisterServices registers module services.
+func (am AppModule) RegisterServices(cfg module.Configurator) {
+	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
+	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
 }
 
 // RegisterInvariants registers the admin module invariants.

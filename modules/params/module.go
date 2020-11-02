@@ -2,9 +2,9 @@ package params
 
 import (
 	"encoding/json"
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/keeper"
 	"math/rand"
 
-	"github.com/gogo/protobuf/grpc"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
@@ -61,12 +61,6 @@ type AppModule struct {
 	keeper Keeper
 }
 
-// RegisterQueryService registers a GRPC query service to respond to the
-// module-specific GRPC queries.
-func (am AppModule) RegisterQueryService(server grpc.Server) {
-	// TODO
-}
-
 // NewAppModule creates a new AppModule object
 func NewAppModule(cdc codec.Marshaler, k Keeper) AppModule {
 	return AppModule{
@@ -78,6 +72,12 @@ func NewAppModule(cdc codec.Marshaler, k Keeper) AppModule {
 // Name returns the params module's name.
 func (AppModule) Name() string {
 	return ModuleName
+}
+
+
+// RegisterServices registers module services.
+func (am AppModule) RegisterServices(cfg module.Configurator) {
+	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
 }
 
 // RegisterInvariants registers the params module invariants.

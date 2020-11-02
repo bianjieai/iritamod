@@ -17,7 +17,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/server/api"
 	"github.com/cosmos/cosmos-sdk/simapp"
 	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
-	"github.com/cosmos/cosmos-sdk/std"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
@@ -40,7 +39,8 @@ import (
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 	evidencetypes "github.com/cosmos/cosmos-sdk/x/evidence/types"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
-	"github.com/cosmos/cosmos-sdk/x/ibc"
+	ibc "github.com/cosmos/cosmos-sdk/x/ibc/core"
+
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -164,8 +164,8 @@ func NewSimApp(
 	bApp := baseapp.NewBaseApp(appName, logger, db, encodingConfig.TxConfig.TxDecoder(), baseAppOptions...)
 	bApp.SetCommitMultiStoreTracer(traceStore)
 	bApp.SetAppVersion(version.Version)
-	bApp.GRPCQueryRouter().SetInterfaceRegistry(interfaceRegistry)
-	bApp.GRPCQueryRouter().RegisterSimulateService(bApp.Simulate, interfaceRegistry, std.DefaultPublicKeyCodec{})
+	bApp.SetInterfaceRegistry(interfaceRegistry)
+	bApp.GRPCQueryRouter().RegisterSimulateService(bApp.Simulate, interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
 		authtypes.StoreKey,
@@ -273,10 +273,10 @@ func NewSimApp(
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
 	app.mm.RegisterRoutes(app.Router(), app.QueryRouter(), encodingConfig.Amino)
-	app.mm.RegisterQueryServices(app.GRPCQueryRouter())
+	app.mm.RegisterServices(module.NewConfigurator(app.MsgServiceRouter(), app.GRPCQueryRouter()))
 
 	// add test gRPC service for testing gRPC queries in isolation
-	testdata.RegisterTestServiceServer(app.GRPCQueryRouter(), testdata.TestServiceImpl{})
+	testdata.RegisterQueryServer(app.GRPCQueryRouter(), testdata.QueryImpl{})
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	//

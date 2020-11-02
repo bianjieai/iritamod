@@ -1,0 +1,60 @@
+syntax = "proto3";
+package iritamod.validator;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types";
+option (gogoproto.goproto_getters_all) = false;
+
+
+// Msg defines the validator Msg service.
+service Msg {
+    // Unjail defines a method for unjail a validator.
+    rpc CreateValidator(MsgCreateValidator) returns (MsgCreateValidatorResponse);
+    rpc UpdateValidator(MsgUpdateValidator) returns (MsgUpdateValidatorResponse);
+    rpc RemoveValidator(MsgRemoveValidator) returns (MsgRemoveValidatorResponse);
+}
+
+// MsgCreateValidator defines an SDK message for creating a new validator.
+message MsgCreateValidator {
+    option (gogoproto.equal) = true;
+
+    string name = 1;
+    string certificate = 2;
+    int64 power = 3;
+    string description = 4;
+    string operator = 5 [(gogoproto.moretags) = "yaml:\"operator\""];
+}
+
+// MsgCreateValidatorResponse defines the Msg/CreateValidator response type.
+message MsgCreateValidatorResponse {
+    option (gogoproto.equal) = true;
+
+    string id = 1;
+}
+
+// MsgUpdateValidator defines an SDK message for updating an existing validator.
+message MsgUpdateValidator {
+    option (gogoproto.equal) = true;
+
+    string id = 1;
+    string name = 2;
+    string certificate = 3;
+    int64 power = 4;
+    string description = 5;
+    string operator = 6;
+}
+
+// MsgUpdateValidatorResponse defines the Msg/UpdateValidator response type.
+message MsgUpdateValidatorResponse {}
+
+// MsgRemoveValidator defines an SDK message for removing an existing validator.
+message MsgRemoveValidator {
+    option (gogoproto.equal) = true;
+
+    string id = 1 ;
+    string operator = 2;
+}
+
+// MsgRemoveValidatorResponse defines the Msg/RemoveValidator response type.
+message MsgRemoveValidatorResponse {}

@@ -10,7 +10,7 @@ import (
 )
 
 // BlockAccount blocks an account
-func (k Keeper) BlockAccount(ctx sdk.Context, address sdk.AccAddress) error {
+func (k Keeper) Block(ctx sdk.Context, address sdk.AccAddress) error {
 	if k.IsAdmin(ctx, address) {
 		return sdkerrors.Wrap(types.ErrBlockAdminAccount, address.String())
 	}
@@ -22,7 +22,7 @@ func (k Keeper) BlockAccount(ctx sdk.Context, address sdk.AccAddress) error {
 }
 
 // UnblockAccount unblocks an account
-func (k Keeper) UnblockAccount(ctx sdk.Context, address sdk.AccAddress) error {
+func (k Keeper) Unblock(ctx sdk.Context, address sdk.AccAddress) error {
 	if !k.GetBlockAccount(ctx, address) {
 		return sdkerrors.Wrap(types.ErrUnknownBlockedAccount, address.String())
 	}

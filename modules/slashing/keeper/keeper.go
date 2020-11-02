@@ -45,7 +45,7 @@ func (k Keeper) HandleValidatorSignature(ctx sdk.Context, addr crypto.Address, p
 		return
 	}
 
-	k.Keeper.HandleValidatorSignature(ctx, addr, power, signed)
+	k.HandleValidatorSignature(ctx, addr, power, signed)
 }
 
 // HandleUnjail handles ths unjail msg

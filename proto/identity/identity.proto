@@ -6,34 +6,6 @@ import "gogoproto/gogo.proto";
 option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/types";
 option (gogoproto.goproto_getters_all)  = false;
 
-// MsgCreateIdentity defines a message to create an identity
-message MsgCreateIdentity {
-  option (gogoproto.equal) = true;
-
-  string id = 1 ;
-  PubKeyInfo pub_key = 2 [
-    (gogoproto.moretags) = "yaml:\"pubkey\"",
-    (gogoproto.jsontag)  = "pubkey"
-  ];
-  string certificate = 3;
-  string credentials = 4;
-  string owner       = 5;
-}
-
-// MsgUpdateIdentity defines a message to update an identity
-message MsgUpdateIdentity {
-  option (gogoproto.equal) = true;
- 
-  string id = 1 ;
-  PubKeyInfo pub_key = 2 [
-    (gogoproto.moretags) = "yaml:\"pubkey\"",
-    (gogoproto.jsontag)  = "pubkey"
-  ];
-  string certificate = 3;
-  string credentials = 4;
-  string owner       = 5;
-}
-
 // Identity defines a struct for an identity
 message Identity {
   option (gogoproto.equal) = true;

@@ -8,10 +8,10 @@ import (
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	stakingexported "github.com/cosmos/cosmos-sdk/x/staking/exported"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
-var _ stakingexported.ValidatorI = Validator{}
+var _ stakingtypes.ValidatorI = Validator{}
 
 // DoNotModifyDesc used in flags to indicate that description field should not be updated
 const DoNotModifyDesc = "[do-not-modify]"
@@ -52,11 +52,11 @@ func (v Validator) GetMoniker() string {
 }
 
 // GetStatus implement ValidatorI 
-func (v Validator) GetStatus() sdk.BondStatus {
+func (v Validator) GetStatus() stakingtypes.BondStatus {
 	if v.Jailed {
-		return sdk.Unbonded
+		return stakingtypes.Unbonded
 	} else {
-		return sdk.Bonded
+		return stakingtypes.Bonded
 	}
 }
 

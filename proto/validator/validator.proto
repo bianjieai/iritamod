@@ -7,37 +7,6 @@ import "tendermint/types/types.proto";
 option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types";
 option (gogoproto.goproto_getters_all) = false;
 
-// MsgCreateValidator defines an SDK message for creating a new validator.
-message MsgCreateValidator {
-    option (gogoproto.equal) = true;
-
-    string name = 1;
-    string certificate = 2;
-    int64 power = 3;
-    string description = 4;
-    string operator = 5 [(gogoproto.moretags) = "yaml:\"operator\""];
-}
-
-// MsgUpdateValidator defines an SDK message for updating an existing validator.
-message MsgUpdateValidator {
-    option (gogoproto.equal) = true;
-
-    string id = 1;
-    string name = 2;
-    string certificate = 3;
-    int64 power = 4;
-    string description = 5;
-    string operator = 6;
-}
-
-// MsgRemoveValidator defines an SDK message for removing an existing validator.
-message MsgRemoveValidator {
-    option (gogoproto.equal) = true;
-
-    string id = 1 ;
-    string operator = 2;
-}
-
 // Request defines a standard for validator. The validator will participate the
 // blockchain consensus, power determines the probability of proposing a new block.
 message Validator {

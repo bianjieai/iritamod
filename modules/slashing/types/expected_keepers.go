@@ -6,7 +6,7 @@ import (
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	stakingexported "github.com/cosmos/cosmos-sdk/x/staking/exported"
+	stakingexported "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
 // AccountKeeper expected account keeper

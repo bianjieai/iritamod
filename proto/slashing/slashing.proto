@@ -8,12 +8,6 @@ import "google/protobuf/timestamp.proto";
 option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/types";
 option (gogoproto.goproto_getters_all) = false;
 
-// MsgUnjailValidator - struct for unjailing jailed validator
-message MsgUnjailValidator {
-    string id = 1 ;
-    string operator = 2 ;
-}
-
 // ValidatorSigningInfo defines a validator's signing info for monitoring their liveness activity.
 message ValidatorSigningInfo {
   option (gogoproto.equal)            = true;
