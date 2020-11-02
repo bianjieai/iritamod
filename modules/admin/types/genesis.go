@@ -4,11 +4,10 @@ import (
 	"encoding/json"
 
 	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
 // NewGenesisState creates a new GenesisState instance
-func NewGenesisState(roleAccounts []RoleAccount, blackList []sdk.AccAddress) *GenesisState {
+func NewGenesisState(roleAccounts []RoleAccount, blackList []string) *GenesisState {
 	return &GenesisState{
 		RoleAccounts: roleAccounts,
 		BlackList:    blackList,

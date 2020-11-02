@@ -19,9 +19,13 @@ func (k Keeper) Roles(c context.Context, req *types.QueryRolesRequest) (*types.Q
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
 
-	ctx := sdk.UnwrapSDKContext(c)
+	addr, err := sdk.AccAddressFromBech32(req.Address)
+	if err != nil {
+		return nil, err
+	}
 
-	auth := k.GetAuth(ctx, req.Address)
+	ctx := sdk.UnwrapSDKContext(c)
+	auth := k.GetAuth(ctx, addr)
 
 	return &types.QueryRolesResponse{Roles: auth.Roles()}, nil
 }

@@ -66,7 +66,7 @@ func Setup(isCheckTx bool) *SimApp {
 		adminGenState.RoleAccounts = append(
 			adminGenState.RoleAccounts,
 			admin.RoleAccount{
-				Address: sdk.AccAddress(tmhash.SumTruncated([]byte("rootAdmin"))),
+				Address: sdk.AccAddress(tmhash.SumTruncated([]byte("rootAdmin"))).String(),
 				Roles:   []admin.Role{admin.RoleRootAdmin},
 			},
 		)

@@ -10,34 +10,34 @@ option (gogoproto.goproto_getters_all) = false;
 message MsgAddRoles {
     option (gogoproto.equal) = true;
 
-    bytes address = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+    string address = 1;
     repeated Role roles = 2;
-    bytes operator = 3 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+    string operator = 3;
 }
 
 // MsgRemoveRoles defines an SDK message for removing roles from an existing address.
 message MsgRemoveRoles {
     option (gogoproto.equal) = true;
 
-    bytes address = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+    string address = 1;
     repeated Role roles = 2;
-    bytes operator = 3 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+    string operator = 3;
 }
 
 // MsgBlockAccount defines an SDK message for blocking an account.
 message MsgBlockAccount {
     option (gogoproto.equal) = true;
 
-    bytes address = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
-    bytes operator = 2 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+    string address = 1;
+    string operator = 2;
 }
 
 // MsgUnblockAccount defines an SDK message for unblocking an account.
 message MsgUnblockAccount {
     option (gogoproto.equal) = true;
 
-    bytes address = 1 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
-    bytes operator = 2 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+    string address = 1;
+    string operator = 2;
 }
 
 // Role is a type alias that represents a proposal status as a byte

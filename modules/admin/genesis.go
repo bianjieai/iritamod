@@ -22,7 +22,11 @@ func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) (res []abci.Valid
 		for _, r := range account.Roles {
 			auth = auth ^ r.Auth()
 		}
-		k.SetAuth(ctx, account.Address, auth)
+		addr, err := sdk.AccAddressFromBech32(account.Address)
+		if err != nil {
+			panic(err)
+		}
+		k.SetAuth(ctx, addr, auth)
 	}
 	return
 }
@@ -51,13 +55,10 @@ func ValidateGenesis(data GenesisState) error {
 
 	accountMap := make(map[string]bool, len(data.RoleAccounts))
 	for _, roleAccount := range data.RoleAccounts {
-		strAddr := roleAccount.Address.String()
-
-		if _, ok := accountMap[strAddr]; ok {
-			return fmt.Errorf("duplicate admin account in genesis state: address %s", strAddr)
+		if _, ok := accountMap[roleAccount.Address]; ok {
+			return fmt.Errorf("duplicate admin account in genesis state: address %s", roleAccount.Address)
 		}
-
-		accountMap[strAddr] = true
+		accountMap[roleAccount.Address] = true
 	}
 
 	return nil

@@ -12,30 +12,37 @@ var (
 	_ sdk.Msg = &MsgUnblockAccount{}
 )
 
-// NewMsgCreateValidator creates a new MsgAddRoles instance.
+// NewMsgAddRoles creates a new MsgAddRoles instance.
 func NewMsgAddRoles(roles []Role, address, operator sdk.AccAddress) *MsgAddRoles {
 	return &MsgAddRoles{
-		Address:  address,
+		Address:  address.String(),
 		Roles:    roles,
-		Operator: operator,
+		Operator: operator.String(),
 	}
 }
 
+// Route return the RouterKey of MsgAddRoles
 func (m MsgAddRoles) Route() string {
 	return RouterKey
 }
 
+// Type return the Type of MsgAddRoles
 func (m MsgAddRoles) Type() string {
 	return "add_roles"
 }
 
+// ValidateBasic validate the message MsgAddRoles
 func (m MsgAddRoles) ValidateBasic() error {
-	if m.Address.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "address missing")
+	_, err := sdk.AccAddressFromBech32(m.Address)
+	if err != nil {
+		return sdkerrors.Wrap(err, "invalid address")
 	}
-	if m.Operator.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "operator missing")
+
+	_, err = sdk.AccAddressFromBech32(m.Operator)
+	if err != nil {
+		return sdkerrors.Wrap(err, "invalid address")
 	}
+
 	if len(m.Roles) == 0 {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "roles missing")
 	}
@@ -50,39 +57,49 @@ func (m MsgAddRoles) ValidateBasic() error {
 	return nil
 }
 
+// GetSignBytes return the sign bytes
 func (m MsgAddRoles) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&m)
 	return sdk.MustSortJSON(bz)
 }
 
+// GetSigners return the signers of MsgAddRoles
 func (m MsgAddRoles) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{m.Operator}
+	addr, _ := sdk.AccAddressFromBech32(m.Operator)
+	return []sdk.AccAddress{addr}
 }
 
 // NewMsgRemoveRoles creates a new MsgRemoveRoles instance.
 func NewMsgRemoveRoles(roles []Role, address, operator sdk.AccAddress) *MsgRemoveRoles {
 	return &MsgRemoveRoles{
-		Address:  address,
+		Address:  address.String(),
 		Roles:    roles,
-		Operator: operator,
+		Operator: operator.String(),
 	}
 }
 
+// Route return the RouterKey of MsgRemoveRoles
 func (m MsgRemoveRoles) Route() string {
 	return RouterKey
 }
 
+// Type return the Type of MsgRemoveRoles
 func (m MsgRemoveRoles) Type() string {
 	return "remove_roles"
 }
 
+// ValidateBasic validate the message MsgRemoveRoles
 func (m MsgRemoveRoles) ValidateBasic() error {
-	if m.Address.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "address missing")
+	_, err := sdk.AccAddressFromBech32(m.Address)
+	if err != nil {
+		return err
 	}
-	if m.Operator.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "operator missing")
+
+	_, err = sdk.AccAddressFromBech32(m.Operator)
+	if err != nil {
+		return err
 	}
+
 	if len(m.Roles) == 0 {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "roles missing")
 	}
@@ -97,81 +114,102 @@ func (m MsgRemoveRoles) ValidateBasic() error {
 	return nil
 }
 
+// GetSignBytes return the sign bytes
 func (m MsgRemoveRoles) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&m)
 	return sdk.MustSortJSON(bz)
 }
 
+// GetSigners return the signers of MsgAddRoles
 func (m MsgRemoveRoles) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{m.Operator}
+	addr, _ := sdk.AccAddressFromBech32(m.Operator)
+	return []sdk.AccAddress{addr}
 }
 
 // NewMsgBlockAccount creates a new MsgBlockAccount instance.
 func NewMsgBlockAccount(address, operator sdk.AccAddress) *MsgBlockAccount {
 	return &MsgBlockAccount{
-		Address:  address,
-		Operator: operator,
+		Address:  address.String(),
+		Operator: operator.String(),
 	}
 }
 
+// Route return the RouterKey of MsgBlockAccount
 func (m MsgBlockAccount) Route() string {
 	return RouterKey
 }
 
+// Type return the Type of MsgBlockAccount
 func (m MsgBlockAccount) Type() string {
 	return "block_account"
 }
 
+// ValidateBasic validate the message MsgBlockAccount
 func (m MsgBlockAccount) ValidateBasic() error {
-	if m.Address.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "address missing")
+	_, err := sdk.AccAddressFromBech32(m.Address)
+	if err != nil {
+		return err
 	}
-	if m.Operator.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "operator missing")
+
+	_, err = sdk.AccAddressFromBech32(m.Operator)
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
+// GetSignBytes return the sign bytes
 func (m MsgBlockAccount) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&m)
 	return sdk.MustSortJSON(bz)
 }
 
+// GetSigners return the signers of MsgBlockAccount
 func (m MsgBlockAccount) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{m.Operator}
+	addr, _ := sdk.AccAddressFromBech32(m.Operator)
+	return []sdk.AccAddress{addr}
 }
 
 // NewMsgUnblockAccount creates a new MsgUnblockAccount instance.
 func NewMsgUnblockAccount(address, operator sdk.AccAddress) *MsgUnblockAccount {
 	return &MsgUnblockAccount{
-		Address:  address,
-		Operator: operator,
+		Address:  address.String(),
+		Operator: operator.String(),
 	}
 }
 
+// Route return the RouterKey of MsgUnblockAccount
 func (m MsgUnblockAccount) Route() string {
 	return RouterKey
 }
 
+// Type return the Type of MsgUnblockAccount
 func (m MsgUnblockAccount) Type() string {
 	return "unblock_account"
 }
 
+// ValidateBasic validate the message MsgUnblockAccount
 func (m MsgUnblockAccount) ValidateBasic() error {
-	if m.Address.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "address missing")
+	_, err := sdk.AccAddressFromBech32(m.Address)
+	if err != nil {
+		return err
 	}
-	if m.Operator.Empty() {
-		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "operator missing")
+
+	_, err = sdk.AccAddressFromBech32(m.Operator)
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
+// GetSignBytes return the sign bytes
 func (m MsgUnblockAccount) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&m)
 	return sdk.MustSortJSON(bz)
 }
 
+// GetSigners return the signers of MsgUnblockAccount
 func (m MsgUnblockAccount) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{m.Operator}
+	addr, _ := sdk.AccAddressFromBech32(m.Operator)
+	return []sdk.AccAddress{addr}
 }
