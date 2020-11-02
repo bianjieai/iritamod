@@ -33,7 +33,7 @@ func handleMsgUnjail(ctx sdk.Context, msg MsgUnjailValidator, k Keeper) (*sdk.Re
 		sdk.NewEvent(
 			sdk.EventTypeMessage,
 			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator.String()),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
 		),
 	)
 

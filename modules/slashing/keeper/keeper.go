@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"encoding/hex"
 	"fmt"
 
 	"github.com/tendermint/tendermint/crypto"
@@ -12,6 +13,7 @@ import (
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/types"
 )
 
+// Keeper define a slashing keeper
 type Keeper struct {
 	slashingkeeper.Keeper
 	validatorKeeper types.ValidatorKeeper
@@ -48,7 +50,11 @@ func (k Keeper) HandleValidatorSignature(ctx sdk.Context, addr crypto.Address, p
 
 // HandleUnjail handles ths unjail msg
 func (k Keeper) HandleUnjail(ctx sdk.Context, msg types.MsgUnjailValidator) error {
-	validator := k.validatorKeeper.ValidatorByID(ctx, msg.Id)
+	id, err := hex.DecodeString(msg.Id)
+	if err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid validator id : %s", msg.Id)
+	}
+	validator := k.validatorKeeper.ValidatorByID(ctx, id)
 	if validator == nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "unknown validator: %s", msg.Id)
 	}
