@@ -77,13 +77,8 @@ func NewCreateIdentityCmd() *cobra.Command {
 
 			pubKeyStr := viper.GetString(FlagPubKey)
 			if len(pubKeyStr) > 0 {
-				pubKey, err := hex.DecodeString(pubKeyStr)
-				if err != nil {
-					return err
-				}
-
 				pubKeyInfo = new(types.PubKeyInfo)
-				pubKeyInfo.PubKey = pubKey
+				pubKeyInfo.PubKey = pubKeyStr
 				pubKeyInfo.Algorithm = types.PubKeyAlgorithmFromString(viper.GetString(FlagPubKeyAlgo))
 			}
 
@@ -149,13 +144,8 @@ func NewUpdateIdentityCmd() *cobra.Command {
 
 			pubKeyStr := viper.GetString(FlagPubKey)
 			if len(pubKeyStr) > 0 {
-				pubKey, err := hex.DecodeString(pubKeyStr)
-				if err != nil {
-					return err
-				}
-
 				pubKeyInfo = new(types.PubKeyInfo)
-				pubKeyInfo.PubKey = pubKey
+				pubKeyInfo.PubKey = pubKeyStr
 				pubKeyInfo.Algorithm = types.PubKeyAlgorithmFromString(viper.GetString(FlagPubKeyAlgo))
 			}
 

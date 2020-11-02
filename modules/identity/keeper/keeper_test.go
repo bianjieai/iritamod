@@ -24,14 +24,14 @@ var (
 	testID = tmbytes.HexBytes(uuid.NewV4().Bytes())
 
 	testPubKeySM2     = sm2.GenPrivKey().PubKey().Bytes()
-	testPubKeySM2Info = types.PubKeyInfo{PubKey: testPubKeySM2, Algorithm: types.SM2}
+	testPubKeySM2Info = types.PubKeyInfo{PubKey: tmbytes.HexBytes(testPubKeySM2).String(), Algorithm: types.SM2}
 
 	testPrivKeyECDSA, _ = ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	testPubKeyECDSA     = elliptic.Marshal(testPrivKeyECDSA.PublicKey.Curve, testPrivKeyECDSA.X, testPrivKeyECDSA.Y)
-	testPubKeyECDSAInfo = types.PubKeyInfo{PubKey: testPubKeyECDSA, Algorithm: types.ECDSA}
+	testPubKeyECDSAInfo = types.PubKeyInfo{PubKey: tmbytes.HexBytes(testPubKeyECDSA).String(), Algorithm: types.ECDSA}
 
 	testCredentials = "https://kyc.com/user/10001"
-	testOwner       = sdk.AccAddress([]byte("test-owner"))
+	testOwner       = sdk.AccAddress([]byte("test-ownertest-owner"))
 )
 
 type KeeperTestSuite struct {
@@ -54,7 +54,8 @@ func (suite *KeeperTestSuite) SetupTest() {
 
 func (suite *KeeperTestSuite) setIdentity() {
 	identity := types.NewIdentity(testID, []types.PubKeyInfo{testPubKeySM2Info}, []string{testCertificate}, testCredentials, testOwner)
-	suite.keeper.SetIdentity(suite.ctx, identity)
+	err := suite.keeper.SetIdentity(suite.ctx, identity)
+	suite.NoError(err)
 }
 
 func (suite *KeeperTestSuite) TestCreateIdentity() {
@@ -64,13 +65,13 @@ func (suite *KeeperTestSuite) TestCreateIdentity() {
 	identity, found := suite.keeper.GetIdentity(suite.ctx, testID)
 	suite.True(found)
 
-	suite.Equal(testID, identity.Id)
+	suite.Equal(testID.String(), identity.Id)
 	suite.Len(identity.PubKeys, 2)
 	suite.Equal(testPubKeySM2Info, identity.PubKeys[1])
 	suite.Len(identity.Certificates, 1)
 	suite.Equal(testCertificate, identity.Certificates[0])
 	suite.Equal(testCredentials, identity.Credentials)
-	suite.Equal(testOwner, identity.Owner)
+	suite.Equal(testOwner.String(), identity.Owner)
 }
 
 func (suite *KeeperTestSuite) TestUpdateIdentity() {
@@ -85,14 +86,14 @@ func (suite *KeeperTestSuite) TestUpdateIdentity() {
 	identity, found := suite.keeper.GetIdentity(suite.ctx, testID)
 	suite.True(found)
 
-	suite.Equal(testID, identity.Id)
+	suite.Equal(testID.String(), identity.Id)
 	suite.Len(identity.PubKeys, 3)
 	suite.Equal(testPubKeyECDSAInfo, identity.PubKeys[1])
 	suite.Equal(testPubKeySM2Info, identity.PubKeys[2])
 	suite.Len(identity.Certificates, 1)
 	suite.Equal(testCertificate, identity.Certificates[0])
 	suite.Equal(newCredentials, identity.Credentials)
-	suite.Equal(testOwner, identity.Owner)
+	suite.Equal(testOwner.String(), identity.Owner)
 }
 
 const testCertificate = `-----BEGIN CERTIFICATE-----

@@ -1,6 +1,7 @@
 package types
 
 import (
+	"encoding/hex"
 	"encoding/json"
 	"strings"
 
@@ -21,21 +22,25 @@ func NewIdentity(
 	owner sdk.AccAddress,
 ) Identity {
 	return Identity{
-		Id:           id,
+		Id:           id.String(),
 		PubKeys:      pubKeys,
 		Certificates: certificates,
 		Credentials:  credentials,
-		Owner:        owner,
+		Owner:        owner.String(),
 	}
 }
 
 // Validate validates the identity
 func (i Identity) Validate() error {
-	if i.Owner.Empty() {
+	if len(i.Owner) == 0 {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "owner missing")
 	}
 
-	if len(i.Id) != IDLength {
+	if _, err := sdk.AccAddressFromBech32(i.Owner); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "wrong address format")
+	}
+
+	if len(i.Id) != IDLength*2 {
 		return sdkerrors.Wrapf(ErrInvalidID, "size of the ID must be %d in bytes", IDLength)
 	}
 
@@ -61,7 +66,7 @@ func (i Identity) Validate() error {
 // NewPubKeyInfo constructs a new PubKeyInfo instance
 func NewPubKeyInfo(pubKey tmbytes.HexBytes, algorithm PubKeyAlgorithm) PubKeyInfo {
 	return PubKeyInfo{
-		PubKey:    pubKey,
+		PubKey:    pubKey.String(),
 		Algorithm: algorithm,
 	}
 }
@@ -69,29 +74,34 @@ func NewPubKeyInfo(pubKey tmbytes.HexBytes, algorithm PubKeyAlgorithm) PubKeyInf
 // Validate validates the public key against underlying constraints
 // which vary by the algorithm
 func (pki PubKeyInfo) Validate() error {
+	pubKey, err := hex.DecodeString(pki.PubKey)
+	if err != nil {
+		return err
+	}
+
 	switch pki.Algorithm {
 	case RSA:
-		if err := ValidateRSAPubKey(pki.PubKey); err != nil {
+		if err := ValidateRSAPubKey(pubKey); err != nil {
 			return sdkerrors.Wrapf(ErrInvalidPubKey, err.Error())
 		}
 
 	case DSA:
-		if err := ValidateDSAPubKey(pki.PubKey); err != nil {
+		if err := ValidateDSAPubKey(pubKey); err != nil {
 			return sdkerrors.Wrapf(ErrInvalidPubKey, err.Error())
 		}
 
 	case ECDSA:
-		if len(pki.PubKey) != 33 {
+		if len(pubKey) != 33 {
 			return sdkerrors.Wrapf(ErrInvalidPubKey, "size of the ECDSA public key must be %d in bytes", 33)
 		}
 
 	case ED25519:
-		if len(pki.PubKey) != ed25519.PubKeySize {
+		if len(pubKey) != ed25519.PubKeySize {
 			return sdkerrors.Wrapf(ErrInvalidPubKey, "size of the ED25519 public key must be %d in bytes", ed25519.PubKeySize)
 		}
 
 	case SM2:
-		if len(pki.PubKey) != sm2.PubKeySize {
+		if len(pubKey) != sm2.PubKeySize {
 			return sdkerrors.Wrapf(ErrInvalidPubKey, "size of the SM2 public key must be %d in bytes", sm2.PubKeySize)
 		}
 
@@ -100,6 +110,12 @@ func (pki PubKeyInfo) Validate() error {
 	}
 
 	return nil
+}
+
+// PubKeyBytes return the hex bytes of the PubKey
+func (pki PubKeyInfo) PubKeyBytes() []byte {
+	bz, _ := hex.DecodeString(pki.PubKey)
+	return bz
 }
 
 // PubKeyAlgorithmFromString converts the given string to PubKeyAlgorithm

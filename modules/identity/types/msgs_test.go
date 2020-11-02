@@ -21,10 +21,10 @@ var (
 	testPrivKeySM2, _ = sm2.GenerateKey()
 	testPubKeySM2     = sm2.Compress(&testPrivKeySM2.PublicKey)
 	testPubKeySM2Str  = tmbytes.HexBytes(testPubKeySM2).String()
-	testPubKeySM2Info = PubKeyInfo{PubKey: testPubKeySM2, Algorithm: SM2}
+	testPubKeySM2Info = PubKeyInfo{PubKey: testPubKeySM2Str, Algorithm: SM2}
 
 	testCredentials = "https://kyc.com/user/10001"
-	testOwner       = sdk.AccAddress([]byte("test-owner"))
+	testOwner       = sdk.AccAddress([]byte("test-ownertest-owner"))
 )
 
 // TestMsgCreateIdentityRoute tests Route for MsgCreateIdentity
@@ -46,7 +46,7 @@ func TestMsgCreateIdentityValidation(t *testing.T) {
 	emptyAddress := sdk.AccAddress{}
 
 	invalidID := []byte("invalidID")
-	invalidPubKey := PubKeyInfo{PubKey: []byte("invalidPubKey"), Algorithm: UnknownPubKeyAlgorithm}
+	invalidPubKey := PubKeyInfo{PubKey: "invalidPubKey", Algorithm: UnknownPubKeyAlgorithm}
 	invalidCertificate := "invalidCertificate"
 	invalidCredentials := testCredentials + strings.Repeat("c", MaxURILength)
 
@@ -91,7 +91,7 @@ func TestMsgCreateIdentityGetSignBytes(t *testing.T) {
 	msg := NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
 	res := msg.GetSignBytes()
 
-	expected := fmt.Sprintf(`{"type":"iritamod/identity/MsgCreateIdentity","value":{"certificate":"%s","credentials":"https://kyc.com/user/10001","id":"%s","owner":"cosmos1w3jhxapddamkuetjkkyjud","pubkey":{"algorithm":"SM2","pubkey":"%s"}}}`, strings.ReplaceAll(testCertificate, "\n", "\\n"), testIDStr, testPubKeySM2Str)
+	expected := fmt.Sprintf(`{"type":"iritamod/identity/MsgCreateIdentity","value":{"certificate":"%s","credentials":"https://kyc.com/user/10001","id":"%s","owner":"cosmos1w3jhxapddamkuetjw3jhxapddamkuetjgzplvk","pubkey":{"algorithm":"SM2","pubkey":"%s"}}}`, strings.ReplaceAll(testCertificate, "\n", "\\n"), testIDStr, testPubKeySM2Str)
 	require.Equal(t, expected, string(res))
 }
 
@@ -100,7 +100,7 @@ func TestMsgCreateIdentityGetSigners(t *testing.T) {
 	msg := NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
 	res := msg.GetSigners()
 
-	expected := "[746573742D6F776E6572]"
+	expected := "[746573742D6F776E6572746573742D6F776E6572]"
 	require.Equal(t, expected, fmt.Sprintf("%v", res))
 }
 
@@ -123,7 +123,7 @@ func TestMsgUpdateIdentityValidation(t *testing.T) {
 	emptyAddress := sdk.AccAddress{}
 
 	invalidID := []byte("invalidID")
-	invalidPubKey := PubKeyInfo{PubKey: []byte("invalidPubKey"), Algorithm: UnknownPubKeyAlgorithm}
+	invalidPubKey := PubKeyInfo{PubKey: "invalidPubKey", Algorithm: UnknownPubKeyAlgorithm}
 	invalidCertificate := "invalidCertificate"
 	invalidCredentials := testCredentials + strings.Repeat("c", MaxURILength)
 
@@ -168,7 +168,7 @@ func TestMsgUpdateIdentityGetSignBytes(t *testing.T) {
 	msg := NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
 	res := msg.GetSignBytes()
 
-	expected := fmt.Sprintf(`{"type":"iritamod/identity/MsgUpdateIdentity","value":{"certificate":"%s","credentials":"https://kyc.com/user/10001","id":"%s","owner":"cosmos1w3jhxapddamkuetjkkyjud","pubkey":{"algorithm":"SM2","pubkey":"%s"}}}`, strings.ReplaceAll(testCertificate, "\n", "\\n"), testIDStr, testPubKeySM2Str)
+	expected := fmt.Sprintf(`{"type":"iritamod/identity/MsgUpdateIdentity","value":{"certificate":"%s","credentials":"https://kyc.com/user/10001","id":"%s","owner":"cosmos1w3jhxapddamkuetjw3jhxapddamkuetjgzplvk","pubkey":{"algorithm":"SM2","pubkey":"%s"}}}`, strings.ReplaceAll(testCertificate, "\n", "\\n"), testIDStr, testPubKeySM2Str)
 	require.Equal(t, expected, string(res))
 }
 
@@ -177,7 +177,7 @@ func TestMsgUpdateIdentityGetSigners(t *testing.T) {
 	msg := NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
 	res := msg.GetSigners()
 
-	expected := "[746573742D6F776E6572]"
+	expected := "[746573742D6F776E6572746573742D6F776E6572]"
 	require.Equal(t, expected, fmt.Sprintf("%v", res))
 }
 
@@ -201,3 +201,18 @@ C90iTCiV9WhlL93S6fSelDj65sgD4Gw8Q4bBbNa/SRCu4+oBNS9BPjpcbrGllph9
 JZOeFg1owNP2nZ8cD2TwDKS+T+T1rAG1ovnVp/PV7lbH1o8Kn2rwtj1S42O824Gr
 2NyVhhdZkLI/uEX9mdmcFPB+oV6iiPnqEh/r2wswFgw=
 -----END CERTIFICATE-----`
+
+// TestMsgUpdateIdentityGetSigners tests GetSigners for MsgUpdateIdentity
+func TestValidateGenesis(t *testing.T) {
+	id := Identity{
+		Id: testIDStr,
+		PubKeys: []PubKeyInfo{
+			{PubKey: testPubKeySM2Str, Algorithm: SM2},
+		},
+		Certificates: []string{testCertificate},
+		Credentials:  testCredentials,
+		Owner:        testOwner.String(),
+	}
+	err := ValidateGenesis(GenesisState{[]Identity{id}})
+	require.NoError(t, err)
+}

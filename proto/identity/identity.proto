@@ -10,41 +10,35 @@ option (gogoproto.goproto_getters_all)  = false;
 message MsgCreateIdentity {
   option (gogoproto.equal) = true;
 
-  bytes id = 1 [
-    (gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes"
-  ];
+  string id = 1 ;
   PubKeyInfo pub_key = 2 [
     (gogoproto.moretags) = "yaml:\"pubkey\"",
     (gogoproto.jsontag)  = "pubkey"
   ];
   string certificate = 3;
   string credentials = 4;
-  bytes  owner       = 5 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+  string owner       = 5;
 }
 
 // MsgUpdateIdentity defines a message to update an identity
 message MsgUpdateIdentity {
   option (gogoproto.equal) = true;
  
-  bytes id = 1 [
-    (gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes"
-  ];
+  string id = 1 ;
   PubKeyInfo pub_key = 2 [
     (gogoproto.moretags) = "yaml:\"pubkey\"",
     (gogoproto.jsontag)  = "pubkey"
   ];
   string certificate = 3;
   string credentials = 4;
-  bytes  owner       = 5 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+  string owner       = 5;
 }
 
 // Identity defines a struct for an identity
 message Identity {
   option (gogoproto.equal) = true;
 
-  bytes id = 1 [
-    (gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes"
-  ];
+  string id = 1 ;
   repeated PubKeyInfo pub_keys = 2 [
     (gogoproto.nullable) = false,
     (gogoproto.moretags) = "yaml:\"pubkeys\"",
@@ -52,15 +46,14 @@ message Identity {
   ];
   repeated string certificates = 3;
   string credentials           = 4;
-  bytes owner                  = 5 [(gogoproto.casttype) = "github.com/cosmos/cosmos-sdk/types.AccAddress"];
+  string owner       = 5;
 }
 
 // PubKey represents a public key along with the corresponding algorithm
 message PubKeyInfo {
   option (gogoproto.equal) = true;
 
-  bytes pub_key = 1 [
-    (gogoproto.casttype) = "github.com/tendermint/tendermint/libs/bytes.HexBytes",
+  string pub_key = 1 [
     (gogoproto.moretags) = "yaml:\"pubkey\"",
     (gogoproto.jsontag)  = "pubkey"
   ];

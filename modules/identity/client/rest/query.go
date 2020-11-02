@@ -1,7 +1,6 @@
 package rest
 
 import (
-	"encoding/hex"
 	"fmt"
 	"net/http"
 
@@ -21,20 +20,13 @@ func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
 func queryIdentityHandlerFn(clientCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
-
-		id, err := hex.DecodeString(vars[RestID])
-		if err != nil {
-			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
-			return
-		}
-
 		clientCtx, ok := rest.ParseQueryHeightOrReturnBadRequest(w, clientCtx, r)
 		if !ok {
 			return
 		}
 
 		params := types.QueryIdentityParams{
-			ID: id,
+			ID: vars[RestID],
 		}
 
 		bz, err := clientCtx.LegacyAmino.MarshalJSON(params)

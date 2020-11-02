@@ -2,11 +2,13 @@ package keeper
 
 import (
 	"context"
+	"encoding/hex"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/types"
 )
@@ -21,7 +23,11 @@ func (k Keeper) Identity(c context.Context, req *types.QueryIdentityRequest) (*t
 
 	ctx := sdk.UnwrapSDKContext(c)
 
-	identity, found := k.GetIdentity(ctx, req.Id)
+	id, err := hex.DecodeString(req.Id)
+	if err != nil {
+		return nil, sdkerrors.Wrap(types.ErrInvalidID, req.Id)
+	}
+	identity, found := k.GetIdentity(ctx, id)
 	if !found {
 		return nil, status.Errorf(codes.NotFound, "identity %s not found", req.Id)
 	}

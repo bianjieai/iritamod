@@ -26,20 +26,23 @@ func NewHandler(k Keeper) sdk.Handler {
 }
 
 func handleMsgCreateIdentity(ctx sdk.Context, k Keeper, msg *MsgCreateIdentity) (*sdk.Result, error) {
-	if err := k.CreateIdentity(ctx, msg.Id, msg.PubKey, msg.Certificate, msg.Credentials, msg.Owner); err != nil {
+	id, _ := hex.DecodeString(msg.Id)
+	owner, _ := sdk.AccAddressFromBech32(msg.Owner)
+
+	if err := k.CreateIdentity(ctx, id, msg.PubKey, msg.Certificate, msg.Credentials, owner); err != nil {
 		return nil, err
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			EventTypeCreateIdentity,
-			sdk.NewAttribute(AttributeKeyID, hex.EncodeToString(msg.Id)),
-			sdk.NewAttribute(AttributeKeyOwner, msg.Owner.String()),
+			sdk.NewAttribute(AttributeKeyID, msg.Id),
+			sdk.NewAttribute(AttributeKeyOwner, msg.Owner),
 		),
 		sdk.NewEvent(
 			sdk.EventTypeMessage,
 			sdk.NewAttribute(sdk.AttributeKeyModule, AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.Owner.String()),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Owner),
 		),
 	})
 
@@ -47,20 +50,23 @@ func handleMsgCreateIdentity(ctx sdk.Context, k Keeper, msg *MsgCreateIdentity) 
 }
 
 func handleMsgUpdateIdentity(ctx sdk.Context, k Keeper, msg *MsgUpdateIdentity) (*sdk.Result, error) {
-	if err := k.UpdateIdentity(ctx, msg.Id, msg.PubKey, msg.Certificate, msg.Credentials, msg.Owner); err != nil {
+	id, _ := hex.DecodeString(msg.Id)
+	owner, _ := sdk.AccAddressFromBech32(msg.Owner)
+
+	if err := k.UpdateIdentity(ctx, id, msg.PubKey, msg.Certificate, msg.Credentials, owner); err != nil {
 		return nil, err
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			EventTypeUpdateIdentity,
-			sdk.NewAttribute(AttributeKeyID, hex.EncodeToString(msg.Id)),
-			sdk.NewAttribute(AttributeKeyOwner, msg.Owner.String()),
+			sdk.NewAttribute(AttributeKeyID, msg.Id),
+			sdk.NewAttribute(AttributeKeyOwner, msg.Owner),
 		),
 		sdk.NewEvent(
 			sdk.EventTypeMessage,
 			sdk.NewAttribute(sdk.AttributeKeyModule, AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.Owner.String()),
+			sdk.NewAttribute(sdk.AttributeKeySender, msg.Owner),
 		),
 	})
 

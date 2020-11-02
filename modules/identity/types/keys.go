@@ -39,7 +39,7 @@ func GetPubKeyInfoKey(identityID []byte, pubKey *PubKeyInfo) []byte {
 	algoBz := make([]byte, 4)
 	binary.BigEndian.PutUint32(algoBz, uint32(pubKey.Algorithm))
 
-	return append(append(append(PubKeyInfoKey, identityID...), algoBz...), pubKey.PubKey...)
+	return append(append(append(PubKeyInfoKey, identityID...), algoBz...), pubKey.PubKeyBytes()...)
 }
 
 // GetCertificateKey gets the key for the certificate with the specified identity and certificate hash

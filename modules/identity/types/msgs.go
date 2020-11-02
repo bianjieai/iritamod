@@ -1,6 +1,8 @@
 package types
 
 import (
+	"encoding/hex"
+
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -32,11 +34,11 @@ func NewMsgCreateIdentity(
 	owner sdk.AccAddress,
 ) *MsgCreateIdentity {
 	return &MsgCreateIdentity{
-		Id:          id,
+		Id:          id.String(),
 		PubKey:      pubKey,
 		Certificate: certificate,
 		Credentials: credentials,
-		Owner:       owner,
+		Owner:       owner.String(),
 	}
 }
 
@@ -65,7 +67,11 @@ func (msg MsgCreateIdentity) GetSignBytes() []byte {
 
 // GetSigners implements Msg
 func (msg MsgCreateIdentity) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Owner}
+	addr, err := sdk.AccAddressFromBech32(msg.Owner)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{addr}
 }
 
 // NewMsgUpdateIdentity creates a new MsgUpdateIdentity instance
@@ -77,11 +83,11 @@ func NewMsgUpdateIdentity(
 	owner sdk.AccAddress,
 ) *MsgUpdateIdentity {
 	return &MsgUpdateIdentity{
-		Id:          id,
+		Id:          id.String(),
 		PubKey:      pubKey,
 		Certificate: certificate,
 		Credentials: credentials,
-		Owner:       owner,
+		Owner:       owner.String(),
 	}
 }
 
@@ -110,23 +116,35 @@ func (msg MsgUpdateIdentity) ValidateBasic() error {
 
 // GetSigners implements Msg.
 func (msg MsgUpdateIdentity) GetSigners() []sdk.AccAddress {
-	return []sdk.AccAddress{msg.Owner}
+	addr, err := sdk.AccAddressFromBech32(msg.Owner)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{addr}
 }
 
 // ValidateIdentityFields validates the given identity fields
 func ValidateIdentityFields(
-	id tmbytes.HexBytes,
+	id string,
 	pubKey *PubKeyInfo,
 	certificate string,
 	credentials string,
-	owner sdk.AccAddress,
+	owner string,
 ) error {
-	if owner.Empty() {
+	if owner == "" {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "owner missing")
 	}
 
-	if len(id) != IDLength {
+	if _, err := sdk.AccAddressFromBech32(owner); err != nil {
+		return err
+	}
+
+	if len(id) != IDLength*2 {
 		return sdkerrors.Wrapf(ErrInvalidID, "size of the ID must be %d in bytes", IDLength)
+	}
+
+	if _, err := hex.DecodeString(id); err != nil {
+		return sdkerrors.Wrap(ErrInvalidID, "id not hex encoding")
 	}
 
 	if pubKey != nil {
