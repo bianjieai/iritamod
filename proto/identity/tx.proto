@@ -9,11 +9,11 @@ option (gogoproto.goproto_getters_all)  = false;
 
 // Msg defines the bank Msg service.
 service Msg {
-    // AddRoles defines a method for adding a role for the operator.
-    rpc Create(MsgCreateIdentity) returns (MsgCreateIdentityResponse);
+    // CreateIdentity defines a method for creating a new identity.
+    rpc CreateIdentity(MsgCreateIdentity) returns (MsgCreateIdentityResponse);
 
-    // RemoveRoles defines a method for removing a role for the operator.
-    rpc Update(MsgUpdateIdentity) returns (MsgUpdateIdentityResponse);
+    // UpdateIdentity defines a method for Updating a identity.
+    rpc UpdateIdentity(MsgUpdateIdentity) returns (MsgUpdateIdentityResponse);
 }
 
 // MsgCreateIdentity defines a message to create an identity

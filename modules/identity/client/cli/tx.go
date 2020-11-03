@@ -39,8 +39,8 @@ func NewTxCmd() *cobra.Command {
 func NewCreateIdentityCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
-		Short: "Create an identity",
-		Long:  "Create a new identity based on the given params.",
+		Short: "CreateValidator an identity",
+		Long:  "CreateValidator a new identity based on the given params.",
 		Example: fmt.Sprintf(
 			"$ %s tx identity create "+
 				"--id=<id> "+
@@ -113,8 +113,8 @@ func NewCreateIdentityCmd() *cobra.Command {
 func NewUpdateIdentityCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update [id]",
-		Short: "Update an identity",
-		Long:  "Update an existing identity.",
+		Short: "UpdateValidator an identity",
+		Long:  "UpdateValidator an existing identity.",
 		Example: fmt.Sprintf(
 			"$ %s tx identity update <id> "+
 				"--pubkey=<public-key> "+

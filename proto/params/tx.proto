@@ -10,8 +10,8 @@ option (gogoproto.goproto_getters_all) = false;
 
 // Msg defines the bank Msg service.
 service Msg {
-  // Unjail defines a method for unjail a validator.
-  rpc Update(MsgUpdateParams) returns (MsgUpdateParamsResponse);
+  // UpdateParams defines a method for update a set of system params.
+  rpc UpdateParams(MsgUpdateParams) returns (MsgUpdateParamsResponse);
 }
 
 // MsgUpdateParams defines an SDK message for updating params.
@@ -22,5 +22,5 @@ message MsgUpdateParams {
   string operator              = 2;
 }
 
-// MsgUpdateParamsResponse defines the Msg/Update response type.
+// MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
 message MsgUpdateParamsResponse { }

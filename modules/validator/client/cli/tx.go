@@ -47,7 +47,7 @@ func NewTxCmd() *cobra.Command {
 func NewCreateValidatorCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "create",
-		Short: "Create new validator",
+		Short: "CreateValidator new validator",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
@@ -88,7 +88,7 @@ func NewUpdateValidatorCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update [id]",
 		Args:  cobra.ExactArgs(1),
-		Short: "Update an existing validator",
+		Short: "UpdateValidator an existing validator",
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())

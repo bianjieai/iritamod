@@ -68,7 +68,7 @@ func (m *MsgAddRoles) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgAddRoles proto.InternalMessageInfo
 
-// MsgAddRolesResponse defines the Msg/Add response type.
+// MsgAddRolesResponse defines the Msg/AddRoles response type.
 type MsgAddRolesResponse struct {
 }
 
@@ -145,7 +145,7 @@ func (m *MsgRemoveRoles) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgRemoveRoles proto.InternalMessageInfo
 
-// MsgRemoveRolesResponse defines the Msg/Deauthorize response type.
+// MsgRemoveRolesResponse defines the Msg/RemoveRoles response type.
 type MsgRemoveRolesResponse struct {
 }
 
@@ -534,7 +534,7 @@ func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 
 func (c *msgClient) AddRoles(ctx context.Context, in *MsgAddRoles, opts ...grpc.CallOption) (*MsgAddRolesResponse, error) {
 	out := new(MsgAddRolesResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.admin.Msg/Add", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/iritamod.admin.Msg/AddRoles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -543,7 +543,7 @@ func (c *msgClient) AddRoles(ctx context.Context, in *MsgAddRoles, opts ...grpc.
 
 func (c *msgClient) RemoveRoles(ctx context.Context, in *MsgRemoveRoles, opts ...grpc.CallOption) (*MsgRemoveRolesResponse, error) {
 	out := new(MsgRemoveRolesResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.admin.Msg/Deauthorize", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/iritamod.admin.Msg/RemoveRoles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -585,10 +585,10 @@ type UnimplementedMsgServer struct {
 }
 
 func (*UnimplementedMsgServer) AddRoles(ctx context.Context, req *MsgAddRoles) (*MsgAddRolesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Add not implemented")
+	return nil, status.Errorf(codes.Unimplemented, "method AddRoles not implemented")
 }
 func (*UnimplementedMsgServer) RemoveRoles(ctx context.Context, req *MsgRemoveRoles) (*MsgRemoveRolesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Deauthorize not implemented")
+	return nil, status.Errorf(codes.Unimplemented, "method RemoveRoles not implemented")
 }
 func (*UnimplementedMsgServer) BlockAccount(ctx context.Context, req *MsgBlockAccount) (*MsgBlockAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BlockAccount not implemented")
@@ -611,7 +611,7 @@ func _Msg_AddRoles_Handler(srv interface{}, ctx context.Context, dec func(interf
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.admin.Msg/Add",
+		FullMethod: "/iritamod.admin.Msg/AddRoles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).AddRoles(ctx, req.(*MsgAddRoles))
@@ -629,7 +629,7 @@ func _Msg_RemoveRoles_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.admin.Msg/Deauthorize",
+		FullMethod: "/iritamod.admin.Msg/RemoveRoles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).RemoveRoles(ctx, req.(*MsgRemoveRoles))
@@ -678,11 +678,11 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Add",
+			MethodName: "AddRoles",
 			Handler:    _Msg_AddRoles_Handler,
 		},
 		{
-			MethodName: "Deauthorize",
+			MethodName: "RemoveRoles",
 			Handler:    _Msg_RemoveRoles_Handler,
 		},
 		{

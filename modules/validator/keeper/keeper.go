@@ -52,8 +52,8 @@ func (k *Keeper) SetHooks(sh staking.StakingHooks) *Keeper {
 	return k
 }
 
-// Create create a new validator
-func (k Keeper) Create(ctx sdk.Context, msg types.MsgCreateValidator) (tmbytes.HexBytes, error) {
+// CreateValidator create a new validator
+func (k Keeper) CreateValidator(ctx sdk.Context, msg types.MsgCreateValidator) (tmbytes.HexBytes, error) {
 	if k.HasValidatorName(ctx, msg.Name) {
 		return nil, types.ErrValidatorNameExists
 	}
@@ -95,7 +95,7 @@ func (k Keeper) Create(ctx sdk.Context, msg types.MsgCreateValidator) (tmbytes.H
 }
 
 // UpdateValidator updates an existing validator record
-func (k Keeper) Update(ctx sdk.Context, msg types.MsgUpdateValidator) error {
+func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) error {
 	if k.HasValidatorName(ctx, msg.Name) {
 		return types.ErrValidatorNameExists
 	}

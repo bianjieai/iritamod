@@ -21,9 +21,9 @@ func NewMsgServerImpl(keeper paramskeeper.Keeper) types.MsgServer {
 
 var _ types.MsgServer = msgServer{}
 
-func (m msgServer) Update(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	changeEvents, err := m.UpdateParams(ctx, msg.Changes)
+	changeEvents, err := m.Keeper.UpdateParams(ctx, msg.Changes)
 	if err != nil {
 		return nil, err
 	}

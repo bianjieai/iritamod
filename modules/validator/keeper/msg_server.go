@@ -21,7 +21,7 @@ var _ types.MsgServer = msgServer{}
 
 func (m msgServer) CreateValidator(goCtx context.Context, msg *types.MsgCreateValidator) (*types.MsgCreateValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	id, err := m.Create(ctx, *msg)
+	id, err := m.Keeper.CreateValidator(ctx, *msg)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (m msgServer) CreateValidator(goCtx context.Context, msg *types.MsgCreateVa
 
 func (m msgServer) UpdateValidator(goCtx context.Context, msg *types.MsgUpdateValidator) (*types.MsgUpdateValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := m.Update(ctx, *msg); err != nil {
+	if err := m.Keeper.UpdateValidator(ctx, *msg); err != nil {
 		return nil, err
 	}
 

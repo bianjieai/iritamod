@@ -15,11 +15,11 @@ func NewHandler(k Keeper) sdk.Handler {
 
 		switch msg := msg.(type) {
 		case *MsgCreateIdentity:
-			res, err := msgServer.Create(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.CreateIdentity(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *MsgUpdateIdentity:
-			res, err := msgServer.Update(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.UpdateIdentity(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		default:

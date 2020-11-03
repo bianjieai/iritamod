@@ -21,13 +21,13 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 var _ types.MsgServer = msgServer{}
 
-func (m msgServer) Create(goCtx context.Context, msg *types.MsgCreateIdentity) (*types.MsgCreateIdentityResponse, error) {
+func (m msgServer) CreateIdentity(goCtx context.Context, msg *types.MsgCreateIdentity) (*types.MsgCreateIdentityResponse, error) {
 	id, _ := hex.DecodeString(msg.Id)
 	owner, _ := sdk.AccAddressFromBech32(msg.Owner)
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.CreateIdentity(ctx, id, msg.PubKey, msg.Certificate, msg.Credentials, owner); err != nil {
+	if err := m.Keeper.CreateIdentity(ctx, id, msg.PubKey, msg.Certificate, msg.Credentials, owner); err != nil {
 		return nil, err
 	}
 
@@ -46,12 +46,12 @@ func (m msgServer) Create(goCtx context.Context, msg *types.MsgCreateIdentity) (
 	return &types.MsgCreateIdentityResponse{}, nil
 }
 
-func (m msgServer) Update(goCtx context.Context, msg *types.MsgUpdateIdentity) (*types.MsgUpdateIdentityResponse, error) {
+func (m msgServer) UpdateIdentity(goCtx context.Context, msg *types.MsgUpdateIdentity) (*types.MsgUpdateIdentityResponse, error) {
 	id, _ := hex.DecodeString(msg.Id)
 	owner, _ := sdk.AccAddressFromBech32(msg.Owner)
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := m.UpdateIdentity(ctx, id, msg.PubKey, msg.Certificate, msg.Credentials, owner); err != nil {
+	if err := m.Keeper.UpdateIdentity(ctx, id, msg.PubKey, msg.Certificate, msg.Credentials, owner); err != nil {
 		return nil, err
 	}
 
