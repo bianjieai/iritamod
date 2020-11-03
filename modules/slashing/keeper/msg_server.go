@@ -14,7 +14,7 @@ type msgServer struct {
 
 func (m msgServer) UnjailValidator(goCtx context.Context, msg *types.MsgUnjailValidator) (*types.MsgUnjailValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := m.Keeper.HandleUnjail(ctx,*msg); err != nil {
+	if err := m.Keeper.HandleUnjail(ctx, *msg); err != nil {
 		return nil, err
 	}
 	ctx.EventManager().EmitEvent(

@@ -41,17 +41,17 @@ func NewValidator(
 	}
 }
 
-// IsJailed implement ValidatorI 
+// IsJailed implement ValidatorI
 func (v Validator) IsJailed() bool {
 	return v.Jailed
 }
 
-// GetMoniker implement ValidatorI 
+// GetMoniker implement ValidatorI
 func (v Validator) GetMoniker() string {
 	return v.Name
 }
 
-// GetStatus implement ValidatorI 
+// GetStatus implement ValidatorI
 func (v Validator) GetStatus() stakingtypes.BondStatus {
 	if v.Jailed {
 		return stakingtypes.Unbonded
@@ -60,42 +60,42 @@ func (v Validator) GetStatus() stakingtypes.BondStatus {
 	}
 }
 
-// IsBonded implement ValidatorI 
+// IsBonded implement ValidatorI
 func (v Validator) IsBonded() bool {
 	return !v.Jailed
 }
 
-// IsUnbonded implement ValidatorI 
+// IsUnbonded implement ValidatorI
 func (v Validator) IsUnbonded() bool {
 	return v.Jailed
 }
 
-// IsUnbonding implement ValidatorI 
+// IsUnbonding implement ValidatorI
 func (v Validator) IsUnbonding() bool {
 	return false
 }
 
-// GetOperator implement ValidatorI 
+// GetOperator implement ValidatorI
 func (v Validator) GetOperator() sdk.ValAddress {
 	return sdk.ValAddress(v.GetConsPubKey().Address())
 }
 
-// GetConsPubKey implement ValidatorI 
+// GetConsPubKey implement ValidatorI
 func (v Validator) GetConsPubKey() crypto.PubKey {
 	return sdk.MustGetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, v.Pubkey)
 }
 
-// GetConsAddr implement ValidatorI 
+// GetConsAddr implement ValidatorI
 func (v Validator) GetConsAddr() sdk.ConsAddress {
 	return sdk.ConsAddress(v.GetConsPubKey().Address())
 }
 
-// GetTokens implement ValidatorI 
+// GetTokens implement ValidatorI
 func (v Validator) GetTokens() sdk.Int {
 	return sdk.TokensFromConsensusPower(v.Power)
 }
 
-// GetBondedTokens implement ValidatorI 
+// GetBondedTokens implement ValidatorI
 func (v Validator) GetBondedTokens() sdk.Int {
 	if v.Jailed {
 		return sdk.NewInt(0)
@@ -103,17 +103,17 @@ func (v Validator) GetBondedTokens() sdk.Int {
 	return sdk.TokensFromConsensusPower(v.Power)
 }
 
-// GetConsensusPower implement ValidatorI 
+// GetConsensusPower implement ValidatorI
 func (v Validator) GetConsensusPower() int64 {
 	return v.Power
 }
 
-// GetCommission implement ValidatorI 
+// GetCommission implement ValidatorI
 func (v Validator) GetCommission() sdk.Dec {
 	return sdk.NewDec(0)
 }
 
-// GetMinSelfDelegation implement ValidatorI 
+// GetMinSelfDelegation implement ValidatorI
 func (v Validator) GetMinSelfDelegation() sdk.Int {
 	return sdk.NewInt(0)
 }

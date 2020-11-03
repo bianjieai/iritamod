@@ -116,7 +116,7 @@ func SetupWithGenesisValSet(t *testing.T, valSet *tmtypes.ValidatorSet, genAccs 
 
 	for _, val := range valSet.Validators {
 		validator := stakingtypes.Validator{
-			OperatorAddress:   sdk.MustBech32ifyAddressBytes(sdk.Bech32PrefixValAddr,val.Address),
+			OperatorAddress:   sdk.MustBech32ifyAddressBytes(sdk.Bech32PrefixValAddr, val.Address),
 			ConsensusPubkey:   sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, val.PubKey),
 			Jailed:            false,
 			Status:            stakingtypes.Bonded,
@@ -278,7 +278,7 @@ func addTestAddrs(app *SimApp, ctx sdk.Context, accNum int, accAmt sdk.Int, stra
 func saveAccount(app *SimApp, ctx sdk.Context, addr sdk.AccAddress, initCoins sdk.Coins) {
 	acc := app.AccountKeeper.NewAccountWithAddress(ctx, addr)
 	app.AccountKeeper.SetAccount(ctx, acc)
-	if  err := app.BankKeeper.AddCoins(ctx, addr, initCoins); err != nil {
+	if err := app.BankKeeper.AddCoins(ctx, addr, initCoins); err != nil {
 		panic(err)
 	}
 }
@@ -357,7 +357,7 @@ func SignCheckDeliver(
 
 	// Simulate a sending a transaction and committing a block
 	app.BeginBlock(abci.RequestBeginBlock{Header: header})
-	gInfo, res, err := app.Deliver(txGen.TxEncoder(),tx)
+	gInfo, res, err := app.Deliver(txGen.TxEncoder(), tx)
 
 	if expPass {
 		require.NoError(t, err)

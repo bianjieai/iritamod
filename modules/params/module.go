@@ -74,7 +74,6 @@ func (AppModule) Name() string {
 	return ModuleName
 }
 
-
 // RegisterServices registers module services.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))

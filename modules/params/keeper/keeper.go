@@ -24,7 +24,7 @@ func NewKeeper(keeper paramskeeper.Keeper) Keeper {
 
 // HandleValidatorSignature handles a validator signature, must be called once per validator per block.
 // Block all subsequent logic if this validator has been removed.
-func (k Keeper) UpdateParams(ctx sdk.Context, params []types.ParamChange) ([]sdk.Attribute,error) {
+func (k Keeper) UpdateParams(ctx sdk.Context, params []types.ParamChange) ([]sdk.Attribute, error) {
 	var changeEvents []sdk.Attribute
 	for _, c := range params {
 		ss, ok := k.GetSubspace(c.Subspace)
@@ -46,5 +46,5 @@ func (k Keeper) UpdateParams(ctx sdk.Context, params []types.ParamChange) ([]sdk
 
 		changeEvents = append(changeEvents, sdk.NewAttribute(types.AttributeKeyParamKey, c.Key))
 	}
-	return changeEvents,nil
+	return changeEvents, nil
 }
