@@ -152,7 +152,7 @@ func (suite *KeeperTestSuite) TestRemoveValidator() {
 	suite.True(found)
 
 	msg1 := types.NewMsgRemoveValidator(id, operator)
-	err = suite.keeper.Remove(suite.ctx, *msg1)
+	err = suite.keeper.RemoveValidator(suite.ctx, *msg1)
 	suite.NoError(err)
 
 	_, found = suite.keeper.GetValidator(suite.ctx, id)

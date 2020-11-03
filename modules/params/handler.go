@@ -17,7 +17,7 @@ func NewHandler(k paramskeeper.Keeper) sdk.Handler {
 
 		switch msg := msg.(type) {
 		case *types.MsgUpdateParams:
-			res, err := msgServer.Update(sdk.WrapSDKContext(ctx), msg)
+			res, err := msgServer.UpdateParams(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		default:

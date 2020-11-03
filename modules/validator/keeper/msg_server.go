@@ -65,7 +65,7 @@ func (m msgServer) UpdateValidator(goCtx context.Context, msg *types.MsgUpdateVa
 
 func (m msgServer) RemoveValidator(goCtx context.Context, msg *types.MsgRemoveValidator) (*types.MsgRemoveValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := m.Remove(ctx, *msg); err != nil {
+	if err := m.Keeper.RemoveValidator(ctx, *msg); err != nil {
 		return nil, err
 	}
 

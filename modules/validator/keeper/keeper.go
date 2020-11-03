@@ -146,8 +146,8 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 	return nil
 }
 
-// Remove deletes an existing validator record
-func (k Keeper) Remove(ctx sdk.Context, msg types.MsgRemoveValidator) error {
+// RemoveValidator deletes an existing validator record
+func (k Keeper) RemoveValidator(ctx sdk.Context, msg types.MsgRemoveValidator) error {
 	id, _ := hex.DecodeString(msg.Id)
 	validator, found := k.GetValidator(ctx, id)
 	if !found {
