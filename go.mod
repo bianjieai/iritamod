@@ -3,7 +3,7 @@ module gitlab.bianjie.ai/irita-pro/iritamod
 go 1.14
 
 require (
-	github.com/cosmos/cosmos-sdk v0.38.1
+	github.com/cosmos/cosmos-sdk v0.40.0-rc1
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.4.2
 	github.com/gorilla/mux v1.8.0
@@ -23,8 +23,8 @@ require (
 )
 
 replace (
-	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.34.4-0.20201102075921-7fd8a21eec11
+	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.28.2-0.20201116055048-cc8d536ab601
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
 	github.com/keybase/go-keychain => github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4
-	github.com/tendermint/tendermint => github.com/bianjieai/tendermint v0.33.1-dev0.0.20201102020549-48ef07463df0
+	github.com/tendermint/tendermint => github.com/bianjieai/tendermint v0.33.1-dev0.0.20201116031932-c5abb65d4bac
 )
