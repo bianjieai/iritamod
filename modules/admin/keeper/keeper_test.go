@@ -59,49 +59,49 @@ func (suite *KeeperTestSuite) TestRootAdminCheck() {
 
 func (suite *KeeperTestSuite) TestRoleAuth() {
 	// can not operate root admin
-	err := suite.keeper.AddRoles(suite.ctx, rootAdmin, rootAdmin, addRoles...)
+	err := suite.keeper.Authorize(suite.ctx, rootAdmin, rootAdmin, addRoles...)
 	suite.Error(err)
 
 	// can not add root admin
-	err = suite.keeper.AddRoles(suite.ctx, account, rootAdmin, types.RoleRootAdmin)
+	err = suite.keeper.Authorize(suite.ctx, account, rootAdmin, types.RoleRootAdmin)
 	suite.Error(err)
 
-	err = suite.keeper.AddRoles(suite.ctx, account, rootAdmin, addRoles...)
+	err = suite.keeper.Authorize(suite.ctx, account, rootAdmin, addRoles...)
 	suite.NoError(err)
 
-	err = suite.keeper.AddRoles(suite.ctx, account1, rootAdmin, addRoles...)
+	err = suite.keeper.Authorize(suite.ctx, account1, rootAdmin, addRoles...)
 	suite.NoError(err)
 
 	// perm admin can not operate another perm admin
-	err = suite.keeper.AddRoles(suite.ctx, account1, account, addRoles...)
+	err = suite.keeper.Authorize(suite.ctx, account1, account, addRoles...)
 	suite.Error(err)
 
-	err = suite.keeper.AddRoles(suite.ctx, account1, rootAdmin, addRoles...)
+	err = suite.keeper.Authorize(suite.ctx, account1, rootAdmin, addRoles...)
 	suite.NoError(err)
 
 	// perm admin can not operate another perm admin
-	err = suite.keeper.RemoveRoles(suite.ctx, account1, account, removeRoles...)
+	err = suite.keeper.Deauthorize(suite.ctx, account1, account, removeRoles...)
 	suite.Error(err)
 
 	// can not remove root admin
-	err = suite.keeper.RemoveRoles(suite.ctx, account, rootAdmin, types.RoleRootAdmin)
+	err = suite.keeper.Deauthorize(suite.ctx, account, rootAdmin, types.RoleRootAdmin)
 	suite.Error(err)
 
 	// can not operate root admin
-	err = suite.keeper.RemoveRoles(suite.ctx, rootAdmin, rootAdmin, addRoles...)
+	err = suite.keeper.Deauthorize(suite.ctx, rootAdmin, rootAdmin, addRoles...)
 	suite.Error(err)
 
-	err = suite.keeper.RemoveRoles(suite.ctx, account, rootAdmin, addRoles...)
+	err = suite.keeper.Deauthorize(suite.ctx, account, rootAdmin, addRoles...)
 	suite.NoError(err)
 
-	err = suite.keeper.RemoveRoles(suite.ctx, account1, rootAdmin, addRoles...)
+	err = suite.keeper.Deauthorize(suite.ctx, account1, rootAdmin, addRoles...)
 	suite.NoError(err)
 
 	suite.TestRootAdminCheck()
 }
 
 func (suite *KeeperTestSuite) TestAddRoles() {
-	err := suite.keeper.AddRoles(suite.ctx, account, rootAdmin, addRoles...)
+	err := suite.keeper.Authorize(suite.ctx, account, rootAdmin, addRoles...)
 	suite.NoError(err)
 
 	roles := suite.keeper.GetAuth(suite.ctx, account).Roles()
@@ -118,16 +118,16 @@ func (suite *KeeperTestSuite) TestAddRoles() {
 	}
 
 	// permission admin can not add other permission admin
-	err = suite.keeper.AddRoles(suite.ctx, account1, account, types.RolePermAdmin)
+	err = suite.keeper.Authorize(suite.ctx, account1, account, types.RolePermAdmin)
 	suite.Error(err)
 }
 
 func (suite *KeeperTestSuite) TestRemoveRoles() {
-	err := suite.keeper.AddRoles(suite.ctx, account, rootAdmin, types.RolePermAdmin,
+	err := suite.keeper.Authorize(suite.ctx, account, rootAdmin, types.RolePermAdmin,
 		types.RoleBlacklistAdmin, types.RoleNodeAdmin, types.RoleParamAdmin, types.RolePowerUser)
 	suite.NoError(err)
 
-	err = suite.keeper.RemoveRoles(suite.ctx, account, rootAdmin, removeRoles...)
+	err = suite.keeper.Deauthorize(suite.ctx, account, rootAdmin, removeRoles...)
 	suite.NoError(err)
 
 	existingRoles := addRoles
@@ -145,7 +145,7 @@ func (suite *KeeperTestSuite) TestRemoveRoles() {
 	}
 
 	// remove all roles from this account
-	err = suite.keeper.RemoveRoles(suite.ctx, account, rootAdmin, existingRoles...)
+	err = suite.keeper.Deauthorize(suite.ctx, account, rootAdmin, existingRoles...)
 	suite.NoError(err)
 
 	roles = suite.keeper.GetAuth(suite.ctx, account).Roles()
@@ -157,31 +157,31 @@ func (suite *KeeperTestSuite) TestRemoveRoles() {
 }
 
 func (suite *KeeperTestSuite) TestBlockAccount() {
-	err := suite.keeper.AddRoles(suite.ctx, account, rootAdmin, addRoles...)
+	err := suite.keeper.Authorize(suite.ctx, account, rootAdmin, addRoles...)
 	suite.NoError(err)
 
 	// can not block admin account
-	err = suite.keeper.BlockAccount(suite.ctx, account)
+	err = suite.keeper.Block(suite.ctx, account)
 	suite.Error(err)
 
-	err = suite.keeper.RemoveRoles(suite.ctx, account, rootAdmin, addRoles...)
+	err = suite.keeper.Deauthorize(suite.ctx, account, rootAdmin, addRoles...)
 	suite.NoError(err)
 
-	err = suite.keeper.BlockAccount(suite.ctx, account)
+	err = suite.keeper.Block(suite.ctx, account)
 	suite.NoError(err)
 
 	// already blocked
-	err = suite.keeper.BlockAccount(suite.ctx, account)
+	err = suite.keeper.Block(suite.ctx, account)
 	suite.Error(err)
 
 	blackList := suite.keeper.GetAllBlackAccounts(suite.ctx)
 	suite.Equal(1, len(blackList))
 	suite.Equal(account.String(), blackList[0])
 
-	err = suite.keeper.UnblockAccount(suite.ctx, account)
+	err = suite.keeper.Unblock(suite.ctx, account)
 	suite.NoError(err)
 
-	err = suite.keeper.UnblockAccount(suite.ctx, account)
+	err = suite.keeper.Unblock(suite.ctx, account)
 	suite.Error(err)
 
 	blackList = suite.keeper.GetAllBlackAccounts(suite.ctx)

@@ -90,7 +90,7 @@ func NewRemoveRolesCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "remove-roles [address] [roles]",
 		Long: strings.TrimSpace(fmt.Sprintf(
-			"Remove roles from an account.\n\nAuth options: %s, %s, %s, %s, %s",
+			"RemoveValidator roles from an account.\n\nAuth options: %s, %s, %s, %s, %s",
 			types.RolePermAdmin,
 			types.RoleBlacklistAdmin,
 			types.RoleNodeAdmin,

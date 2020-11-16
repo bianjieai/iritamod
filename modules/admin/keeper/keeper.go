@@ -54,8 +54,8 @@ func (k *Keeper) RegisterModuleAuth(module string, roles ...types.Role) {
 	k.AuthMap[module] = auth
 }
 
-// AddRole adds the role to an address
-func (k *Keeper) AddRoles(ctx sdk.Context, address, operator sdk.AccAddress, rs ...types.Role) error {
+// Authorize adds the role to an address
+func (k *Keeper) Authorize(ctx sdk.Context, address, operator sdk.AccAddress, rs ...types.Role) error {
 	if k.IsRootAdmin(ctx, address) {
 		return types.ErrOperateRootAdmin
 	}
@@ -77,8 +77,8 @@ func (k *Keeper) AddRoles(ctx sdk.Context, address, operator sdk.AccAddress, rs 
 	return nil
 }
 
-// AddRole removes the role from an address
-func (k Keeper) RemoveRoles(ctx sdk.Context, address, operator sdk.AccAddress, roles ...types.Role) error {
+// Deauthorize removes the role from an address
+func (k Keeper) Deauthorize(ctx sdk.Context, address, operator sdk.AccAddress, roles ...types.Role) error {
 	if k.IsRootAdmin(ctx, address) {
 		return types.ErrOperateRootAdmin
 	}

@@ -31,7 +31,7 @@ func NewTxCmd() *cobra.Command {
 func NewUpdateParamsCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "update [change-file]",
-		Short: "Update params",
+		Short: "UpdateValidator params",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)

@@ -13,7 +13,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	stakingexported "github.com/cosmos/cosmos-sdk/x/staking/exported"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
@@ -270,7 +269,7 @@ func (k Keeper) IterateUpdateValidators(ctx sdk.Context, fn func(index int64, pu
 }
 
 // IterateValidators iterates through the validator set and perform the provided function
-func (k Keeper) IterateValidators(ctx sdk.Context, fn func(index int64, validator stakingexported.ValidatorI) (stop bool)) {
+func (k Keeper) IterateValidators(ctx sdk.Context, fn func(index int64, validator staking.ValidatorI) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := sdk.KVStorePrefixIterator(store, types.ValidatorsKey)
@@ -307,7 +306,7 @@ func (k Keeper) GetAllValidators(ctx sdk.Context) (validators []types.Validator)
 }
 
 // ValidatorByID return the validator imformation by id
-func (k Keeper) ValidatorByID(ctx sdk.Context, id tmbytes.HexBytes) stakingexported.ValidatorI {
+func (k Keeper) ValidatorByID(ctx sdk.Context, id tmbytes.HexBytes) staking.ValidatorI {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.GetValidatorIDKey(id))
 
@@ -317,12 +316,12 @@ func (k Keeper) ValidatorByID(ctx sdk.Context, id tmbytes.HexBytes) stakingexpor
 }
 
 // Validator return the validator imformation by valAddr
-func (k Keeper) Validator(ctx sdk.Context, valAddr sdk.ValAddress) stakingexported.ValidatorI {
+func (k Keeper) Validator(ctx sdk.Context, valAddr sdk.ValAddress) staking.ValidatorI {
 	return k.ValidatorByConsAddr(ctx, sdk.ConsAddress(valAddr))
 }
 
 // ValidatorByConsAddr return the validator imformation by consAddr
-func (k Keeper) ValidatorByConsAddr(ctx sdk.Context, consAddr sdk.ConsAddress) stakingexported.ValidatorI {
+func (k Keeper) ValidatorByConsAddr(ctx sdk.Context, consAddr sdk.ConsAddress) staking.ValidatorI {
 	validator, found := k.GetValidatorByConsAddr(ctx, consAddr)
 	if !found {
 		return nil
@@ -362,7 +361,7 @@ func (k Keeper) Unjail(ctx sdk.Context, consAddr sdk.ConsAddress) {
 	k.EnqueueValidatorsUpdate(ctx, validator, validator.Power)
 }
 
-func (k Keeper) Delegation(context sdk.Context, accAddr sdk.AccAddress, consAddr sdk.ValAddress) stakingexported.DelegationI {
+func (k Keeper) Delegation(context sdk.Context, accAddr sdk.AccAddress, consAddr sdk.ValAddress) staking.DelegationI {
 	return staking.Delegation{}
 }
 
@@ -388,7 +387,7 @@ func (k Keeper) GetLastValidators(ctx sdk.Context) (validators []types.Validator
 	return validators
 }
 
-func (k *Keeper) IterateBondedValidatorsByPower(ctx sdk.Context, fn func(index int64, validator stakingexported.ValidatorI) (stop bool)) {
+func (k *Keeper) IterateBondedValidatorsByPower(ctx sdk.Context, fn func(index int64, validator staking.ValidatorI) (stop bool)) {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := sdk.KVStorePrefixIterator(store, types.ValidatorsKey)
@@ -412,7 +411,7 @@ func (k *Keeper) IterateBondedValidatorsByPower(ctx sdk.Context, fn func(index i
 func (k *Keeper) TotalBondedTokens(ctx sdk.Context) sdk.Int {
 	total := sdk.NewInt(0)
 	k.IterateValidators(ctx,
-		func(index int64, validator stakingexported.ValidatorI) bool {
+		func(index int64, validator staking.ValidatorI) bool {
 			if !validator.IsJailed() {
 				total = total.Sub(validator.GetTokens())
 			}
@@ -424,7 +423,7 @@ func (k *Keeper) TotalBondedTokens(ctx sdk.Context) sdk.Int {
 
 func (k *Keeper) IterateDelegations(
 	ctx sdk.Context, delegator sdk.AccAddress,
-	fn func(index int64, delegation stakingexported.DelegationI) (stop bool),
+	fn func(index int64, delegation staking.DelegationI) (stop bool),
 ) {
 }
 

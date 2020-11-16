@@ -6,14 +6,6 @@ import "gogoproto/gogo.proto";
 option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/params/types";
 option (gogoproto.goproto_getters_all) = false;
 
-// MsgUpdateParams defines an SDK message for updating params.
-message MsgUpdateParams {
-  option (gogoproto.equal) = true;
-
-  repeated ParamChange changes = 1 [(gogoproto.nullable) = false];
-  string operator              = 2;
-}
-
 // ParamChange defines a parameter change.
 message ParamChange {
   option (gogoproto.equal) = true;

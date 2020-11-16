@@ -9,82 +9,25 @@ import (
 
 // NewHandler creates an sdk.Handler for all the validator type messages
 func NewHandler(k keeper.Keeper) sdk.Handler {
+	msgServer := keeper.NewMsgServerImpl(k)
 	return func(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
 		ctx = ctx.WithEventManager(sdk.NewEventManager())
 
 		switch msg := msg.(type) {
 		case *MsgCreateValidator:
-			return handleMsgCreateValidator(ctx, msg, k)
+			res, err := msgServer.CreateValidator(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *MsgUpdateValidator:
-			return handleMsgUpdateValidator(ctx, msg, k)
+			res, err := msgServer.UpdateValidator(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *MsgRemoveValidator:
-			return handleMsgRemoveValidator(ctx, msg, k)
+			res, err := msgServer.RemoveValidator(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
 
 		default:
 			return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized %s message type: %T", ModuleName, msg)
 		}
 	}
-}
-
-func handleMsgCreateValidator(ctx sdk.Context, msg *MsgCreateValidator, k keeper.Keeper) (*sdk.Result, error) {
-	validatorID, err := k.CreateValidator(ctx, *msg)
-	if err != nil {
-		return nil, err
-	}
-
-	ctx.EventManager().EmitEvents(sdk.Events{
-		sdk.NewEvent(
-			EventTypeCreateValidator,
-			sdk.NewAttribute(AttributeKeyValidator, validatorID.String()),
-		),
-		sdk.NewEvent(
-			sdk.EventTypeMessage,
-			sdk.NewAttribute(sdk.AttributeKeyModule, AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
-		),
-	})
-
-	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
-}
-
-func handleMsgUpdateValidator(ctx sdk.Context, msg *MsgUpdateValidator, k keeper.Keeper) (*sdk.Result, error) {
-	if err := k.UpdateValidator(ctx, *msg); err != nil {
-		return nil, err
-	}
-
-	ctx.EventManager().EmitEvents(sdk.Events{
-		sdk.NewEvent(
-			EventTypeUpdateValidator,
-			sdk.NewAttribute(AttributeKeyValidator, msg.Id),
-		),
-		sdk.NewEvent(
-			sdk.EventTypeMessage,
-			sdk.NewAttribute(sdk.AttributeKeyModule, AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
-		),
-	})
-
-	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
-}
-
-func handleMsgRemoveValidator(ctx sdk.Context, msg *MsgRemoveValidator, k keeper.Keeper) (*sdk.Result, error) {
-	if err := k.RemoveValidator(ctx, *msg); err != nil {
-		return nil, err
-	}
-
-	ctx.EventManager().EmitEvents(sdk.Events{
-		sdk.NewEvent(
-			EventTypeRemoveValidator,
-			sdk.NewAttribute(AttributeKeyValidator, msg.Id),
-		),
-		sdk.NewEvent(
-			sdk.EventTypeMessage,
-			sdk.NewAttribute(sdk.AttributeKeyModule, AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
-		),
-	})
-
-	return &sdk.Result{Events: ctx.EventManager().ABCIEvents()}, nil
 }

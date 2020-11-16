@@ -6,40 +6,6 @@ import "gogoproto/gogo.proto";
 option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types";
 option (gogoproto.goproto_getters_all) = false;
 
-// MsgAddRoles defines an SDK message for adding roles to a address.
-message MsgAddRoles {
-    option (gogoproto.equal) = true;
-
-    string address = 1;
-    repeated Role roles = 2;
-    string operator = 3;
-}
-
-// MsgRemoveRoles defines an SDK message for removing roles from an existing address.
-message MsgRemoveRoles {
-    option (gogoproto.equal) = true;
-
-    string address = 1;
-    repeated Role roles = 2;
-    string operator = 3;
-}
-
-// MsgBlockAccount defines an SDK message for blocking an account.
-message MsgBlockAccount {
-    option (gogoproto.equal) = true;
-
-    string address = 1;
-    string operator = 2;
-}
-
-// MsgUnblockAccount defines an SDK message for unblocking an account.
-message MsgUnblockAccount {
-    option (gogoproto.equal) = true;
-
-    string address = 1;
-    string operator = 2;
-}
-
 // Role is a type alias that represents a proposal status as a byte
 enum Role {
     option (gogoproto.enum_stringer) = true;

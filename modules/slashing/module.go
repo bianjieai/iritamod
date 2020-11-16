@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+
 	"math/rand"
 
-	"github.com/gogo/protobuf/grpc"
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
@@ -22,9 +22,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/slashing"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 	"github.com/cosmos/cosmos-sdk/x/slashing/simulation"
+	"github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/client/cli"
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/client/rest"
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/keeper"
 	slashingtypes "gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/types"
 )
 
@@ -101,10 +103,10 @@ type AppModule struct {
 	stakingKeeper StakingKeeper
 }
 
-// RegisterQueryService registers a GRPC query service to respond to the
-// module-specific GRPC queries.
-func (am AppModule) RegisterQueryService(server grpc.Server) {
-	RegisterQueryServer(server, am.keeper)
+// RegisterServices registers module services.
+func (am AppModule) RegisterServices(cfg module.Configurator) {
+	slashingtypes.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
+	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
 }
 
 // NewAppModule creates a new AppModule object

@@ -2,7 +2,6 @@ syntax = "proto3";
 package iritamod.admin;
 
 import "admin/admin.proto";
-import "gogoproto/gogo.proto";
 
 option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types";
 
