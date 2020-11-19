@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
+
 	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/types"
 )
 

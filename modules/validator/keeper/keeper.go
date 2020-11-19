@@ -86,11 +86,15 @@ func (k Keeper) CreateValidator(ctx sdk.Context, msg types.MsgCreateValidator) (
 	)
 
 	k.SetValidator(ctx, validator)
-	k.SetValidatorConsAddrIndex(ctx, id, validator.GetConsAddr())
+	consAddr, err := validator.GetConsAddr()
+	if err != nil {
+		return nil, err
+	}
+	k.SetValidatorConsAddrIndex(ctx, id, consAddr)
 	k.EnqueueValidatorsUpdate(ctx, validator, msg.Power)
 
 	k.hooks.AfterValidatorCreated(ctx, validator.GetOperator())
-	k.hooks.AfterValidatorBonded(ctx, validator.GetConsAddr(), validator.GetOperator())
+	k.hooks.AfterValidatorBonded(ctx, consAddr, validator.GetOperator())
 	return id, nil
 }
 
@@ -117,14 +121,22 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 		}
 		pkStr := sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pk)
 
+		consAddr, err := validator.GetConsAddr()
+		if err != nil {
+			return err
+		}
 		// delete pubkey related index
-		k.DeleteValidatorConsAddrIndex(ctx, validator.GetConsAddr())
+		k.DeleteValidatorConsAddrIndex(ctx, consAddr)
 		// delete from tendermint validator set
 		k.EnqueueValidatorsUpdate(ctx, validator, 0)
 
 		validator.Pubkey = pkStr
 		validator.Certificate = msg.Certificate
-		k.SetValidatorConsAddrIndex(ctx, id, validator.GetConsAddr())
+		newConsAddr, err := validator.GetConsAddr()
+		if err != nil {
+			return err
+		}
+		k.SetValidatorConsAddrIndex(ctx, id, newConsAddr)
 		k.EnqueueValidatorsUpdate(ctx, validator, validator.Power)
 	}
 	if msg.Power > 0 {
@@ -155,11 +167,15 @@ func (k Keeper) RemoveValidator(ctx sdk.Context, msg types.MsgRemoveValidator) e
 	}
 
 	k.DeleteValidator(ctx, validator)
-	k.DeleteValidatorConsAddrIndex(ctx, validator.GetConsAddr())
+	consAddr, err := validator.GetConsAddr()
+	if err != nil {
+		return err
+	}
+	k.DeleteValidatorConsAddrIndex(ctx, consAddr)
 	// delete from tendermint validator set
 	k.EnqueueValidatorsUpdate(ctx, validator, 0)
 
-	k.hooks.AfterValidatorRemoved(ctx, validator.GetConsAddr(), validator.GetOperator())
+	k.hooks.AfterValidatorRemoved(ctx, consAddr, validator.GetOperator())
 	return nil
 }
 

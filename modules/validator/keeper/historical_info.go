@@ -1,6 +1,10 @@
 package keeper
 
 import (
+	"github.com/tendermint/tendermint/crypto"
+
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
@@ -22,9 +26,22 @@ func (k Keeper) GetHistoricalInfo(ctx sdk.Context, height int64) (stakingtypes.H
 
 	// convert to staking validator set
 	valSet := make([]stakingtypes.Validator, len(hi.Valset))
+
 	for i, v := range hi.Valset {
+		var pubKey crypto.PubKey
+		if len(v.Pubkey) > 0 {
+			pubKey = sdk.MustGetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, v.Pubkey)
+		}
+		pk, err := ed25519.FromTmEd25519(pubKey)
+		if err != nil {
+			continue
+		}
+		pkAny, err := codectypes.PackAny(pk)
+		if err != nil {
+			continue
+		}
 		valSet[i] = stakingtypes.Validator{
-			ConsensusPubkey: v.Pubkey,
+			ConsensusPubkey: pkAny,
 			Tokens:          v.GetTokens(),
 		}
 	}
