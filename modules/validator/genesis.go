@@ -52,8 +52,12 @@ func ExportGenesis(ctx sdk.Context, k Keeper) *GenesisState {
 // WriteValidators returns a slice of bonded genesis validators.
 func WriteValidators(ctx sdk.Context, keeper Keeper) (vals []tmtypes.GenesisValidator) {
 	for _, v := range keeper.GetLastValidators(ctx) {
+		consPk, err := v.TmConsPubKey()
+		if err != nil {
+			continue
+		}
 		vals = append(vals, tmtypes.GenesisValidator{
-			PubKey: v.GetConsPubKey(),
+			PubKey: consPk,
 			Power:  v.GetConsensusPower(),
 			Name:   v.GetMoniker(),
 		})

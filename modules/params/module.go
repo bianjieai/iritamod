@@ -2,8 +2,9 @@ package params
 
 import (
 	"encoding/json"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/keeper"
 	"math/rand"
+
+	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/keeper"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
