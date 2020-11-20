@@ -31,8 +31,8 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator"
+	"github.com/bianjieai/iritamod/modules/admin"
+	"github.com/bianjieai/iritamod/modules/validator"
 )
 
 const BondDenom = sdk.DefaultBondDenom

@@ -1,8 +1,8 @@
 package admin
 
 import (
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/keeper"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
+	"github.com/bianjieai/iritamod/modules/admin/keeper"
+	"github.com/bianjieai/iritamod/modules/admin/types"
 )
 
 const (

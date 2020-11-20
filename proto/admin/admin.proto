@@ -3,7 +3,7 @@ package iritamod.admin;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types";
+option go_package = "github.com/bianjieai/iritamod/modules/admin/types";
 option (gogoproto.goproto_getters_all) = false;
 
 // Role is a type alias that represents a proposal status as a byte

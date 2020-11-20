@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"math/rand"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/keeper"
+	"github.com/bianjieai/iritamod/modules/params/keeper"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/client/cli"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/types"
+	"github.com/bianjieai/iritamod/modules/params/client/cli"
+	"github.com/bianjieai/iritamod/modules/params/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"

@@ -3,7 +3,7 @@ package iritamod.admin;
 
 import "admin/admin.proto";
 
-option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types";
+option go_package = "github.com/bianjieai/iritamod/modules/admin/types";
 
 // Query defines the gRPC querier service for record module
 service Query {

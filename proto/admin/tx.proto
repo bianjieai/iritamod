@@ -5,7 +5,7 @@ import "admin/admin.proto";
 import "gogoproto/gogo.proto";
 
 
-option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types";
+option go_package = "github.com/bianjieai/iritamod/modules/admin/types";
 option (gogoproto.goproto_getters_all) = false;
 
 // Msg defines the bank Msg service.

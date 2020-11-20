@@ -6,7 +6,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/query/pagination.proto";
 
-option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types";
+option go_package = "github.com/bianjieai/iritamod/modules/validator/types";
 
 // Query defines the gRPC querier service for validator module
 service Query {

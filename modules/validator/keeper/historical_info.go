@@ -4,11 +4,11 @@ import (
 	"github.com/tendermint/tendermint/crypto"
 
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
+	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
+	"github.com/bianjieai/iritamod/modules/validator/types"
 )
 
 // GetHistoricalInfo gets the historical info at a given height
@@ -32,7 +32,7 @@ func (k Keeper) GetHistoricalInfo(ctx sdk.Context, height int64) (stakingtypes.H
 		if len(v.Pubkey) > 0 {
 			pubKey = sdk.MustGetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, v.Pubkey)
 		}
-		pk, err := ed25519.FromTmEd25519(pubKey)
+		pk, err := keys.FromTmPubKey(pubKey)
 		if err != nil {
 			continue
 		}

@@ -19,10 +19,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/client/cli"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/client/rest"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/keeper"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/types"
+	"github.com/bianjieai/iritamod/modules/identity/client/cli"
+	"github.com/bianjieai/iritamod/modules/identity/client/rest"
+	"github.com/bianjieai/iritamod/modules/identity/keeper"
+	"github.com/bianjieai/iritamod/modules/identity/types"
 )
 
 var (

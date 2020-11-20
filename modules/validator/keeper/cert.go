@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
+	"github.com/bianjieai/iritamod/modules/validator/types"
 )
 
 func (k *Keeper) GetRootCert(ctx sdk.Context) (cert string, found bool) {

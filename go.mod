@@ -1,4 +1,4 @@
-module gitlab.bianjie.ai/irita-pro/iritamod
+module github.com/bianjieai/iritamod
 
 go 1.14
 

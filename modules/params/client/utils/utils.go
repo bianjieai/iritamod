@@ -6,7 +6,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/types"
+	"github.com/bianjieai/iritamod/modules/params/types"
 )
 
 type (

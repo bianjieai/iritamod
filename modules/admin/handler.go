@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/keeper"
+	"github.com/bianjieai/iritamod/modules/admin/keeper"
 )
 
 // NewHandler return the message handler for admin module

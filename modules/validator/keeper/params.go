@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
+	"github.com/bianjieai/iritamod/modules/validator/types"
 )
 
 // Default parameter namespace

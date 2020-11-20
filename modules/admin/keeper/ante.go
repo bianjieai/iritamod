@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
+	"github.com/bianjieai/iritamod/modules/admin/types"
 )
 
 type AuthDecorator struct {
