@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/types"
+	"github.com/bianjieai/iritamod/modules/slashing/types"
 )
 
 type msgServer struct {

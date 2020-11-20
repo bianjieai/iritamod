@@ -10,7 +10,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/types"
+	"github.com/bianjieai/iritamod/modules/slashing/types"
 )
 
 // Keeper define a slashing keeper

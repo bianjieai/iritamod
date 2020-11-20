@@ -37,13 +37,4 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ## [Unreleased]
 
-## [v1.1.0] - 2020-09-30
-
-### Features
-
-* 增加模块 `admin`，`params`，`validator`，`slashing`，`identity`。
-
-
 <!-- Release links -->
-
-[v1.1.0]: https://gitlab.bianjie.ai/irita-pro/iritamod/tags/v1.1.0

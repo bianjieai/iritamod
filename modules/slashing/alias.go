@@ -5,8 +5,8 @@ package slashing
 import (
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/keeper"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/types"
+	"github.com/bianjieai/iritamod/modules/slashing/keeper"
+	"github.com/bianjieai/iritamod/modules/slashing/types"
 )
 
 var (

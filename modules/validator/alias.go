@@ -1,8 +1,8 @@
 package validator
 
 import (
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/keeper"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
+	"github.com/bianjieai/iritamod/modules/validator/keeper"
+	"github.com/bianjieai/iritamod/modules/validator/types"
 )
 
 const (

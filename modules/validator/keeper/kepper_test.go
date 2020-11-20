@@ -10,10 +10,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/keeper"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
-	"gitlab.bianjie.ai/irita-pro/iritamod/simapp"
-	cautil "gitlab.bianjie.ai/irita-pro/iritamod/utils/ca"
+	"github.com/bianjieai/iritamod/modules/validator/keeper"
+	"github.com/bianjieai/iritamod/modules/validator/types"
+	"github.com/bianjieai/iritamod/simapp"
+	cautil "github.com/bianjieai/iritamod/utils/ca"
 )
 
 type KeeperTestSuite struct {

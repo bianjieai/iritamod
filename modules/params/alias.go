@@ -4,7 +4,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/params/types"
+	"github.com/bianjieai/iritamod/modules/params/types"
 )
 
 const (

@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/keeper"
+	"github.com/bianjieai/iritamod/modules/validator/keeper"
 )
 
 // NewHandler creates an sdk.Handler for all the validator type messages

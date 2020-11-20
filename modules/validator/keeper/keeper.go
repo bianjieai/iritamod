@@ -15,8 +15,8 @@ import (
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
-	cautil "gitlab.bianjie.ai/irita-pro/iritamod/utils/ca"
+	"github.com/bianjieai/iritamod/modules/validator/types"
+	cautil "github.com/bianjieai/iritamod/utils/ca"
 )
 
 // keeper of the validator store

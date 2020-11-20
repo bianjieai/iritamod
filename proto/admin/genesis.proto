@@ -4,7 +4,7 @@ package iritamod.admin;
 import "admin/admin.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types";
+option go_package = "github.com/bianjieai/iritamod/modules/admin/types";
 
 // GenesisState defines the admin module's genesis state.
 message GenesisState {

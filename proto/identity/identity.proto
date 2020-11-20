@@ -3,7 +3,7 @@ package iritamod.identity;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/types";
+option go_package = "github.com/bianjieai/iritamod/modules/identity/types";
 option (gogoproto.goproto_getters_all)  = false;
 
 // Identity defines a struct for an identity

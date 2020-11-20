@@ -22,10 +22,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/client/cli"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/client/rest"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/keeper"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types"
+	"github.com/bianjieai/iritamod/modules/validator/client/cli"
+	"github.com/bianjieai/iritamod/modules/validator/client/rest"
+	"github.com/bianjieai/iritamod/modules/validator/keeper"
+	"github.com/bianjieai/iritamod/modules/validator/types"
 )
 
 var (

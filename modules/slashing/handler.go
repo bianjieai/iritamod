@@ -5,7 +5,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/keeper"
+	"github.com/bianjieai/iritamod/modules/slashing/keeper"
 )
 
 func NewHandler(k keeper.Keeper) sdk.Handler {

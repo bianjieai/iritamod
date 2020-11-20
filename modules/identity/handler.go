@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/identity/keeper"
+	"github.com/bianjieai/iritamod/modules/identity/keeper"
 )
 
 // NewHandler creates an sdk.Handler for all the identity type messages

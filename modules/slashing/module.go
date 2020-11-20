@@ -24,10 +24,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/slashing/simulation"
 	"github.com/cosmos/cosmos-sdk/x/slashing/types"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/client/cli"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/client/rest"
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/keeper"
-	slashingtypes "gitlab.bianjie.ai/irita-pro/iritamod/modules/slashing/types"
+	"github.com/bianjieai/iritamod/modules/slashing/client/cli"
+	"github.com/bianjieai/iritamod/modules/slashing/client/rest"
+	"github.com/bianjieai/iritamod/modules/slashing/keeper"
+	slashingtypes "github.com/bianjieai/iritamod/modules/slashing/types"
 )
 
 var (

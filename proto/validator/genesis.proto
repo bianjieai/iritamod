@@ -4,7 +4,7 @@ package iritamod.validator;
 import "validator/validator.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "gitlab.bianjie.ai/irita-pro/iritamod/modules/validator/types";
+option go_package = "github.com/bianjieai/iritamod/modules/validator/types";
 
 // GenesisState defines the validator module's genesis state.
 message GenesisState {

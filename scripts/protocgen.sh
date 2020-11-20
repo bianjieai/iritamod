@@ -21,5 +21,5 @@ Mgoogle/protobuf/any.proto=github.com/cosmos/cosmos-sdk/codec/types:. \
 done
 
 # move proto files to the right places
-cp -r gitlab.bianjie.ai/irita-pro/iritamod/* ./
+cp -r github.com/bianjieai/iritamod/* ./
 rm -rf gitlab.bianjie.ai

@@ -8,7 +8,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 
-	"gitlab.bianjie.ai/irita-pro/iritamod/modules/admin/types"
+	"github.com/bianjieai/iritamod/modules/admin/types"
 )
 
 // GetQueryCmd returns the cli query commands for this module
