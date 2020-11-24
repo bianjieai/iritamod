@@ -22,4 +22,4 @@ done
 
 # move proto files to the right places
 cp -r github.com/bianjieai/iritamod/* ./
-rm -rf gitlab.bianjie.ai
+rm -rf github.com
