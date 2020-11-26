@@ -64,6 +64,9 @@ import (
 	"github.com/bianjieai/iritamod/modules/identity"
 	identitykeeper "github.com/bianjieai/iritamod/modules/identity/keeper"
 	identitytypes "github.com/bianjieai/iritamod/modules/identity/types"
+	"github.com/bianjieai/iritamod/modules/node"
+	nodekeeper "github.com/bianjieai/iritamod/modules/node/keeper"
+	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
 	cparams "github.com/bianjieai/iritamod/modules/params"
 	cslashing "github.com/bianjieai/iritamod/modules/slashing"
 	"github.com/bianjieai/iritamod/modules/validator"
@@ -98,6 +101,7 @@ var (
 		validator.AppModuleBasic{},
 		admin.AppModuleBasic{},
 		identity.AppModuleBasic{},
+		node.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -140,6 +144,7 @@ type SimApp struct {
 	ValidatorKeeper validatorkeeper.Keeper
 	AdminKeeper     adminkeeper.Keeper
 	IdentityKeeper  identitykeeper.Keeper
+	NodeKeeper      nodekeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -185,6 +190,7 @@ func NewSimApp(
 		validatortypes.StoreKey,
 		admintypes.StoreKey,
 		identitytypes.StoreKey,
+		nodetypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -231,9 +237,9 @@ func NewSimApp(
 	app.ValidatorKeeper = *ValidatorKeeper.SetHooks(
 		stakingtypes.NewMultiStakingHooks(app.SlashingKeeper.Hooks()),
 	)
-	AdminKeeper := adminkeeper.NewKeeper(appCodec, keys[admintypes.StoreKey])
-	app.AdminKeeper = AdminKeeper
+	app.AdminKeeper = adminkeeper.NewKeeper(appCodec, keys[admintypes.StoreKey])
 	app.IdentityKeeper = identitykeeper.NewKeeper(appCodec, keys[identitytypes.StoreKey])
+	app.NodeKeeper = nodekeeper.NewKeeper(appCodec, keys[nodetypes.StoreKey], &app.ValidatorKeeper)
 
 	/****  Module Options ****/
 
@@ -256,6 +262,7 @@ func NewSimApp(
 		validator.NewAppModule(appCodec, app.ValidatorKeeper),
 		admin.NewAppModule(appCodec, app.AdminKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
+		node.NewAppModule(app.NodeKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -282,6 +289,7 @@ func NewSimApp(
 		crisistypes.ModuleName,
 		evidencetypes.ModuleName,
 		identitytypes.ModuleName,
+		nodetypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -305,6 +313,7 @@ func NewSimApp(
 		validator.NewAppModule(appCodec, app.ValidatorKeeper),
 		admin.NewAppModule(appCodec, app.AdminKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
+		node.NewAppModule(app.NodeKeeper),
 	)
 
 	app.sm.RegisterStoreDecoders()

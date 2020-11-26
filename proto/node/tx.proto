@@ -1,0 +1,42 @@
+syntax = "proto3";
+package iritamod.node;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/node/types";
+option (gogoproto.goproto_getters_all) = false;
+
+// Msg defines the node Msg service.
+service Msg {
+    // AddNode defines a method for adding a node.
+    rpc AddNode(MsgAddNode) returns (MsgAddNodeResponse);
+    
+    // RemoveNode defines a method for removing a node.
+    rpc RemoveNode(MsgRemoveNode) returns (MsgRemoveNodeResponse);
+}
+
+// MsgAddNode defines a message to add a node.
+message MsgAddNode {
+    option (gogoproto.equal) = true;
+
+    string certificate = 1;
+    string operator = 2;
+}
+
+// MsgAddNodeResponse defines the Msg/AddNode response type.
+message MsgAddNodeResponse {
+    option (gogoproto.equal) = true;
+
+    string id = 1;
+}
+
+// MsgRemoveNode defines a message to remove an existing node.
+message MsgRemoveNode {
+    option (gogoproto.equal) = true;
+
+    string id = 1;
+    string operator = 2;
+}
+
+// MsgRemoveNodeResponse defines the Msg/RemoveNode response type.
+message MsgRemoveNodeResponse {}
