@@ -35,13 +35,13 @@ func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) (res []abci.Valid
 
 		k.SetValidatorConsAddrIndex(ctx, id, sdk.GetConsAddress(pk))
 
-		tmpubk ,err := val.TmConsPubKey()
+		tmPubKey ,err := val.TmConsPubKey()
 		if err != nil {
 			panic(err)
 		}
 
 		res = append(res, ABCIValidatorUpdate(
-			tmpubk,
+			tmPubKey,
 			val.Power,
 		))
 	}
