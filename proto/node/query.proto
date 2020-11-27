@@ -1,0 +1,43 @@
+syntax = "proto3";
+package iritamod.node;
+
+import "node/node.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/query/pagination.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/node/types";
+
+// Query defines the gRPC querier service for node module
+service Query {
+    // Node queries the node by the given id
+    rpc Node(QueryNodeRequest) returns (QueryNodeResponse) {
+        option (google.api.http).get = "/iritamod/node/nodes/{id}";
+    }
+
+    // Nodes queries the nodes
+    rpc Nodes(QueryNodesRequest) returns (QueryNodesResponse) {
+        option (google.api.http).get = "/iritamod/node/nodes";
+    }
+}
+
+// QueryNodeRequest is the request type for the Query/Node RPC method
+message QueryNodeRequest {
+    string id = 1 ;
+}
+
+// QueryNodeResponse is the response type for the Query/Node RPC method
+message QueryNodeResponse {
+    Node node = 1;
+}
+
+// QueryNodesRequest is the request type for the Query/Nodes RPC method
+message QueryNodesRequest {
+    cosmos.query.PageRequest pagination = 1;
+}
+
+// QueryNodesResponse is the response type for the Query/Nodes RPC method
+message QueryNodesResponse {
+    repeated Node nodes = 1 [ (gogoproto.nullable) = false ];
+    cosmos.query.PageResponse pagination = 2;
+}

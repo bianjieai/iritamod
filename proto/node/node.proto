@@ -1,0 +1,15 @@
+syntax = "proto3";
+package iritamod.node;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/node/types";
+option (gogoproto.goproto_getters_all) = false;
+
+// Node defines a struct to represent a node identity
+message Node {
+    option (gogoproto.equal) = true;
+
+    string id = 1;
+    string certificate = 2;
+}
