@@ -6,13 +6,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 )
 
-// Rest variable names
-// nolint
 const (
-	RestID = "id"
+	RestID     = "id"
+	RestJailed = "jailed"
 )
 
-// RegisterRoutes defines routes that get registered by the main application
+// RegisterRoutes registers node-related REST handlers to a router
 func RegisterRoutes(clientCtx client.Context, r *mux.Router) {
 	registerQueryRoutes(clientCtx, r)
 }

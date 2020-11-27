@@ -2,6 +2,7 @@ package types
 
 import (
 	"encoding/hex"
+	"strings"
 
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
@@ -14,10 +15,12 @@ import (
 // NewNode contructs a new Node instance
 func NewNode(
 	id tmbytes.HexBytes,
+	name string,
 	cert string,
 ) Node {
 	return Node{
 		Id:          id.String(),
+		Name:        name,
 		Certificate: cert,
 	}
 }
@@ -26,6 +29,10 @@ func NewNode(
 func (n Node) Validate() error {
 	if err := ValidateNodeID(n.Id); err != nil {
 		return err
+	}
+
+	if len(strings.TrimSpace(n.Name)) == 0 {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "empty node name")
 	}
 
 	return ValidateCertificate(n.Certificate)
@@ -54,7 +61,7 @@ func ValidateNodeID(id string) error {
 func ValidateCertificate(cert string) error {
 	_, err := cautils.ReadX509CertFromMem([]byte(cert))
 	if err != nil {
-		return sdkerrors.Wrap(ErrInvalidCertificate, err.Error())
+		return sdkerrors.Wrap(ErrInvalidCert, err.Error())
 	}
 
 	return nil

@@ -16,14 +16,14 @@ import (
 // Keeper define a slashing keeper
 type Keeper struct {
 	slashingkeeper.Keeper
-	validatorKeeper types.ValidatorKeeper
+	nodeKeeper types.NodeKeeper
 }
 
 // NewKeeper creates a slashing keeper
-func NewKeeper(slashingKeeper slashingkeeper.Keeper, validatorKeeper types.ValidatorKeeper) Keeper {
+func NewKeeper(slashingKeeper slashingkeeper.Keeper, nodeKeeper types.NodeKeeper) Keeper {
 	return Keeper{
 		slashingKeeper,
-		validatorKeeper,
+		nodeKeeper,
 	}
 }
 
@@ -54,7 +54,7 @@ func (k Keeper) HandleUnjail(ctx sdk.Context, msg types.MsgUnjailValidator) erro
 	if err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "invalid validator id : %s", msg.Id)
 	}
-	validator := k.validatorKeeper.ValidatorByID(ctx, id)
+	validator := k.nodeKeeper.ValidatorByID(ctx, id)
 	if validator == nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest, "unknown validator: %s", msg.Id)
 	}

@@ -14,7 +14,7 @@ var (
 
 func init() {
 	RegisterLegacyAminoCodec(amino)
-	// validatortypes.RegisterLegacyAminoCodec(amino)
+	// nodetypes.RegisterLegacyAminoCodec(amino)
 	// authtypes.RegisterLegacyAminoCodec(ModuleCdc)
 	// sdk.RegisterLegacyAminoCodec(ModuleCdc)
 	cryptocodec.RegisterCrypto(amino)

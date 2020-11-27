@@ -11,7 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	validatortypes "github.com/bianjieai/iritamod/modules/validator/types"
+	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
 )
 
 // NewGenesisState creates a new GenesisState object
@@ -105,7 +105,7 @@ func ValidateGenesis(genesisState *GenesisState, txJSONDecoder sdk.TxDecoder) er
 		}
 
 		// TODO: abstract back to validator
-		if _, ok := msgs[0].(*validatortypes.MsgCreateValidator); !ok {
+		if _, ok := msgs[0].(*nodetypes.MsgCreateValidator); !ok {
 			return fmt.Errorf("genesis transaction %v does not contain a MsgCreateValidator", i)
 		}
 	}

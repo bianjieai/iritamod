@@ -1,40 +1,51 @@
 package node
 
-// nolint
-
 import (
 	"github.com/bianjieai/iritamod/modules/node/keeper"
 	"github.com/bianjieai/iritamod/modules/node/types"
 )
 
 const (
-	ModuleName             = types.ModuleName
-	StoreKey               = types.StoreKey
-	QuerierRoute           = types.QuerierRoute
-	RouterKey              = types.RouterKey
-	QueryNode              = types.QueryNode
-	QueryNodes             = types.QueryNodes
-	EventTypeAddNode       = types.EventTypeAddNode
-	EventTypeRemoveNode    = types.EventTypeRemoveNode
-	AttributeValueCategory = types.AttributeValueCategory
-	AttributeKeyID         = types.AttributeKeyID
+	ModuleName               = types.ModuleName
+	StoreKey                 = types.StoreKey
+	QuerierRoute             = types.QuerierRoute
+	RouterKey                = types.RouterKey
+	EventTypeCreateValidator = types.EventTypeCreateValidator
+	EventTypeUpdateValidator = types.EventTypeUpdateValidator
+	EventTypeRemoveValidator = types.EventTypeRemoveValidator
+	EventTypeAddNode         = types.EventTypeAddNode
+	EventTypeRemoveNode      = types.EventTypeRemoveNode
+	AttributeKeyValidator    = types.AttributeKeyValidator
+	AttributeKeyPubkey       = types.AttributeKeyPubkey
+	AttributeKeyID           = types.AttributeKeyID
+	AttributeValueCategory   = types.AttributeValueCategory
+	DefaultParamspace        = keeper.DefaultParamspace
 )
 
 var (
-	NewKeeper           = keeper.NewKeeper
-	NewQuerier          = keeper.NewQuerier
-	ModuleCdc           = types.ModuleCdc
-	DefaultGenesisState = types.DefaultGenesisState
-	ValidateGenesis     = types.ValidateGenesis
-	NewGenesisState     = types.NewGenesisState
+	NewGenesisState             = types.NewGenesisState
+	DefaultGenesisState         = types.DefaultGenesisState
+	NewQuerier                  = keeper.NewQuerier
+	NewKeeper                   = keeper.NewKeeper
+	NewMsgCreateValidator       = types.NewMsgCreateValidator
+	NewMsgUpdateValidator       = types.NewMsgUpdateValidator
+	NewMsgRemoveValidator       = types.NewMsgRemoveValidator
+	NewMsgAddNode               = types.NewMsgAddNode
+	NewMsgRemoveNode            = types.NewMsgRemoveNode
+	ABCIValidatorUpdate         = keeper.ABCIValidatorUpdate
+	GetGenesisStateFromAppState = types.GetGenesisStateFromAppState
+	NewValidator                = types.NewValidator
 )
 
 type (
-	Keeper           = keeper.Keeper
-	Node             = types.Node
-	GenesisState     = types.GenesisState
-	MsgAddNode       = types.MsgAddNode
-	MsgRemoveNode    = types.MsgRemoveNode
-	QueryNodeParams  = types.QueryNodeParams
-	QueryNodesParams = types.QueryNodesParams
+	MsgCreateValidator = types.MsgCreateValidator
+	MsgUpdateValidator = types.MsgUpdateValidator
+	MsgRemoveValidator = types.MsgRemoveValidator
+	MsgAddNode         = types.MsgAddNode
+	MsgRemoveNode      = types.MsgRemoveNode
+	GenesisState       = types.GenesisState
+	Validator          = types.Validator
+	Node               = types.Node
+	Params             = types.Params
+	Keeper             = keeper.Keeper
 )

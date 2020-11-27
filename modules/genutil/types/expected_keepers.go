@@ -7,8 +7,8 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
-// ValidatorKeeper defines the expected validator keeper (noalias)
-type ValidatorKeeper interface {
+// NodeKeeper defines the expected node keeper (noalias)
+type NodeKeeper interface {
 	ApplyAndReturnValidatorSetUpdates(sdk.Context) (updates []abci.ValidatorUpdate, err error)
 }
 

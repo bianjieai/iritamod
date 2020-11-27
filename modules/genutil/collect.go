@@ -20,7 +20,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/genutil/types"
 
-	validatortypes "github.com/bianjieai/iritamod/modules/validator/types"
+	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
 )
 
 // GenAppStateFromConfig gets the genesis app state from the config
@@ -131,7 +131,7 @@ func CollectTxs(
 		}
 
 		// TODO abstract out validator message validation back to validator
-		msg, ok := msgs[0].(*validatortypes.MsgCreateValidator)
+		msg, ok := msgs[0].(*nodetypes.MsgCreateValidator)
 		if !ok {
 			return appGenTxs, persistentPeers, errors.New("each genesis transaction must provide a validator creating message")
 		}

@@ -9,37 +9,13 @@ import (
 	"github.com/tendermint/tendermint/crypto/tmhash"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
-	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/bianjieai/iritamod/modules/validator/types"
+	"github.com/bianjieai/iritamod/modules/node/types"
 	cautil "github.com/bianjieai/iritamod/utils/ca"
 )
-
-// keeper of the validator store
-type Keeper struct {
-	cdc      codec.Marshaler
-	storeKey sdk.StoreKey
-
-	paramstore paramtypes.Subspace
-	hooks      staking.StakingHooks
-}
-
-func NewKeeper(cdc codec.Marshaler, storeKey sdk.StoreKey, ps paramtypes.Subspace) Keeper {
-	// set KeyTable if it has not already been set
-	if !ps.HasKeyTable() {
-		ps = ps.WithKeyTable(ParamKeyTable())
-	}
-
-	return Keeper{
-		cdc:        cdc,
-		storeKey:   storeKey,
-		paramstore: ps,
-	}
-}
 
 // SetHooks sets the validator hooks
 func (k *Keeper) SetHooks(sh staking.StakingHooks) *Keeper {

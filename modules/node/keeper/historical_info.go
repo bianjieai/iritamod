@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/bianjieai/iritamod/modules/validator/types"
+	"github.com/bianjieai/iritamod/modules/node/types"
 )
 
 // GetHistoricalInfo gets the historical info at a given height

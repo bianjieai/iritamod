@@ -11,14 +11,14 @@ import (
 
 // InitGenesis - initialize accounts and deliver genesis transactions
 func InitGenesis(
-	ctx sdk.Context, validatorKeeper types.ValidatorKeeper,
+	ctx sdk.Context, nodeKeeper types.NodeKeeper,
 	deliverTx deliverTxfn, genesisState types.GenesisState,
 	txEncodingConfig client.TxEncodingConfig,
 ) []abci.ValidatorUpdate {
 
 	var validators []abci.ValidatorUpdate
 	if len(genesisState.GenTxs) > 0 {
-		validators = DeliverGenTxs(ctx, genesisState.GenTxs, validatorKeeper, deliverTx, txEncodingConfig)
+		validators = DeliverGenTxs(ctx, genesisState.GenTxs, nodeKeeper, deliverTx, txEncodingConfig)
 	}
 
 	return validators
