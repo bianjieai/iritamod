@@ -1,6 +1,6 @@
 package types
 
-// validator module event types
+// admin module event types
 const (
 	EventTypeAddRoles       = "add_roles"
 	EventTypeRemoveRoles    = "remove_roles"

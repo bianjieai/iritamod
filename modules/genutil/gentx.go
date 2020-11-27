@@ -40,7 +40,7 @@ type deliverTxfn func(abci.RequestDeliverTx) abci.ResponseDeliverTx
 
 // DeliverGenTxs iterates over all genesis txs, decodes each into a StdTx and
 // invokes the provided deliverTxfn with the decoded StdTx. It returns the result
-// of the validator module's ApplyAndReturnValidatorSetUpdates.
+// of the node module's ApplyAndReturnValidatorSetUpdates.
 func DeliverGenTxs(
 	ctx sdk.Context, genTxs []json.RawMessage,
 	nodeKeeper types.NodeKeeper, deliverTx deliverTxfn,

@@ -1,6 +1,6 @@
 package types
 
-// validator module event types
+// node module event types
 const (
 	EventTypeCreateValidator = "create_validator"
 	EventTypeUpdateValidator = "update_validator"

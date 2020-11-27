@@ -76,7 +76,7 @@ func (q Querier) Validators(c context.Context, req *types.QueryValidatorsRequest
 	}, nil
 }
 
-// Params queries the parameters of the validator module
+// Params queries the parameters of the node module
 func (q Querier) Params(c context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
