@@ -6,7 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
-	"github.com/bianjieai/iritamod/modules/validator/types"
+	"github.com/bianjieai/iritamod/modules/node/types"
 )
 
 // Default parameter namespace
@@ -14,7 +14,7 @@ const (
 	DefaultParamspace = types.ModuleName
 )
 
-// ParamTable for staking module
+// ParamTable for node module
 func ParamKeyTable() paramtypes.KeyTable {
 	return paramtypes.NewKeyTable().RegisterParamSet(&types.Params{})
 }

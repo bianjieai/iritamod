@@ -14,6 +14,7 @@ import (
 // AddNode adds a node
 func (k Keeper) AddNode(
 	ctx sdk.Context,
+	name string,
 	cert string,
 ) (id tmbytes.HexBytes, err error) {
 	pubKey, err := k.VerifyCertificate(ctx, cert)
@@ -27,7 +28,7 @@ func (k Keeper) AddNode(
 		return nil, sdkerrors.Wrap(types.ErrNodeExists, id.String())
 	}
 
-	node := types.NewNode(id, cert)
+	node := types.NewNode(id, name, cert)
 	k.SetNode(ctx, id, node)
 
 	return id, nil
@@ -80,15 +81,16 @@ func (k Keeper) GetNode(ctx sdk.Context, id tmbytes.HexBytes) (node types.Node, 
 	return node, true
 }
 
-// IterateNodes iterates through all nodes
-func (k Keeper) IterateNodes(
+// GetNodes gets all nodes
+func (k Keeper) GetNodes(
 	ctx sdk.Context,
-	op func(node types.Node) (stop bool),
-) {
+) []types.Node {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := sdk.KVStorePrefixIterator(store, types.NodeKey)
 	defer iterator.Close()
+
+	nodes := make([]types.Node, 0)
 
 	for ; iterator.Valid(); iterator.Next() {
 		var node types.Node
@@ -96,10 +98,10 @@ func (k Keeper) IterateNodes(
 		bz := iterator.Value()
 		k.cdc.MustUnmarshalBinaryBare(bz, &node)
 
-		if stop := op(node); stop {
-			break
-		}
+		nodes = append(nodes, node)
 	}
+
+	return nodes
 }
 
 // VerifyCertificate verifies the given certificate against the root certificate
@@ -110,11 +112,11 @@ func (k Keeper) VerifyCertificate(
 ) (crypto.PubKey, error) {
 	cert, _ := cautils.ReadCertificateFromMem([]byte(certificate))
 
-	rootCertStr, _ := k.validatorKeeper.GetRootCert(ctx)
+	rootCertStr, _ := k.GetRootCert(ctx)
 	rootCert, _ := cautils.ReadCertificateFromMem([]byte(rootCertStr))
 
 	if err := cautils.VerifyCertFromRoot(cert, rootCert); err != nil {
-		return nil, sdkerrors.Wrapf(types.ErrInvalidCertificate, "verification failed: %s", err)
+		return nil, sdkerrors.Wrapf(types.ErrInvalidCert, "verification failed: %s", err)
 	}
 
 	pubKey, _ := cautils.GetPubkeyFromCert(cert)

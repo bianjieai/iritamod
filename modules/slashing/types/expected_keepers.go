@@ -9,7 +9,7 @@ import (
 	stakingexported "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
-// AccountKeeper expected account keeper
-type ValidatorKeeper interface {
+// NodeKeeper defines the expected node keeper
+type NodeKeeper interface {
 	ValidatorByID(ctx sdk.Context, id tmbytes.HexBytes) stakingexported.ValidatorI
 }

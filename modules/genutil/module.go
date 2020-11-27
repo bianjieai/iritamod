@@ -74,21 +74,21 @@ type AppModule struct {
 	AppModuleBasic
 
 	accountKeeper    types.AccountKeeper
-	validatorKeeper  types.ValidatorKeeper
+	nodeKeeper       types.NodeKeeper
 	deliverTx        deliverTxfn
 	txEncodingConfig client.TxEncodingConfig
 }
 
 // NewAppModule creates a new AppModule object
 func NewAppModule(accountKeeper types.AccountKeeper,
-	validatorKeeper types.ValidatorKeeper, deliverTx deliverTxfn,
+	nodeKeeper types.NodeKeeper, deliverTx deliverTxfn,
 	txEncodingConfig client.TxEncodingConfig,
 ) module.AppModule {
 
 	return module.NewGenesisOnlyAppModule(AppModule{
 		AppModuleBasic:   AppModuleBasic{},
 		accountKeeper:    accountKeeper,
-		validatorKeeper:  validatorKeeper,
+		nodeKeeper:       nodeKeeper,
 		deliverTx:        deliverTx,
 		txEncodingConfig: txEncodingConfig,
 	})
@@ -99,7 +99,7 @@ func NewAppModule(accountKeeper types.AccountKeeper,
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONMarshaler, data json.RawMessage) []abci.ValidatorUpdate {
 	var genesisState GenesisState
 	cdc.MustUnmarshalJSON(data, &genesisState)
-	return InitGenesis(ctx, am.validatorKeeper, am.deliverTx, genesisState, am.txEncodingConfig)
+	return InitGenesis(ctx, am.nodeKeeper, am.deliverTx, genesisState, am.txEncodingConfig)
 }
 
 // ExportGenesis returns the exported genesis state as raw bytes for the genutil module.

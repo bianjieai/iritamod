@@ -8,6 +8,15 @@ option (gogoproto.goproto_getters_all) = false;
 
 // Msg defines the node Msg service.
 service Msg {
+    // CreateValidator defines a method for creating a validator.
+    rpc CreateValidator(MsgCreateValidator) returns (MsgCreateValidatorResponse);
+
+    // UpdateValidator defines a method for updating a validator.
+    rpc UpdateValidator(MsgUpdateValidator) returns (MsgUpdateValidatorResponse);
+
+    // RemoveValidator defines a method for removing a validator.
+    rpc RemoveValidator(MsgRemoveValidator) returns (MsgRemoveValidatorResponse);
+    
     // AddNode defines a method for adding a node.
     rpc AddNode(MsgAddNode) returns (MsgAddNodeResponse);
     
@@ -15,12 +24,57 @@ service Msg {
     rpc RemoveNode(MsgRemoveNode) returns (MsgRemoveNodeResponse);
 }
 
+// MsgCreateValidator defines an SDK message for creating a new validator.
+message MsgCreateValidator {
+    option (gogoproto.equal) = true;
+
+    string name = 1;
+    string certificate = 2;
+    int64 power = 3;
+    string description = 4;
+    string operator = 5 [(gogoproto.moretags) = "yaml:\"operator\""];
+}
+
+// MsgCreateValidatorResponse defines the Msg/CreateValidator response type.
+message MsgCreateValidatorResponse {
+    option (gogoproto.equal) = true;
+
+    string id = 1;
+}
+
+// MsgUpdateValidator defines an SDK message for updating an existing validator.
+message MsgUpdateValidator {
+    option (gogoproto.equal) = true;
+
+    string id = 1;
+    string name = 2;
+    string certificate = 3;
+    int64 power = 4;
+    string description = 5;
+    string operator = 6;
+}
+
+// MsgUpdateValidatorResponse defines the Msg/UpdateValidator response type.
+message MsgUpdateValidatorResponse {}
+
+// MsgRemoveValidator defines an SDK message for removing an existing validator.
+message MsgRemoveValidator {
+    option (gogoproto.equal) = true;
+
+    string id = 1 ;
+    string operator = 2;
+}
+
+// MsgRemoveValidatorResponse defines the Msg/RemoveValidator response type.
+message MsgRemoveValidatorResponse {}
+
 // MsgAddNode defines a message to add a node.
 message MsgAddNode {
     option (gogoproto.equal) = true;
 
-    string certificate = 1;
-    string operator = 2;
+    string name = 1;
+    string certificate = 2;
+    string operator = 3;
 }
 
 // MsgAddNodeResponse defines the Msg/AddNode response type.

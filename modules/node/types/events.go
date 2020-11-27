@@ -1,10 +1,15 @@
 package types
 
-// node module event types
+// validator module event types
 const (
-	EventTypeAddNode    = "add_node"
-	EventTypeRemoveNode = "remove_node"
+	EventTypeCreateValidator = "create_validator"
+	EventTypeUpdateValidator = "update_validator"
+	EventTypeRemoveValidator = "remove_validator"
+	EventTypeAddNode         = "add_node"
+	EventTypeRemoveNode      = "remove_node"
 
 	AttributeValueCategory = ModuleName
+	AttributeKeyValidator  = "validator"
+	AttributeKeyPubkey     = "pubkey"
 	AttributeKeyID         = "id"
 )

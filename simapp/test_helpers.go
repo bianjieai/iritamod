@@ -32,7 +32,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/bianjieai/iritamod/modules/admin"
-	"github.com/bianjieai/iritamod/modules/validator"
+	"github.com/bianjieai/iritamod/modules/node"
 )
 
 const BondDenom = sdk.DefaultBondDenom
@@ -76,10 +76,10 @@ func Setup(isCheckTx bool) *SimApp {
 		genesisState[admin.ModuleName] = adminGenStateBz
 
 		// add root cert
-		validatorGenState := validator.GetGenesisStateFromAppState(app.appCodec, genesisState)
+		validatorGenState := node.GetGenesisStateFromAppState(app.appCodec, genesisState)
 		validatorGenState.RootCert = rootCert
 		validatorGenStateBz := app.cdc.MustMarshalJSON(validatorGenState)
-		genesisState[validator.ModuleName] = validatorGenStateBz
+		genesisState[node.ModuleName] = validatorGenStateBz
 
 		stateBytes, err := codec.MarshalJSONIndent(app.cdc, genesisState)
 		if err != nil {
