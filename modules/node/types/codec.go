@@ -25,8 +25,8 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgCreateValidator{}, "iritamod/validator/MsgCreateValidator", nil)
 	cdc.RegisterConcrete(&MsgUpdateValidator{}, "iritamod/validator/MsgUpdateValidator", nil)
 	cdc.RegisterConcrete(&MsgRemoveValidator{}, "iritamod/validator/MsgRemoveValidator", nil)
-	cdc.RegisterConcrete(&MsgAddNode{}, "iritamod/node/MsgAddNode", nil)
-	cdc.RegisterConcrete(&MsgRemoveNode{}, "iritamod/node/MsgRemoveNode", nil)
+	cdc.RegisterConcrete(&MsgGrantNode{}, "iritamod/node/MsgGrantNode", nil)
+	cdc.RegisterConcrete(&MsgRevokeNode{}, "iritamod/node/MsgRevokeNode", nil)
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {
@@ -34,6 +34,8 @@ func RegisterInterfaces(registry types.InterfaceRegistry) {
 		&MsgCreateValidator{},
 		&MsgUpdateValidator{},
 		&MsgRemoveValidator{},
+		&MsgGrantNode{},
+		&MsgRevokeNode{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)

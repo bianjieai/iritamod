@@ -85,7 +85,7 @@ func (m msgServer) RemoveValidator(goCtx context.Context, msg *types.MsgRemoveVa
 	return &types.MsgRemoveValidatorResponse{}, nil
 }
 
-func (m msgServer) AddNode(goCtx context.Context, msg *types.MsgAddNode) (*types.MsgAddNodeResponse, error) {
+func (m msgServer) GrantNode(goCtx context.Context, msg *types.MsgGrantNode) (*types.MsgGrantNodeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	id, err := m.Keeper.AddNode(ctx, msg.Name, msg.Certificate)
@@ -95,7 +95,7 @@ func (m msgServer) AddNode(goCtx context.Context, msg *types.MsgAddNode) (*types
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeAddNode,
+			types.EventTypeGrantNode,
 			sdk.NewAttribute(types.AttributeKeyID, id.String()),
 		),
 		sdk.NewEvent(
@@ -105,10 +105,10 @@ func (m msgServer) AddNode(goCtx context.Context, msg *types.MsgAddNode) (*types
 		),
 	})
 
-	return &types.MsgAddNodeResponse{}, nil
+	return &types.MsgGrantNodeResponse{}, nil
 }
 
-func (m msgServer) RemoveNode(goCtx context.Context, msg *types.MsgRemoveNode) (*types.MsgRemoveNodeResponse, error) {
+func (m msgServer) RevokeNode(goCtx context.Context, msg *types.MsgRevokeNode) (*types.MsgRevokeNodeResponse, error) {
 	id, _ := hex.DecodeString(msg.Id)
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -118,7 +118,7 @@ func (m msgServer) RemoveNode(goCtx context.Context, msg *types.MsgRemoveNode) (
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeRemoveNode,
+			types.EventTypeRevokeNode,
 			sdk.NewAttribute(types.AttributeKeyID, msg.Id),
 		),
 		sdk.NewEvent(
@@ -128,5 +128,5 @@ func (m msgServer) RemoveNode(goCtx context.Context, msg *types.MsgRemoveNode) (
 		),
 	})
 
-	return &types.MsgRemoveNodeResponse{}, nil
+	return &types.MsgRevokeNodeResponse{}, nil
 }

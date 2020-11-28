@@ -13,8 +13,8 @@ const (
 	EventTypeCreateValidator = types.EventTypeCreateValidator
 	EventTypeUpdateValidator = types.EventTypeUpdateValidator
 	EventTypeRemoveValidator = types.EventTypeRemoveValidator
-	EventTypeAddNode         = types.EventTypeAddNode
-	EventTypeRemoveNode      = types.EventTypeRemoveNode
+	EventTypeGrantNode       = types.EventTypeGrantNode
+	EventTypeRevokeNode      = types.EventTypeRevokeNode
 	AttributeKeyValidator    = types.AttributeKeyValidator
 	AttributeKeyPubkey       = types.AttributeKeyPubkey
 	AttributeKeyID           = types.AttributeKeyID
@@ -30,8 +30,8 @@ var (
 	NewMsgCreateValidator       = types.NewMsgCreateValidator
 	NewMsgUpdateValidator       = types.NewMsgUpdateValidator
 	NewMsgRemoveValidator       = types.NewMsgRemoveValidator
-	NewMsgAddNode               = types.NewMsgAddNode
-	NewMsgRemoveNode            = types.NewMsgRemoveNode
+	NewMsgGrantNode             = types.NewMsgGrantNode
+	NewMsgRevokeNode            = types.NewMsgRevokeNode
 	ABCIValidatorUpdate         = keeper.ABCIValidatorUpdate
 	GetGenesisStateFromAppState = types.GetGenesisStateFromAppState
 	NewValidator                = types.NewValidator
@@ -41,8 +41,8 @@ type (
 	MsgCreateValidator = types.MsgCreateValidator
 	MsgUpdateValidator = types.MsgUpdateValidator
 	MsgRemoveValidator = types.MsgRemoveValidator
-	MsgAddNode         = types.MsgAddNode
-	MsgRemoveNode      = types.MsgRemoveNode
+	MsgGrantNode       = types.MsgGrantNode
+	MsgRevokeNode      = types.MsgRevokeNode
 	GenesisState       = types.GenesisState
 	Validator          = types.Validator
 	Node               = types.Node

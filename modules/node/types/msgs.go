@@ -14,16 +14,16 @@ const (
 	TypeMsgCreateValidator = "create_validator" // type for MsgCreateValidator
 	TypeMsgUpdateValidator = "update_validator" // type for MsgUpdateValidator
 	TypeMsgRemoveValidator = "remove_validator" // type for MsgRemoveValidator
-	TypeMsgAddNode         = "add_node"         // type for MsgAddNode
-	TypeMsgRemoveNode      = "remove_node"      // type for MsgRemoveNode
+	TypeMsgGrantNode       = "grant_node"       // type for MsgGrantNode
+	TypeMsgRevokeNode      = "revoke_node"      // type for MsgRevokeNode
 )
 
 var (
 	_ sdk.Msg = &MsgCreateValidator{}
 	_ sdk.Msg = &MsgUpdateValidator{}
 	_ sdk.Msg = &MsgRemoveValidator{}
-	_ sdk.Msg = &MsgAddNode{}
-	_ sdk.Msg = &MsgRemoveNode{}
+	_ sdk.Msg = &MsgGrantNode{}
+	_ sdk.Msg = &MsgRevokeNode{}
 )
 
 // NewMsgCreateValidator creates a new MsgCreateValidator instance.
@@ -196,13 +196,13 @@ func (m MsgRemoveValidator) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{signer}
 }
 
-// NewMsgAddNode creates a new MsgAddNode instance
-func NewMsgAddNode(
+// NewMsgGrantNode creates a new MsgGrantNode instance
+func NewMsgGrantNode(
 	name string,
 	cert string,
 	operator sdk.AccAddress,
-) *MsgAddNode {
-	return &MsgAddNode{
+) *MsgGrantNode {
+	return &MsgGrantNode{
 		Name:        name,
 		Certificate: cert,
 		Operator:    operator.String(),
@@ -210,13 +210,13 @@ func NewMsgAddNode(
 }
 
 // Route implements Msg
-func (msg MsgAddNode) Route() string { return RouterKey }
+func (msg MsgGrantNode) Route() string { return RouterKey }
 
 // Type implements Msg
-func (msg MsgAddNode) Type() string { return TypeMsgAddNode }
+func (msg MsgGrantNode) Type() string { return TypeMsgGrantNode }
 
 // ValidateBasic implements Msg
-func (msg MsgAddNode) ValidateBasic() error {
+func (msg MsgGrantNode) ValidateBasic() error {
 	if err := ValidateOperator(msg.Operator); err != nil {
 		return err
 	}
@@ -229,13 +229,13 @@ func (msg MsgAddNode) ValidateBasic() error {
 }
 
 // GetSignBytes implements Msg
-func (msg MsgAddNode) GetSignBytes() []byte {
+func (msg MsgGrantNode) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&msg)
 	return sdk.MustSortJSON(bz)
 }
 
 // GetSigners implements Msg
-func (msg MsgAddNode) GetSigners() []sdk.AccAddress {
+func (msg MsgGrantNode) GetSigners() []sdk.AccAddress {
 	addr, err := sdk.AccAddressFromBech32(msg.Operator)
 	if err != nil {
 		panic(err)
@@ -244,31 +244,31 @@ func (msg MsgAddNode) GetSigners() []sdk.AccAddress {
 	return []sdk.AccAddress{addr}
 }
 
-// NewMsgRemoveNode creates a new MsgRemoveNode instance
-func NewMsgRemoveNode(
+// NewMsgRevokeNode creates a new MsgRevokeNode instance
+func NewMsgRevokeNode(
 	id tmbytes.HexBytes,
 	operator sdk.AccAddress,
-) *MsgRemoveNode {
-	return &MsgRemoveNode{
+) *MsgRevokeNode {
+	return &MsgRevokeNode{
 		Id:       id.String(),
 		Operator: operator.String(),
 	}
 }
 
 // Route implements Msg.
-func (msg MsgRemoveNode) Route() string { return RouterKey }
+func (msg MsgRevokeNode) Route() string { return RouterKey }
 
 // Type implements Msg.
-func (msg MsgRemoveNode) Type() string { return TypeMsgRemoveNode }
+func (msg MsgRevokeNode) Type() string { return TypeMsgRevokeNode }
 
 // GetSignBytes implements Msg.
-func (msg MsgRemoveNode) GetSignBytes() []byte {
+func (msg MsgRevokeNode) GetSignBytes() []byte {
 	b := ModuleCdc.MustMarshalJSON(&msg)
 	return sdk.MustSortJSON(b)
 }
 
 // ValidateBasic implements Msg.
-func (msg MsgRemoveNode) ValidateBasic() error {
+func (msg MsgRevokeNode) ValidateBasic() error {
 	if err := ValidateOperator(msg.Operator); err != nil {
 		return err
 	}
@@ -277,7 +277,7 @@ func (msg MsgRemoveNode) ValidateBasic() error {
 }
 
 // GetSigners implements Msg.
-func (msg MsgRemoveNode) GetSigners() []sdk.AccAddress {
+func (msg MsgRevokeNode) GetSigners() []sdk.AccAddress {
 	addr, err := sdk.AccAddressFromBech32(msg.Operator)
 	if err != nil {
 		panic(err)

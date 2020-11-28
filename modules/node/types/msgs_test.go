@@ -129,34 +129,34 @@ func TestMsgRemoveValidator(t *testing.T) {
 	}
 }
 
-// TestMsgAddNodeRoute tests Route for MsgAddNode
-func TestMsgAddNodeRoute(t *testing.T) {
-	msg := NewMsgAddNode(nodeName, certStr, accAddr)
+// TestMsgGrantNodeRoute tests Route for MsgGrantNode
+func TestMsgGrantNodeRoute(t *testing.T) {
+	msg := NewMsgGrantNode(nodeName, certStr, accAddr)
 
 	require.Equal(t, RouterKey, msg.Route())
 }
 
-// TestMsgAddNode tests Type for MsgAddNode
-func TestMsgAddNodeType(t *testing.T) {
-	msg := NewMsgAddNode(nodeName, certStr, accAddr)
+// TestMsgGrantNode tests Type for MsgGrantNode
+func TestMsgGrantNodeType(t *testing.T) {
+	msg := NewMsgGrantNode(nodeName, certStr, accAddr)
 
-	require.Equal(t, "add_node", msg.Type())
+	require.Equal(t, "grant_node", msg.Type())
 }
 
-// TestMsgAddNodeValidation tests ValidateBasic for MsgAddNode
-func TestMsgAddNodeValidation(t *testing.T) {
+// TestMsgGrantNodeValidation tests ValidateBasic for MsgGrantNode
+func TestMsgGrantNodeValidation(t *testing.T) {
 	invalidCertificate := "invalidCertificate"
 
-	testMsgs := []*MsgAddNode{
-		NewMsgAddNode(nodeName, certStr, accAddr),            // valid msg
-		NewMsgAddNode(nodeName, certStr, emptyAddr),          // missing operator address
-		NewMsgAddNode("", certStr, accAddr),                  // name can not be empty
-		NewMsgAddNode(nodeName, "", accAddr),                 // missing certificate
-		NewMsgAddNode(nodeName, invalidCertificate, accAddr), // invalid certificate
+	testMsgs := []*MsgGrantNode{
+		NewMsgGrantNode(nodeName, certStr, accAddr),            // valid msg
+		NewMsgGrantNode(nodeName, certStr, emptyAddr),          // missing operator address
+		NewMsgGrantNode("", certStr, accAddr),                  // name can not be empty
+		NewMsgGrantNode(nodeName, "", accAddr),                 // missing certificate
+		NewMsgGrantNode(nodeName, invalidCertificate, accAddr), // invalid certificate
 	}
 
 	testCases := []struct {
-		msg     *MsgAddNode
+		msg     *MsgGrantNode
 		expPass bool
 		errMsg  string
 	}{
@@ -177,51 +177,51 @@ func TestMsgAddNodeValidation(t *testing.T) {
 	}
 }
 
-// TestMsgAddNodeGetSignBytes tests GetSignBytes for MsgAddNode
-func TestMsgAddNodeGetSignBytes(t *testing.T) {
-	msg := NewMsgAddNode(nodeName, certStr, accAddr)
+// TestMsgGrantNodeGetSignBytes tests GetSignBytes for MsgGrantNode
+func TestMsgGrantNodeGetSignBytes(t *testing.T) {
+	msg := NewMsgGrantNode(nodeName, certStr, accAddr)
 	res := msg.GetSignBytes()
 
-	expected := fmt.Sprintf(`{"type":"iritamod/node/MsgAddNode","value":{"certificate":"-----BEGIN CERTIFICATE-----\nMIIBazCCAR0CFGTwvE8oG+N3uNm1gonJBh6pie5TMAUGAytlcDBYMQswCQYDVQQG\nEwJDTjENMAsGA1UECAwEcm9vdDENMAsGA1UEBwwEcm9vdDENMAsGA1UECgwEcm9v\ndDENMAsGA1UECwwEcm9vdDENMAsGA1UEAwwEcm9vdDAeFw0yMDA2MTkwNzAyMzla\nFw0yMDA3MTkwNzAyMzlaMFgxCzAJBgNVBAYTAkNOMQ0wCwYDVQQIDAR0ZXN0MQ0w\nCwYDVQQHDAR0ZXN0MQ0wCwYDVQQKDAR0ZXN0MQ0wCwYDVQQLDAR0ZXN0MQ0wCwYD\nVQQDDAR0ZXN0MCowBQYDK2VwAyEA27WvK0goa1sSjsp6eb/xCkgjBEoPC9vfL/6h\nf0hqjHYwBQYDK2VwA0EA0fo8y+saUl+8UiyKpKdjv2DsqYWqmqJDz9u3NaioOvrQ\nZ0mOxdgj9wfO0t3voldCRUw3hCekjC+GEOoXH5ysDQ==\n-----END CERTIFICATE-----","name":"test_node","operator":"cosmos1z0hd0wjhlsl2jj33439ppy7u2crvlwyq8qedsm"}}`)
+	expected := fmt.Sprintf(`{"type":"iritamod/node/MsgGrantNode","value":{"certificate":"-----BEGIN CERTIFICATE-----\nMIIBazCCAR0CFGTwvE8oG+N3uNm1gonJBh6pie5TMAUGAytlcDBYMQswCQYDVQQG\nEwJDTjENMAsGA1UECAwEcm9vdDENMAsGA1UEBwwEcm9vdDENMAsGA1UECgwEcm9v\ndDENMAsGA1UECwwEcm9vdDENMAsGA1UEAwwEcm9vdDAeFw0yMDA2MTkwNzAyMzla\nFw0yMDA3MTkwNzAyMzlaMFgxCzAJBgNVBAYTAkNOMQ0wCwYDVQQIDAR0ZXN0MQ0w\nCwYDVQQHDAR0ZXN0MQ0wCwYDVQQKDAR0ZXN0MQ0wCwYDVQQLDAR0ZXN0MQ0wCwYD\nVQQDDAR0ZXN0MCowBQYDK2VwAyEA27WvK0goa1sSjsp6eb/xCkgjBEoPC9vfL/6h\nf0hqjHYwBQYDK2VwA0EA0fo8y+saUl+8UiyKpKdjv2DsqYWqmqJDz9u3NaioOvrQ\nZ0mOxdgj9wfO0t3voldCRUw3hCekjC+GEOoXH5ysDQ==\n-----END CERTIFICATE-----","name":"test_node","operator":"cosmos1z0hd0wjhlsl2jj33439ppy7u2crvlwyq8qedsm"}}`)
 	require.Equal(t, expected, string(res))
 }
 
-// TestMsgAddNodeGetSigners tests GetSigners for MsgAddNode
-func TestMsgAddNodeGetSigners(t *testing.T) {
-	msg := NewMsgAddNode(nodeName, certStr, accAddr)
+// TestMsgGrantNodeGetSigners tests GetSigners for MsgGrantNode
+func TestMsgGrantNodeGetSigners(t *testing.T) {
+	msg := NewMsgGrantNode(nodeName, certStr, accAddr)
 	res := msg.GetSigners()
 
 	expected := "[13EED7BA57FC3EA94A31AC4A1093DC5606CFB880]"
 	require.Equal(t, expected, fmt.Sprintf("%v", res))
 }
 
-// TestMsgRemoveNodeRoute tests Route for MsgRemoveNode
-func TestMsgRemoveNodeRoute(t *testing.T) {
-	msg := NewMsgRemoveNode(nodeID, accAddr)
+// TestMsgRevokeNodeRoute tests Route for MsgRevokeNode
+func TestMsgRevokeNodeRoute(t *testing.T) {
+	msg := NewMsgRevokeNode(nodeID, accAddr)
 
 	require.Equal(t, RouterKey, msg.Route())
 }
 
-// TestMsgRemoveNodeType tests Type for MsgRemoveNode
-func TestMsgRemoveNodeType(t *testing.T) {
-	msg := NewMsgRemoveNode(nodeID, accAddr)
+// TestMsgRevokeNodeType tests Type for MsgRevokeNode
+func TestMsgRevokeNodeType(t *testing.T) {
+	msg := NewMsgRevokeNode(nodeID, accAddr)
 
-	require.Equal(t, "remove_node", msg.Type())
+	require.Equal(t, "revoke_node", msg.Type())
 }
 
-// TestMsgRemoveNodeValidation tests ValidateBasic for MsgRemoveNode
-func TestMsgRemoveNodeValidation(t *testing.T) {
+// TestMsgRevokeNodeValidation tests ValidateBasic for MsgRevokeNode
+func TestMsgRevokeNodeValidation(t *testing.T) {
 	invalidID := []byte("invalidID")
 
-	testMsgs := []*MsgRemoveNode{
-		NewMsgRemoveNode(nodeID, accAddr),    // valid msg
-		NewMsgRemoveNode(nodeID, emptyAddr),  // missing operator address
-		NewMsgRemoveNode(nil, accAddr),       // missing node ID
-		NewMsgRemoveNode(invalidID, accAddr), // invalid node ID
+	testMsgs := []*MsgRevokeNode{
+		NewMsgRevokeNode(nodeID, accAddr),    // valid msg
+		NewMsgRevokeNode(nodeID, emptyAddr),  // missing operator address
+		NewMsgRevokeNode(nil, accAddr),       // missing node ID
+		NewMsgRevokeNode(invalidID, accAddr), // invalid node ID
 	}
 
 	testCases := []struct {
-		msg     *MsgRemoveNode
+		msg     *MsgRevokeNode
 		expPass bool
 		errMsg  string
 	}{
@@ -241,18 +241,18 @@ func TestMsgRemoveNodeValidation(t *testing.T) {
 	}
 }
 
-// TestMsgRemoveNodeGetSignBytes tests GetSignBytes for MsgRemoveNode
-func TestMsgRemoveNodeGetSignBytes(t *testing.T) {
-	msg := NewMsgRemoveNode(nodeID, accAddr)
+// TestMsgRevokeNodeGetSignBytes tests GetSignBytes for MsgRevokeNode
+func TestMsgRevokeNodeGetSignBytes(t *testing.T) {
+	msg := NewMsgRevokeNode(nodeID, accAddr)
 	res := msg.GetSignBytes()
 
-	expected := fmt.Sprintf(`{"type":"iritamod/node/MsgRemoveNode","value":{"id":"13EED7BA57FC3EA94A31AC4A1093DC5606CFB880","operator":"cosmos1z0hd0wjhlsl2jj33439ppy7u2crvlwyq8qedsm"}}`)
+	expected := fmt.Sprintf(`{"type":"iritamod/node/MsgRevokeNode","value":{"id":"13EED7BA57FC3EA94A31AC4A1093DC5606CFB880","operator":"cosmos1z0hd0wjhlsl2jj33439ppy7u2crvlwyq8qedsm"}}`)
 	require.Equal(t, expected, string(res))
 }
 
-// TestMsgRemoveNodeGetSigners tests GetSigners for MsgRemoveNode
-func TestMsgRemoveNodeGetSigners(t *testing.T) {
-	msg := NewMsgRemoveNode(nodeID, accAddr)
+// TestMsgRevokeNodeGetSigners tests GetSigners for MsgRevokeNode
+func TestMsgRevokeNodeGetSigners(t *testing.T) {
+	msg := NewMsgRevokeNode(nodeID, accAddr)
 	res := msg.GetSigners()
 
 	expected := "[13EED7BA57FC3EA94A31AC4A1093DC5606CFB880]"
