@@ -9,16 +9,16 @@ import (
 )
 
 const (
-	// ModuleName is the name of the validator module
-	ModuleName = "validator"
+	// ModuleName is the name of the node module
+	ModuleName = "node"
 
 	// StoreKey is the string store representation
 	StoreKey = ModuleName
 
-	// QuerierRoute is the querier route for the validator module
+	// QuerierRoute is the querier route for the node module
 	QuerierRoute = ModuleName
 
-	// RouterKey is the msg router key for the validator module
+	// RouterKey is the msg router key for the node module
 	RouterKey = ModuleName
 )
 
