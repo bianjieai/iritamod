@@ -5,8 +5,8 @@ const (
 	EventTypeCreateValidator = "create_validator"
 	EventTypeUpdateValidator = "update_validator"
 	EventTypeRemoveValidator = "remove_validator"
-	EventTypeAddNode         = "add_node"
-	EventTypeRemoveNode      = "remove_node"
+	EventTypeGrantNode       = "grant_node"
+	EventTypeRevokeNode      = "revoke_node"
 
 	AttributeValueCategory = ModuleName
 	AttributeKeyValidator  = "validator"

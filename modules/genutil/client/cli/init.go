@@ -78,10 +78,12 @@ func InitCmd(mbm module.BasicManager, defaultNodeHome string) *cobra.Command { /
 				chainID = fmt.Sprintf("test-chain-%v", tmrand.Str(6))
 			}
 
-			nodeID, _, err := genutil.InitializeNodeValidatorFiles(config)
+			nodeKey, _, err := genutil.InitializeNodeValidatorFiles(config)
 			if err != nil {
 				return err
 			}
+
+			nodeID := string(nodeKey.ID())
 
 			config.Moniker = args[0]
 

@@ -27,12 +27,12 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 			res, err := msgServer.RemoveValidator(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *MsgAddNode:
-			res, err := msgServer.AddNode(sdk.WrapSDKContext(ctx), msg)
+		case *MsgGrantNode:
+			res, err := msgServer.GrantNode(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *MsgRemoveNode:
-			res, err := msgServer.RemoveNode(sdk.WrapSDKContext(ctx), msg)
+		case *MsgRevokeNode:
+			res, err := msgServer.RevokeNode(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		default:

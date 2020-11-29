@@ -17,11 +17,11 @@ service Msg {
     // RemoveValidator defines a method for removing a validator.
     rpc RemoveValidator(MsgRemoveValidator) returns (MsgRemoveValidatorResponse);
     
-    // AddNode defines a method for adding a node.
-    rpc AddNode(MsgAddNode) returns (MsgAddNodeResponse);
+    // GrantNode defines a method for granting a node access.
+    rpc GrantNode(MsgGrantNode) returns (MsgGrantNodeResponse);
     
-    // RemoveNode defines a method for removing a node.
-    rpc RemoveNode(MsgRemoveNode) returns (MsgRemoveNodeResponse);
+    // RevokeNode defines a method for revoking access from a node.
+    rpc RevokeNode(MsgRevokeNode) returns (MsgRevokeNodeResponse);
 }
 
 // MsgCreateValidator defines an SDK message for creating a new validator.
@@ -68,8 +68,8 @@ message MsgRemoveValidator {
 // MsgRemoveValidatorResponse defines the Msg/RemoveValidator response type.
 message MsgRemoveValidatorResponse {}
 
-// MsgAddNode defines a message to add a node.
-message MsgAddNode {
+// MsgGrantNode defines a message to grant a node access
+message MsgGrantNode {
     option (gogoproto.equal) = true;
 
     string name = 1;
@@ -77,20 +77,20 @@ message MsgAddNode {
     string operator = 3;
 }
 
-// MsgAddNodeResponse defines the Msg/AddNode response type.
-message MsgAddNodeResponse {
+// MsgGrantNodeResponse defines the Msg/GrantNode response type.
+message MsgGrantNodeResponse {
     option (gogoproto.equal) = true;
 
     string id = 1;
 }
 
-// MsgRemoveNode defines a message to remove an existing node.
-message MsgRemoveNode {
+// MsgRevokeNode defines a message to revoke access from a node
+message MsgRevokeNode {
     option (gogoproto.equal) = true;
 
     string id = 1;
     string operator = 2;
 }
 
-// MsgRemoveNodeResponse defines the Msg/RemoveNode response type.
-message MsgRemoveNodeResponse {}
+// MsgRevokeNodeResponse defines the Msg/RevokeNode response type.
+message MsgRevokeNodeResponse {}

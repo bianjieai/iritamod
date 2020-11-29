@@ -264,25 +264,25 @@ func (m *MsgRemoveValidatorResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgRemoveValidatorResponse proto.InternalMessageInfo
 
-// MsgAddNode defines a message to add a node.
-type MsgAddNode struct {
+// MsgGrantNode defines a message to grant a node access
+type MsgGrantNode struct {
 	Name        string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	Certificate string `protobuf:"bytes,2,opt,name=certificate,proto3" json:"certificate,omitempty"`
 	Operator    string `protobuf:"bytes,3,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
-func (m *MsgAddNode) Reset()         { *m = MsgAddNode{} }
-func (m *MsgAddNode) String() string { return proto.CompactTextString(m) }
-func (*MsgAddNode) ProtoMessage()    {}
-func (*MsgAddNode) Descriptor() ([]byte, []int) {
+func (m *MsgGrantNode) Reset()         { *m = MsgGrantNode{} }
+func (m *MsgGrantNode) String() string { return proto.CompactTextString(m) }
+func (*MsgGrantNode) ProtoMessage()    {}
+func (*MsgGrantNode) Descriptor() ([]byte, []int) {
 	return fileDescriptor_841e96430e5a9f3c, []int{6}
 }
-func (m *MsgAddNode) XXX_Unmarshal(b []byte) error {
+func (m *MsgGrantNode) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgAddNode) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgGrantNode) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgAddNode.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgGrantNode.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -292,35 +292,35 @@ func (m *MsgAddNode) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *MsgAddNode) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgAddNode.Merge(m, src)
+func (m *MsgGrantNode) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgGrantNode.Merge(m, src)
 }
-func (m *MsgAddNode) XXX_Size() int {
+func (m *MsgGrantNode) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgAddNode) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgAddNode.DiscardUnknown(m)
+func (m *MsgGrantNode) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgGrantNode.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgAddNode proto.InternalMessageInfo
+var xxx_messageInfo_MsgGrantNode proto.InternalMessageInfo
 
-// MsgAddNodeResponse defines the Msg/AddNode response type.
-type MsgAddNodeResponse struct {
+// MsgGrantNodeResponse defines the Msg/GrantNode response type.
+type MsgGrantNodeResponse struct {
 	Id string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 }
 
-func (m *MsgAddNodeResponse) Reset()         { *m = MsgAddNodeResponse{} }
-func (m *MsgAddNodeResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgAddNodeResponse) ProtoMessage()    {}
-func (*MsgAddNodeResponse) Descriptor() ([]byte, []int) {
+func (m *MsgGrantNodeResponse) Reset()         { *m = MsgGrantNodeResponse{} }
+func (m *MsgGrantNodeResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgGrantNodeResponse) ProtoMessage()    {}
+func (*MsgGrantNodeResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_841e96430e5a9f3c, []int{7}
 }
-func (m *MsgAddNodeResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgGrantNodeResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgAddNodeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgGrantNodeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgAddNodeResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgGrantNodeResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -330,36 +330,36 @@ func (m *MsgAddNodeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, 
 		return b[:n], nil
 	}
 }
-func (m *MsgAddNodeResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgAddNodeResponse.Merge(m, src)
+func (m *MsgGrantNodeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgGrantNodeResponse.Merge(m, src)
 }
-func (m *MsgAddNodeResponse) XXX_Size() int {
+func (m *MsgGrantNodeResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgAddNodeResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgAddNodeResponse.DiscardUnknown(m)
+func (m *MsgGrantNodeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgGrantNodeResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgAddNodeResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgGrantNodeResponse proto.InternalMessageInfo
 
-// MsgRemoveNode defines a message to remove an existing node.
-type MsgRemoveNode struct {
+// MsgRevokeNode defines a message to revoke access from a node
+type MsgRevokeNode struct {
 	Id       string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	Operator string `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
-func (m *MsgRemoveNode) Reset()         { *m = MsgRemoveNode{} }
-func (m *MsgRemoveNode) String() string { return proto.CompactTextString(m) }
-func (*MsgRemoveNode) ProtoMessage()    {}
-func (*MsgRemoveNode) Descriptor() ([]byte, []int) {
+func (m *MsgRevokeNode) Reset()         { *m = MsgRevokeNode{} }
+func (m *MsgRevokeNode) String() string { return proto.CompactTextString(m) }
+func (*MsgRevokeNode) ProtoMessage()    {}
+func (*MsgRevokeNode) Descriptor() ([]byte, []int) {
 	return fileDescriptor_841e96430e5a9f3c, []int{8}
 }
-func (m *MsgRemoveNode) XXX_Unmarshal(b []byte) error {
+func (m *MsgRevokeNode) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRemoveNode) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgRevokeNode) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRemoveNode.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgRevokeNode.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -369,34 +369,34 @@ func (m *MsgRemoveNode) XXX_Marshal(b []byte, deterministic bool) ([]byte, error
 		return b[:n], nil
 	}
 }
-func (m *MsgRemoveNode) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRemoveNode.Merge(m, src)
+func (m *MsgRevokeNode) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRevokeNode.Merge(m, src)
 }
-func (m *MsgRemoveNode) XXX_Size() int {
+func (m *MsgRevokeNode) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRemoveNode) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRemoveNode.DiscardUnknown(m)
+func (m *MsgRevokeNode) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRevokeNode.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRemoveNode proto.InternalMessageInfo
+var xxx_messageInfo_MsgRevokeNode proto.InternalMessageInfo
 
-// MsgRemoveNodeResponse defines the Msg/RemoveNode response type.
-type MsgRemoveNodeResponse struct {
+// MsgRevokeNodeResponse defines the Msg/RevokeNode response type.
+type MsgRevokeNodeResponse struct {
 }
 
-func (m *MsgRemoveNodeResponse) Reset()         { *m = MsgRemoveNodeResponse{} }
-func (m *MsgRemoveNodeResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgRemoveNodeResponse) ProtoMessage()    {}
-func (*MsgRemoveNodeResponse) Descriptor() ([]byte, []int) {
+func (m *MsgRevokeNodeResponse) Reset()         { *m = MsgRevokeNodeResponse{} }
+func (m *MsgRevokeNodeResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgRevokeNodeResponse) ProtoMessage()    {}
+func (*MsgRevokeNodeResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_841e96430e5a9f3c, []int{9}
 }
-func (m *MsgRemoveNodeResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgRevokeNodeResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRemoveNodeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgRevokeNodeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRemoveNodeResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgRevokeNodeResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -406,17 +406,17 @@ func (m *MsgRemoveNodeResponse) XXX_Marshal(b []byte, deterministic bool) ([]byt
 		return b[:n], nil
 	}
 }
-func (m *MsgRemoveNodeResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRemoveNodeResponse.Merge(m, src)
+func (m *MsgRevokeNodeResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgRevokeNodeResponse.Merge(m, src)
 }
-func (m *MsgRemoveNodeResponse) XXX_Size() int {
+func (m *MsgRevokeNodeResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRemoveNodeResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRemoveNodeResponse.DiscardUnknown(m)
+func (m *MsgRevokeNodeResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgRevokeNodeResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRemoveNodeResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgRevokeNodeResponse proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*MsgCreateValidator)(nil), "iritamod.node.MsgCreateValidator")
@@ -425,48 +425,48 @@ func init() {
 	proto.RegisterType((*MsgUpdateValidatorResponse)(nil), "iritamod.node.MsgUpdateValidatorResponse")
 	proto.RegisterType((*MsgRemoveValidator)(nil), "iritamod.node.MsgRemoveValidator")
 	proto.RegisterType((*MsgRemoveValidatorResponse)(nil), "iritamod.node.MsgRemoveValidatorResponse")
-	proto.RegisterType((*MsgAddNode)(nil), "iritamod.node.MsgAddNode")
-	proto.RegisterType((*MsgAddNodeResponse)(nil), "iritamod.node.MsgAddNodeResponse")
-	proto.RegisterType((*MsgRemoveNode)(nil), "iritamod.node.MsgRemoveNode")
-	proto.RegisterType((*MsgRemoveNodeResponse)(nil), "iritamod.node.MsgRemoveNodeResponse")
+	proto.RegisterType((*MsgGrantNode)(nil), "iritamod.node.MsgGrantNode")
+	proto.RegisterType((*MsgGrantNodeResponse)(nil), "iritamod.node.MsgGrantNodeResponse")
+	proto.RegisterType((*MsgRevokeNode)(nil), "iritamod.node.MsgRevokeNode")
+	proto.RegisterType((*MsgRevokeNodeResponse)(nil), "iritamod.node.MsgRevokeNodeResponse")
 }
 
 func init() { proto.RegisterFile("node/tx.proto", fileDescriptor_841e96430e5a9f3c) }
 
 var fileDescriptor_841e96430e5a9f3c = []byte{
-	// 499 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0x31, 0x6f, 0xd3, 0x40,
-	0x14, 0xc7, 0x63, 0x3b, 0x29, 0xf0, 0x50, 0x88, 0x74, 0x14, 0x61, 0xac, 0xca, 0x4d, 0x2d, 0x86,
-	0xc2, 0x60, 0xa3, 0xb2, 0x75, 0x6b, 0x91, 0x60, 0x4a, 0x85, 0x2c, 0xc1, 0xc0, 0x52, 0x5d, 0x72,
-	0x87, 0x39, 0x14, 0xfb, 0x2c, 0xdf, 0x15, 0xe8, 0xb7, 0xe0, 0x23, 0xf0, 0x21, 0x58, 0x98, 0x59,
-	0x3a, 0x76, 0x64, 0x42, 0x90, 0x2c, 0xcc, 0x7c, 0x02, 0xe4, 0x73, 0x6c, 0x39, 0x17, 0xdb, 0x15,
-	0xdd, 0xec, 0xfb, 0xbf, 0xf7, 0xfe, 0xef, 0x27, 0xff, 0x7d, 0x30, 0x4c, 0x38, 0xa1, 0x81, 0xfc,
-	0xe4, 0xa7, 0x19, 0x97, 0x1c, 0x0d, 0x59, 0xc6, 0x24, 0x8e, 0x39, 0xf1, 0xf3, 0x73, 0x67, 0x3b,
-	0xe2, 0x11, 0x57, 0x4a, 0x90, 0x3f, 0x15, 0x45, 0xde, 0x37, 0x03, 0xd0, 0x44, 0x44, 0xcf, 0x32,
-	0x8a, 0x25, 0x7d, 0x8d, 0xe7, 0x8c, 0x60, 0xc9, 0x33, 0x84, 0xa0, 0x9f, 0xe0, 0x98, 0xda, 0xc6,
-	0xd8, 0xd8, 0xbf, 0x15, 0xaa, 0x67, 0x34, 0x86, 0xdb, 0x33, 0x9a, 0x49, 0xf6, 0x96, 0xcd, 0xb0,
-	0xa4, 0xb6, 0xa9, 0xa4, 0xfa, 0x11, 0xda, 0x86, 0x41, 0xca, 0x3f, 0xd2, 0xcc, 0xb6, 0xc6, 0xc6,
-	0xbe, 0x15, 0x16, 0x2f, 0x79, 0x1f, 0xa1, 0x62, 0x96, 0xb1, 0x54, 0x32, 0x9e, 0xd8, 0xfd, 0xa2,
-	0xaf, 0x76, 0x84, 0x02, 0xb8, 0xc9, 0x53, 0x9a, 0xe5, 0xce, 0xf6, 0x20, 0x97, 0x8f, 0xef, 0xfe,
-	0xfd, 0xb9, 0x3b, 0x3a, 0xc7, 0xf1, 0xfc, 0xd0, 0x2b, 0x15, 0x2f, 0xac, 0x8a, 0x0e, 0xfb, 0x7f,
-	0xbe, 0xec, 0x1a, 0xde, 0x01, 0x38, 0x9b, 0xab, 0x87, 0x54, 0xa4, 0x3c, 0x11, 0x14, 0xdd, 0x01,
-	0x93, 0x91, 0x15, 0x80, 0xc9, 0xc8, 0xaa, 0xe7, 0x6b, 0xc1, 0xfb, 0x2a, 0x25, 0x6b, 0xbc, 0x5a,
-	0x71, 0xc5, 0x6f, 0xb6, 0xf3, 0x5b, 0x1d, 0xfc, 0xfd, 0x0e, 0xfe, 0xc1, 0x26, 0xbf, 0x53, 0xe3,
-	0xdf, 0x52, 0xb2, 0x8e, 0xba, 0xa3, 0x50, 0xb5, 0xad, 0x4b, 0x54, 0xef, 0xb9, 0x62, 0x0a, 0x69,
-	0xcc, 0x3f, 0x74, 0x30, 0xd5, 0x5d, 0xcc, 0x0e, 0x17, 0x6d, 0x4e, 0xe5, 0x42, 0x00, 0x26, 0x22,
-	0x3a, 0x22, 0xe4, 0x84, 0x13, 0x7a, 0xcd, 0x84, 0xd4, 0x77, 0xb0, 0x1a, 0x77, 0x78, 0xac, 0x58,
-	0x56, 0x2e, 0x57, 0x7c, 0xcc, 0x23, 0x18, 0x56, 0xfb, 0xaa, 0xa5, 0xfe, 0x1f, 0xf9, 0x3e, 0xdc,
-	0x5b, 0x1b, 0x51, 0x3a, 0x1e, 0x7c, 0xb7, 0xc0, 0x9a, 0x88, 0x08, 0x9d, 0xc2, 0x48, 0xff, 0x39,
-	0xf6, 0xfc, 0xb5, 0x3f, 0xcb, 0xdf, 0x0c, 0xa1, 0xf3, 0xe8, 0xca, 0x92, 0x0a, 0xed, 0x14, 0x46,
-	0x7a, 0x1a, 0x1b, 0x0c, 0xb4, 0x92, 0x26, 0x83, 0x96, 0x74, 0xe4, 0x06, 0x7a, 0x34, 0x1a, 0x0c,
-	0xb4, 0x92, 0x26, 0x83, 0x96, 0x60, 0xa0, 0x17, 0x70, 0xa3, 0x4c, 0xc5, 0x83, 0xcd, 0xae, 0x95,
-	0xe4, 0xec, 0xb5, 0x4a, 0xd5, 0xa0, 0x97, 0x00, 0xb5, 0x8f, 0xb9, 0xd3, 0xb6, 0x81, 0x1a, 0xf7,
-	0xb0, 0x4b, 0x2d, 0x27, 0x1e, 0x9f, 0x5c, 0xfc, 0x76, 0x7b, 0x17, 0x0b, 0xd7, 0xb8, 0x5c, 0xb8,
-	0xc6, 0xaf, 0x85, 0x6b, 0x7c, 0x5e, 0xba, 0xbd, 0xcb, 0xa5, 0xdb, 0xfb, 0xb1, 0x74, 0x7b, 0x6f,
-	0x9e, 0x44, 0x4c, 0xbe, 0x3b, 0x9b, 0xfa, 0x33, 0x1e, 0x07, 0x53, 0x86, 0x93, 0xf7, 0x8c, 0x62,
-	0x16, 0x94, 0x73, 0x83, 0x98, 0x93, 0xb3, 0x39, 0x15, 0x41, 0x71, 0xad, 0x9e, 0xa7, 0x54, 0x4c,
-	0xb7, 0xd4, 0xad, 0xf9, 0xf4, 0x5f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x76, 0xc9, 0xad, 0x15, 0x6b,
-	0x05, 0x00, 0x00,
+	// 505 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x94, 0x41, 0x6e, 0xd3, 0x40,
+	0x14, 0x86, 0x63, 0x3b, 0xa9, 0xe8, 0x83, 0x10, 0x69, 0x08, 0xc2, 0x32, 0x95, 0x1b, 0x0c, 0x8b,
+	0x22, 0x21, 0x1b, 0x95, 0x5d, 0x77, 0x14, 0x09, 0x56, 0xa9, 0x90, 0x25, 0x58, 0xb0, 0xa9, 0x26,
+	0x99, 0xa9, 0x19, 0x88, 0x3d, 0xd6, 0x78, 0x5a, 0xe8, 0x2d, 0x38, 0x02, 0x87, 0x60, 0xc3, 0x0d,
+	0xca, 0xae, 0x4b, 0x56, 0x08, 0x92, 0x0d, 0x6b, 0x4e, 0x80, 0x3c, 0xae, 0x8d, 0x33, 0x71, 0x5c,
+	0xd1, 0x9d, 0x3d, 0xff, 0x7b, 0xef, 0x7f, 0x9f, 0xfc, 0x7b, 0xa0, 0x9f, 0x70, 0x42, 0x03, 0xf9,
+	0xd1, 0x4f, 0x05, 0x97, 0x1c, 0xf5, 0x99, 0x60, 0x12, 0xc7, 0x9c, 0xf8, 0xf9, 0xb9, 0x33, 0x8c,
+	0x78, 0xc4, 0x95, 0x12, 0xe4, 0x4f, 0x45, 0x91, 0xf7, 0xd5, 0x00, 0x34, 0xce, 0xa2, 0x67, 0x82,
+	0x62, 0x49, 0x5f, 0xe3, 0x19, 0x23, 0x58, 0x72, 0x81, 0x10, 0x74, 0x13, 0x1c, 0x53, 0xdb, 0x18,
+	0x19, 0x3b, 0x9b, 0xa1, 0x7a, 0x46, 0x23, 0xb8, 0x3e, 0xa5, 0x42, 0xb2, 0x23, 0x36, 0xc5, 0x92,
+	0xda, 0xa6, 0x92, 0xea, 0x47, 0x68, 0x08, 0xbd, 0x94, 0x7f, 0xa0, 0xc2, 0xb6, 0x46, 0xc6, 0x8e,
+	0x15, 0x16, 0x2f, 0x79, 0x1f, 0xa1, 0xd9, 0x54, 0xb0, 0x54, 0x32, 0x9e, 0xd8, 0xdd, 0xa2, 0xaf,
+	0x76, 0x84, 0x02, 0xb8, 0xc6, 0x53, 0x2a, 0x72, 0x67, 0xbb, 0x97, 0xcb, 0xfb, 0xb7, 0xfe, 0xfc,
+	0xd8, 0x1e, 0x9c, 0xe2, 0x78, 0xb6, 0xe7, 0x95, 0x8a, 0x17, 0x56, 0x45, 0x7b, 0xdd, 0xdf, 0x9f,
+	0xb7, 0x0d, 0x6f, 0x17, 0x9c, 0xd5, 0xd5, 0x43, 0x9a, 0xa5, 0x3c, 0xc9, 0x28, 0xba, 0x09, 0x26,
+	0x23, 0x17, 0x00, 0x26, 0x23, 0x17, 0x3d, 0x5f, 0x0a, 0xde, 0x57, 0x29, 0x59, 0xe2, 0xd5, 0x8a,
+	0x2b, 0x7e, 0x73, 0x3d, 0xbf, 0xd5, 0xc2, 0xdf, 0x6d, 0xe1, 0xef, 0xad, 0xf2, 0x3b, 0x35, 0xfe,
+	0x0d, 0x25, 0xeb, 0xa8, 0x5b, 0x0a, 0x55, 0xdb, 0xba, 0x44, 0xf5, 0x9e, 0x2b, 0xa6, 0x90, 0xc6,
+	0xfc, 0xa4, 0x85, 0xa9, 0xee, 0x62, 0xb6, 0xb8, 0x68, 0x73, 0x2a, 0x97, 0x23, 0xb8, 0x31, 0xce,
+	0xa2, 0x17, 0x02, 0x27, 0xf2, 0x80, 0x13, 0x7a, 0xc5, 0x8c, 0xd4, 0xb7, 0xb0, 0x1a, 0xb7, 0x78,
+	0x04, 0xc3, 0xba, 0xcf, 0x25, 0x1f, 0xf4, 0x29, 0xf4, 0xd5, 0xce, 0x27, 0xfc, 0x3d, 0x55, 0x6b,
+	0xfd, 0x3f, 0xf6, 0x1d, 0xb8, 0xbd, 0x34, 0xa2, 0x74, 0xdc, 0xfd, 0x66, 0x81, 0x35, 0xce, 0x22,
+	0x74, 0x08, 0x03, 0xfd, 0x07, 0xb9, 0xe7, 0x2f, 0xfd, 0x5d, 0xfe, 0x6a, 0x10, 0x9d, 0x87, 0x97,
+	0x96, 0x54, 0x68, 0x87, 0x30, 0xd0, 0x13, 0xd9, 0x60, 0xa0, 0x95, 0x34, 0x19, 0xac, 0x49, 0x48,
+	0x6e, 0xa0, 0xc7, 0xa3, 0xc1, 0x40, 0x2b, 0x69, 0x32, 0x58, 0x13, 0x0e, 0x34, 0x86, 0xcd, 0x7f,
+	0xc9, 0xb8, 0xbb, 0xda, 0x57, 0x89, 0xce, 0xfd, 0x16, 0xb1, 0x1a, 0xf7, 0x12, 0xa0, 0xf6, 0x49,
+	0xb7, 0x9a, 0xf6, 0x28, 0x55, 0xe7, 0x41, 0x9b, 0x5a, 0x4e, 0xdc, 0x3f, 0x38, 0xfb, 0xe5, 0x76,
+	0xce, 0xe6, 0xae, 0x71, 0x3e, 0x77, 0x8d, 0x9f, 0x73, 0xd7, 0xf8, 0xb4, 0x70, 0x3b, 0xe7, 0x0b,
+	0xb7, 0xf3, 0x7d, 0xe1, 0x76, 0xde, 0x3c, 0x8e, 0x98, 0x7c, 0x7b, 0x3c, 0xf1, 0xa7, 0x3c, 0x0e,
+	0x26, 0x0c, 0x27, 0xef, 0x18, 0xc5, 0x2c, 0x28, 0xe7, 0x06, 0x31, 0x27, 0xc7, 0x33, 0x9a, 0x05,
+	0xc5, 0x05, 0x7b, 0x9a, 0xd2, 0x6c, 0xb2, 0xa1, 0xee, 0xcf, 0x27, 0x7f, 0x03, 0x00, 0x00, 0xff,
+	0xff, 0x4e, 0x67, 0x51, 0x0c, 0x75, 0x05, 0x00, 0x00,
 }
 
 func (this *MsgCreateValidator) Equal(that interface{}) bool {
@@ -595,14 +595,14 @@ func (this *MsgRemoveValidator) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *MsgAddNode) Equal(that interface{}) bool {
+func (this *MsgGrantNode) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*MsgAddNode)
+	that1, ok := that.(*MsgGrantNode)
 	if !ok {
-		that2, ok := that.(MsgAddNode)
+		that2, ok := that.(MsgGrantNode)
 		if ok {
 			that1 = &that2
 		} else {
@@ -625,14 +625,14 @@ func (this *MsgAddNode) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *MsgAddNodeResponse) Equal(that interface{}) bool {
+func (this *MsgGrantNodeResponse) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*MsgAddNodeResponse)
+	that1, ok := that.(*MsgGrantNodeResponse)
 	if !ok {
-		that2, ok := that.(MsgAddNodeResponse)
+		that2, ok := that.(MsgGrantNodeResponse)
 		if ok {
 			that1 = &that2
 		} else {
@@ -649,14 +649,14 @@ func (this *MsgAddNodeResponse) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *MsgRemoveNode) Equal(that interface{}) bool {
+func (this *MsgRevokeNode) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*MsgRemoveNode)
+	that1, ok := that.(*MsgRevokeNode)
 	if !ok {
-		that2, ok := that.(MsgRemoveNode)
+		that2, ok := that.(MsgRevokeNode)
 		if ok {
 			that1 = &that2
 		} else {
@@ -695,10 +695,10 @@ type MsgClient interface {
 	UpdateValidator(ctx context.Context, in *MsgUpdateValidator, opts ...grpc.CallOption) (*MsgUpdateValidatorResponse, error)
 	// RemoveValidator defines a method for removing a validator.
 	RemoveValidator(ctx context.Context, in *MsgRemoveValidator, opts ...grpc.CallOption) (*MsgRemoveValidatorResponse, error)
-	// AddNode defines a method for adding a node.
-	AddNode(ctx context.Context, in *MsgAddNode, opts ...grpc.CallOption) (*MsgAddNodeResponse, error)
-	// RemoveNode defines a method for removing a node.
-	RemoveNode(ctx context.Context, in *MsgRemoveNode, opts ...grpc.CallOption) (*MsgRemoveNodeResponse, error)
+	// GrantNode defines a method for granting a node access.
+	GrantNode(ctx context.Context, in *MsgGrantNode, opts ...grpc.CallOption) (*MsgGrantNodeResponse, error)
+	// RevokeNode defines a method for revoking access from a node.
+	RevokeNode(ctx context.Context, in *MsgRevokeNode, opts ...grpc.CallOption) (*MsgRevokeNodeResponse, error)
 }
 
 type msgClient struct {
@@ -736,18 +736,18 @@ func (c *msgClient) RemoveValidator(ctx context.Context, in *MsgRemoveValidator,
 	return out, nil
 }
 
-func (c *msgClient) AddNode(ctx context.Context, in *MsgAddNode, opts ...grpc.CallOption) (*MsgAddNodeResponse, error) {
-	out := new(MsgAddNodeResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.node.Msg/AddNode", in, out, opts...)
+func (c *msgClient) GrantNode(ctx context.Context, in *MsgGrantNode, opts ...grpc.CallOption) (*MsgGrantNodeResponse, error) {
+	out := new(MsgGrantNodeResponse)
+	err := c.cc.Invoke(ctx, "/iritamod.node.Msg/GrantNode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) RemoveNode(ctx context.Context, in *MsgRemoveNode, opts ...grpc.CallOption) (*MsgRemoveNodeResponse, error) {
-	out := new(MsgRemoveNodeResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.node.Msg/RemoveNode", in, out, opts...)
+func (c *msgClient) RevokeNode(ctx context.Context, in *MsgRevokeNode, opts ...grpc.CallOption) (*MsgRevokeNodeResponse, error) {
+	out := new(MsgRevokeNodeResponse)
+	err := c.cc.Invoke(ctx, "/iritamod.node.Msg/RevokeNode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -762,10 +762,10 @@ type MsgServer interface {
 	UpdateValidator(context.Context, *MsgUpdateValidator) (*MsgUpdateValidatorResponse, error)
 	// RemoveValidator defines a method for removing a validator.
 	RemoveValidator(context.Context, *MsgRemoveValidator) (*MsgRemoveValidatorResponse, error)
-	// AddNode defines a method for adding a node.
-	AddNode(context.Context, *MsgAddNode) (*MsgAddNodeResponse, error)
-	// RemoveNode defines a method for removing a node.
-	RemoveNode(context.Context, *MsgRemoveNode) (*MsgRemoveNodeResponse, error)
+	// GrantNode defines a method for granting a node access.
+	GrantNode(context.Context, *MsgGrantNode) (*MsgGrantNodeResponse, error)
+	// RevokeNode defines a method for revoking access from a node.
+	RevokeNode(context.Context, *MsgRevokeNode) (*MsgRevokeNodeResponse, error)
 }
 
 // UnimplementedMsgServer can be embedded to have forward compatible implementations.
@@ -781,11 +781,11 @@ func (*UnimplementedMsgServer) UpdateValidator(ctx context.Context, req *MsgUpda
 func (*UnimplementedMsgServer) RemoveValidator(ctx context.Context, req *MsgRemoveValidator) (*MsgRemoveValidatorResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RemoveValidator not implemented")
 }
-func (*UnimplementedMsgServer) AddNode(ctx context.Context, req *MsgAddNode) (*MsgAddNodeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddNode not implemented")
+func (*UnimplementedMsgServer) GrantNode(ctx context.Context, req *MsgGrantNode) (*MsgGrantNodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GrantNode not implemented")
 }
-func (*UnimplementedMsgServer) RemoveNode(ctx context.Context, req *MsgRemoveNode) (*MsgRemoveNodeResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RemoveNode not implemented")
+func (*UnimplementedMsgServer) RevokeNode(ctx context.Context, req *MsgRevokeNode) (*MsgRevokeNodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RevokeNode not implemented")
 }
 
 func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
@@ -846,38 +846,38 @@ func _Msg_RemoveValidator_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_AddNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgAddNode)
+func _Msg_GrantNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgGrantNode)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).AddNode(ctx, in)
+		return srv.(MsgServer).GrantNode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.node.Msg/AddNode",
+		FullMethod: "/iritamod.node.Msg/GrantNode",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).AddNode(ctx, req.(*MsgAddNode))
+		return srv.(MsgServer).GrantNode(ctx, req.(*MsgGrantNode))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_RemoveNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRemoveNode)
+func _Msg_RevokeNode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgRevokeNode)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).RemoveNode(ctx, in)
+		return srv.(MsgServer).RevokeNode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.node.Msg/RemoveNode",
+		FullMethod: "/iritamod.node.Msg/RevokeNode",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RemoveNode(ctx, req.(*MsgRemoveNode))
+		return srv.(MsgServer).RevokeNode(ctx, req.(*MsgRevokeNode))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -899,12 +899,12 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Msg_RemoveValidator_Handler,
 		},
 		{
-			MethodName: "AddNode",
-			Handler:    _Msg_AddNode_Handler,
+			MethodName: "GrantNode",
+			Handler:    _Msg_GrantNode_Handler,
 		},
 		{
-			MethodName: "RemoveNode",
-			Handler:    _Msg_RemoveNode_Handler,
+			MethodName: "RevokeNode",
+			Handler:    _Msg_RevokeNode_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1143,7 +1143,7 @@ func (m *MsgRemoveValidatorResponse) MarshalToSizedBuffer(dAtA []byte) (int, err
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgAddNode) Marshal() (dAtA []byte, err error) {
+func (m *MsgGrantNode) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1153,12 +1153,12 @@ func (m *MsgAddNode) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgAddNode) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgGrantNode) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgAddNode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgGrantNode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1187,7 +1187,7 @@ func (m *MsgAddNode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgAddNodeResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgGrantNodeResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1197,12 +1197,12 @@ func (m *MsgAddNodeResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgAddNodeResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgGrantNodeResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgAddNodeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgGrantNodeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1217,7 +1217,7 @@ func (m *MsgAddNodeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgRemoveNode) Marshal() (dAtA []byte, err error) {
+func (m *MsgRevokeNode) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1227,12 +1227,12 @@ func (m *MsgRemoveNode) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRemoveNode) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgRevokeNode) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRemoveNode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgRevokeNode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1254,7 +1254,7 @@ func (m *MsgRemoveNode) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgRemoveNodeResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgRevokeNodeResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -1264,12 +1264,12 @@ func (m *MsgRemoveNodeResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRemoveNodeResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgRevokeNodeResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRemoveNodeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgRevokeNodeResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -1396,7 +1396,7 @@ func (m *MsgRemoveValidatorResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgAddNode) Size() (n int) {
+func (m *MsgGrantNode) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1417,7 +1417,7 @@ func (m *MsgAddNode) Size() (n int) {
 	return n
 }
 
-func (m *MsgAddNodeResponse) Size() (n int) {
+func (m *MsgGrantNodeResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1430,7 +1430,7 @@ func (m *MsgAddNodeResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgRemoveNode) Size() (n int) {
+func (m *MsgRevokeNode) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1447,7 +1447,7 @@ func (m *MsgRemoveNode) Size() (n int) {
 	return n
 }
 
-func (m *MsgRemoveNodeResponse) Size() (n int) {
+func (m *MsgRevokeNodeResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2202,7 +2202,7 @@ func (m *MsgRemoveValidatorResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgAddNode) Unmarshal(dAtA []byte) error {
+func (m *MsgGrantNode) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2225,10 +2225,10 @@ func (m *MsgAddNode) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgAddNode: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgGrantNode: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgAddNode: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgGrantNode: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2351,7 +2351,7 @@ func (m *MsgAddNode) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgAddNodeResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgGrantNodeResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2374,10 +2374,10 @@ func (m *MsgAddNodeResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgAddNodeResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgGrantNodeResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgAddNodeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgGrantNodeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2436,7 +2436,7 @@ func (m *MsgAddNodeResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgRemoveNode) Unmarshal(dAtA []byte) error {
+func (m *MsgRevokeNode) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2459,10 +2459,10 @@ func (m *MsgRemoveNode) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRemoveNode: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgRevokeNode: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRemoveNode: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgRevokeNode: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2553,7 +2553,7 @@ func (m *MsgRemoveNode) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgRemoveNodeResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgRevokeNodeResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2576,10 +2576,10 @@ func (m *MsgRemoveNodeResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRemoveNodeResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgRevokeNodeResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRemoveNodeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgRevokeNodeResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

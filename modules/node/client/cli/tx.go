@@ -39,8 +39,8 @@ func NewTxCmd() *cobra.Command {
 		NewCreateValidatorCmd(),
 		NewUpdateValidatorCmd(),
 		NewRemoveValidatorCmd(),
-		NewAddNodeCmd(),
-		NewRemoveNodeCmd(),
+		NewGrantNodeCmd(),
+		NewRevokeNodeCmd(),
 	)
 
 	return nodeTxCmd
@@ -168,14 +168,14 @@ func NewRemoveValidatorCmd() *cobra.Command {
 	return cmd
 }
 
-// NewAddNodeCmd implements adding a node command
-func NewAddNodeCmd() *cobra.Command {
+// NewGrantNodeCmd implements granting a node access command
+func NewGrantNodeCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "add",
-		Short: "Add a node to the node whitelist",
-		Long:  "Add a node to the node whitelist based on the identity certificate",
+		Use:   "grant",
+		Short: "Grant a node access to the chain",
+		Long:  "Grant a node access to the chain based on the identity certificate",
 		Example: fmt.Sprintf(
-			"$ %s tx node add --name=<name> --cert=<certificate-file> --from mykey",
+			"$ %s tx node grant --name=<name> --cert=<certificate-file> --from mykey",
 			version.AppName,
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -199,7 +199,7 @@ func NewAddNodeCmd() *cobra.Command {
 				return fmt.Errorf("failed to read the certificate file: %s", err.Error())
 			}
 
-			msg := types.NewMsgAddNode(name, string(cert), operator)
+			msg := types.NewMsgGrantNode(name, string(cert), operator)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -208,7 +208,7 @@ func NewAddNodeCmd() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().AddFlagSet(FsAddNode)
+	cmd.Flags().AddFlagSet(FsGrantNode)
 	cmd.MarkFlagRequired(FlagCert)
 
 	flags.AddTxFlagsToCmd(cmd)
@@ -216,14 +216,14 @@ func NewAddNodeCmd() *cobra.Command {
 	return cmd
 }
 
-// NewRemoveNodeCmd implements removing a node command
-func NewRemoveNodeCmd() *cobra.Command {
+// NewRevokeNodeCmd implements revoking access from a node command
+func NewRevokeNodeCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "remove [id]",
-		Short: "Remove a node from the node whitelist",
-		Long:  "Remove a node from the node whitelist by id",
+		Use:   "revoke [id]",
+		Short: "Revoke the chain access from the node",
+		Long:  "Revoke the chain access from the node by id",
 		Example: fmt.Sprintf(
-			"$ %s tx node remove <id> --from mykey",
+			"$ %s tx node revoke <id> --from mykey",
 			version.AppName,
 		),
 		Args: cobra.ExactArgs(1),
@@ -241,7 +241,7 @@ func NewRemoveNodeCmd() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgRemoveNode(id, operator)
+			msg := types.NewMsgRevokeNode(id, operator)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

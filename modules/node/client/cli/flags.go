@@ -20,7 +20,7 @@ const (
 var (
 	FsCreateValidator = flag.NewFlagSet("", flag.ContinueOnError)
 	FsUpdateValidator = flag.NewFlagSet("", flag.ContinueOnError)
-	FsAddNode         = flag.NewFlagSet("", flag.ContinueOnError)
+	FsGrantNode       = flag.NewFlagSet("", flag.ContinueOnError)
 )
 
 func init() {
@@ -35,6 +35,6 @@ func init() {
 	FsUpdateValidator.String(FlagDescription, types.DoNotModifyDesc, "The validator's (optional) details")
 	FsUpdateValidator.String(FlagName, types.DoNotModifyDesc, "The alias name of the validator")
 
-	FsAddNode.String(FlagName, "", "The alias name of the node")
-	FsAddNode.String(FlagCert, "", "The certificate file path of the node identity")
+	FsGrantNode.String(FlagName, "", "The alias name of the node")
+	FsGrantNode.String(FlagCert, "", "The certificate file path of the node identity")
 }
