@@ -65,7 +65,7 @@ func GetCmdQueryValidator() *cobra.Command {
 // GetCmdQueryValidators implements the query all validators command.
 func GetCmdQueryValidators() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "list",
+		Use:   "validators",
 		Short: "Query for all validators",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
