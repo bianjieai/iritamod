@@ -61,7 +61,7 @@ func ValidateNodeID(id string) error {
 
 // ValidateCertificate validates the node certificate
 func ValidateCertificate(cert string) error {
-	_, err := cautils.ReadX509CertFromMem([]byte(cert))
+	_, err := cautils.ReadCertificateFromMem([]byte(cert))
 	if err != nil {
 		return sdkerrors.Wrap(ErrInvalidCert, err.Error())
 	}
