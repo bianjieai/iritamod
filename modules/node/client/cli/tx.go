@@ -258,14 +258,14 @@ func NewRevokeNodeCmd() *cobra.Command {
 // CreateValidatorMsgHelpers Return the flagset, particular flags, and a description of defaults
 // this is anticipated to be used with the gen-tx
 func CreateValidatorMsgHelpers(ipDefault string) (fs *flag.FlagSet, pubkeyFlag, powerFlag, defaultsDesc string) {
-	fsCreateValidator := flag.NewFlagSet("", flag.ContinueOnError)
-	fsCreateValidator.String(FlagIP, ipDefault, "The node's public IP")
+	fs = flag.NewFlagSet("", flag.ContinueOnError)
+	fs.String(FlagIP, ipDefault, "The node's public IP")
 
-	fsCreateValidator.AddFlagSet(fsCreateValidator)
+	fs.AddFlagSet(FsCreateValidator)
 
 	defaultsDesc = fmt.Sprintf("\n	power:		%d\n", defaultPower)
 
-	return fsCreateValidator, FlagCert, FlagPower, defaultsDesc
+	return fs, FlagCert, FlagPower, defaultsDesc
 }
 
 // PrepareFlagsForTxCreateValidator prepare flags in config
