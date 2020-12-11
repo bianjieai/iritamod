@@ -118,7 +118,21 @@ func (q Querier) Nodes(c context.Context, req *types.QueryNodesRequest) (*types.
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	nodes := q.GetNodes(ctx)
+	nodes := make([]types.Node, 0)
+	store := ctx.KVStore(q.storeKey)
+	nodeStore := prefix.NewStore(store, types.NodeKey)
+	pageRes, err := query.Paginate(nodeStore, req.Pagination, func(key []byte, value []byte) error {
+		var node types.Node
+		err := q.cdc.UnmarshalBinaryBare(value, &node)
+		if err != nil {
+			return err
+		}
+		nodes = append(nodes, node)
+		return nil
+	})
+	if err != nil {
+		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
+	}
 
-	return &types.QueryNodesResponse{Nodes: nodes}, nil
+	return &types.QueryNodesResponse{Nodes: nodes, Pagination: pageRes}, nil
 }
