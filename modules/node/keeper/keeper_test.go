@@ -1,11 +1,11 @@
 package keeper_test
 
 import (
-	"github.com/tendermint/tendermint/crypto/tmhash"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/tendermint/tendermint/crypto/tmhash"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
