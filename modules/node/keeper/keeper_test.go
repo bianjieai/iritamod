@@ -5,6 +5,7 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
+	"github.com/tendermint/tendermint/crypto/tmhash"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -29,7 +30,7 @@ var (
 	name     = "test_name"
 	details  = "test_details"
 	power    = int64(1)
-	operator = sdk.AccAddress("test_operator")
+	operator = sdk.AccAddress(tmhash.SumTruncated([]byte("test_operator")))
 	cert, _  = cautil.ReadCertificateFromMem([]byte(certStr))
 	pk, _    = cautil.GetPubkeyFromCert(cert)
 
@@ -67,6 +68,7 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 	suite.Equal(msg.Certificate, validator.Certificate)
 	suite.Equal(msg.Power, validator.Power)
 	suite.Equal(msg.Description, validator.Description)
+	suite.Equal(msg.Operator, validator.Operator)
 	suite.False(validator.Jailed)
 
 	validator1, found := suite.keeper.GetValidatorByConsAddr(suite.ctx, sdk.GetConsAddress(pk))
@@ -120,6 +122,7 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	suite.Equal(msg2.Id, validator.Id)
 	suite.Equal(msg2.Certificate, validator.Certificate)
 	suite.Equal(msg2.Power, validator.Power)
+	suite.Equal(msg2.Operator, validator.Operator)
 	suite.Equal(msg2.Description, validator.Description)
 
 	// old pubkey index can not be found

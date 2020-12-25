@@ -48,7 +48,10 @@ func (k Keeper) CreateValidator(ctx sdk.Context, msg types.MsgCreateValidator) (
 		return nil, types.ErrValidatorPubkeyExists
 	}
 
-	operator, _ := hex.DecodeString(msg.Operator)
+	operator, err := sdk.AccAddressFromBech32(msg.Operator)
+	if err != nil {
+		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, err.Error())
+	}
 	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 
 	validator := types.NewValidator(
@@ -130,6 +133,7 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 
 		validator.Name = msg.Name
 	}
+	validator.Operator = msg.Operator
 	k.SetValidator(ctx, validator)
 	return nil
 }
