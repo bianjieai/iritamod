@@ -53,8 +53,7 @@ func NewCreateIdentityCmd() *cobra.Command {
 		),
 		PreRunE: preCheckCmd,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -127,8 +126,7 @@ func NewUpdateIdentityCmd() *cobra.Command {
 		Args:    cobra.ExactArgs(1),
 		PreRunE: preCheckCmd,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadTxCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}

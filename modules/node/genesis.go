@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmtypes "github.com/tendermint/tendermint/types"
@@ -35,11 +36,14 @@ func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) (res []abci.Valid
 
 		k.SetValidatorConsAddrIndex(ctx, id, sdk.GetConsAddress(pk))
 
-		tmPubKey, err := val.TmConsPubKey()
+		pubKey, err := val.ConsPubKey()
 		if err != nil {
 			panic(err)
 		}
-
+		tmPubKey, err := cryptocodec.ToTmPubKeyInterface(pubKey)
+		if err != nil {
+			panic(err)
+		}
 		res = append(res, ABCIValidatorUpdate(
 			tmPubKey,
 			val.Power,
@@ -63,12 +67,16 @@ func ExportGenesis(ctx sdk.Context, k Keeper) *GenesisState {
 // WriteValidators returns a slice of bonded genesis validators.
 func WriteValidators(ctx sdk.Context, keeper Keeper) (vals []tmtypes.GenesisValidator) {
 	for _, v := range keeper.GetLastValidators(ctx) {
-		consPk, err := v.TmConsPubKey()
+		consPk, err := v.ConsPubKey()
+		if err != nil {
+			continue
+		}
+		tmPubkey, err:= cryptocodec.ToTmPubKeyInterface(consPk)
 		if err != nil {
 			continue
 		}
 		vals = append(vals, tmtypes.GenesisValidator{
-			PubKey: consPk,
+			PubKey: tmPubkey,
 			Power:  v.GetConsensusPower(),
 			Name:   v.GetMoniker(),
 		})

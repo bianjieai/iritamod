@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -33,7 +34,7 @@ var (
 	operator = sdk.AccAddress(tmhash.SumTruncated([]byte("test_operator")))
 	cert, _  = cautil.ReadCertificateFromMem([]byte(certStr))
 	pk, _    = cautil.GetPubkeyFromCert(cert)
-
+	cospk, _ = cryptocodec.FromTmPubKeyInterface(pk)
 	nodeID   = pk.Address()
 	nodeName = "test_node"
 )
@@ -71,7 +72,7 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 	suite.Equal(msg.Operator, validator.Operator)
 	suite.False(validator.Jailed)
 
-	validator1, found := suite.keeper.GetValidatorByConsAddr(suite.ctx, sdk.GetConsAddress(pk))
+	validator1, found := suite.keeper.GetValidatorByConsAddr(suite.ctx, sdk.GetConsAddress(cospk))
 	suite.True(found)
 	suite.Equal(validator, validator1)
 
@@ -83,7 +84,7 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 		suite.ctx,
 		func(index int64, pubkey string, power int64) bool {
 			suite.Equal(int64(0), index)
-			suite.Equal(sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pk), pubkey)
+			suite.Equal(sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, cospk), pubkey)
 			suite.Equal(msg.Power, power)
 			return false
 		},
@@ -107,6 +108,8 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	suite.NoError(err)
 	pk1, err := cautil.GetPubkeyFromCert(cert1)
 	suite.NoError(err)
+	cospk1, err := cryptocodec.FromTmPubKeyInterface(pk1)
+	suite.NoError(err)
 
 	// error name
 	msg1 := types.NewMsgUpdateValidator([]byte{0x1}, name1, details1, certStr1, power1, operator1)
@@ -126,10 +129,10 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	suite.Equal(msg2.Description, validator.Description)
 
 	// old pubkey index can not be found
-	_, found = suite.keeper.GetValidatorByConsAddr(suite.ctx, sdk.GetConsAddress(pk))
+	_, found = suite.keeper.GetValidatorByConsAddr(suite.ctx, sdk.GetConsAddress(cospk))
 	suite.False(found)
 
-	validator1, found := suite.keeper.GetValidatorByConsAddr(suite.ctx, sdk.GetConsAddress(pk1))
+	validator1, found := suite.keeper.GetValidatorByConsAddr(suite.ctx, sdk.GetConsAddress(cospk1))
 	suite.True(found)
 	suite.Equal(validator, validator1)
 
@@ -140,10 +143,10 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	updatesTotal := 0
 	suite.keeper.IterateUpdateValidators(suite.ctx, func(index int64, pubkey string, power int64) bool {
 		switch pubkey {
-		case sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pk):
+		case sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, cospk):
 			updatesTotal++
 			suite.Equal(int64(0), power)
-		case sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pk1):
+		case sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, cospk1):
 			updatesTotal++
 			suite.Equal(msg1.Power, power)
 		default:
@@ -169,7 +172,7 @@ func (suite *KeeperTestSuite) TestRemoveValidator() {
 	_, found = suite.keeper.GetValidator(suite.ctx, id)
 	suite.False(found)
 
-	_, found = suite.keeper.GetValidatorByConsAddr(suite.ctx, sdk.GetConsAddress(pk))
+	_, found = suite.keeper.GetValidatorByConsAddr(suite.ctx, sdk.GetConsAddress(cospk))
 	suite.False(found)
 
 	validators := suite.keeper.GetAllValidators(suite.ctx)
@@ -179,7 +182,7 @@ func (suite *KeeperTestSuite) TestRemoveValidator() {
 		suite.ctx,
 		func(index int64, pubkey string, power int64) bool {
 			suite.Equal(int64(0), index)
-			suite.Equal(sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pk), pubkey)
+			suite.Equal(sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, cospk), pubkey)
 			suite.Equal(int64(0), power)
 			return false
 		},

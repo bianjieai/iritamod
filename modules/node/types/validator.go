@@ -1,15 +1,15 @@
 package types
 
 import (
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"sort"
 	"strings"
 
-	"github.com/tendermint/tendermint/crypto"
+	tmprotocrypto "github.com/tendermint/tendermint/proto/tendermint/crypto"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 )
 
@@ -22,7 +22,7 @@ const DoNotModifyDesc = "[do-not-modify]"
 func NewValidator(
 	id tmbytes.HexBytes,
 	name, description string,
-	pubKey crypto.PubKey,
+	pubKey cryptotypes.PubKey,
 	cert string,
 	power int64,
 	operator sdk.AccAddress,
@@ -79,35 +79,41 @@ func (v Validator) IsUnbonding() bool {
 
 // GetOperator implement ValidatorI
 func (v Validator) GetOperator() sdk.ValAddress {
-	pubkey, err := v.TmConsPubKey()
+	pubkey, err := v.ConsPubKey()
 	if err != nil {
 		panic(err)
 	}
 	return sdk.ValAddress(pubkey.Address())
 }
 
-// TmConsPubKey implement ValidatorI
-func (v Validator) TmConsPubKey() (crypto.PubKey, error) {
+// ConsPubKey returns the validator PubKey as a cryptotypes.PubKey.
+func (v Validator) ConsPubKey() (cryptotypes.PubKey, error) {
 	pk, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, v.Pubkey)
 	if err != nil {
 		return nil, err
 	}
+	return pk, nil
 
-	// The way things are refactored now, v.ConsensusPubkey is sometimes a TM
-	// ed25519 pubkey, sometimes our own ed25519 pubkey. This is very ugly and
-	// inconsistent.
-	// Luckily, here we coerce it into a TM ed25519 pubkey always, as this
-	// pubkey will be passed into TM (eg calling encoding.PubKeyToProto).
-	if intoTmPk, ok := pk.(cryptotypes.IntoTmPubKey); ok {
-		return intoTmPk.AsTmPubKey(), nil
+}
+
+// TmConsPublicKey casts Validator.ConsensusPubkey to tmprotocrypto.PubKey.
+func (v Validator) TmConsPublicKey() (tmprotocrypto.PublicKey, error) {
+	pk, err := v.ConsPubKey()
+	if err != nil {
+		return tmprotocrypto.PublicKey{}, err
 	}
 
-	return nil, sdkerrors.Wrapf(sdkerrors.ErrInvalidPubKey, "Logic error: ConsensusPubkey must be an SDK key and SDK PubKey types must be convertible to tendermint PubKey; got: %T", pk)
+	tmPk, err := cryptocodec.ToTmProtoPublicKey(pk)
+	if err != nil {
+		return tmprotocrypto.PublicKey{}, err
+	}
+
+	return tmPk, nil
 }
 
 // GetConsAddr implement ValidatorI
 func (v Validator) GetConsAddr() (sdk.ConsAddress, error) {
-	pk, err := v.TmConsPubKey()
+	pk, err := v.ConsPubKey()
 	if err != nil {
 		return sdk.ConsAddress{}, err
 	}

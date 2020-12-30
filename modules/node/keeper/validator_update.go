@@ -1,11 +1,11 @@
 package keeper
 
 import (
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/encoding"
 
-	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -14,12 +14,12 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx sdk.Context) (updates []ab
 		ctx,
 		func(index int64, pubkey string, power int64) bool {
 			pk := sdk.MustGetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, pubkey)
-			intoTmPk, ok := pk.(cryptotypes.IntoTmPubKey)
-			if !ok {
-				panic("invalid public key type")
+			tmPubkey, err := cryptocodec.ToTmPubKeyInterface(pk)
+			if err != nil {
+				panic(err.Error())
 			}
 			updates = append(updates, ABCIValidatorUpdate(
-				intoTmPk.AsTmPubKey(),
+				tmPubkey,
 				power,
 			))
 			k.DequeueValidatorsUpdate(ctx, pubkey)
