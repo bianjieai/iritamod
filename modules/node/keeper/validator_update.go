@@ -1,11 +1,11 @@
 package keeper
 
 import (
-	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/encoding"
 
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 

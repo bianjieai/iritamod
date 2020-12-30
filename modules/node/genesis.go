@@ -4,11 +4,11 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -71,7 +71,7 @@ func WriteValidators(ctx sdk.Context, keeper Keeper) (vals []tmtypes.GenesisVali
 		if err != nil {
 			continue
 		}
-		tmPubkey, err:= cryptocodec.ToTmPubKeyInterface(consPk)
+		tmPubkey, err := cryptocodec.ToTmPubKeyInterface(consPk)
 		if err != nil {
 			continue
 		}

@@ -1,13 +1,13 @@
 package types
 
 import (
-	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"sort"
 	"strings"
 
-	tmprotocrypto "github.com/tendermint/tendermint/proto/tendermint/crypto"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	tmprotocrypto "github.com/tendermint/tendermint/proto/tendermint/crypto"
 
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"

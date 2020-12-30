@@ -1,7 +1,6 @@
 package keeper_test
 
 import (
-	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -10,6 +9,7 @@ import (
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/bianjieai/iritamod/modules/node/keeper"
