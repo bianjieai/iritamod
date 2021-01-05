@@ -41,9 +41,8 @@ func GetCmdQueryValidator() *cobra.Command {
 		Short: "Query a validator",
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			var err error
-			if clientCtx, err = client.ReadQueryCommandFlags(clientCtx, cmd.Flags()); err != nil {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
 				return err
 			}
 
@@ -54,7 +53,7 @@ func GetCmdQueryValidator() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintOutput(res.Validator)
+			return clientCtx.PrintProto(res.Validator)
 		},
 	}
 
@@ -69,8 +68,7 @@ func GetCmdQueryValidators() *cobra.Command {
 		Short: "Query for all validators",
 		Args:  cobra.NoArgs,
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -90,7 +88,7 @@ func GetCmdQueryValidators() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintOutput(res)
+			return clientCtx.PrintProto(res)
 		},
 	}
 
@@ -108,8 +106,7 @@ func GetCmdQueryNode() *cobra.Command {
 		Example: fmt.Sprintf("$ %s query node node <id>", version.AppName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -129,7 +126,7 @@ func GetCmdQueryNode() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintOutput(res.Node)
+			return clientCtx.PrintProto(res.Node)
 		},
 	}
 
@@ -146,8 +143,7 @@ func GetCmdQueryNodes() *cobra.Command {
 		Long:    "Query all nodes in the node whitelist",
 		Example: fmt.Sprintf("$ %s query node nodes", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -167,7 +163,7 @@ func GetCmdQueryNodes() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintOutput(res)
+			return clientCtx.PrintProto(res)
 		},
 	}
 
@@ -187,7 +183,7 @@ func GetCmdQueryParams() *cobra.Command {
 		Example: fmt.Sprintf("$ %s query validator params", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -199,7 +195,7 @@ func GetCmdQueryParams() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintOutput(&res.Params)
+			return clientCtx.PrintProto(&res.Params)
 		},
 	}
 

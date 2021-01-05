@@ -3,12 +3,12 @@ package keeper
 import (
 	"encoding/hex"
 	"fmt"
-
 	gogotypes "github.com/gogo/protobuf/types"
 
 	"github.com/tendermint/tendermint/crypto/tmhash"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -44,7 +44,12 @@ func (k Keeper) CreateValidator(ctx sdk.Context, msg types.MsgCreateValidator) (
 		return nil, sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
 	}
 
-	if _, found := k.GetValidatorByConsAddr(ctx, sdk.GetConsAddress(pk)); found {
+	pubkey, err := cryptocodec.FromTmPubKeyInterface(pk)
+	if err != nil {
+		return nil, err
+	}
+
+	if _, found := k.GetValidatorByConsAddr(ctx, sdk.GetConsAddress(pubkey)); found {
 		return nil, types.ErrValidatorPubkeyExists
 	}
 
@@ -58,7 +63,7 @@ func (k Keeper) CreateValidator(ctx sdk.Context, msg types.MsgCreateValidator) (
 		id,
 		msg.Name,
 		msg.Description,
-		pk,
+		pubkey,
 		msg.Certificate,
 		msg.Power,
 		operator,
@@ -98,7 +103,11 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 		if err != nil {
 			return sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
 		}
-		pkStr := sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pk)
+		pubkey, err := cryptocodec.FromTmPubKeyInterface(pk)
+		if err != nil {
+			return err
+		}
+		pkStr := sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pubkey)
 
 		consAddr, err := validator.GetConsAddr()
 		if err != nil {
