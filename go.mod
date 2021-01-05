@@ -1,6 +1,6 @@
 module github.com/bianjieai/iritamod
 
-go 1.14
+go 1.15
 
 require (
 	github.com/cosmos/cosmos-sdk v0.40.0-rc5
@@ -25,8 +25,8 @@ require (
 )
 
 replace (
-	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.34.4-0.20201231020629-dd34a4507d2c
+	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.34.4-0.20210105022052-24f2fc27b94f
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
 	github.com/keybase/go-keychain => github.com/99designs/go-keychain v0.0.0-20191008050251-8e49817e8af4
-	github.com/tendermint/tendermint => github.com/bianjieai/tendermint v0.33.1-dev0.0.20201229081232-9fb79d93fb0f
+	github.com/tendermint/tendermint => github.com/bianjieai/tendermint v0.34.0-irita-210104
 )
