@@ -1,9 +1,9 @@
 module github.com/bianjieai/iritamod
 
-go 1.14
+go 1.15
 
 require (
-	github.com/cosmos/cosmos-sdk v0.40.0-rc3
+	github.com/cosmos/cosmos-sdk v0.40.0-rc5
 	github.com/gogo/protobuf v1.3.1
 	github.com/golang/protobuf v1.4.3
 	github.com/gorilla/mux v1.8.0

@@ -39,8 +39,7 @@ func GetCmdQueryIdentity() *cobra.Command {
 		Example: fmt.Sprintf("$ %s query identity identity <id>", version.AppName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
-			clientCtx, err := client.ReadQueryCommandFlags(clientCtx, cmd.Flags())
+			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
@@ -50,7 +49,7 @@ func GetCmdQueryIdentity() *cobra.Command {
 				return err
 			}
 
-			return clientCtx.PrintOutput(res.Identity)
+			return clientCtx.PrintProto(res.Identity)
 		},
 	}
 	flags.AddQueryFlagsToCmd(cmd)

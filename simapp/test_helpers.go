@@ -12,7 +12,6 @@ import (
 	"github.com/stretchr/testify/require"
 
 	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/tmhash"
 	"github.com/tendermint/tendermint/libs/log"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
@@ -23,7 +22,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	"github.com/cosmos/cosmos-sdk/simapp/helpers"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/errors"
@@ -117,7 +118,7 @@ func SetupWithGenesisValSet(t *testing.T, valSet *tmtypes.ValidatorSet, genAccs 
 	bondAmt := sdk.NewInt(1000000)
 
 	for _, val := range valSet.Validators {
-		pk, err := ed25519.FromTmEd25519(val.PubKey)
+		pk, err := cryptocodec.FromTmPubKeyInterface(val.PubKey)
 		require.NoError(t, err)
 		pkAny, err := codectypes.PackAny(pk)
 		require.NoError(t, err)
@@ -336,7 +337,7 @@ func CheckBalance(t *testing.T, app *SimApp, addr sdk.AccAddress, balances sdk.C
 // returned.
 func SignCheckDeliver(
 	t *testing.T, txCfg client.TxConfig, app *bam.BaseApp, header tmproto.Header, msgs []sdk.Msg,
-	chainID string, accNums, accSeqs []uint64, expSimPass, expPass bool, priv ...crypto.PrivKey,
+	chainID string, accNums, accSeqs []uint64, expSimPass, expPass bool, priv ...cryptotypes.PrivKey,
 ) (sdk.GasInfo, *sdk.Result, error) {
 
 	tx, err := helpers.GenTx(
@@ -387,7 +388,7 @@ func SignCheckDeliver(
 // every transaction.
 func GenSequenceOfTxs(
 	txGen client.TxConfig, msgs []sdk.Msg, accNums []uint64,
-	initSeqNums []uint64, numToGenerate int, priv ...crypto.PrivKey,
+	initSeqNums []uint64, numToGenerate int, priv ...cryptotypes.PrivKey,
 ) ([]sdk.Tx, error) {
 	txs := make([]sdk.Tx, numToGenerate)
 	var err error
@@ -418,8 +419,8 @@ func incrementAllSequenceNumbers(initSeqNums []uint64) {
 }
 
 // CreateTestPubKeys returns a total of numPubKeys public keys in ascending order.
-func CreateTestPubKeys(numPubKeys int) []crypto.PubKey {
-	var publicKeys []crypto.PubKey
+func CreateTestPubKeys(numPubKeys int) []cryptotypes.PubKey {
+	var publicKeys []cryptotypes.PubKey
 	var buffer bytes.Buffer
 
 	// start at 10 to avoid changing 1 to 01, 2 to 02, etc
@@ -435,7 +436,7 @@ func CreateTestPubKeys(numPubKeys int) []crypto.PubKey {
 }
 
 // NewPubKeyFromHex returns a PubKey from a hex string.
-func NewPubKeyFromHex(pk string) (res crypto.PubKey) {
+func NewPubKeyFromHex(pk string) (res cryptotypes.PubKey) {
 	pkBytes, err := hex.DecodeString(pk)
 	if err != nil {
 		panic(err)

@@ -2,7 +2,7 @@ package keeper
 
 import (
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
-	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
@@ -26,11 +26,11 @@ func (k Keeper) GetHistoricalInfo(ctx sdk.Context, height int64) (stakingtypes.H
 	valSet := make([]stakingtypes.Validator, len(hi.Valset))
 
 	for i, v := range hi.Valset {
-		tmPubKey, err := v.TmConsPubKey()
+		pubKey, err := v.ConsPubKey()
 		if err != nil {
 			panic(err)
 		}
-		pk, err := keys.FromTmPubKey(tmPubKey)
+		pk, err := cryptocodec.ToTmPubKeyInterface(pubKey)
 		if err != nil {
 			continue
 		}
