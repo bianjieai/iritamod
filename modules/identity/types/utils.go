@@ -3,7 +3,6 @@ package types
 import (
 	bytes "bytes"
 	"crypto/elliptic"
-	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/asn1"
 	"encoding/pem"
@@ -13,6 +12,7 @@ import (
 
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	"github.com/tjfoc/gmsm/sm2"
+	"github.com/tjfoc/gmsm/x509"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
@@ -92,7 +92,7 @@ func parseASN1Certificate(asn1Data []byte) (*certificate, error) {
 // parseCertificate parses the X.509 certificate with the given public key algorithm
 func parseCertificate(asn1Data []byte, pkAlgo PubKeyAlgorithm) (interface{}, error) {
 	if pkAlgo == SM2 {
-		x509Cert, err := sm2.ParseCertificate(asn1Data)
+		x509Cert, err := x509.ParseCertificate(asn1Data)
 		if err != nil {
 			return nil, sdkerrors.Wrap(ErrInvalidCertificate, err.Error())
 		}
