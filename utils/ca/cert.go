@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"github.com/tjfoc/gmsm/sm2"
+	smx509 "github.com/tjfoc/gmsm/x509"
 
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/algo"
@@ -40,7 +41,7 @@ func GetPubkeyFromCert(cert Cert) (crypto.PubKey, error) {
 	case Sm2Cert:
 		expectedPubKeyAlgo := c.Certificate.PublicKeyAlgorithm
 		pub, ok := c.Certificate.PublicKey.(*ecdsa.PublicKey)
-		if !ok || expectedPubKeyAlgo != sm2.ECDSA {
+		if !ok || expectedPubKeyAlgo != smx509.ECDSA {
 			return nil, UnexpectedPubKeyAlgo("ECDSA", c.Certificate.PublicKey)
 		}
 		switch pub.Curve {

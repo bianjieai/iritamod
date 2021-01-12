@@ -1,6 +1,7 @@
 package types
 
 import (
+	"crypto/rand"
 	"fmt"
 	"strings"
 	"testing"
@@ -18,7 +19,7 @@ var (
 	testID    = uuid.NewV4().Bytes()
 	testIDStr = tmbytes.HexBytes(testID).String()
 
-	testPrivKeySM2, _ = sm2.GenerateKey()
+	testPrivKeySM2, _ = sm2.GenerateKey(rand.Reader)
 	testPubKeySM2     = sm2.Compress(&testPrivKeySM2.PublicKey)
 	testPubKeySM2Str  = tmbytes.HexBytes(testPubKeySM2).String()
 	testPubKeySM2Info = PubKeyInfo{PubKey: testPubKeySM2Str, Algorithm: SM2}
