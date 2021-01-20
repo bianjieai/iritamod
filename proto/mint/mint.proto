@@ -1,0 +1,15 @@
+syntax = "proto3";
+package iritamod.mint;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/mint/types";
+option (gogoproto.goproto_getters_all) = false;
+
+// Params defines the parameters for the mint module.
+message Params {
+    option (gogoproto.equal) = true;
+    option (gogoproto.goproto_stringer) = false;
+
+    string mint_denom = 1 [(gogoproto.moretags) = "yaml:\"mint_denom\""];
+}

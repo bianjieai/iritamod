@@ -1,0 +1,24 @@
+syntax = "proto3";
+package iritamod.mint;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/mint/types";
+option (gogoproto.goproto_getters_all)  = false;
+
+// Msg defines the mint Msg service.
+service Msg {
+    // Mint defines a method for minting the base native token.
+    rpc Mint(MsgMint) returns (MsgMintResponse);
+}
+
+// MsgMint defines a message to mint the base native token.
+message MsgMint {
+    option (gogoproto.equal) = true;
+
+    uint64 amount = 1;
+    string operator  = 2;
+}
+
+// MsgMintResponse defines the Msg/Mint response type.
+message MsgMintResponse {}
