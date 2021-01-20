@@ -22,6 +22,7 @@ require (
 	github.com/tjfoc/gmsm v1.4.0
 	google.golang.org/genproto v0.0.0-20201214200347-8c77b98c765d
 	google.golang.org/grpc v1.33.2
+	gopkg.in/yaml.v2 v2.4.0
 )
 
 replace (
