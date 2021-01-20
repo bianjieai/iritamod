@@ -47,7 +47,11 @@ func (k Keeper) Logger(ctx sdk.Context) log.Logger {
 
 // Mint mints the base native token by the specified amount
 func (k Keeper) Mint(ctx sdk.Context, amount uint64, recipient sdk.AccAddress) error {
+	// get mint denom param
 	mintDenom := k.MintDenom(ctx)
 
-	return k.tokenKeeper.MintToken(ctx, mintDenom, amount, recipient)
+	// NOTE: empty owner
+	owner := sdk.AccAddress{}
+
+	return k.tokenKeeper.MintToken(ctx, mintDenom, amount, recipient, owner)
 }

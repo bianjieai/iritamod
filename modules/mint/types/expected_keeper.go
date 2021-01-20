@@ -6,5 +6,5 @@ import (
 
 // TokenKeeper defines the expected token keeper (noalias)
 type TokenKeeper interface {
-	MintToken(ctx sdk.Context, denom string, amount uint64, recipient sdk.AccAddress) error
+	MintToken(ctx sdk.Context, denom string, amount uint64, recipient sdk.AccAddress, owner sdk.AccAddress) error
 }
