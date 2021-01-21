@@ -43,9 +43,10 @@ func NewAddRolesCmd() *cobra.Command {
 			types.RoleBlacklistAdmin,
 			types.RoleNodeAdmin,
 			types.RoleParamAdmin,
+			types.RoleIDAdmin,
+			types.RoleMintAdmin,
 			types.RolePowerUser,
 			types.RoleRelayerUser,
-			types.RoleIDAdmin,
 		)),
 		Args: cobra.MinimumNArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -94,7 +95,10 @@ func NewRemoveRolesCmd() *cobra.Command {
 			types.RoleBlacklistAdmin,
 			types.RoleNodeAdmin,
 			types.RoleParamAdmin,
+			types.RoleIDAdmin,
+			types.RoleMintAdmin,
 			types.RolePowerUser,
+			types.RoleRelayerUser,
 		)),
 		Args: cobra.MinimumNArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

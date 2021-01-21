@@ -21,9 +21,10 @@ const (
 	RoleBlacklistAdmin      = types.RoleBlacklistAdmin
 	RoleNodeAdmin           = types.RoleNodeAdmin
 	RoleParamAdmin          = types.RoleParamAdmin
+	RoleIDAdmin             = types.RoleIDAdmin
+	RoleMintAdmin           = types.RoleMintAdmin
 	RolePowerUser           = types.RolePowerUser
 	RoleRelayerUser         = types.RoleRelayerUser
-	RoleIDAdmin             = types.RoleIDAdmin
 )
 
 var (

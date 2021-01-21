@@ -36,9 +36,10 @@ func ValidRole(role Role) bool {
 		role == RoleBlacklistAdmin ||
 		role == RoleNodeAdmin ||
 		role == RoleParamAdmin ||
+		role == RoleIDAdmin ||
+		role == RoleMintAdmin ||
 		role == RolePowerUser ||
-		role == RoleRelayerUser ||
-		role == RoleIDAdmin {
+		role == RoleRelayerUser {
 		return true
 	}
 	return false

@@ -6,7 +6,7 @@ import "gogoproto/gogo.proto";
 option go_package = "github.com/bianjieai/iritamod/modules/admin/types";
 option (gogoproto.goproto_getters_all) = false;
 
-// Role is a type alias that represents a proposal status as a byte
+// Role represents a role
 enum Role {
     option (gogoproto.enum_stringer) = true;
     option (gogoproto.goproto_enum_stringer) = false;
@@ -18,14 +18,16 @@ enum Role {
     PERM_ADMIN = 1 [(gogoproto.enumvalue_customname) = "RolePermAdmin"];
     // BLACKLIST_ADMIN defines the blacklist admin role index.
     BLACKLIST_ADMIN = 2 [(gogoproto.enumvalue_customname) = "RoleBlacklistAdmin"];
-    // NODE_ADMIN defines the validator node admin role index.
+    // NODE_ADMIN defines the node admin role index.
     NODE_ADMIN = 3 [(gogoproto.enumvalue_customname) = "RoleNodeAdmin"];
     // PARAM_ADMIN defines the param admin role index.
     PARAM_ADMIN = 4 [(gogoproto.enumvalue_customname) = "RoleParamAdmin"];
+    // ID_ADMIN defines the identity admin role index.
+    ID_ADMIN = 5 [(gogoproto.enumvalue_customname) = "RoleIDAdmin"];
+    // MINT_ADMIN defines the mint admin role index.
+    MINT_ADMIN = 6 [(gogoproto.enumvalue_customname) = "RoleMintAdmin"];
     // POWER_USER defines the power user role index.
-    POWER_USER = 5 [(gogoproto.enumvalue_customname) = "RolePowerUser"];
+    POWER_USER = 7 [(gogoproto.enumvalue_customname) = "RolePowerUser"];
     // RELAYER_USER defines the relayer role index.
-    RELAYER_USER = 6 [(gogoproto.enumvalue_customname) = "RoleRelayerUser"];
-    // IDAdmin defines the identity role index.
-    ID_ADMIN = 7 [(gogoproto.enumvalue_customname) = "RoleIDAdmin"];
+    RELAYER_USER = 8 [(gogoproto.enumvalue_customname) = "RoleRelayerUser"];
 }
