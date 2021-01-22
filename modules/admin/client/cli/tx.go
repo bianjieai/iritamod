@@ -38,7 +38,7 @@ func NewAddRolesCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "add-roles [address] [roles]",
 		Long: strings.TrimSpace(fmt.Sprintf(
-			"Add roles to an account.\n\n Auth options: %s, %s, %s, %s, %s, %s, %s\n",
+			"Add roles to an account.\n\n Auth options: %s, %s, %s, %s, %s, %s, %s, %s\n",
 			types.RolePermAdmin,
 			types.RoleBlacklistAdmin,
 			types.RoleNodeAdmin,
@@ -90,7 +90,7 @@ func NewRemoveRolesCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "remove-roles [address] [roles]",
 		Long: strings.TrimSpace(fmt.Sprintf(
-			"RemoveValidator roles from an account.\n\nAuth options: %s, %s, %s, %s, %s",
+			"Remove roles from an account.\n\nAuth options: %s, %s, %s, %s, %s, %s, %s, %s",
 			types.RolePermAdmin,
 			types.RoleBlacklistAdmin,
 			types.RoleNodeAdmin,
