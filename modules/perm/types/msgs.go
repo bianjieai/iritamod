@@ -5,34 +5,41 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
+const (
+	TypeMsgAssignRoles    = "assign_roles"    // type for MsgAssignRoles
+	TypeMsgUnassignRoles  = "unassign_roles"  // type for MsgUnassignRoles
+	TypeMsgBlockAccount   = "block_account"   // type for MsgBlockAccount
+	TypeMsgUnblockAccount = "unblock_account" // type for MsgUnblockAccount
+)
+
 var (
-	_ sdk.Msg = &MsgAddRoles{}
-	_ sdk.Msg = &MsgRemoveRoles{}
+	_ sdk.Msg = &MsgAssignRoles{}
+	_ sdk.Msg = &MsgUnassignRoles{}
 	_ sdk.Msg = &MsgBlockAccount{}
 	_ sdk.Msg = &MsgUnblockAccount{}
 )
 
-// NewMsgAddRoles creates a new MsgAddRoles instance.
-func NewMsgAddRoles(roles []Role, address, operator sdk.AccAddress) *MsgAddRoles {
-	return &MsgAddRoles{
+// NewMsgAssignRoles creates a new MsgAssignRoles instance.
+func NewMsgAssignRoles(roles []Role, address, operator sdk.AccAddress) *MsgAssignRoles {
+	return &MsgAssignRoles{
 		Address:  address.String(),
 		Roles:    roles,
 		Operator: operator.String(),
 	}
 }
 
-// Route return the RouterKey of MsgAddRoles
-func (m MsgAddRoles) Route() string {
+// Route returns the RouterKey of MsgAssignRoles
+func (m MsgAssignRoles) Route() string {
 	return RouterKey
 }
 
-// Type return the Type of MsgAddRoles
-func (m MsgAddRoles) Type() string {
-	return "add_roles"
+// Type returns the type of MsgAssignRoles
+func (m MsgAssignRoles) Type() string {
+	return TypeMsgAssignRoles
 }
 
-// ValidateBasic validate the message MsgAddRoles
-func (m MsgAddRoles) ValidateBasic() error {
+// ValidateBasic validates the message MsgAssignRoles
+func (m MsgAssignRoles) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(m.Address)
 	if err != nil {
 		return sdkerrors.Wrap(err, "invalid address")
@@ -57,39 +64,39 @@ func (m MsgAddRoles) ValidateBasic() error {
 	return nil
 }
 
-// GetSignBytes return the sign bytes
-func (m MsgAddRoles) GetSignBytes() []byte {
+// GetSignBytes returns the sign bytes
+func (m MsgAssignRoles) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&m)
 	return sdk.MustSortJSON(bz)
 }
 
-// GetSigners return the signers of MsgAddRoles
-func (m MsgAddRoles) GetSigners() []sdk.AccAddress {
+// GetSigners returns the signers of MsgAssignRoles
+func (m MsgAssignRoles) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(m.Operator)
 	return []sdk.AccAddress{addr}
 }
 
-// NewMsgRemoveRoles creates a new MsgRemoveRoles instance.
-func NewMsgRemoveRoles(roles []Role, address, operator sdk.AccAddress) *MsgRemoveRoles {
-	return &MsgRemoveRoles{
+// NewMsgUnassignRoles creates a new MsgUnassignRoles instance.
+func NewMsgUnassignRoles(roles []Role, address, operator sdk.AccAddress) *MsgUnassignRoles {
+	return &MsgUnassignRoles{
 		Address:  address.String(),
 		Roles:    roles,
 		Operator: operator.String(),
 	}
 }
 
-// Route return the RouterKey of MsgRemoveRoles
-func (m MsgRemoveRoles) Route() string {
+// Route returns the RouterKey of MsgUnassignRoles
+func (m MsgUnassignRoles) Route() string {
 	return RouterKey
 }
 
-// Type return the Type of MsgRemoveRoles
-func (m MsgRemoveRoles) Type() string {
-	return "remove_roles"
+// Type returns the type of MsgUnassignRoles
+func (m MsgUnassignRoles) Type() string {
+	return TypeMsgUnassignRoles
 }
 
-// ValidateBasic validate the message MsgRemoveRoles
-func (m MsgRemoveRoles) ValidateBasic() error {
+// ValidateBasic validates the message MsgUnassignRoles
+func (m MsgUnassignRoles) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(m.Address)
 	if err != nil {
 		return err
@@ -114,14 +121,14 @@ func (m MsgRemoveRoles) ValidateBasic() error {
 	return nil
 }
 
-// GetSignBytes return the sign bytes
-func (m MsgRemoveRoles) GetSignBytes() []byte {
+// GetSignBytes returns the sign bytes
+func (m MsgUnassignRoles) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&m)
 	return sdk.MustSortJSON(bz)
 }
 
-// GetSigners return the signers of MsgAddRoles
-func (m MsgRemoveRoles) GetSigners() []sdk.AccAddress {
+// GetSigners returns the signers of MsgAssignRoles
+func (m MsgUnassignRoles) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(m.Operator)
 	return []sdk.AccAddress{addr}
 }
@@ -134,17 +141,17 @@ func NewMsgBlockAccount(address, operator sdk.AccAddress) *MsgBlockAccount {
 	}
 }
 
-// Route return the RouterKey of MsgBlockAccount
+// Route returns the RouterKey of MsgBlockAccount
 func (m MsgBlockAccount) Route() string {
 	return RouterKey
 }
 
-// Type return the Type of MsgBlockAccount
+// Type returns the type of MsgBlockAccount
 func (m MsgBlockAccount) Type() string {
-	return "block_account"
+	return TypeMsgBlockAccount
 }
 
-// ValidateBasic validate the message MsgBlockAccount
+// ValidateBasic validates the message MsgBlockAccount
 func (m MsgBlockAccount) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(m.Address)
 	if err != nil {
@@ -158,13 +165,13 @@ func (m MsgBlockAccount) ValidateBasic() error {
 	return nil
 }
 
-// GetSignBytes return the sign bytes
+// GetSignBytes returns the sign bytes
 func (m MsgBlockAccount) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&m)
 	return sdk.MustSortJSON(bz)
 }
 
-// GetSigners return the signers of MsgBlockAccount
+// GetSigners returns the signers of MsgBlockAccount
 func (m MsgBlockAccount) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(m.Operator)
 	return []sdk.AccAddress{addr}
@@ -178,17 +185,17 @@ func NewMsgUnblockAccount(address, operator sdk.AccAddress) *MsgUnblockAccount {
 	}
 }
 
-// Route return the RouterKey of MsgUnblockAccount
+// Route returns the RouterKey of MsgUnblockAccount
 func (m MsgUnblockAccount) Route() string {
 	return RouterKey
 }
 
-// Type return the Type of MsgUnblockAccount
+// Type returns the type of MsgUnblockAccount
 func (m MsgUnblockAccount) Type() string {
-	return "unblock_account"
+	return TypeMsgUnblockAccount
 }
 
-// ValidateBasic validate the message MsgUnblockAccount
+// ValidateBasic validates the message MsgUnblockAccount
 func (m MsgUnblockAccount) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(m.Address)
 	if err != nil {
@@ -202,13 +209,13 @@ func (m MsgUnblockAccount) ValidateBasic() error {
 	return nil
 }
 
-// GetSignBytes return the sign bytes
+// GetSignBytes returns the sign bytes
 func (m MsgUnblockAccount) GetSignBytes() []byte {
 	bz := ModuleCdc.MustMarshalJSON(&m)
 	return sdk.MustSortJSON(bz)
 }
 
-// GetSigners return the signers of MsgUnblockAccount
+// GetSigners returns the signers of MsgUnblockAccount
 func (m MsgUnblockAccount) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(m.Operator)
 	return []sdk.AccAddress{addr}

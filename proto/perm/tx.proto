@@ -9,21 +9,21 @@ option (gogoproto.goproto_getters_all) = false;
 
 // Msg defines the perm Msg service.
 service Msg {
-    // AddRoles defines a method for adding a role for the operator.
-    rpc AddRoles(MsgAddRoles) returns (MsgAddRolesResponse);
+    // AssignRoles defines a method for assigning roles for the operator.
+    rpc AssignRoles(MsgAssignRoles) returns (MsgAssignRolesResponse);
 
-    // RemoveRoles defines a method for removing a role for the operator.
-    rpc RemoveRoles(MsgRemoveRoles) returns (MsgRemoveRolesResponse);
+    // UnassignRoles defines a method for unassigning roles from the operator.
+    rpc UnassignRoles(MsgUnassignRoles) returns (MsgUnassignRolesResponse);
 
-    // BlockAccount defines a method for block a account
+    // BlockAccount defines a method for blocking an account
     rpc BlockAccount(MsgBlockAccount) returns (MsgBlockAccountResponse);
 
-    // UnblockAccount defines a method for unblock a blocked account
+    // UnblockAccount defines a method for unblocking a blocked account
     rpc UnblockAccount(MsgUnblockAccount) returns (MsgUnblockAccountResponse);
 }
 
-// MsgAddRoles defines an SDK message for adding roles to a address.
-message MsgAddRoles {
+// MsgAssignRoles defines an SDK message for assigning roles to an address.
+message MsgAssignRoles {
     option (gogoproto.equal) = true;
 
     string address = 1;
@@ -31,11 +31,11 @@ message MsgAddRoles {
     string operator = 3;
 }
 
-// MsgAddRolesResponse defines the Msg/AddRoles response type.
-message MsgAddRolesResponse { }
+// MsgAssignRolesResponse defines the Msg/AssignRoles response type.
+message MsgAssignRolesResponse { }
 
-// MsgRemoveRoles defines an SDK message for removing roles from an existing address.
-message MsgRemoveRoles {
+// MsgUnassignRoles defines an SDK message for unassigning roles from an address.
+message MsgUnassignRoles {
     option (gogoproto.equal) = true;
 
     string address = 1;
@@ -43,8 +43,8 @@ message MsgRemoveRoles {
     string operator = 3;
 }
 
-// MsgRemoveRolesResponse defines the Msg/RemoveRoles response type.
-message MsgRemoveRolesResponse { }
+// MsgUnassignRolesResponse defines the Msg/UnassignRoles response type.
+message MsgUnassignRolesResponse { }
 
 // MsgBlockAccount defines an SDK message for blocking an account.
 message MsgBlockAccount {

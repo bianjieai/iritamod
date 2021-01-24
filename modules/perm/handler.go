@@ -14,12 +14,12 @@ func NewHandler(k Keeper) sdk.Handler {
 		ctx = ctx.WithEventManager(sdk.NewEventManager())
 
 		switch msg := msg.(type) {
-		case *MsgAddRoles:
-			res, err := msgServer.AddRoles(sdk.WrapSDKContext(ctx), msg)
+		case *MsgAssignRoles:
+			res, err := msgServer.AssignRoles(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
-		case *MsgRemoveRoles:
-			res, err := msgServer.RemoveRoles(sdk.WrapSDKContext(ctx), msg)
+		case *MsgUnassignRoles:
+			res, err := msgServer.UnassignRoles(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
 		case *MsgBlockAccount:

@@ -28,8 +28,8 @@ func NewKeeper(cdc codec.Marshaler, storeKey sdk.StoreKey) Keeper {
 	}
 }
 
-// RegisterMsgAuth register the auth to send the msg.
-// Each roles get the access control
+// RegisterMsgAuth registers the auth to send the msg.
+// Each role gets the access control
 func (k Keeper) RegisterMsgAuth(msg sdk.Msg, roles ...types.Role) {
 	if _, ok := k.AuthMap[msg.Type()]; ok {
 		panic(fmt.Sprintf("msg type or module name %s has already been initialized", msg.Type()))
@@ -41,8 +41,8 @@ func (k Keeper) RegisterMsgAuth(msg sdk.Msg, roles ...types.Role) {
 	k.AuthMap[msg.Type()] = auth
 }
 
-// RegisterModuleAuth registers the auth to send the module related msg.
-// Each roles get the access control
+// RegisterModuleAuth registers the auth to send the module related msgs.
+// Each role gets the access control
 func (k *Keeper) RegisterModuleAuth(module string, roles ...types.Role) {
 	if _, ok := k.AuthMap[module]; ok {
 		panic(fmt.Sprintf("msg type or module name %s has already been initialized", module))
@@ -54,7 +54,7 @@ func (k *Keeper) RegisterModuleAuth(module string, roles ...types.Role) {
 	k.AuthMap[module] = auth
 }
 
-// Authorize adds the role to an address
+// Authorize assigns the specified roles to an address
 func (k *Keeper) Authorize(ctx sdk.Context, address, operator sdk.AccAddress, rs ...types.Role) error {
 	if k.IsRootAdmin(ctx, address) {
 		return types.ErrOperateRootAdmin
@@ -77,8 +77,8 @@ func (k *Keeper) Authorize(ctx sdk.Context, address, operator sdk.AccAddress, rs
 	return nil
 }
 
-// Deauthorize removes the role from an address
-func (k Keeper) Deauthorize(ctx sdk.Context, address, operator sdk.AccAddress, roles ...types.Role) error {
+// Unauthorize unassigns the specified roles from an address
+func (k Keeper) Unauthorize(ctx sdk.Context, address, operator sdk.AccAddress, roles ...types.Role) error {
 	if k.IsRootAdmin(ctx, address) {
 		return types.ErrOperateRootAdmin
 	}
@@ -105,7 +105,7 @@ func (k Keeper) Deauthorize(ctx sdk.Context, address, operator sdk.AccAddress, r
 	return nil
 }
 
-// GetRoles gets the role set for all account
+// GetRoles gets the role set for all accounts
 func (k Keeper) GetRoles(ctx sdk.Context) (roleAccounts []types.RoleAccount) {
 	store := ctx.KVStore(k.storeKey)
 

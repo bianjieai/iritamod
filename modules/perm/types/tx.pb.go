@@ -28,25 +28,25 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
-// MsgAddRoles defines an SDK message for adding roles to a address.
-type MsgAddRoles struct {
+// MsgAssignRoles defines an SDK message for assigning roles to an address.
+type MsgAssignRoles struct {
 	Address  string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	Roles    []Role `protobuf:"varint,2,rep,packed,name=roles,proto3,enum=iritamod.perm.Role" json:"roles,omitempty"`
 	Operator string `protobuf:"bytes,3,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
-func (m *MsgAddRoles) Reset()         { *m = MsgAddRoles{} }
-func (m *MsgAddRoles) String() string { return proto.CompactTextString(m) }
-func (*MsgAddRoles) ProtoMessage()    {}
-func (*MsgAddRoles) Descriptor() ([]byte, []int) {
+func (m *MsgAssignRoles) Reset()         { *m = MsgAssignRoles{} }
+func (m *MsgAssignRoles) String() string { return proto.CompactTextString(m) }
+func (*MsgAssignRoles) ProtoMessage()    {}
+func (*MsgAssignRoles) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ad797c02944c52e5, []int{0}
 }
-func (m *MsgAddRoles) XXX_Unmarshal(b []byte) error {
+func (m *MsgAssignRoles) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgAddRoles) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgAssignRoles) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgAddRoles.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgAssignRoles.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -56,34 +56,34 @@ func (m *MsgAddRoles) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) 
 		return b[:n], nil
 	}
 }
-func (m *MsgAddRoles) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgAddRoles.Merge(m, src)
+func (m *MsgAssignRoles) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAssignRoles.Merge(m, src)
 }
-func (m *MsgAddRoles) XXX_Size() int {
+func (m *MsgAssignRoles) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgAddRoles) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgAddRoles.DiscardUnknown(m)
+func (m *MsgAssignRoles) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAssignRoles.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgAddRoles proto.InternalMessageInfo
+var xxx_messageInfo_MsgAssignRoles proto.InternalMessageInfo
 
-// MsgAddRolesResponse defines the Msg/AddRoles response type.
-type MsgAddRolesResponse struct {
+// MsgAssignRolesResponse defines the Msg/AssignRoles response type.
+type MsgAssignRolesResponse struct {
 }
 
-func (m *MsgAddRolesResponse) Reset()         { *m = MsgAddRolesResponse{} }
-func (m *MsgAddRolesResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgAddRolesResponse) ProtoMessage()    {}
-func (*MsgAddRolesResponse) Descriptor() ([]byte, []int) {
+func (m *MsgAssignRolesResponse) Reset()         { *m = MsgAssignRolesResponse{} }
+func (m *MsgAssignRolesResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgAssignRolesResponse) ProtoMessage()    {}
+func (*MsgAssignRolesResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ad797c02944c52e5, []int{1}
 }
-func (m *MsgAddRolesResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgAssignRolesResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgAddRolesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgAssignRolesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgAddRolesResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgAssignRolesResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -93,37 +93,37 @@ func (m *MsgAddRolesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte,
 		return b[:n], nil
 	}
 }
-func (m *MsgAddRolesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgAddRolesResponse.Merge(m, src)
+func (m *MsgAssignRolesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgAssignRolesResponse.Merge(m, src)
 }
-func (m *MsgAddRolesResponse) XXX_Size() int {
+func (m *MsgAssignRolesResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgAddRolesResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgAddRolesResponse.DiscardUnknown(m)
+func (m *MsgAssignRolesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgAssignRolesResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgAddRolesResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgAssignRolesResponse proto.InternalMessageInfo
 
-// MsgRemoveRoles defines an SDK message for removing roles from an existing address.
-type MsgRemoveRoles struct {
+// MsgUnassignRoles defines an SDK message for unassigning roles from an address.
+type MsgUnassignRoles struct {
 	Address  string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
 	Roles    []Role `protobuf:"varint,2,rep,packed,name=roles,proto3,enum=iritamod.perm.Role" json:"roles,omitempty"`
 	Operator string `protobuf:"bytes,3,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
-func (m *MsgRemoveRoles) Reset()         { *m = MsgRemoveRoles{} }
-func (m *MsgRemoveRoles) String() string { return proto.CompactTextString(m) }
-func (*MsgRemoveRoles) ProtoMessage()    {}
-func (*MsgRemoveRoles) Descriptor() ([]byte, []int) {
+func (m *MsgUnassignRoles) Reset()         { *m = MsgUnassignRoles{} }
+func (m *MsgUnassignRoles) String() string { return proto.CompactTextString(m) }
+func (*MsgUnassignRoles) ProtoMessage()    {}
+func (*MsgUnassignRoles) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ad797c02944c52e5, []int{2}
 }
-func (m *MsgRemoveRoles) XXX_Unmarshal(b []byte) error {
+func (m *MsgUnassignRoles) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRemoveRoles) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUnassignRoles) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRemoveRoles.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUnassignRoles.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -133,34 +133,34 @@ func (m *MsgRemoveRoles) XXX_Marshal(b []byte, deterministic bool) ([]byte, erro
 		return b[:n], nil
 	}
 }
-func (m *MsgRemoveRoles) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRemoveRoles.Merge(m, src)
+func (m *MsgUnassignRoles) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUnassignRoles.Merge(m, src)
 }
-func (m *MsgRemoveRoles) XXX_Size() int {
+func (m *MsgUnassignRoles) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRemoveRoles) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRemoveRoles.DiscardUnknown(m)
+func (m *MsgUnassignRoles) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUnassignRoles.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRemoveRoles proto.InternalMessageInfo
+var xxx_messageInfo_MsgUnassignRoles proto.InternalMessageInfo
 
-// MsgRemoveRolesResponse defines the Msg/RemoveRoles response type.
-type MsgRemoveRolesResponse struct {
+// MsgUnassignRolesResponse defines the Msg/UnassignRoles response type.
+type MsgUnassignRolesResponse struct {
 }
 
-func (m *MsgRemoveRolesResponse) Reset()         { *m = MsgRemoveRolesResponse{} }
-func (m *MsgRemoveRolesResponse) String() string { return proto.CompactTextString(m) }
-func (*MsgRemoveRolesResponse) ProtoMessage()    {}
-func (*MsgRemoveRolesResponse) Descriptor() ([]byte, []int) {
+func (m *MsgUnassignRolesResponse) Reset()         { *m = MsgUnassignRolesResponse{} }
+func (m *MsgUnassignRolesResponse) String() string { return proto.CompactTextString(m) }
+func (*MsgUnassignRolesResponse) ProtoMessage()    {}
+func (*MsgUnassignRolesResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ad797c02944c52e5, []int{3}
 }
-func (m *MsgRemoveRolesResponse) XXX_Unmarshal(b []byte) error {
+func (m *MsgUnassignRolesResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *MsgRemoveRolesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *MsgUnassignRolesResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_MsgRemoveRolesResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_MsgUnassignRolesResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -170,17 +170,17 @@ func (m *MsgRemoveRolesResponse) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return b[:n], nil
 	}
 }
-func (m *MsgRemoveRolesResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_MsgRemoveRolesResponse.Merge(m, src)
+func (m *MsgUnassignRolesResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_MsgUnassignRolesResponse.Merge(m, src)
 }
-func (m *MsgRemoveRolesResponse) XXX_Size() int {
+func (m *MsgUnassignRolesResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *MsgRemoveRolesResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_MsgRemoveRolesResponse.DiscardUnknown(m)
+func (m *MsgUnassignRolesResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_MsgUnassignRolesResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_MsgRemoveRolesResponse proto.InternalMessageInfo
+var xxx_messageInfo_MsgUnassignRolesResponse proto.InternalMessageInfo
 
 // MsgBlockAccount defines an SDK message for blocking an account.
 type MsgBlockAccount struct {
@@ -335,10 +335,10 @@ func (m *MsgUnblockAccountResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUnblockAccountResponse proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*MsgAddRoles)(nil), "iritamod.perm.MsgAddRoles")
-	proto.RegisterType((*MsgAddRolesResponse)(nil), "iritamod.perm.MsgAddRolesResponse")
-	proto.RegisterType((*MsgRemoveRoles)(nil), "iritamod.perm.MsgRemoveRoles")
-	proto.RegisterType((*MsgRemoveRolesResponse)(nil), "iritamod.perm.MsgRemoveRolesResponse")
+	proto.RegisterType((*MsgAssignRoles)(nil), "iritamod.perm.MsgAssignRoles")
+	proto.RegisterType((*MsgAssignRolesResponse)(nil), "iritamod.perm.MsgAssignRolesResponse")
+	proto.RegisterType((*MsgUnassignRoles)(nil), "iritamod.perm.MsgUnassignRoles")
+	proto.RegisterType((*MsgUnassignRolesResponse)(nil), "iritamod.perm.MsgUnassignRolesResponse")
 	proto.RegisterType((*MsgBlockAccount)(nil), "iritamod.perm.MsgBlockAccount")
 	proto.RegisterType((*MsgBlockAccountResponse)(nil), "iritamod.perm.MsgBlockAccountResponse")
 	proto.RegisterType((*MsgUnblockAccount)(nil), "iritamod.perm.MsgUnblockAccount")
@@ -348,43 +348,42 @@ func init() {
 func init() { proto.RegisterFile("perm/tx.proto", fileDescriptor_ad797c02944c52e5) }
 
 var fileDescriptor_ad797c02944c52e5 = []byte{
-	// 401 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x2d, 0x48, 0x2d, 0xca,
-	0xd5, 0x2f, 0xa9, 0xd0, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0xcd, 0x2c, 0xca, 0x2c, 0x49,
-	0xcc, 0xcd, 0x4f, 0xd1, 0x03, 0x89, 0x4b, 0xf1, 0x83, 0x65, 0x41, 0x04, 0x44, 0x5e, 0x4a, 0x24,
-	0x3d, 0x3f, 0x3d, 0x1f, 0xcc, 0xd4, 0x07, 0xb1, 0x20, 0xa2, 0x4a, 0x25, 0x5c, 0xdc, 0xbe, 0xc5,
-	0xe9, 0x8e, 0x29, 0x29, 0x41, 0xf9, 0x39, 0xa9, 0xc5, 0x42, 0x12, 0x5c, 0xec, 0x89, 0x29, 0x29,
-	0x45, 0xa9, 0xc5, 0xc5, 0x12, 0x8c, 0x0a, 0x8c, 0x1a, 0x9c, 0x41, 0x30, 0xae, 0x90, 0x26, 0x17,
-	0x6b, 0x11, 0x48, 0x89, 0x04, 0x93, 0x02, 0xb3, 0x06, 0x9f, 0x91, 0xb0, 0x1e, 0x8a, 0x75, 0x7a,
-	0x20, 0xed, 0x41, 0x10, 0x15, 0x42, 0x52, 0x5c, 0x1c, 0xf9, 0x05, 0xa9, 0x45, 0x89, 0x25, 0xf9,
-	0x45, 0x12, 0xcc, 0x60, 0x53, 0xe0, 0x7c, 0x2b, 0x96, 0x17, 0x0b, 0xe4, 0x19, 0x95, 0x44, 0xb9,
-	0x84, 0x91, 0x6c, 0x0d, 0x4a, 0x2d, 0x2e, 0xc8, 0xcf, 0x2b, 0x4e, 0x55, 0x2a, 0xe7, 0xe2, 0xf3,
-	0x2d, 0x4e, 0x0f, 0x4a, 0xcd, 0xcd, 0x2f, 0x4b, 0xa5, 0xab, 0x7b, 0x24, 0xb8, 0xc4, 0x50, 0x2d,
-	0x86, 0x3b, 0xc9, 0x97, 0x8b, 0xdf, 0xb7, 0x38, 0xdd, 0x29, 0x27, 0x3f, 0x39, 0xdb, 0x31, 0x39,
-	0x39, 0xbf, 0x34, 0xaf, 0x04, 0x8f, 0x9b, 0x90, 0x2d, 0x62, 0xc2, 0x6a, 0x91, 0x24, 0x97, 0x38,
-	0x9a, 0x71, 0x70, 0x9b, 0xfc, 0xb9, 0x04, 0x7d, 0x8b, 0xd3, 0x43, 0xf3, 0x92, 0xa8, 0x65, 0x97,
-	0x34, 0x97, 0x24, 0x86, 0x81, 0x30, 0xdb, 0x8c, 0xee, 0x30, 0x71, 0x31, 0xfb, 0x16, 0xa7, 0x0b,
-	0x79, 0x71, 0x71, 0xc0, 0x23, 0x5f, 0x0a, 0x2d, 0x0c, 0x91, 0xa2, 0x48, 0x4a, 0x09, 0xb7, 0x1c,
-	0xcc, 0x4c, 0xa1, 0x60, 0x2e, 0x6e, 0xe4, 0xb8, 0x93, 0xc5, 0xd4, 0x82, 0x24, 0x2d, 0xa5, 0x8a,
-	0x57, 0x1a, 0x6e, 0x68, 0x18, 0x17, 0x0f, 0x4a, 0xe8, 0xcb, 0x61, 0x6a, 0x43, 0x96, 0x97, 0x52,
-	0xc3, 0x2f, 0x0f, 0x37, 0x37, 0x86, 0x8b, 0x0f, 0x2d, 0xac, 0x15, 0x30, 0x75, 0xa2, 0xaa, 0x90,
-	0xd2, 0x20, 0xa4, 0x02, 0x66, 0xba, 0x93, 0xdf, 0x89, 0x87, 0x72, 0x0c, 0x27, 0x1e, 0xc9, 0x31,
-	0x5e, 0x78, 0x24, 0xc7, 0xf8, 0xe0, 0x91, 0x1c, 0xe3, 0x84, 0xc7, 0x72, 0x0c, 0x17, 0x1e, 0xcb,
-	0x31, 0xdc, 0x78, 0x2c, 0xc7, 0x10, 0x65, 0x90, 0x9e, 0x59, 0x92, 0x51, 0x9a, 0xa4, 0x97, 0x9c,
-	0x9f, 0xab, 0x9f, 0x94, 0x99, 0x98, 0x97, 0x95, 0x99, 0x9a, 0x98, 0xa9, 0x0f, 0x33, 0x5b, 0x3f,
-	0x37, 0x3f, 0xa5, 0x34, 0x27, 0xb5, 0x58, 0x1f, 0x92, 0xbf, 0x2b, 0x0b, 0x52, 0x8b, 0x93, 0xd8,
-	0xc0, 0xb9, 0xd5, 0x18, 0x10, 0x00, 0x00, 0xff, 0xff, 0x01, 0xde, 0x64, 0x3d, 0xf4, 0x03, 0x00,
-	0x00,
+	// 398 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x53, 0x4d, 0x4f, 0xab, 0x40,
+	0x14, 0x85, 0xf6, 0x7d, 0xde, 0xf7, 0xda, 0xbe, 0xc7, 0x7b, 0x51, 0x3a, 0xc6, 0x69, 0xd3, 0x44,
+	0xad, 0x1b, 0x30, 0x75, 0xe7, 0xae, 0xdd, 0xa3, 0x09, 0x46, 0x13, 0x8d, 0x1b, 0x3e, 0x26, 0x23,
+	0x5a, 0x18, 0xc2, 0xd0, 0x68, 0xff, 0x85, 0x3f, 0xc1, 0x9f, 0xd3, 0x65, 0x97, 0x2e, 0xb5, 0xdd,
+	0x98, 0xf8, 0x27, 0x0c, 0x10, 0x08, 0xd0, 0xa6, 0xdd, 0x18, 0x37, 0x64, 0x66, 0xce, 0xb9, 0xe7,
+	0x9c, 0xdc, 0xcb, 0x85, 0x9a, 0x4f, 0x02, 0x57, 0x0d, 0xef, 0x15, 0x3f, 0x60, 0x21, 0x93, 0x6a,
+	0x4e, 0xe0, 0x84, 0x86, 0xcb, 0x6c, 0x25, 0x7a, 0x47, 0x8d, 0x18, 0x8d, 0x3e, 0x09, 0x8e, 0xfe,
+	0x53, 0x46, 0x59, 0x7c, 0x54, 0xa3, 0x53, 0xf2, 0xda, 0xb9, 0x83, 0xba, 0xc6, 0x69, 0x9f, 0x73,
+	0x87, 0x7a, 0x3a, 0x1b, 0x12, 0x2e, 0xc9, 0xf0, 0xdd, 0xb0, 0xed, 0x80, 0x70, 0x2e, 0x8b, 0x6d,
+	0xb1, 0xfb, 0x53, 0x4f, 0xaf, 0xd2, 0x3e, 0x7c, 0x0d, 0x22, 0x8a, 0x5c, 0x69, 0x57, 0xbb, 0xf5,
+	0xde, 0x3f, 0xa5, 0xe0, 0xa8, 0x44, 0xe5, 0x7a, 0xc2, 0x90, 0x10, 0xfc, 0x60, 0x3e, 0x09, 0x8c,
+	0x90, 0x05, 0x72, 0x35, 0x56, 0xc9, 0xee, 0x47, 0x5f, 0x5e, 0x1f, 0x5b, 0x62, 0x47, 0x86, 0x8d,
+	0xa2, 0xb1, 0x4e, 0xb8, 0xcf, 0x3c, 0x4e, 0x3a, 0x63, 0xf8, 0xa3, 0x71, 0x7a, 0xe6, 0x19, 0x9f,
+	0x1f, 0x0a, 0x81, 0x5c, 0xb6, 0xce, 0x62, 0x69, 0xd0, 0xd0, 0x38, 0x1d, 0x0c, 0x99, 0x75, 0xdb,
+	0xb7, 0x2c, 0x36, 0xf2, 0xc2, 0x15, 0xa9, 0xf2, 0x56, 0x95, 0xa5, 0x56, 0x4d, 0xd8, 0x2c, 0xc9,
+	0x65, 0x4e, 0x27, 0xf0, 0x37, 0x4e, 0x61, 0x7e, 0x94, 0xd7, 0x16, 0x34, 0x17, 0x04, 0x53, 0xb7,
+	0xde, 0x5b, 0x05, 0xaa, 0x1a, 0xa7, 0xd2, 0x29, 0xfc, 0xca, 0xff, 0x06, 0xdb, 0xa5, 0x46, 0x16,
+	0x87, 0x85, 0x76, 0x56, 0xc2, 0xa9, 0xb8, 0x74, 0x01, 0xb5, 0xe2, 0x20, 0x5b, 0x8b, 0x75, 0x05,
+	0x02, 0xda, 0x5b, 0x43, 0xc8, 0xa4, 0xcf, 0xe1, 0x77, 0x61, 0x18, 0x78, 0xb1, 0x30, 0x8f, 0xa3,
+	0xdd, 0xd5, 0x78, 0xa6, 0x7b, 0x05, 0xf5, 0x52, 0xeb, 0xdb, 0xcb, 0x22, 0xe5, 0x19, 0xa8, 0xbb,
+	0x8e, 0x91, 0xaa, 0x0f, 0x8e, 0x27, 0x2f, 0x58, 0x98, 0xcc, 0xb0, 0x38, 0x9d, 0x61, 0xf1, 0x79,
+	0x86, 0xc5, 0x87, 0x39, 0x16, 0xa6, 0x73, 0x2c, 0x3c, 0xcd, 0xb1, 0x70, 0x79, 0x40, 0x9d, 0xf0,
+	0x7a, 0x64, 0x2a, 0x16, 0x73, 0x55, 0xd3, 0x31, 0xbc, 0x1b, 0x87, 0x18, 0x8e, 0x9a, 0x6a, 0xab,
+	0x2e, 0xb3, 0x47, 0x43, 0xc2, 0xd5, 0x64, 0xf1, 0xc7, 0x3e, 0xe1, 0xe6, 0xb7, 0x78, 0x8d, 0x0f,
+	0xdf, 0x03, 0x00, 0x00, 0xff, 0xff, 0xff, 0xac, 0x69, 0x83, 0x0d, 0x04, 0x00, 0x00,
 }
 
-func (this *MsgAddRoles) Equal(that interface{}) bool {
+func (this *MsgAssignRoles) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*MsgAddRoles)
+	that1, ok := that.(*MsgAssignRoles)
 	if !ok {
-		that2, ok := that.(MsgAddRoles)
+		that2, ok := that.(MsgAssignRoles)
 		if ok {
 			that1 = &that2
 		} else {
@@ -412,14 +411,14 @@ func (this *MsgAddRoles) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *MsgRemoveRoles) Equal(that interface{}) bool {
+func (this *MsgUnassignRoles) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*MsgRemoveRoles)
+	that1, ok := that.(*MsgUnassignRoles)
 	if !ok {
-		that2, ok := that.(MsgRemoveRoles)
+		that2, ok := that.(MsgUnassignRoles)
 		if ok {
 			that1 = &that2
 		} else {
@@ -514,13 +513,13 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type MsgClient interface {
-	// AddRoles defines a method for adding a role for the operator.
-	AddRoles(ctx context.Context, in *MsgAddRoles, opts ...grpc.CallOption) (*MsgAddRolesResponse, error)
-	// RemoveRoles defines a method for removing a role for the operator.
-	RemoveRoles(ctx context.Context, in *MsgRemoveRoles, opts ...grpc.CallOption) (*MsgRemoveRolesResponse, error)
-	// BlockAccount defines a method for block a account
+	// AssignRoles defines a method for assigning roles for the operator.
+	AssignRoles(ctx context.Context, in *MsgAssignRoles, opts ...grpc.CallOption) (*MsgAssignRolesResponse, error)
+	// UnassignRoles defines a method for unassigning roles from the operator.
+	UnassignRoles(ctx context.Context, in *MsgUnassignRoles, opts ...grpc.CallOption) (*MsgUnassignRolesResponse, error)
+	// BlockAccount defines a method for blocking an account
 	BlockAccount(ctx context.Context, in *MsgBlockAccount, opts ...grpc.CallOption) (*MsgBlockAccountResponse, error)
-	// UnblockAccount defines a method for unblock a blocked account
+	// UnblockAccount defines a method for unblocking a blocked account
 	UnblockAccount(ctx context.Context, in *MsgUnblockAccount, opts ...grpc.CallOption) (*MsgUnblockAccountResponse, error)
 }
 
@@ -532,18 +531,18 @@ func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 	return &msgClient{cc}
 }
 
-func (c *msgClient) AddRoles(ctx context.Context, in *MsgAddRoles, opts ...grpc.CallOption) (*MsgAddRolesResponse, error) {
-	out := new(MsgAddRolesResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.perm.Msg/AddRoles", in, out, opts...)
+func (c *msgClient) AssignRoles(ctx context.Context, in *MsgAssignRoles, opts ...grpc.CallOption) (*MsgAssignRolesResponse, error) {
+	out := new(MsgAssignRolesResponse)
+	err := c.cc.Invoke(ctx, "/iritamod.perm.Msg/AssignRoles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *msgClient) RemoveRoles(ctx context.Context, in *MsgRemoveRoles, opts ...grpc.CallOption) (*MsgRemoveRolesResponse, error) {
-	out := new(MsgRemoveRolesResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.perm.Msg/RemoveRoles", in, out, opts...)
+func (c *msgClient) UnassignRoles(ctx context.Context, in *MsgUnassignRoles, opts ...grpc.CallOption) (*MsgUnassignRolesResponse, error) {
+	out := new(MsgUnassignRolesResponse)
+	err := c.cc.Invoke(ctx, "/iritamod.perm.Msg/UnassignRoles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -570,13 +569,13 @@ func (c *msgClient) UnblockAccount(ctx context.Context, in *MsgUnblockAccount, o
 
 // MsgServer is the server API for Msg service.
 type MsgServer interface {
-	// AddRoles defines a method for adding a role for the operator.
-	AddRoles(context.Context, *MsgAddRoles) (*MsgAddRolesResponse, error)
-	// RemoveRoles defines a method for removing a role for the operator.
-	RemoveRoles(context.Context, *MsgRemoveRoles) (*MsgRemoveRolesResponse, error)
-	// BlockAccount defines a method for block a account
+	// AssignRoles defines a method for assigning roles for the operator.
+	AssignRoles(context.Context, *MsgAssignRoles) (*MsgAssignRolesResponse, error)
+	// UnassignRoles defines a method for unassigning roles from the operator.
+	UnassignRoles(context.Context, *MsgUnassignRoles) (*MsgUnassignRolesResponse, error)
+	// BlockAccount defines a method for blocking an account
 	BlockAccount(context.Context, *MsgBlockAccount) (*MsgBlockAccountResponse, error)
-	// UnblockAccount defines a method for unblock a blocked account
+	// UnblockAccount defines a method for unblocking a blocked account
 	UnblockAccount(context.Context, *MsgUnblockAccount) (*MsgUnblockAccountResponse, error)
 }
 
@@ -584,11 +583,11 @@ type MsgServer interface {
 type UnimplementedMsgServer struct {
 }
 
-func (*UnimplementedMsgServer) AddRoles(ctx context.Context, req *MsgAddRoles) (*MsgAddRolesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method AddRoles not implemented")
+func (*UnimplementedMsgServer) AssignRoles(ctx context.Context, req *MsgAssignRoles) (*MsgAssignRolesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AssignRoles not implemented")
 }
-func (*UnimplementedMsgServer) RemoveRoles(ctx context.Context, req *MsgRemoveRoles) (*MsgRemoveRolesResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RemoveRoles not implemented")
+func (*UnimplementedMsgServer) UnassignRoles(ctx context.Context, req *MsgUnassignRoles) (*MsgUnassignRolesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UnassignRoles not implemented")
 }
 func (*UnimplementedMsgServer) BlockAccount(ctx context.Context, req *MsgBlockAccount) (*MsgBlockAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method BlockAccount not implemented")
@@ -601,38 +600,38 @@ func RegisterMsgServer(s grpc1.Server, srv MsgServer) {
 	s.RegisterService(&_Msg_serviceDesc, srv)
 }
 
-func _Msg_AddRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgAddRoles)
+func _Msg_AssignRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgAssignRoles)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).AddRoles(ctx, in)
+		return srv.(MsgServer).AssignRoles(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.perm.Msg/AddRoles",
+		FullMethod: "/iritamod.perm.Msg/AssignRoles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).AddRoles(ctx, req.(*MsgAddRoles))
+		return srv.(MsgServer).AssignRoles(ctx, req.(*MsgAssignRoles))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Msg_RemoveRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(MsgRemoveRoles)
+func _Msg_UnassignRoles_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MsgUnassignRoles)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(MsgServer).RemoveRoles(ctx, in)
+		return srv.(MsgServer).UnassignRoles(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.perm.Msg/RemoveRoles",
+		FullMethod: "/iritamod.perm.Msg/UnassignRoles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(MsgServer).RemoveRoles(ctx, req.(*MsgRemoveRoles))
+		return srv.(MsgServer).UnassignRoles(ctx, req.(*MsgUnassignRoles))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -678,12 +677,12 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "AddRoles",
-			Handler:    _Msg_AddRoles_Handler,
+			MethodName: "AssignRoles",
+			Handler:    _Msg_AssignRoles_Handler,
 		},
 		{
-			MethodName: "RemoveRoles",
-			Handler:    _Msg_RemoveRoles_Handler,
+			MethodName: "UnassignRoles",
+			Handler:    _Msg_UnassignRoles_Handler,
 		},
 		{
 			MethodName: "BlockAccount",
@@ -698,7 +697,7 @@ var _Msg_serviceDesc = grpc.ServiceDesc{
 	Metadata: "perm/tx.proto",
 }
 
-func (m *MsgAddRoles) Marshal() (dAtA []byte, err error) {
+func (m *MsgAssignRoles) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -708,12 +707,12 @@ func (m *MsgAddRoles) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgAddRoles) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgAssignRoles) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgAddRoles) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgAssignRoles) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -753,7 +752,7 @@ func (m *MsgAddRoles) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgAddRolesResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgAssignRolesResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -763,12 +762,12 @@ func (m *MsgAddRolesResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgAddRolesResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgAssignRolesResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgAddRolesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgAssignRolesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -776,7 +775,7 @@ func (m *MsgAddRolesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgRemoveRoles) Marshal() (dAtA []byte, err error) {
+func (m *MsgUnassignRoles) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -786,12 +785,12 @@ func (m *MsgRemoveRoles) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRemoveRoles) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUnassignRoles) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRemoveRoles) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUnassignRoles) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -831,7 +830,7 @@ func (m *MsgRemoveRoles) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *MsgRemoveRolesResponse) Marshal() (dAtA []byte, err error) {
+func (m *MsgUnassignRolesResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -841,12 +840,12 @@ func (m *MsgRemoveRolesResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *MsgRemoveRolesResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *MsgUnassignRolesResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *MsgRemoveRolesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *MsgUnassignRolesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -985,7 +984,7 @@ func encodeVarintTx(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return base
 }
-func (m *MsgAddRoles) Size() (n int) {
+func (m *MsgAssignRoles) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1009,7 +1008,7 @@ func (m *MsgAddRoles) Size() (n int) {
 	return n
 }
 
-func (m *MsgAddRolesResponse) Size() (n int) {
+func (m *MsgAssignRolesResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1018,7 +1017,7 @@ func (m *MsgAddRolesResponse) Size() (n int) {
 	return n
 }
 
-func (m *MsgRemoveRoles) Size() (n int) {
+func (m *MsgUnassignRoles) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1042,7 +1041,7 @@ func (m *MsgRemoveRoles) Size() (n int) {
 	return n
 }
 
-func (m *MsgRemoveRolesResponse) Size() (n int) {
+func (m *MsgUnassignRolesResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -1109,7 +1108,7 @@ func sovTx(x uint64) (n int) {
 func sozTx(x uint64) (n int) {
 	return sovTx(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (m *MsgAddRoles) Unmarshal(dAtA []byte) error {
+func (m *MsgAssignRoles) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1132,10 +1131,10 @@ func (m *MsgAddRoles) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgAddRoles: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgAssignRoles: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgAddRoles: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgAssignRoles: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1295,7 +1294,7 @@ func (m *MsgAddRoles) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgAddRolesResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgAssignRolesResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1318,10 +1317,10 @@ func (m *MsgAddRolesResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgAddRolesResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgAssignRolesResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgAddRolesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgAssignRolesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -1348,7 +1347,7 @@ func (m *MsgAddRolesResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgRemoveRoles) Unmarshal(dAtA []byte) error {
+func (m *MsgUnassignRoles) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1371,10 +1370,10 @@ func (m *MsgRemoveRoles) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRemoveRoles: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUnassignRoles: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRemoveRoles: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUnassignRoles: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -1534,7 +1533,7 @@ func (m *MsgRemoveRoles) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *MsgRemoveRolesResponse) Unmarshal(dAtA []byte) error {
+func (m *MsgUnassignRolesResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1557,10 +1556,10 @@ func (m *MsgRemoveRolesResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: MsgRemoveRolesResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: MsgUnassignRolesResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: MsgRemoveRolesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: MsgUnassignRolesResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:

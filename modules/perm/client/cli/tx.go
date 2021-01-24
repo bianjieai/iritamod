@@ -24,8 +24,8 @@ func NewTxCmd() *cobra.Command {
 	}
 
 	permTxCmd.AddCommand(
-		NewAddRolesCmd(),
-		NewRemoveRolesCmd(),
+		NewAssignRolesCmd(),
+		NewUnassignRolesCmd(),
 		NewBlockAccountCmd(),
 		NewUnblockAccountCmd(),
 	)
@@ -33,12 +33,12 @@ func NewTxCmd() *cobra.Command {
 	return permTxCmd
 }
 
-// NewAddRolesCmd implements the add roles command handler.
-func NewAddRolesCmd() *cobra.Command {
+// NewAssignRolesCmd implements the assign roles command handler.
+func NewAssignRolesCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "add-roles [address] [roles]",
+		Use: "assign-roles [address] [roles]",
 		Long: strings.TrimSpace(fmt.Sprintf(
-			"Add roles to an account.\n\n Auth options: %s, %s, %s, %s, %s, %s, %s, %s\n",
+			"Assign roles to an account.\n\n Auth options: %s, %s, %s, %s, %s, %s, %s, %s\n",
 			types.RolePermAdmin,
 			types.RoleBlacklistAdmin,
 			types.RoleNodeAdmin,
@@ -65,7 +65,7 @@ func NewAddRolesCmd() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgAddRoles(
+			msg := types.NewMsgAssignRoles(
 				roles,
 				addr,
 				clientCtx.GetFromAddress(),
@@ -85,12 +85,12 @@ func NewAddRolesCmd() *cobra.Command {
 	return cmd
 }
 
-// NewRemoveRolesCmd implements the remove roles command handler.
-func NewRemoveRolesCmd() *cobra.Command {
+// NewUnassignRolesCmd implements the unassign roles command handler.
+func NewUnassignRolesCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use: "remove-roles [address] [roles]",
+		Use: "unassign-roles [address] [roles]",
 		Long: strings.TrimSpace(fmt.Sprintf(
-			"Remove roles from an account.\n\nAuth options: %s, %s, %s, %s, %s, %s, %s, %s",
+			"Unassign roles from an account.\n\nAuth options: %s, %s, %s, %s, %s, %s, %s, %s",
 			types.RolePermAdmin,
 			types.RoleBlacklistAdmin,
 			types.RoleNodeAdmin,
@@ -117,7 +117,7 @@ func NewRemoveRolesCmd() *cobra.Command {
 				return err
 			}
 
-			msg := types.NewMsgRemoveRoles(
+			msg := types.NewMsgUnassignRoles(
 				roles,
 				addr,
 				clientCtx.GetFromAddress(),

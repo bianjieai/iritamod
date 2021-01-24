@@ -12,7 +12,7 @@ type msgServer struct {
 	Keeper
 }
 
-// NewMsgServerImpl returns an implementation of the bank MsgServer interface
+// NewMsgServerImpl returns an implementation of the perm MsgServer interface
 // for the provided Keeper.
 func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 	return &msgServer{Keeper: keeper}
@@ -20,7 +20,7 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 var _ types.MsgServer = msgServer{}
 
-func (m msgServer) AddRoles(goCtx context.Context, msg *types.MsgAddRoles) (*types.MsgAddRolesResponse, error) {
+func (m msgServer) AssignRoles(goCtx context.Context, msg *types.MsgAssignRoles) (*types.MsgAssignRolesResponse, error) {
 	addr, err := sdk.AccAddressFromBech32(msg.Address)
 	if err != nil {
 		return nil, err
@@ -39,7 +39,7 @@ func (m msgServer) AddRoles(goCtx context.Context, msg *types.MsgAddRoles) (*typ
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeAddRoles,
+			types.EventTypeAssignRoles,
 			sdk.NewAttribute(types.AttributeKeyAccount, msg.Address),
 		),
 		sdk.NewEvent(
@@ -48,10 +48,10 @@ func (m msgServer) AddRoles(goCtx context.Context, msg *types.MsgAddRoles) (*typ
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
 		),
 	})
-	return &types.MsgAddRolesResponse{}, nil
+	return &types.MsgAssignRolesResponse{}, nil
 }
 
-func (m msgServer) RemoveRoles(goCtx context.Context, msg *types.MsgRemoveRoles) (*types.MsgRemoveRolesResponse, error) {
+func (m msgServer) UnassignRoles(goCtx context.Context, msg *types.MsgUnassignRoles) (*types.MsgUnassignRolesResponse, error) {
 	addr, err := sdk.AccAddressFromBech32(msg.Address)
 	if err != nil {
 		return nil, err
@@ -64,13 +64,13 @@ func (m msgServer) RemoveRoles(goCtx context.Context, msg *types.MsgRemoveRoles)
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.Deauthorize(ctx, addr, operator, msg.Roles...); err != nil {
+	if err := m.Keeper.Unauthorize(ctx, addr, operator, msg.Roles...); err != nil {
 		return nil, err
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
-			types.EventTypeRemoveRoles,
+			types.EventTypeUnassignRoles,
 			sdk.NewAttribute(types.AttributeKeyAccount, msg.Address),
 		),
 		sdk.NewEvent(
@@ -79,7 +79,7 @@ func (m msgServer) RemoveRoles(goCtx context.Context, msg *types.MsgRemoveRoles)
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
 		),
 	})
-	return &types.MsgRemoveRolesResponse{}, nil
+	return &types.MsgUnassignRolesResponse{}, nil
 }
 
 func (m msgServer) BlockAccount(goCtx context.Context, msg *types.MsgBlockAccount) (*types.MsgBlockAccountResponse, error) {

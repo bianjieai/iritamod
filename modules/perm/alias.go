@@ -10,8 +10,8 @@ const (
 	StoreKey                = types.StoreKey
 	QuerierRoute            = types.QuerierRoute
 	RouterKey               = types.RouterKey
-	EventTypeAddRoles       = types.EventTypeAddRoles
-	EventTypeRemoveRoles    = types.EventTypeRemoveRoles
+	EventTypeAssignRoles    = types.EventTypeAssignRoles
+	EventTypeUnassignRoles  = types.EventTypeUnassignRoles
 	EventTypeBlockAccount   = types.EventTypeBlockAccount
 	EventTypeUnblockAccount = types.EventTypeUnblockAccount
 	AttributeKeyAccount     = types.AttributeKeyAccount
@@ -37,8 +37,8 @@ var (
 )
 
 type (
-	MsgAddRoles       = types.MsgAddRoles
-	MsgRemoveRoles    = types.MsgRemoveRoles
+	MsgAssignRoles    = types.MsgAssignRoles
+	MsgUnassignRoles  = types.MsgUnassignRoles
 	MsgBlockAccount   = types.MsgBlockAccount
 	MsgUnblockAccount = types.MsgUnblockAccount
 	Keeper            = keeper.Keeper

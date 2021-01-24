@@ -2,8 +2,8 @@ package types
 
 // perm module event types
 const (
-	EventTypeAddRoles       = "add_roles"
-	EventTypeRemoveRoles    = "remove_roles"
+	EventTypeAssignRoles    = "assign_roles"
+	EventTypeUnassignRoles  = "unassign_roles"
 	EventTypeBlockAccount   = "block_account"
 	EventTypeUnblockAccount = "unblock_account"
 

@@ -13,19 +13,19 @@ import (
 
 // GetQueryCmd returns the cli query commands for this module
 func GetQueryCmd() *cobra.Command {
-	validatorQueryCmd := &cobra.Command{
+	permQueryCmd := &cobra.Command{
 		Use:                        types.ModuleName,
 		Short:                      "Querying commands for the perm module",
 		DisableFlagParsing:         true,
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
 	}
-	validatorQueryCmd.AddCommand(
+	permQueryCmd.AddCommand(
 		GetCmdQueryRoles(),
 		GetCmdQueryBlackList(),
 	)
 
-	return validatorQueryCmd
+	return permQueryCmd
 }
 
 // GetCmdQueryRoles implements the roles query command.
