@@ -22,15 +22,19 @@ func (a Auth) Roles() (rs []Role) {
 	if a.Access(RoleParamAdmin.Auth()) {
 		rs = append(rs, RoleParamAdmin)
 	}
+	if a.Access(RoleIDAdmin.Auth()) {
+		rs = append(rs, RoleIDAdmin)
+	}
+	if a.Access(RoleMintAdmin.Auth()) {
+		rs = append(rs, RoleMintAdmin)
+	}
 	if a.Access(RolePowerUser.Auth()) {
 		rs = append(rs, RolePowerUser)
 	}
 	if a.Access(RoleRelayerUser.Auth()) {
 		rs = append(rs, RoleRelayerUser)
 	}
-	if a.Access(RoleIDAdmin.Auth()) {
-		rs = append(rs, RoleIDAdmin)
-	}
+
 	return rs
 }
 
