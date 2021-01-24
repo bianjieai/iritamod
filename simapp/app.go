@@ -58,9 +58,6 @@ import (
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 
-	"github.com/bianjieai/iritamod/modules/admin"
-	adminkeeper "github.com/bianjieai/iritamod/modules/admin/keeper"
-	admintypes "github.com/bianjieai/iritamod/modules/admin/types"
 	"github.com/bianjieai/iritamod/modules/identity"
 	identitykeeper "github.com/bianjieai/iritamod/modules/identity/keeper"
 	identitytypes "github.com/bianjieai/iritamod/modules/identity/types"
@@ -68,6 +65,9 @@ import (
 	nodekeeper "github.com/bianjieai/iritamod/modules/node/keeper"
 	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
 	cparams "github.com/bianjieai/iritamod/modules/params"
+	"github.com/bianjieai/iritamod/modules/perm"
+	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
+	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	cslashing "github.com/bianjieai/iritamod/modules/slashing"
 )
 
@@ -95,7 +95,7 @@ var (
 		ibc.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
-		admin.AppModuleBasic{},
+		perm.AppModuleBasic{},
 		identity.AppModuleBasic{},
 		node.AppModuleBasic{},
 	)
@@ -137,7 +137,7 @@ type SimApp struct {
 	UpgradeKeeper  upgradekeeper.Keeper
 	ParamsKeeper   paramskeeper.Keeper
 	EvidenceKeeper evidencekeeper.Keeper
-	AdminKeeper    adminkeeper.Keeper
+	PermKeeper     permkeeper.Keeper
 	IdentityKeeper identitykeeper.Keeper
 	NodeKeeper     nodekeeper.Keeper
 
@@ -182,7 +182,7 @@ func NewSimApp(
 		//gov.StoreKey,
 		upgradetypes.StoreKey,
 		evidencetypes.StoreKey,
-		admintypes.StoreKey,
+		permtypes.StoreKey,
 		identitytypes.StoreKey,
 		nodetypes.StoreKey,
 	)
@@ -231,7 +231,7 @@ func NewSimApp(
 	app.NodeKeeper = *app.NodeKeeper.SetHooks(
 		stakingtypes.NewMultiStakingHooks(app.SlashingKeeper.Hooks()),
 	)
-	app.AdminKeeper = adminkeeper.NewKeeper(appCodec, keys[admintypes.StoreKey])
+	app.PermKeeper = permkeeper.NewKeeper(appCodec, keys[permtypes.StoreKey])
 	app.IdentityKeeper = identitykeeper.NewKeeper(appCodec, keys[identitytypes.StoreKey])
 
 	/****  Module Options ****/
@@ -252,7 +252,7 @@ func NewSimApp(
 		upgrade.NewAppModule(app.UpgradeKeeper),
 		evidence.NewAppModule(app.EvidenceKeeper),
 		params.NewAppModule(app.ParamsKeeper),
-		admin.NewAppModule(appCodec, app.AdminKeeper),
+		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
 	)
@@ -273,7 +273,7 @@ func NewSimApp(
 	// so that other modules that want to create or claim capabilities afterwards in InitChain
 	// can do so safely.
 	app.mm.SetOrderInitGenesis(
-		admintypes.ModuleName,
+		permtypes.ModuleName,
 		authtypes.ModuleName,
 		nodetypes.ModuleName,
 		banktypes.ModuleName,
@@ -301,7 +301,7 @@ func NewSimApp(
 		cslashing.NewAppModule(appCodec, cslashing.NewKeeper(app.SlashingKeeper, app.NodeKeeper), app.AccountKeeper, app.BankKeeper, app.NodeKeeper),
 		params.NewAppModule(app.ParamsKeeper),
 		cparams.NewAppModule(appCodec, app.ParamsKeeper),
-		admin.NewAppModule(appCodec, app.AdminKeeper),
+		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
 	)

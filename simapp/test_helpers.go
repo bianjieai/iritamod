@@ -32,8 +32,8 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/bianjieai/iritamod/modules/admin"
 	"github.com/bianjieai/iritamod/modules/node"
+	"github.com/bianjieai/iritamod/modules/perm"
 )
 
 const BondDenom = sdk.DefaultBondDenom
@@ -65,16 +65,16 @@ func Setup(isCheckTx bool) *SimApp {
 		genesisState := NewDefaultGenesisState()
 
 		// add root admin
-		adminGenState := admin.GetGenesisStateFromAppState(app.appCodec, genesisState)
-		adminGenState.RoleAccounts = append(
-			adminGenState.RoleAccounts,
-			admin.RoleAccount{
+		permGenState := perm.GetGenesisStateFromAppState(app.appCodec, genesisState)
+		permGenState.RoleAccounts = append(
+			permGenState.RoleAccounts,
+			perm.RoleAccount{
 				Address: sdk.AccAddress(tmhash.SumTruncated([]byte("rootAdmin"))).String(),
-				Roles:   []admin.Role{admin.RoleRootAdmin},
+				Roles:   []perm.Role{perm.RoleRootAdmin},
 			},
 		)
-		adminGenStateBz := app.cdc.MustMarshalJSON(adminGenState)
-		genesisState[admin.ModuleName] = adminGenStateBz
+		permGenStateBz := app.cdc.MustMarshalJSON(permGenState)
+		genesisState[perm.ModuleName] = permGenStateBz
 
 		// add root cert
 		validatorGenState := node.GetGenesisStateFromAppState(app.appCodec, genesisState)

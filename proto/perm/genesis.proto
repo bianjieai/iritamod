@@ -1,0 +1,24 @@
+syntax = "proto3";
+package iritamod.perm;
+
+import "perm/perm.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/perm/types";
+
+// GenesisState defines the perm module's genesis state.
+message GenesisState {
+    repeated RoleAccount role_accounts = 1 [
+      (gogoproto.moretags) = "yaml:\"role_accounts\"",
+      (gogoproto.nullable) = false
+    ];
+    repeated string black_list = 2 [
+      (gogoproto.moretags) = "yaml:\"black_list\""
+    ];
+}
+
+// RoleAccount represents an account with roles.
+message RoleAccount {
+    string address = 1;
+    repeated Role roles = 2;
+}
