@@ -22,7 +22,7 @@ const (
 	RoleNodeAdmin           = types.RoleNodeAdmin
 	RoleParamAdmin          = types.RoleParamAdmin
 	RoleIDAdmin             = types.RoleIDAdmin
-	RoleMintAdmin           = types.RoleMintAdmin
+	RoleBaseM1Admin         = types.RoleBaseM1Admin
 	RolePowerUser           = types.RolePowerUser
 	RoleRelayerUser         = types.RoleRelayerUser
 )

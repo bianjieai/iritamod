@@ -46,6 +46,11 @@ func (k Keeper) IsPermAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
 	return (auth & types.RolePermAdmin.Auth()) > 0
 }
 
+func (k Keeper) IsBaseM1Admin(ctx sdk.Context, address sdk.AccAddress) bool {
+	auth := k.GetAuth(ctx, address)
+	return (auth & types.RoleBaseM1Admin.Auth()) > 0
+}
+
 func (k Keeper) IsAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
 	auth := k.GetAuth(ctx, address)
 	return (auth&types.RoleRootAdmin.Auth()) > 0 ||
