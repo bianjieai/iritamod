@@ -1,0 +1,69 @@
+syntax = "proto3";
+package iritamod.perm;
+
+import "perm/perm.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/perm/types";
+option (gogoproto.goproto_getters_all) = false;
+
+// Msg defines the perm Msg service.
+service Msg {
+    // AssignRoles defines a method for assigning roles for the operator.
+    rpc AssignRoles(MsgAssignRoles) returns (MsgAssignRolesResponse);
+
+    // UnassignRoles defines a method for unassigning roles from the operator.
+    rpc UnassignRoles(MsgUnassignRoles) returns (MsgUnassignRolesResponse);
+
+    // BlockAccount defines a method for blocking an account
+    rpc BlockAccount(MsgBlockAccount) returns (MsgBlockAccountResponse);
+
+    // UnblockAccount defines a method for unblocking a blocked account
+    rpc UnblockAccount(MsgUnblockAccount) returns (MsgUnblockAccountResponse);
+}
+
+// MsgAssignRoles defines an SDK message for assigning roles to an address.
+message MsgAssignRoles {
+    option (gogoproto.equal) = true;
+
+    string address = 1;
+    repeated Role roles = 2;
+    string operator = 3;
+}
+
+// MsgAssignRolesResponse defines the Msg/AssignRoles response type.
+message MsgAssignRolesResponse { }
+
+// MsgUnassignRoles defines an SDK message for unassigning roles from an address.
+message MsgUnassignRoles {
+    option (gogoproto.equal) = true;
+
+    string address = 1;
+    repeated Role roles = 2;
+    string operator = 3;
+}
+
+// MsgUnassignRolesResponse defines the Msg/UnassignRoles response type.
+message MsgUnassignRolesResponse { }
+
+// MsgBlockAccount defines an SDK message for blocking an account.
+message MsgBlockAccount {
+    option (gogoproto.equal) = true;
+
+    string address = 1;
+    string operator = 2;
+}
+
+// MsgBlockAccountResponse defines the Msg/BlockAccount response type.
+message MsgBlockAccountResponse { }
+
+// MsgUnblockAccount defines an SDK message for unblocking an account.
+message MsgUnblockAccount {
+    option (gogoproto.equal) = true;
+
+    string address = 1;
+    string operator = 2;
+}
+
+// MsgUnblockAccountResponse defines the Msg/UnblockAccount response type.
+message MsgUnblockAccountResponse { }
