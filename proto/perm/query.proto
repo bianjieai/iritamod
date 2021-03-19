@@ -23,7 +23,7 @@ message QueryRolesRequest {
 
 // QueryRolesResponse is response type for the Query/Roles RPC method
 message QueryRolesResponse {
-    repeated Role roles = 1;
+    RoleSet roles = 1;
 }
 
 // QueryBlacklistRequest is request type for the Query/Blacklist RPC method

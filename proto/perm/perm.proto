@@ -6,6 +6,12 @@ import "gogoproto/gogo.proto";
 option go_package = "github.com/bianjieai/iritamod/modules/perm/types";
 option (gogoproto.goproto_getters_all) = false;
 
+// PubKey represents a public key along with the corresponding algorithm
+message RoleSet {
+    option (gogoproto.equal) = true;
+    repeated Role roles = 1;
+}
+
 // Role represents a role
 enum Role {
     option (gogoproto.enum_stringer) = true;

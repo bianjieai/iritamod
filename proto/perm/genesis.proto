@@ -20,5 +20,5 @@ message GenesisState {
 // RoleAccount represents an account with roles.
 message RoleAccount {
     string address = 1;
-    repeated Role roles = 2;
+    RoleSet roles = 2;
 }

@@ -105,7 +105,7 @@ func (suite *KeeperTestSuite) TestAddRoles() {
 	suite.NoError(err)
 
 	roles := suite.keeper.GetAuth(suite.ctx, account).Roles()
-	suite.Equal(addRoles, roles)
+	suite.Equal(addRoles, roles.Roles)
 
 	roleAccounts := suite.keeper.GetRoles(suite.ctx)
 	suite.Equal(2, len(roleAccounts))
@@ -114,7 +114,7 @@ func (suite *KeeperTestSuite) TestAddRoles() {
 			continue
 		}
 		suite.Equal(account.String(), ra.Address)
-		suite.Equal(addRoles, ra.Roles)
+		suite.Equal(addRoles, ra.Roles.Roles)
 	}
 
 	// permission admin can not add other permission admin
@@ -132,7 +132,7 @@ func (suite *KeeperTestSuite) TestRemoveRoles() {
 
 	existingRoles := addRoles
 	roles := suite.keeper.GetAuth(suite.ctx, account).Roles()
-	suite.Equal(existingRoles, roles)
+	suite.Equal(existingRoles, roles.Roles)
 
 	roleAccounts := suite.keeper.GetRoles(suite.ctx)
 	suite.Equal(2, len(roleAccounts))
@@ -141,7 +141,7 @@ func (suite *KeeperTestSuite) TestRemoveRoles() {
 			continue
 		}
 		suite.Equal(account.String(), ra.Address)
-		suite.Equal(existingRoles, ra.Roles)
+		suite.Equal(existingRoles, ra.Roles.Roles)
 	}
 
 	// remove all roles from this account
@@ -149,11 +149,11 @@ func (suite *KeeperTestSuite) TestRemoveRoles() {
 	suite.NoError(err)
 
 	roles = suite.keeper.GetAuth(suite.ctx, account).Roles()
-	suite.Empty(roles)
+	suite.Empty(roles.Roles)
 	roleAccounts = suite.keeper.GetRoles(suite.ctx)
 	suite.Equal(1, len(roleAccounts))
 	suite.Equal(roleAccounts[0].Address, rootAdmin.String())
-	suite.Equal(roleAccounts[0].Roles, []types.Role{types.RoleRootAdmin})
+	suite.Equal(roleAccounts[0].Roles.Roles, []types.Role{types.RoleRootAdmin})
 }
 
 func (suite *KeeperTestSuite) TestBlockAccount() {

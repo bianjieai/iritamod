@@ -34,6 +34,7 @@ import (
 
 	"github.com/bianjieai/iritamod/modules/node"
 	"github.com/bianjieai/iritamod/modules/perm"
+	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 )
 
 const BondDenom = sdk.DefaultBondDenom
@@ -70,7 +71,9 @@ func Setup(isCheckTx bool) *SimApp {
 			permGenState.RoleAccounts,
 			perm.RoleAccount{
 				Address: sdk.AccAddress(tmhash.SumTruncated([]byte("rootAdmin"))).String(),
-				Roles:   []perm.Role{perm.RoleRootAdmin},
+				Roles:   &permtypes.RoleSet{
+					[]perm.Role{perm.RoleRootAdmin},
+				},
 			},
 		)
 		permGenStateBz := app.cdc.MustMarshalJSON(permGenState)

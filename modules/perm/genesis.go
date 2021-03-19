@@ -19,7 +19,7 @@ func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) (res []abci.Valid
 
 	for _, account := range data.RoleAccounts {
 		var auth types.Auth
-		for _, r := range account.Roles {
+		for _, r := range account.Roles.Roles {
 			auth = auth ^ r.Auth()
 		}
 		addr, err := sdk.AccAddressFromBech32(account.Address)
@@ -42,7 +42,7 @@ func ValidateGenesis(data GenesisState) error {
 	// check root admin
 	rootAdminFound := false
 	for _, roleAccount := range data.RoleAccounts {
-		for _, r := range roleAccount.Roles {
+		for _, r := range roleAccount.Roles.Roles {
 			if r == RoleRootAdmin {
 				rootAdminFound = true
 			}
