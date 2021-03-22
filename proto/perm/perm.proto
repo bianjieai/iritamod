@@ -5,6 +5,7 @@ import "gogoproto/gogo.proto";
 
 option go_package = "github.com/bianjieai/iritamod/modules/perm/types";
 option (gogoproto.goproto_getters_all) = false;
+option (gogoproto.goproto_registration) = true;
 
 // Role represents a role
 enum Role {
