@@ -45,4 +45,4 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 <!-- Release links -->
 
-[v1.1.0]: https://github.com/bianjieai/iritamod/tags/v1.1.0
+[v1.0.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.0.0
