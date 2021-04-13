@@ -37,4 +37,12 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ## [Unreleased]
 
+## [v1.0.0] - 2021-04-13
+
+### Features
+
+* Add modules `perm`, `params`, `node`, `slashing`, `identity`, `upgrade`.
+
 <!-- Release links -->
+
+[v1.1.0]: https://github.com/bianjieai/iritamod/tags/v1.1.0
