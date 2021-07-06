@@ -40,5 +40,5 @@ func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
 
 // UnbondingTime
 func (k Keeper) UnbondingTime(ctx sdk.Context) (res time.Duration) {
-	return
+	return time.Hour * 3360 // TODO
 }
