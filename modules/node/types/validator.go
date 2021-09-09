@@ -7,6 +7,8 @@ import (
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	tmprotocrypto "github.com/tendermint/tendermint/proto/tendermint/crypto"
 
+	"github.com/cosmos/cosmos-sdk/codec"
+	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -22,20 +24,15 @@ const DoNotModifyDesc = "[do-not-modify]"
 func NewValidator(
 	id tmbytes.HexBytes,
 	name, description string,
-	pubKey cryptotypes.PubKey,
+	pubKey string,
 	cert string,
 	power int64,
 	operator sdk.AccAddress,
 ) Validator {
-	var pkStr string
-	if pubKey != nil {
-		pkStr = sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pubKey)
-	}
-
 	return Validator{
 		Id:          id.String(),
 		Name:        name,
-		Pubkey:      pkStr,
+		Pubkey:      pubKey,
 		Certificate: cert,
 		Power:       power,
 		Description: description,
@@ -87,13 +84,14 @@ func (v Validator) GetOperator() sdk.ValAddress {
 }
 
 // ConsPubKey returns the validator PubKey as a cryptotypes.PubKey.
-func (v Validator) ConsPubKey() (cryptotypes.PubKey, error) {
-	pk, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, v.Pubkey)
-	if err != nil {
-		return nil, err
-	}
-	return pk, nil
+func (v Validator) ConsPubKey() (pk cryptotypes.PubKey, err error) {
 
+	registry := codectypes.NewInterfaceRegistry()
+	cryptocodec.RegisterInterfaces(registry)
+	cdc := codec.NewProtoCodec(registry)
+
+	err = cdc.UnmarshalInterfaceJSON([]byte(v.Pubkey), &pk)
+	return
 }
 
 // TmConsPublicKey casts Validator.ConsensusPubkey to tmprotocrypto.PubKey.
@@ -117,12 +115,13 @@ func (v Validator) GetConsAddr() (sdk.ConsAddress, error) {
 	if err != nil {
 		return sdk.ConsAddress{}, err
 	}
+
 	return sdk.ConsAddress(pk.Address()), nil
 }
 
 // GetTokens implement ValidatorI
 func (v Validator) GetTokens() sdk.Int {
-	return sdk.TokensFromConsensusPower(v.Power)
+	return sdk.TokensFromConsensusPower(v.Power, sdk.DefaultPowerReduction)
 }
 
 // GetBondedTokens implement ValidatorI
@@ -130,11 +129,11 @@ func (v Validator) GetBondedTokens() sdk.Int {
 	if v.Jailed {
 		return sdk.NewInt(0)
 	}
-	return sdk.TokensFromConsensusPower(v.Power)
+	return sdk.TokensFromConsensusPower(v.Power, sdk.DefaultPowerReduction)
 }
 
 // GetConsensusPower implement ValidatorI
-func (v Validator) GetConsensusPower() int64 {
+func (v Validator) GetConsensusPower(_ sdk.Int) int64 {
 	return v.Power
 }
 

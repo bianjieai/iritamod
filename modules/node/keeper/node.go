@@ -52,7 +52,7 @@ func (k Keeper) RemoveNode(
 func (k Keeper) SetNode(ctx sdk.Context, id tmbytes.HexBytes, node types.Node) {
 	store := ctx.KVStore(k.storeKey)
 
-	bz := k.cdc.MustMarshalBinaryBare(&node)
+	bz := k.cdc.MustMarshal(&node)
 	store.Set(types.GetNodeKey(id), bz)
 }
 
@@ -77,7 +77,7 @@ func (k Keeper) GetNode(ctx sdk.Context, id tmbytes.HexBytes) (node types.Node, 
 		return node, false
 	}
 
-	k.cdc.MustUnmarshalBinaryBare(bz, &node)
+	k.cdc.MustUnmarshal(bz, &node)
 	return node, true
 }
 
@@ -96,7 +96,7 @@ func (k Keeper) GetNodes(
 		var node types.Node
 
 		bz := iterator.Value()
-		k.cdc.MustUnmarshalBinaryBare(bz, &node)
+		k.cdc.MustUnmarshal(bz, &node)
 
 		nodes = append(nodes, node)
 	}

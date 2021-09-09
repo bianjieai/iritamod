@@ -14,11 +14,11 @@ import (
 // Keeper defines the identity keeper
 type Keeper struct {
 	storeKey sdk.StoreKey
-	cdc      codec.Marshaler
+	cdc      codec.Codec
 }
 
 // NewKeeper creates a new identity Keeper instance
-func NewKeeper(cdc codec.Marshaler, key sdk.StoreKey) Keeper {
+func NewKeeper(cdc codec.Codec, key sdk.StoreKey) Keeper {
 	return Keeper{
 		storeKey: key,
 		cdc:      cdc,

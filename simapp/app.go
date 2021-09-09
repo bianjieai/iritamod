@@ -9,6 +9,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cast"
+
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/libs/log"
 	tmos "github.com/tendermint/tendermint/libs/os"
@@ -46,8 +47,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/evidence"
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 	evidencetypes "github.com/cosmos/cosmos-sdk/x/evidence/types"
+	"github.com/cosmos/cosmos-sdk/x/feegrant"
+	feegrantkeeper "github.com/cosmos/cosmos-sdk/x/feegrant/keeper"
+	feegrantmodule "github.com/cosmos/cosmos-sdk/x/feegrant/module"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
-	ibc "github.com/cosmos/cosmos-sdk/x/ibc/core"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -92,7 +95,7 @@ var (
 		cparams.AppModuleBasic{},
 		crisis.AppModuleBasic{},
 		cslashing.AppModuleBasic{},
-		ibc.AppModuleBasic{},
+		feegrantmodule.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
 		perm.AppModuleBasic{},
@@ -118,7 +121,7 @@ var _ simapp.App = (*SimApp)(nil)
 type SimApp struct {
 	*baseapp.BaseApp
 	cdc               *codec.LegacyAmino
-	appCodec          codec.Marshaler
+	appCodec          codec.Codec
 	interfaceRegistry types.InterfaceRegistry
 
 	invCheckPeriod uint
@@ -140,12 +143,16 @@ type SimApp struct {
 	PermKeeper     permkeeper.Keeper
 	IdentityKeeper identitykeeper.Keeper
 	NodeKeeper     nodekeeper.Keeper
+	FeeGrantKeeper feegrantkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
 
 	// simulation manager
 	sm *module.SimulationManager
+
+	// module configurator
+	configurator module.Configurator
 }
 
 func init() {
@@ -171,7 +178,7 @@ func NewSimApp(
 
 	bApp := baseapp.NewBaseApp(appName, logger, db, encodingConfig.TxConfig.TxDecoder(), baseAppOptions...)
 	bApp.SetCommitMultiStoreTracer(traceStore)
-	bApp.SetAppVersion(version.Version)
+	bApp.SetVersion(version.Version)
 	bApp.SetInterfaceRegistry(interfaceRegistry)
 
 	keys := sdk.NewKVStoreKeys(
@@ -181,6 +188,7 @@ func NewSimApp(
 		paramstypes.StoreKey,
 		//gov.StoreKey,
 		upgradetypes.StoreKey,
+		feegrant.StoreKey,
 		evidencetypes.StoreKey,
 		permtypes.StoreKey,
 		identitytypes.StoreKey,
@@ -219,7 +227,8 @@ func NewSimApp(
 	app.CrisisKeeper = crisiskeeper.NewKeeper(
 		app.GetSubspace(crisistypes.ModuleName), invCheckPeriod, app.BankKeeper, authtypes.FeeCollectorName,
 	)
-	app.UpgradeKeeper = upgradekeeper.NewKeeper(skipUpgradeHeights, keys[upgradetypes.StoreKey], appCodec, homePath)
+	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(appCodec, keys[feegrant.StoreKey], app.AccountKeeper)
+	app.UpgradeKeeper = upgradekeeper.NewKeeper(skipUpgradeHeights, keys[upgradetypes.StoreKey], appCodec, homePath, app.BaseApp)
 
 	// create evidence keeper with router
 	EvidenceKeeper := evidencekeeper.NewKeeper(
@@ -247,6 +256,7 @@ func NewSimApp(
 		auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts),
 		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper),
 		crisis.NewAppModule(&app.CrisisKeeper, skipGenesisInvariants),
+		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
 		//gov.NewAppModule(appCodec, app.govKeeper, app.AccountKeeper, app.BankKeeper),
 		cslashing.NewAppModule(appCodec, cslashing.NewKeeper(app.SlashingKeeper, app.NodeKeeper), app.AccountKeeper, app.BankKeeper, app.NodeKeeper),
 		upgrade.NewAppModule(app.UpgradeKeeper),
@@ -281,11 +291,13 @@ func NewSimApp(
 		crisistypes.ModuleName,
 		evidencetypes.ModuleName,
 		identitytypes.ModuleName,
+		feegrant.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
 	app.mm.RegisterRoutes(app.Router(), app.QueryRouter(), encodingConfig.Amino)
-	app.mm.RegisterServices(module.NewConfigurator(app.MsgServiceRouter(), app.GRPCQueryRouter()))
+	app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
+	app.mm.RegisterServices(app.configurator)
 
 	// add test gRPC service for testing gRPC queries in isolation
 	testdata.RegisterQueryServer(app.GRPCQueryRouter(), testdata.QueryImpl{})
@@ -297,6 +309,7 @@ func NewSimApp(
 	app.sm = module.NewSimulationManager(
 		auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts),
 		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper),
+		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
 		//gov.NewAppModule(appCodec, app.govKeeper, app.AccountKeeper, app.BankKeeper),
 		cslashing.NewAppModule(appCodec, cslashing.NewKeeper(app.SlashingKeeper, app.NodeKeeper), app.AccountKeeper, app.BankKeeper, app.NodeKeeper),
 		params.NewAppModule(app.ParamsKeeper),
@@ -316,35 +329,34 @@ func NewSimApp(
 	// initialize BaseApp
 	app.SetInitChainer(app.InitChainer)
 	app.SetBeginBlocker(app.BeginBlocker)
-	app.SetAnteHandler(ante.NewAnteHandler(
-		app.AccountKeeper, app.BankKeeper,
-		ante.DefaultSigVerificationGasConsumer,
-		encodingConfig.TxConfig.SignModeHandler(),
-	))
+	anteHandler, err := ante.NewAnteHandler(
+		ante.HandlerOptions{
+			AccountKeeper:   app.AccountKeeper,
+			BankKeeper:      app.BankKeeper,
+			SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
+			FeegrantKeeper:  app.FeeGrantKeeper,
+			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
+		},
+	)
+	if err != nil {
+		panic(err)
+	}
+	app.SetAnteHandler(anteHandler)
 	app.SetEndBlocker(app.EndBlocker)
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
 			tmos.Exit(err.Error())
 		}
-
-		// Initialize and seal the capability keeper so all persistent capabilities
-		// are loaded in-memory and prevent any further modules from creating scoped
-		// sub-keepers.
-		// This must be done during creation of baseapp rather than in InitChain so
-		// that in-memory capabilities get regenerated on app restart.
-		// Note that since this reads from the store, we can only perform it when
-		// `loadLatest` is set to true.
-		//ctx := app.BaseApp.NewUncachedContext(true, tmproto.Header{})
-		//app.capabilityKeeper.InitializeAndSeal(ctx)
 	}
+
 	return app
 }
 
 // MakeCodecs constructs the *std.Codec and *codec.LegacyAmino instances used by
 // SimApp. It is useful for tests and clients who do not want to construct the
 // full SimApp
-func MakeCodecs() (codec.Marshaler, *codec.LegacyAmino) {
+func MakeCodecs() (codec.Codec, *codec.LegacyAmino) {
 	config := MakeEncodingConfig()
 	return config.Marshaler, config.Amino
 }
@@ -396,7 +408,7 @@ func (app *SimApp) LegacyAmino() *codec.LegacyAmino {
 //
 // NOTE: This is solely to be used for testing purposes as it may be desirable
 // for modules to register their own custom testing types.
-func (app *SimApp) AppCodec() codec.Marshaler {
+func (app *SimApp) AppCodec() codec.Codec {
 	return app.appCodec
 }
 
@@ -485,7 +497,7 @@ func GetMaccPerms() map[string][]string {
 }
 
 // initParamsKeeper init params keeper and its subspaces
-func initParamsKeeper(appCodec codec.BinaryMarshaler, legacyAmino *codec.LegacyAmino, key, tkey sdk.StoreKey) paramskeeper.Keeper {
+func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino, key, tkey sdk.StoreKey) paramskeeper.Keeper {
 	ParamsKeeper := paramskeeper.NewKeeper(appCodec, legacyAmino, key, tkey)
 
 	ParamsKeeper.Subspace(authtypes.ModuleName)

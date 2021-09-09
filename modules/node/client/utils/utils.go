@@ -20,13 +20,13 @@ func QueryValidator(clientCtx client.Context, param string) (validator types.Val
 			return
 		}
 
-		err = types.ModuleCdc.UnmarshalBinaryBare(res, &validator)
+		err = types.ModuleCdc.Unmarshal(res, &validator)
 		return
 	}
 
 	if res, _, err := clientCtx.QueryStore(types.GetValidatorNameKey(param), types.StoreKey); err == nil && len(res) > 0 {
 		var id gogotypes.BytesValue
-		if err := types.ModuleCdc.UnmarshalBinaryBare(res, &id); err != nil {
+		if err := types.ModuleCdc.Unmarshal(res, &id); err != nil {
 			return validator, height, fmt.Errorf("no validator found %s", param)
 		}
 		return queryValidator(id.Value)

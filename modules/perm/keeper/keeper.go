@@ -14,13 +14,13 @@ import (
 
 // keeper of the perm store
 type Keeper struct {
-	cdc      codec.Marshaler
+	cdc      codec.Codec
 	storeKey sdk.StoreKey
 
 	AuthMap map[string]types.Auth
 }
 
-func NewKeeper(cdc codec.Marshaler, storeKey sdk.StoreKey) Keeper {
+func NewKeeper(cdc codec.Codec, storeKey sdk.StoreKey) Keeper {
 	return Keeper{
 		cdc:      cdc,
 		storeKey: storeKey,
@@ -31,14 +31,14 @@ func NewKeeper(cdc codec.Marshaler, storeKey sdk.StoreKey) Keeper {
 // RegisterMsgAuth registers the auth to send the msg.
 // Each role gets the access control
 func (k Keeper) RegisterMsgAuth(msg sdk.Msg, roles ...types.Role) {
-	if _, ok := k.AuthMap[msg.Type()]; ok {
-		panic(fmt.Sprintf("msg type or module name %s has already been initialized", msg.Type()))
+	if _, ok := k.AuthMap[sdk.MsgTypeURL(msg)]; ok {
+		panic(fmt.Sprintf("msg type or module name %s has already been initialized", sdk.MsgTypeURL(msg)))
 	}
 	auth := types.AuthDefault
 	for _, r := range roles {
 		auth = auth | r.Auth()
 	}
-	k.AuthMap[msg.Type()] = auth
+	k.AuthMap[sdk.MsgTypeURL(msg)] = auth
 }
 
 // RegisterModuleAuth registers the auth to send the module related msgs.
@@ -114,7 +114,7 @@ func (k Keeper) GetRoles(ctx sdk.Context) (roleAccounts []types.RoleAccount) {
 
 	for ; iterator.Valid(); iterator.Next() {
 		var role gogotypes.Int32Value
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &role)
+		k.cdc.MustUnmarshal(iterator.Value(), &role)
 
 		account := sdk.AccAddress(iterator.Key()[len(types.AuthKey):])
 		roleAccounts = append(roleAccounts, types.RoleAccount{

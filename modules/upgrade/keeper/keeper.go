@@ -24,14 +24,15 @@ func NewKeeper(uk upgradekeeper.Keeper) Keeper {
 func (k Keeper) ScheduleUpgrade(ctx sdk.Context, msg *types.MsgUpgradeSoftware) error {
 	p, has := k.uk.GetUpgradePlan(ctx)
 	if has {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidRequest,
+		return sdkerrors.Wrapf(
+			sdkerrors.ErrInvalidRequest,
 			"there is already an upgrade plan: %s. if you want to submit a new plan, please cancel the current plan",
-			p.Name)
+			p.Name,
+		)
 	}
 
 	plan := upgradetypes.Plan{
 		Name:   msg.Name,
-		Time:   msg.Time,
 		Height: msg.Height,
 		Info:   msg.Info,
 	}

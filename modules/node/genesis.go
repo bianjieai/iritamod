@@ -8,7 +8,9 @@ import (
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmtypes "github.com/tendermint/tendermint/types"
 
+	"github.com/cosmos/cosmos-sdk/codec"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -17,7 +19,7 @@ import (
 )
 
 // InitGenesis - store genesis validator set
-func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) (res []abci.ValidatorUpdate) {
+func InitGenesis(ctx sdk.Context, cdc codec.Codec, k Keeper, data GenesisState) (res []abci.ValidatorUpdate) {
 	if err := ValidateGenesis(data); err != nil {
 		panic(err.Error())
 	}
@@ -27,7 +29,9 @@ func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) (res []abci.Valid
 
 	for _, val := range data.Validators {
 		k.SetValidator(ctx, val)
-		pk, _ := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, val.Pubkey)
+
+		var pk cryptotypes.PubKey
+		err := cdc.UnmarshalInterfaceJSON([]byte(val.Pubkey), &pk)
 
 		id, err := hex.DecodeString(val.Id)
 		if err != nil {
@@ -77,7 +81,7 @@ func WriteValidators(ctx sdk.Context, keeper Keeper) (vals []tmtypes.GenesisVali
 		}
 		vals = append(vals, tmtypes.GenesisValidator{
 			PubKey: tmPubkey,
-			Power:  v.GetConsensusPower(),
+			Power:  v.GetConsensusPower(sdk.DefaultPowerReduction),
 			Name:   v.GetMoniker(),
 		})
 	}
@@ -121,9 +125,6 @@ func validateGenesisStateValidators(rootCert cautil.Cert, validators []Validator
 			return sdkerrors.Wrapf(types.ErrInvalidCert, "cannot be verified by root certificate, err: %s", err.Error())
 		}
 
-		pk := sdk.MustGetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, val.Pubkey)
-		strPubkey := string(pk.Bytes())
-
 		if _, ok := nameMap[val.Id]; ok {
 			return fmt.Errorf("duplicate validator id in genesis state: ID %v, pubkey %v", val.Id, val.Pubkey)
 		}
@@ -132,7 +133,7 @@ func validateGenesisStateValidators(rootCert cautil.Cert, validators []Validator
 			return fmt.Errorf("duplicate validator name in genesis state: ID %v, pubkey %v", val.Id, val.Pubkey)
 		}
 
-		if _, ok := pubkeyMap[strPubkey]; ok {
+		if _, ok := pubkeyMap[val.Pubkey]; ok {
 			return fmt.Errorf("duplicate validator pubkey in genesis state: ID %v, pubkey %v", val.Id, val.Pubkey)
 		}
 
@@ -140,7 +141,7 @@ func validateGenesisStateValidators(rootCert cautil.Cert, validators []Validator
 			return fmt.Errorf("validator is jailed in genesis state: name %v, ID %v", val.Id, val.Pubkey)
 		}
 
-		pubkeyMap[strPubkey] = true
+		pubkeyMap[val.Pubkey] = true
 		nameMap[val.Name] = true
 		idMap[val.Id] = true
 	}

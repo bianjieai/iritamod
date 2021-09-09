@@ -25,7 +25,7 @@ import (
 
 // GenAppStateFromConfig gets the genesis app state from the config
 func GenAppStateFromConfig(
-	cdc codec.JSONMarshaler, txEncodingConfig client.TxEncodingConfig,
+	cdc codec.JSONCodec, txEncodingConfig client.TxEncodingConfig,
 	config *cfg.Config, initCfg InitConfig, genDoc tmtypes.GenesisDoc,
 ) (appState json.RawMessage, err error) {
 
@@ -70,7 +70,7 @@ func GenAppStateFromConfig(
 // CollectTxs processes and validates application's genesis Txs and returns
 // the list of appGenTxs, and persistent peers required to generate genesis.json.
 func CollectTxs(
-	cdc codec.JSONMarshaler, txJSONDecoder sdk.TxDecoder,
+	cdc codec.JSONCodec, txJSONDecoder sdk.TxDecoder,
 	moniker, genTxsDir string, genDoc tmtypes.GenesisDoc,
 ) (
 	appGenTxs []sdk.Tx, persistentPeers string, err error,

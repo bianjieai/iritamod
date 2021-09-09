@@ -50,6 +50,12 @@ func (k Keeper) CreateValidator(ctx sdk.Context, msg types.MsgCreateValidator) (
 		return nil, err
 	}
 
+	bz, err := k.cdc.MarshalInterfaceJSON(pubkey)
+	if err != nil {
+		return nil, err
+	}
+	pkStr := string(bz)
+
 	if _, found := k.GetValidatorByConsAddr(ctx, sdk.GetConsAddress(pubkey)); found {
 		return nil, types.ErrValidatorPubkeyExists
 	}
@@ -64,7 +70,7 @@ func (k Keeper) CreateValidator(ctx sdk.Context, msg types.MsgCreateValidator) (
 		id,
 		msg.Name,
 		msg.Description,
-		pubkey,
+		pkStr,
 		msg.Certificate,
 		msg.Power,
 		operator,
@@ -108,7 +114,12 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 		if err != nil {
 			return err
 		}
-		pkStr := sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pubkey)
+
+		bz, err := k.cdc.MarshalInterfaceJSON(pubkey)
+		if err != nil {
+			return err
+		}
+		pkStr := string(bz)
 
 		consAddr, err := validator.GetConsAddr()
 		if err != nil {
@@ -174,10 +185,10 @@ func (k Keeper) SetValidator(ctx sdk.Context, validator types.Validator) {
 	store := ctx.KVStore(k.storeKey)
 	id, _ := hex.DecodeString(validator.Id)
 	// set validator by id
-	bz := k.cdc.MustMarshalBinaryBare(&validator)
+	bz := k.cdc.MustMarshal(&validator)
 	store.Set(types.GetValidatorIDKey(id), bz)
 
-	bz = k.cdc.MustMarshalBinaryBare(&gogotypes.BytesValue{Value: id})
+	bz = k.cdc.MustMarshal(&gogotypes.BytesValue{Value: id})
 	store.Set(types.GetValidatorNameKey(validator.Name), bz)
 }
 
@@ -190,7 +201,7 @@ func (k Keeper) GetValidator(ctx sdk.Context, id tmbytes.HexBytes) (validator ty
 		return validator, false
 	}
 
-	k.cdc.MustUnmarshalBinaryBare(value, &validator)
+	k.cdc.MustUnmarshal(value, &validator)
 	return validator, true
 }
 
@@ -211,7 +222,7 @@ func (k Keeper) DeleteValidator(ctx sdk.Context, validator types.Validator) {
 // SetValidatorConsAddrIndex sets the validator index by pubkey
 func (k Keeper) SetValidatorConsAddrIndex(ctx sdk.Context, id tmbytes.HexBytes, addr sdk.ConsAddress) {
 	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshalBinaryBare(&gogotypes.BytesValue{Value: id})
+	bz := k.cdc.MustMarshal(&gogotypes.BytesValue{Value: id})
 	store.Set(types.GetValidatorConsAddrKey(addr), bz)
 }
 
@@ -231,7 +242,7 @@ func (k Keeper) GetValidatorByConsAddr(ctx sdk.Context, addr sdk.ConsAddress) (v
 	}
 
 	var id gogotypes.BytesValue
-	k.cdc.MustUnmarshalBinaryBare(value, &id)
+	k.cdc.MustUnmarshal(value, &id)
 
 	return k.GetValidator(ctx, id.Value)
 }
@@ -243,7 +254,7 @@ func (k Keeper) EnqueueValidatorsUpdate(ctx sdk.Context, validator types.Validat
 		return
 	}
 	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshalBinaryBare(&gogotypes.Int64Value{Value: power})
+	bz := k.cdc.MustMarshal(&gogotypes.Int64Value{Value: power})
 	store.Set(types.GetValidatorUpdateQueueKey(validator.Pubkey), bz)
 }
 
@@ -264,7 +275,7 @@ func (k Keeper) IterateUpdateValidators(ctx sdk.Context, fn func(index int64, pu
 
 	for ; iterator.Valid(); iterator.Next() {
 		var power gogotypes.Int64Value
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &power)
+		k.cdc.MustUnmarshal(iterator.Value(), &power)
 		stop := fn(i, string(iterator.Key()[1:]), power.Value)
 
 		if stop {
@@ -282,10 +293,9 @@ func (k Keeper) IterateValidators(ctx sdk.Context, fn func(index int64, validato
 	defer iterator.Close()
 
 	i := int64(0)
-
 	for ; iterator.Valid(); iterator.Next() {
 		var validator types.Validator
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &validator)
+		k.cdc.MustUnmarshal(iterator.Value(), &validator)
 		stop := fn(i, validator)
 
 		if stop {
@@ -304,7 +314,7 @@ func (k Keeper) GetAllValidators(ctx sdk.Context) (validators []types.Validator)
 
 	for ; iterator.Valid(); iterator.Next() {
 		var validator types.Validator
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &validator)
+		k.cdc.MustUnmarshal(iterator.Value(), &validator)
 		validators = append(validators, validator)
 	}
 
@@ -317,7 +327,7 @@ func (k Keeper) ValidatorByID(ctx sdk.Context, id tmbytes.HexBytes) staking.Vali
 	bz := store.Get(types.GetValidatorIDKey(id))
 
 	var validator types.Validator
-	k.cdc.MustUnmarshalBinaryBare(bz, &validator)
+	k.cdc.MustUnmarshal(bz, &validator)
 	return validator
 }
 
@@ -384,7 +394,7 @@ func (k Keeper) GetLastValidators(ctx sdk.Context) (validators []types.Validator
 
 	for ; iterator.Valid(); iterator.Next() {
 		var validator types.Validator
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &validator)
+		k.cdc.MustUnmarshal(iterator.Value(), &validator)
 		if !validator.Jailed {
 			validators = append(validators, validator)
 		}
@@ -403,7 +413,7 @@ func (k *Keeper) IterateBondedValidatorsByPower(ctx sdk.Context, fn func(index i
 
 	for ; iterator.Valid(); iterator.Next() {
 		var validator types.Validator
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &validator)
+		k.cdc.MustUnmarshal(iterator.Value(), &validator)
 		if !validator.Jailed {
 			stop := fn(i, validator)
 			if stop {

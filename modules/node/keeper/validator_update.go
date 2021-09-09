@@ -6,6 +6,7 @@ import (
 	"github.com/tendermint/tendermint/crypto/encoding"
 
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -13,15 +14,17 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx sdk.Context) (updates []ab
 	k.IterateUpdateValidators(
 		ctx,
 		func(index int64, pubkey string, power int64) bool {
-			pk := sdk.MustGetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, pubkey)
+			var pk cryptotypes.PubKey
+			_ = k.cdc.UnmarshalInterfaceJSON([]byte(pubkey), &pk)
+
 			tmPubkey, err := cryptocodec.ToTmPubKeyInterface(pk)
 			if err != nil {
 				panic(err.Error())
 			}
-			updates = append(updates, ABCIValidatorUpdate(
-				tmPubkey,
-				power,
-			))
+			updates = append(
+				updates,
+				ABCIValidatorUpdate(tmPubkey, power),
+			)
 			k.DequeueValidatorsUpdate(ctx, pubkey)
 			return false
 		},

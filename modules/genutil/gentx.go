@@ -16,7 +16,7 @@ import (
 
 // AddGenTxsInAppGenesisState - add the genesis transactions in the app genesis state
 func AddGenTxsInAppGenesisState(
-	cdc codec.JSONMarshaler, txJSONEncoder sdk.TxEncoder,
+	cdc codec.JSONCodec, txJSONEncoder sdk.TxEncoder,
 	appGenesisState map[string]json.RawMessage, genTxs []sdk.Tx,
 ) (map[string]json.RawMessage, error) {
 

@@ -46,7 +46,7 @@ func ValidateGenesisCmd(mbm module.BasicManager) *cobra.Command {
 				return fmt.Errorf("error unmarshalling genesis doc %s: %s", genesis, err.Error())
 			}
 
-			if err = mbm.ValidateGenesis(clientCtx.JSONMarshaler, clientCtx.TxConfig, genState); err != nil {
+			if err = mbm.ValidateGenesis(clientCtx.Codec, clientCtx.TxConfig, genState); err != nil {
 				return fmt.Errorf("error validating genesis file %s: %s", genesis, err.Error())
 			}
 

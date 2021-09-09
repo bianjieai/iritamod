@@ -182,7 +182,7 @@ func TestMsgGrantNodeGetSignBytes(t *testing.T) {
 	msg := NewMsgGrantNode(nodeName, certStr, accAddr)
 	res := msg.GetSignBytes()
 
-	expected := fmt.Sprintf(`{"type":"iritamod/node/MsgGrantNode","value":{"certificate":"-----BEGIN CERTIFICATE-----\nMIIBazCCAR0CFGTwvE8oG+N3uNm1gonJBh6pie5TMAUGAytlcDBYMQswCQYDVQQG\nEwJDTjENMAsGA1UECAwEcm9vdDENMAsGA1UEBwwEcm9vdDENMAsGA1UECgwEcm9v\ndDENMAsGA1UECwwEcm9vdDENMAsGA1UEAwwEcm9vdDAeFw0yMDA2MTkwNzAyMzla\nFw0yMDA3MTkwNzAyMzlaMFgxCzAJBgNVBAYTAkNOMQ0wCwYDVQQIDAR0ZXN0MQ0w\nCwYDVQQHDAR0ZXN0MQ0wCwYDVQQKDAR0ZXN0MQ0wCwYDVQQLDAR0ZXN0MQ0wCwYD\nVQQDDAR0ZXN0MCowBQYDK2VwAyEA27WvK0goa1sSjsp6eb/xCkgjBEoPC9vfL/6h\nf0hqjHYwBQYDK2VwA0EA0fo8y+saUl+8UiyKpKdjv2DsqYWqmqJDz9u3NaioOvrQ\nZ0mOxdgj9wfO0t3voldCRUw3hCekjC+GEOoXH5ysDQ==\n-----END CERTIFICATE-----","name":"test_node","operator":"cosmos1z0hd0wjhlsl2jj33439ppy7u2crvlwyq8qedsm"}}`)
+	expected := `{"type":"iritamod/node/MsgGrantNode","value":{"certificate":"-----BEGIN CERTIFICATE-----\nMIIBazCCAR0CFGTwvE8oG+N3uNm1gonJBh6pie5TMAUGAytlcDBYMQswCQYDVQQG\nEwJDTjENMAsGA1UECAwEcm9vdDENMAsGA1UEBwwEcm9vdDENMAsGA1UECgwEcm9v\ndDENMAsGA1UECwwEcm9vdDENMAsGA1UEAwwEcm9vdDAeFw0yMDA2MTkwNzAyMzla\nFw0yMDA3MTkwNzAyMzlaMFgxCzAJBgNVBAYTAkNOMQ0wCwYDVQQIDAR0ZXN0MQ0w\nCwYDVQQHDAR0ZXN0MQ0wCwYDVQQKDAR0ZXN0MQ0wCwYDVQQLDAR0ZXN0MQ0wCwYD\nVQQDDAR0ZXN0MCowBQYDK2VwAyEA27WvK0goa1sSjsp6eb/xCkgjBEoPC9vfL/6h\nf0hqjHYwBQYDK2VwA0EA0fo8y+saUl+8UiyKpKdjv2DsqYWqmqJDz9u3NaioOvrQ\nZ0mOxdgj9wfO0t3voldCRUw3hCekjC+GEOoXH5ysDQ==\n-----END CERTIFICATE-----","name":"test_node","operator":"cosmos1z0hd0wjhlsl2jj33439ppy7u2crvlwyq8qedsm"}}`
 	require.Equal(t, expected, string(res))
 }
 
@@ -211,13 +211,10 @@ func TestMsgRevokeNodeType(t *testing.T) {
 
 // TestMsgRevokeNodeValidation tests ValidateBasic for MsgRevokeNode
 func TestMsgRevokeNodeValidation(t *testing.T) {
-	invalidID := []byte("invalidID")
-
 	testMsgs := []*MsgRevokeNode{
-		NewMsgRevokeNode(nodeID, accAddr),    // valid msg
-		NewMsgRevokeNode(nodeID, emptyAddr),  // missing operator address
-		NewMsgRevokeNode(nil, accAddr),       // missing node ID
-		NewMsgRevokeNode(invalidID, accAddr), // invalid node ID
+		NewMsgRevokeNode(nodeID, accAddr),   // valid msg
+		NewMsgRevokeNode(nodeID, emptyAddr), // missing operator address
+		NewMsgRevokeNode(nil, accAddr),      // missing node ID
 	}
 
 	testCases := []struct {
@@ -228,7 +225,6 @@ func TestMsgRevokeNodeValidation(t *testing.T) {
 		{testMsgs[0], true, ""},
 		{testMsgs[1], false, "missing operator address"},
 		{testMsgs[2], false, "missing node ID"},
-		{testMsgs[3], false, "invalid node ID"},
 	}
 
 	for i, tc := range testCases {
@@ -246,7 +242,7 @@ func TestMsgRevokeNodeGetSignBytes(t *testing.T) {
 	msg := NewMsgRevokeNode(nodeID, accAddr)
 	res := msg.GetSignBytes()
 
-	expected := fmt.Sprintf(`{"type":"iritamod/node/MsgRevokeNode","value":{"id":"13EED7BA57FC3EA94A31AC4A1093DC5606CFB880","operator":"cosmos1z0hd0wjhlsl2jj33439ppy7u2crvlwyq8qedsm"}}`)
+	expected := `{"type":"iritamod/node/MsgRevokeNode","value":{"id":"13EED7BA57FC3EA94A31AC4A1093DC5606CFB880","operator":"cosmos1z0hd0wjhlsl2jj33439ppy7u2crvlwyq8qedsm"}}`
 	require.Equal(t, expected, string(res))
 }
 

@@ -22,18 +22,11 @@ func (ad AuthDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, ne
 			if ad.k.GetBlockAccount(ctx, signer) {
 				return ctx, sdkerrors.Wrapf(types.ErrUnauthorizedOperation, "The sender %s has been blocked", signer)
 			}
-			if auth, ok := ad.k.AuthMap[msg.Type()]; ok {
+			if auth, ok := ad.k.AuthMap[sdk.MsgTypeURL(msg)]; ok {
 				if err := ad.k.Access(ctx, signer, auth); err != nil {
 					return ctx, err
 				}
 				continue
-			}
-			// If both msg.Route and msg.Type are registered
-			// Only verify msg.Type
-			if auth, ok := ad.k.AuthMap[msg.Route()]; ok {
-				if err := ad.k.Access(ctx, signer, auth); err != nil {
-					return ctx, err
-				}
 			}
 		}
 	}
