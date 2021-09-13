@@ -12,11 +12,7 @@ import (
 )
 
 // AddNode adds a node
-func (k Keeper) AddNode(
-	ctx sdk.Context,
-	name string,
-	cert string,
-) (id tmbytes.HexBytes, err error) {
+func (k Keeper) AddNode(ctx sdk.Context, name string, cert string) (id tmbytes.HexBytes, err error) {
 	pubKey, err := k.VerifyCertificate(ctx, cert)
 	if err != nil {
 		return nil, err
@@ -35,10 +31,7 @@ func (k Keeper) AddNode(
 }
 
 // RemoveNode removes the specified node
-func (k Keeper) RemoveNode(
-	ctx sdk.Context,
-	id tmbytes.HexBytes,
-) error {
+func (k Keeper) RemoveNode(ctx sdk.Context, id tmbytes.HexBytes) error {
 	if !k.HasNode(ctx, id) {
 		return sdkerrors.Wrap(types.ErrUnknownNode, id.String())
 	}
@@ -82,9 +75,7 @@ func (k Keeper) GetNode(ctx sdk.Context, id tmbytes.HexBytes) (node types.Node, 
 }
 
 // GetNodes gets all nodes
-func (k Keeper) GetNodes(
-	ctx sdk.Context,
-) []types.Node {
+func (k Keeper) GetNodes(ctx sdk.Context) []types.Node {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := sdk.KVStorePrefixIterator(store, types.NodeKey)
@@ -106,10 +97,7 @@ func (k Keeper) GetNodes(
 
 // VerifyCertificate verifies the given certificate against the root certificate
 // Ensure that the given certificate is a valid X.509 format
-func (k Keeper) VerifyCertificate(
-	ctx sdk.Context,
-	certificate string,
-) (crypto.PubKey, error) {
+func (k Keeper) VerifyCertificate(ctx sdk.Context, certificate string) (crypto.PubKey, error) {
 	cert, _ := cautils.ReadCertificateFromMem([]byte(certificate))
 
 	rootCertStr, _ := k.GetRootCert(ctx)
