@@ -23,7 +23,8 @@ const DoNotModifyDesc = "[do-not-modify]"
 // NewValidator creates a new MsgCreateValidator instance.
 func NewValidator(
 	id tmbytes.HexBytes,
-	name, description string,
+	name string,
+	description string,
 	pubKey string,
 	cert string,
 	power int64,
