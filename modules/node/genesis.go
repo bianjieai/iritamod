@@ -32,6 +32,9 @@ func InitGenesis(ctx sdk.Context, cdc codec.Codec, k Keeper, data GenesisState) 
 
 		var pk cryptotypes.PubKey
 		err := cdc.UnmarshalInterfaceJSON([]byte(val.Pubkey), &pk)
+		if err != nil {
+			panic(err)
+		}
 
 		id, err := hex.DecodeString(val.Id)
 		if err != nil {

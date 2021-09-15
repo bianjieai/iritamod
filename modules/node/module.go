@@ -99,14 +99,12 @@ func (AppModuleBasic) CreateValidatorMsgHelpers(ipDefault string) (
 }
 
 // PrepareFlagsForTxCreateValidator - used for gen-tx
-func (AppModuleBasic) PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID,
-	chainID string, cert string) {
+func (AppModuleBasic) PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID string, chainID string, cert string) {
 	cli.PrepareFlagsForTxCreateValidator(config, nodeID, chainID, cert)
 }
 
 // BuildCreateValidatorMsg - used for gen-tx
-func (AppModuleBasic) BuildCreateValidatorMsg(cliCtx client.Context,
-	txBldr tx.Factory) (tx.Factory, sdk.Msg, error) {
+func (AppModuleBasic) BuildCreateValidatorMsg(cliCtx client.Context, txBldr tx.Factory) (tx.Factory, sdk.Msg, error) {
 	return cli.BuildCreateValidatorMsg(cliCtx, txBldr)
 }
 

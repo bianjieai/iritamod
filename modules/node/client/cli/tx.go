@@ -22,9 +22,7 @@ import (
 	"github.com/bianjieai/iritamod/modules/node/types"
 )
 
-var (
-	defaultPower = 100
-)
+var defaultPower = 100
 
 func NewTxCmd() *cobra.Command {
 	nodeTxCmd := &cobra.Command{
@@ -205,7 +203,7 @@ func NewGrantNodeCmd() *cobra.Command {
 	}
 
 	cmd.Flags().AddFlagSet(FsGrantNode)
-	cmd.MarkFlagRequired(FlagCert)
+	_ = cmd.MarkFlagRequired(FlagCert)
 
 	flags.AddTxFlagsToCmd(cmd)
 
@@ -215,14 +213,11 @@ func NewGrantNodeCmd() *cobra.Command {
 // NewRevokeNodeCmd implements revoking access from a node command
 func NewRevokeNodeCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "revoke [id]",
-		Short: "Revoke the chain access from the node",
-		Long:  "Revoke the chain access from the node by id",
-		Example: fmt.Sprintf(
-			"$ %s tx node revoke <id> --from mykey",
-			version.AppName,
-		),
-		Args: cobra.ExactArgs(1),
+		Use:     "revoke [id]",
+		Short:   "Revoke the chain access from the node",
+		Long:    "Revoke the chain access from the node by id",
+		Example: fmt.Sprintf("$ %s tx node revoke <id> --from mykey", version.AppName),
+		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {

@@ -82,7 +82,8 @@ type AppModule struct {
 // NewAppModule creates a new AppModule object
 func NewAppModule(
 	accountKeeper types.AccountKeeper,
-	nodeKeeper types.NodeKeeper, deliverTx deliverTxfn,
+	nodeKeeper types.NodeKeeper,
+	deliverTx deliverTxfn,
 	txEncodingConfig client.TxEncodingConfig,
 ) module.AppModule {
 	return module.NewGenesisOnlyAppModule(AppModule{

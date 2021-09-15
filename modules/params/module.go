@@ -5,15 +5,10 @@ import (
 	"encoding/json"
 	"math/rand"
 
-	"github.com/bianjieai/iritamod/modules/params/keeper"
-
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
 	abci "github.com/tendermint/tendermint/abci/types"
-
-	"github.com/bianjieai/iritamod/modules/params/client/cli"
-	"github.com/bianjieai/iritamod/modules/params/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -22,6 +17,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/params/types/proposal"
+
+	"github.com/bianjieai/iritamod/modules/params/client/cli"
+	"github.com/bianjieai/iritamod/modules/params/keeper"
+	"github.com/bianjieai/iritamod/modules/params/types"
 )
 
 var (
@@ -44,7 +43,7 @@ func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 
 // RegisterGRPCRoutes registers the gRPC Gateway routes for the params module.
 func (AppModuleBasic) RegisterGRPCRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	proposal.RegisterQueryHandlerClient(context.Background(), mux, proposal.NewQueryClient(clientCtx))
+	_ = proposal.RegisterQueryHandlerClient(context.Background(), mux, proposal.NewQueryClient(clientCtx))
 }
 
 // GetTxCmd returns the root tx command for the params module.
