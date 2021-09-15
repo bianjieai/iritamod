@@ -86,7 +86,6 @@ func (v Validator) GetOperator() sdk.ValAddress {
 
 // ConsPubKey returns the validator PubKey as a cryptotypes.PubKey.
 func (v Validator) ConsPubKey() (pk cryptotypes.PubKey, err error) {
-
 	registry := codectypes.NewInterfaceRegistry()
 	cryptocodec.RegisterInterfaces(registry)
 	cdc := codec.NewProtoCodec(registry)
