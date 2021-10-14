@@ -3,7 +3,7 @@ module github.com/bianjieai/iritamod
 go 1.16
 
 require (
-	github.com/cosmos/cosmos-sdk v0.44.1
+	github.com/cosmos/cosmos-sdk v0.44.2
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/mux v1.8.0
@@ -25,7 +25,7 @@ require (
 )
 
 replace (
-	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.34.4-0.20211014035410-4a07c44d6185
+	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.34.4-0.20211014092340-3c5e5a840642
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
 	github.com/tendermint/tendermint => github.com/bianjieai/tendermint v0.34.8-irita-210413.0.20210908054213-781a5fed16d6
 )
