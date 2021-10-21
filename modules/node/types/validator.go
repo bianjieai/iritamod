@@ -1,13 +1,13 @@
 package types
 
 import (
+	"github.com/cosmos/cosmos-sdk/types/bech32/legacybech32"
 	"sort"
 	"strings"
 
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	tmprotocrypto "github.com/tendermint/tendermint/proto/tendermint/crypto"
 
-	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
@@ -88,9 +88,7 @@ func (v Validator) GetOperator() sdk.ValAddress {
 func (v Validator) ConsPubKey() (pk cryptotypes.PubKey, err error) {
 	registry := codectypes.NewInterfaceRegistry()
 	cryptocodec.RegisterInterfaces(registry)
-	cdc := codec.NewProtoCodec(registry)
-
-	err = cdc.UnmarshalInterfaceJSON([]byte(v.Pubkey), &pk)
+	pk,err = legacybech32.UnmarshalPubKey(legacybech32.Bech32PubKeyType(sdk.GetConfig().GetBech32ConsensusPubPrefix()),v.Pubkey)
 	return
 }
 
