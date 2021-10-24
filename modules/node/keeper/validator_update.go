@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec/legacy"
 	abci "github.com/tendermint/tendermint/abci/types"
 	"github.com/tendermint/tendermint/crypto"
 	"github.com/tendermint/tendermint/crypto/encoding"
@@ -15,8 +16,11 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx sdk.Context) (updates []ab
 		ctx,
 		func(index int64, pubkey string, power int64) bool {
 			var pk cryptotypes.PubKey
-			_ = k.cdc.UnmarshalInterfaceJSON([]byte(pubkey), &pk)
-
+			bz, err := sdk.GetFromBech32(pubkey,sdk.GetConfig().GetBech32ConsensusPubPrefix())
+			pk,err  = legacy.PubKeyFromBytes(bz)
+			if err != nil {
+				panic(err)
+			}
 			tmPubkey, err := cryptocodec.ToTmPubKeyInterface(pk)
 			if err != nil {
 				panic(err.Error())

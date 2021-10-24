@@ -2,6 +2,7 @@ package types
 
 import (
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
+	"github.com/cosmos/cosmos-sdk/types/bech32"
 	"sort"
 	"strings"
 
@@ -24,15 +25,23 @@ func NewValidator(
 	id tmbytes.HexBytes,
 	name string,
 	description string,
-	pubKey string,
+	pubKey cryptotypes.PubKey,
 	cert string,
 	power int64,
 	operator sdk.AccAddress,
 ) Validator {
+	var pkStr string
+	var err error
+	if pubKey != nil {
+		pkStr,err = bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(pubKey))
+	}
+	if err != nil {
+		panic(err)
+	}
 	return Validator{
 		Id:          id.String(),
 		Name:        name,
-		Pubkey:      pubKey,
+		Pubkey:      pkStr,
 		Certificate: cert,
 		Power:       power,
 		Description: description,

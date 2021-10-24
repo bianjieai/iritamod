@@ -3,6 +3,8 @@ package keeper
 import (
 	"encoding/hex"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/codec/legacy"
+	"github.com/cosmos/cosmos-sdk/types/bech32"
 
 	gogotypes "github.com/gogo/protobuf/types"
 
@@ -50,12 +52,6 @@ func (k Keeper) CreateValidator(ctx sdk.Context, msg types.MsgCreateValidator) (
 		return nil, err
 	}
 
-	bz, err := k.cdc.MarshalInterfaceJSON(pubkey)
-	if err != nil {
-		return nil, err
-	}
-	pkStr := string(bz)
-
 	if _, found := k.GetValidatorByConsAddr(ctx, sdk.GetConsAddress(pubkey)); found {
 		return nil, types.ErrValidatorPubkeyExists
 	}
@@ -70,7 +66,7 @@ func (k Keeper) CreateValidator(ctx sdk.Context, msg types.MsgCreateValidator) (
 		id,
 		msg.Name,
 		msg.Description,
-		pkStr,
+		pubkey,
 		msg.Certificate,
 		msg.Power,
 		operator,
@@ -114,13 +110,7 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 		if err != nil {
 			return err
 		}
-
-		bz, err := k.cdc.MarshalInterfaceJSON(pubkey)
-		if err != nil {
-			return err
-		}
-		pkStr := string(bz)
-
+		pkStr, err := bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(pubkey))
 		consAddr, err := validator.GetConsAddr()
 		if err != nil {
 			return err

@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/codec/legacy"
 
 	abci "github.com/tendermint/tendermint/abci/types"
 	tmtypes "github.com/tendermint/tendermint/types"
@@ -29,13 +30,12 @@ func InitGenesis(ctx sdk.Context, cdc codec.Codec, k Keeper, data GenesisState) 
 
 	for _, val := range data.Validators {
 		k.SetValidator(ctx, val)
-
 		var pk cryptotypes.PubKey
-		err := cdc.UnmarshalInterfaceJSON([]byte(val.Pubkey), &pk)
+		bz, err := sdk.GetFromBech32(val.Pubkey,sdk.GetConfig().GetBech32ConsensusPubPrefix())
+		pk,err  = legacy.PubKeyFromBytes(bz)
 		if err != nil {
 			panic(err)
 		}
-
 		id, err := hex.DecodeString(val.Id)
 		if err != nil {
 			panic(err)
