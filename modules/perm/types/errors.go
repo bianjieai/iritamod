@@ -10,6 +10,7 @@ var (
 	ErrAddRootAdmin          = sdkerrors.Register(ModuleName, 6, "can not add root account")
 	ErrRemoveRootAdmin       = sdkerrors.Register(ModuleName, 7, "can not remove root account")
 	ErrRemoveUnknownRole     = sdkerrors.Register(ModuleName, 8, "the account does not have this role")
+	ErrInvalidMsgURL         = sdkerrors.Register(ModuleName, 9, "invalid url")
 
 	ErrOperateRootAdmin = sdkerrors.Wrap(ErrUnauthorizedOperation, "can not operate root admin")
 	ErrOperatePermAdmin = sdkerrors.Wrap(ErrUnauthorizedOperation, "can not operate another permission admin")
