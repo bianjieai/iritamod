@@ -109,9 +109,9 @@ func (m msgServer) GrantNode(goCtx context.Context, msg *types.MsgGrantNode) (*t
 }
 
 func (m msgServer) RevokeNode(goCtx context.Context, msg *types.MsgRevokeNode) (*types.MsgRevokeNodeResponse, error) {
-	id, _ := hex.DecodeString(msg.Id)
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
+	id, _ := hex.DecodeString(msg.Id)
 	if err := m.Keeper.RemoveNode(ctx, id); err != nil {
 		return nil, err
 	}

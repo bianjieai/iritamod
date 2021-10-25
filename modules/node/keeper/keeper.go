@@ -15,14 +15,14 @@ import (
 
 // keeper of the node store
 type Keeper struct {
-	cdc      codec.Marshaler
+	cdc      codec.Codec
 	storeKey sdk.StoreKey
 
 	paramstore paramtypes.Subspace
 	hooks      staking.StakingHooks
 }
 
-func NewKeeper(cdc codec.Marshaler, storeKey sdk.StoreKey, ps paramtypes.Subspace) Keeper {
+func NewKeeper(cdc codec.Codec, storeKey sdk.StoreKey, ps paramtypes.Subspace) Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
 		ps = ps.WithKeyTable(ParamKeyTable())

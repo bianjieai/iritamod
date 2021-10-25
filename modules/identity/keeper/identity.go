@@ -55,7 +55,7 @@ func (k Keeper) UpdateIdentity(
 	ctx sdk.Context,
 	id tmbytes.HexBytes,
 	pubKey *types.PubKeyInfo,
-	certificate,
+	certificate string,
 	credentials string,
 	owner sdk.AccAddress,
 ) error {

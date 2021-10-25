@@ -19,8 +19,7 @@ func (k Keeper) FilterNodeByID(ctx sdk.Context, nodeID string) abci.ResponseQuer
 		}
 	}
 
-	_, found := k.GetNode(ctx, id)
-	if !found {
+	if _, found := k.GetNode(ctx, id); !found {
 		return abci.ResponseQuery{
 			Code: types.ErrUnknownNode.ABCICode(),
 		}

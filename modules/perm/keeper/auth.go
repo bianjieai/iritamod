@@ -11,7 +11,7 @@ import (
 // SetAuth sets the auth for an address
 func (k Keeper) SetAuth(ctx sdk.Context, address sdk.AccAddress, auth types.Auth) {
 	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshalBinaryBare(&gogotypes.Int32Value{Value: int32(auth)})
+	bz := k.cdc.MustMarshal(&gogotypes.Int32Value{Value: int32(auth)})
 	store.Set(types.GetAuthKey(address), bz)
 }
 
@@ -31,7 +31,7 @@ func (k Keeper) GetAuth(ctx sdk.Context, address sdk.AccAddress) types.Auth {
 	}
 
 	var role gogotypes.Int32Value
-	k.cdc.MustUnmarshalBinaryBare(value, &role)
+	k.cdc.MustUnmarshal(value, &role)
 
 	return types.Auth(role.Value)
 }

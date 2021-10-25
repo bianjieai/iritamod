@@ -58,7 +58,7 @@ func (q Querier) Validators(c context.Context, req *types.QueryValidatorsRequest
 		req.Pagination,
 		func(key []byte, value []byte) error {
 			var validator types.Validator
-			if err := q.cdc.UnmarshalBinaryBare(value, &validator); err != nil {
+			if err := q.cdc.Unmarshal(value, &validator); err != nil {
 				return err
 			}
 
@@ -123,7 +123,7 @@ func (q Querier) Nodes(c context.Context, req *types.QueryNodesRequest) (*types.
 	nodeStore := prefix.NewStore(store, types.NodeKey)
 	pageRes, err := query.Paginate(nodeStore, req.Pagination, func(key []byte, value []byte) error {
 		var node types.Node
-		err := q.cdc.UnmarshalBinaryBare(value, &node)
+		err := q.cdc.Unmarshal(value, &node)
 		if err != nil {
 			return err
 		}

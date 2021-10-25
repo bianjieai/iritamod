@@ -1,6 +1,8 @@
 package types
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec/legacy"
+	"github.com/cosmos/cosmos-sdk/types/bech32"
 	"sort"
 	"strings"
 
@@ -21,17 +23,21 @@ const DoNotModifyDesc = "[do-not-modify]"
 // NewValidator creates a new MsgCreateValidator instance.
 func NewValidator(
 	id tmbytes.HexBytes,
-	name, description string,
+	name string,
+	description string,
 	pubKey cryptotypes.PubKey,
 	cert string,
 	power int64,
 	operator sdk.AccAddress,
 ) Validator {
 	var pkStr string
+	var err error
 	if pubKey != nil {
-		pkStr = sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, pubKey)
+		pkStr,err = bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(pubKey))
 	}
-
+	if err != nil {
+		panic(err)
+	}
 	return Validator{
 		Id:          id.String(),
 		Name:        name,
@@ -87,13 +93,9 @@ func (v Validator) GetOperator() sdk.ValAddress {
 }
 
 // ConsPubKey returns the validator PubKey as a cryptotypes.PubKey.
-func (v Validator) ConsPubKey() (cryptotypes.PubKey, error) {
-	pk, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, v.Pubkey)
-	if err != nil {
-		return nil, err
-	}
-	return pk, nil
-
+func (v Validator) ConsPubKey() (pk cryptotypes.PubKey, err error) {
+	bz, err := sdk.GetFromBech32(v.Pubkey,sdk.GetConfig().GetBech32ConsensusPubPrefix() )
+	return  legacy.PubKeyFromBytes(bz)
 }
 
 // TmConsPublicKey casts Validator.ConsensusPubkey to tmprotocrypto.PubKey.
@@ -117,12 +119,13 @@ func (v Validator) GetConsAddr() (sdk.ConsAddress, error) {
 	if err != nil {
 		return sdk.ConsAddress{}, err
 	}
+
 	return sdk.ConsAddress(pk.Address()), nil
 }
 
 // GetTokens implement ValidatorI
 func (v Validator) GetTokens() sdk.Int {
-	return sdk.TokensFromConsensusPower(v.Power)
+	return sdk.TokensFromConsensusPower(v.Power, sdk.DefaultPowerReduction)
 }
 
 // GetBondedTokens implement ValidatorI
@@ -130,11 +133,11 @@ func (v Validator) GetBondedTokens() sdk.Int {
 	if v.Jailed {
 		return sdk.NewInt(0)
 	}
-	return sdk.TokensFromConsensusPower(v.Power)
+	return sdk.TokensFromConsensusPower(v.Power, sdk.DefaultPowerReduction)
 }
 
 // GetConsensusPower implement ValidatorI
-func (v Validator) GetConsensusPower() int64 {
+func (v Validator) GetConsensusPower(_ sdk.Int) int64 {
 	return v.Power
 }
 

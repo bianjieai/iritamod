@@ -19,7 +19,7 @@ func (k Keeper) GetHistoricalInfo(ctx sdk.Context, height int64) (stakingtypes.H
 	}
 
 	var hi types.HistoricalInfo
-	k.cdc.MustUnmarshalBinaryBare(value, &hi)
+	k.cdc.MustUnmarshal(value, &hi)
 
 	// convert to staking validator set
 	valSet := make([]stakingtypes.Validator, len(hi.Valset))
@@ -40,7 +40,7 @@ func (k Keeper) GetHistoricalInfo(ctx sdk.Context, height int64) (stakingtypes.H
 		}
 	}
 
-	return stakingtypes.NewHistoricalInfo(hi.Header, valSet), true
+	return stakingtypes.NewHistoricalInfo(hi.Header, valSet, sdk.DefaultPowerReduction), true
 }
 
 // SetHistoricalInfo sets the historical info at a given height
@@ -48,7 +48,7 @@ func (k Keeper) SetHistoricalInfo(ctx sdk.Context, height int64, hi types.Histor
 	store := ctx.KVStore(k.storeKey)
 	key := types.GetHistoricalInfoKey(height)
 
-	value := k.cdc.MustMarshalBinaryBare(&hi)
+	value := k.cdc.MustMarshal(&hi)
 	store.Set(key, value)
 }
 
@@ -71,7 +71,7 @@ func (k Keeper) IterateHistoricalInfo(ctx sdk.Context, cb func(types.HistoricalI
 
 	for ; iterator.Valid(); iterator.Next() {
 		var histInfo types.HistoricalInfo
-		k.cdc.MustUnmarshalBinaryBare(iterator.Value(), &histInfo)
+		k.cdc.MustUnmarshal(iterator.Value(), &histInfo)
 		if cb(histInfo) {
 			break
 		}

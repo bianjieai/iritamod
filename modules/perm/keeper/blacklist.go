@@ -32,7 +32,7 @@ func (k Keeper) Unblock(ctx sdk.Context, address sdk.AccAddress) error {
 
 func (k Keeper) setBlackAccount(ctx sdk.Context, address sdk.AccAddress) {
 	store := ctx.KVStore(k.storeKey)
-	bz := k.cdc.MustMarshalBinaryBare(&gogotypes.BoolValue{Value: true})
+	bz := k.cdc.MustMarshal(&gogotypes.BoolValue{Value: true})
 	store.Set(types.GetBlackKey(address), bz)
 }
 
@@ -46,7 +46,7 @@ func (k Keeper) GetBlockAccount(ctx sdk.Context, address sdk.AccAddress) bool {
 	}
 
 	var black gogotypes.BoolValue
-	k.cdc.MustUnmarshalBinaryBare(value, &black)
+	k.cdc.MustUnmarshal(value, &black)
 
 	return true
 }

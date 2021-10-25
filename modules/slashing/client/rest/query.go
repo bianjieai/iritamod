@@ -7,6 +7,7 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/cosmos/cosmos-sdk/client"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 	"github.com/cosmos/cosmos-sdk/x/slashing/types"
@@ -22,7 +23,9 @@ func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
 func signingInfoHandlerFn(clientCtx client.Context) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		vars := mux.Vars(r)
-		pk, err := sdk.GetPubKeyFromBech32(sdk.Bech32PubKeyTypeConsPub, vars["validatorPubKey"])
+		pkStr := vars["validatorPubKey"]
+		var pk cryptotypes.PubKey
+		err := clientCtx.Codec.UnmarshalInterfaceJSON([]byte(pkStr), &pk)
 		if rest.CheckBadRequestError(w, err) {
 			return
 		}

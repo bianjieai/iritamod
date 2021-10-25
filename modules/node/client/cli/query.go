@@ -47,7 +47,6 @@ func GetCmdQueryValidator() *cobra.Command {
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
-
 			res, err := queryClient.Validator(context.Background(), &types.QueryValidatorRequest{Id: args[0]})
 			if err != nil {
 				return err
@@ -74,7 +73,6 @@ func GetCmdQueryValidators() *cobra.Command {
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
-
 			pageReq, err := client.ReadPageRequest(cmd.Flags())
 			if err != nil {
 				return err
@@ -149,7 +147,6 @@ func GetCmdQueryNodes() *cobra.Command {
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
-
 			pageReq, err := client.ReadPageRequest(cmd.Flags())
 			if err != nil {
 				return err
@@ -182,14 +179,12 @@ func GetCmdQueryParams() *cobra.Command {
 		Long:    "Query values set as validator parameters.",
 		Example: fmt.Sprintf("$ %s query validator params", version.AppName),
 		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx := client.GetClientContextFromCmd(cmd)
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
-
 			res, err := queryClient.Params(context.Background(), &types.QueryParamsRequest{})
 			if err != nil {
 				return err

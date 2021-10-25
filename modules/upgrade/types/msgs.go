@@ -1,8 +1,6 @@
 package types
 
 import (
-	"time"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
@@ -14,10 +12,9 @@ var (
 )
 
 // NewMsgUpgradeSoftware creates a new MsgUpgradeSoftware instance.
-func NewMsgUpgradeSoftware(name string, time time.Time, height int64, info string, operator sdk.AccAddress) *MsgUpgradeSoftware {
+func NewMsgUpgradeSoftware(name string, height int64, info string, operator sdk.AccAddress) *MsgUpgradeSoftware {
 	return &MsgUpgradeSoftware{
 		Name:     name,
-		Time:     time,
 		Height:   height,
 		Info:     info,
 		Operator: operator.String(),
@@ -43,7 +40,6 @@ func (m MsgUpgradeSoftware) ValidateBasic() error {
 
 	plan := upgradetypes.Plan{
 		Name:   m.Name,
-		Time:   m.Time,
 		Height: m.Height,
 		Info:   m.Info,
 	}

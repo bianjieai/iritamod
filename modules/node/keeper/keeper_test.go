@@ -1,6 +1,8 @@
 package keeper_test
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec/legacy"
+	"github.com/cosmos/cosmos-sdk/types/bech32"
 	"testing"
 
 	"github.com/stretchr/testify/suite"
@@ -21,7 +23,7 @@ import (
 type KeeperTestSuite struct {
 	suite.Suite
 
-	cdc    *codec.LegacyAmino
+	cdc    codec.Codec
 	ctx    sdk.Context
 	keeper *keeper.Keeper
 	app    *simapp.SimApp
@@ -46,7 +48,7 @@ func TestKeeperTestSuite(t *testing.T) {
 func (suite *KeeperTestSuite) SetupTest() {
 	app := simapp.Setup(false)
 
-	suite.cdc = app.LegacyAmino()
+	suite.cdc = app.AppCodec()
 	suite.ctx = app.BaseApp.NewContext(false, tmproto.Header{})
 	suite.app = app
 	suite.keeper = &app.NodeKeeper
@@ -83,8 +85,10 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 	suite.keeper.IterateUpdateValidators(
 		suite.ctx,
 		func(index int64, pubkey string, power int64) bool {
+			pkStr, err := bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(cospk))
+			suite.Suite.NoError(err)
 			suite.Equal(int64(0), index)
-			suite.Equal(sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, cospk), pubkey)
+			suite.Equal(pkStr, pubkey)
 			suite.Equal(msg.Power, power)
 			return false
 		},
@@ -142,11 +146,16 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 
 	updatesTotal := 0
 	suite.keeper.IterateUpdateValidators(suite.ctx, func(index int64, pubkey string, power int64) bool {
+		pkStr, err := bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(cospk))
+		suite.Suite.NoError(err)
+		pkStr1, err1 := bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(cospk1))
+		suite.Suite.NoError(err1)
+
 		switch pubkey {
-		case sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, cospk):
+		case pkStr:
 			updatesTotal++
 			suite.Equal(int64(0), power)
-		case sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, cospk1):
+		case pkStr1:
 			updatesTotal++
 			suite.Equal(msg1.Power, power)
 		default:
@@ -181,8 +190,13 @@ func (suite *KeeperTestSuite) TestRemoveValidator() {
 	suite.keeper.IterateUpdateValidators(
 		suite.ctx,
 		func(index int64, pubkey string, power int64) bool {
+			bz, err := sdk.GetFromBech32(pubkey, sdk.GetConfig().GetBech32ConsensusPubPrefix())
+			_, err = legacy.PubKeyFromBytes(bz)
+			if err != nil {
+				panic(err)
+			}
+			suite.Suite.NoError(err)
 			suite.Equal(int64(0), index)
-			suite.Equal(sdk.MustBech32ifyPubKey(sdk.Bech32PubKeyTypeConsPub, cospk), pubkey)
 			suite.Equal(int64(0), power)
 			return false
 		},
