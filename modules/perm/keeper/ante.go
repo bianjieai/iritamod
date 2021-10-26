@@ -31,7 +31,7 @@ func (ad AuthDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, ne
 				continue
 			}
 			route := strings.Split(url, ".")
-			if len(route) != 3 {
+			if len(route) <= 2 {
 				return ctx,sdkerrors.Wrapf(types.ErrInvalidMsgURL,"the url %s is invalid",url)
 			}
 			if auth, ok := ad.k.AuthMap[route[1]]; ok {
