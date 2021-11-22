@@ -62,10 +62,6 @@ func (i Identity) Validate() error {
 		return sdkerrors.Wrapf(ErrInvalidCredentials, "length of the credentials uri must not be greater than %d", MaxURILength)
 	}
 
-	if len(i.Data) > MaxDataLength {
-		return sdkerrors.Wrapf(ErrDataOverSize, "length of the data must not be greater than %d", MaxDataLength)
-	}
-
 	return nil
 }
 
