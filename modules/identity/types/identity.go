@@ -20,6 +20,7 @@ func NewIdentity(
 	certificates []string,
 	credentials string,
 	owner sdk.AccAddress,
+	data string,
 ) Identity {
 	return Identity{
 		Id:           id.String(),
@@ -27,6 +28,7 @@ func NewIdentity(
 		Certificates: certificates,
 		Credentials:  credentials,
 		Owner:        owner.String(),
+		Data:         data,
 	}
 }
 
@@ -58,6 +60,10 @@ func (i Identity) Validate() error {
 
 	if len(i.Credentials) > MaxURILength {
 		return sdkerrors.Wrapf(ErrInvalidCredentials, "length of the credentials uri must not be greater than %d", MaxURILength)
+	}
+
+	if len(i.Data) > MaxDataLength {
+		return sdkerrors.Wrapf(ErrDataOverSize, "length of the data must not be greater than %d", MaxDataLength)
 	}
 
 	return nil

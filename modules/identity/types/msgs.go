@@ -14,8 +14,9 @@ const (
 	TypeMsgCreateIdentity = "create_identity" // type for MsgCreateIdentity
 	TypeMsgUpdateIdentity = "update_identity" // type for MsgUpdateIdentity
 
-	IDLength     = 16  // size of the ID in bytes
-	MaxURILength = 140 // maximum size of the URI
+	IDLength      = 16  // size of the ID in bytes
+	MaxURILength  = 140 // maximum size of the URI
+	MaxDataLength = 20 * 1024
 
 	DoNotModifyDesc = "[do-not-modify]" // description used to indicate not to modify a field
 )

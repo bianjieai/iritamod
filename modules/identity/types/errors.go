@@ -16,4 +16,5 @@ var (
 	ErrUnknownIdentity            = sdkerrors.Register(ModuleName, 9, "unknown identity")
 	ErrUnsupportedPubKeyAlgorithm = sdkerrors.Register(ModuleName, 10, "unsupported public key algorithm; only RSA, DSA, ECDSA, ED25519 and SM2 supported")
 	ErrNotAuthorized              = sdkerrors.Register(ModuleName, 11, "owner not matching")
+	ErrDataOverSize               = sdkerrors.Register(ModuleName, 12, "data over size")
 )

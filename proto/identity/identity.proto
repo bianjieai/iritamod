@@ -19,6 +19,7 @@ message Identity {
   repeated string certificates = 3;
   string credentials           = 4;
   string owner       = 5;
+  string data = 6;
 }
 
 // PubKey represents a public key along with the corresponding algorithm
