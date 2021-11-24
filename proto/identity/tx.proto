@@ -28,6 +28,7 @@ message MsgCreateIdentity {
     string certificate = 3;
     string credentials = 4;
     string owner       = 5;
+    string data =6;
 }
 
 // MsgCreateIdentityResponse defines the Msg/Create response type.
@@ -45,6 +46,7 @@ message MsgUpdateIdentity {
     string certificate = 3;
     string credentials = 4;
     string owner       = 5;
+    string data = 6;
 }
 
 
