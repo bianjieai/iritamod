@@ -183,6 +183,24 @@ func (k Keeper) GetCredentials(ctx sdk.Context, identityID tmbytes.HexBytes) (st
 	return string(bz), true
 }
 
+// SetData sets the given credentials
+func (k Keeper) SetData(ctx sdk.Context, identityID tmbytes.HexBytes, data string) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.GetDataKey(identityID), []byte(data))
+}
+
+// GetData retrieves the credentials of the specified identity
+func (k Keeper) GetData(ctx sdk.Context, identityID tmbytes.HexBytes) (string, bool) {
+	store := ctx.KVStore(k.storeKey)
+
+	bz := store.Get(types.GetDataKey(identityID))
+	if bz == nil {
+		return "", false
+	}
+
+	return string(bz), true
+}
+
 // HasIdentity returns true if the specified identity exists, false otherwise
 func (k Keeper) HasIdentity(ctx sdk.Context, id tmbytes.HexBytes) bool {
 	store := ctx.KVStore(k.storeKey)
@@ -225,6 +243,10 @@ func (k Keeper) SetIdentity(ctx sdk.Context, identity types.Identity) error {
 	if len(identity.Credentials) > 0 {
 		k.SetCredentials(ctx, id, identity.Credentials)
 	}
+
+	if len(identity.Data) > 0 {
+		k.SetData(ctx, id, identity.Data)
+	}
 	return nil
 }
 
@@ -255,12 +277,14 @@ func (k Keeper) GetIdentity(ctx sdk.Context, id tmbytes.HexBytes) (identity type
 	)
 
 	credentials, _ := k.GetCredentials(ctx, id)
+	data, _ := k.GetData(ctx, id)
 
 	identity.Id = id.String()
 	identity.PubKeys = pubKeys
 	identity.Certificates = certificates
 	identity.Credentials = credentials
 	identity.Owner = owner.String()
+	identity.Data = data
 
 	return identity, true
 }
