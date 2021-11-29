@@ -32,6 +32,7 @@ var (
 
 	testCredentials = "https://kyc.com/user/10001"
 	testOwner       = sdk.AccAddress([]byte("test-ownertest-owner"))
+	testData        = "test_data"
 )
 
 type KeeperTestSuite struct {
@@ -53,13 +54,13 @@ func (suite *KeeperTestSuite) SetupTest() {
 }
 
 func (suite *KeeperTestSuite) setIdentity() {
-	identity := types.NewIdentity(testID, []types.PubKeyInfo{testPubKeySM2Info}, []string{testCertificate}, testCredentials, testOwner)
+	identity := types.NewIdentity(testID, []types.PubKeyInfo{testPubKeySM2Info}, []string{testCertificate}, testCredentials, testOwner, testData)
 	err := suite.keeper.SetIdentity(suite.ctx, identity)
 	suite.NoError(err)
 }
 
 func (suite *KeeperTestSuite) TestCreateIdentity() {
-	err := suite.keeper.CreateIdentity(suite.ctx, testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
+	err := suite.keeper.CreateIdentity(suite.ctx, testID, &testPubKeySM2Info, testCertificate, testCredentials, testData, testOwner)
 	suite.NoError(err)
 
 	identity, found := suite.keeper.GetIdentity(suite.ctx, testID)
@@ -72,6 +73,7 @@ func (suite *KeeperTestSuite) TestCreateIdentity() {
 	suite.Equal(testCertificate, identity.Certificates[0])
 	suite.Equal(testCredentials, identity.Credentials)
 	suite.Equal(testOwner.String(), identity.Owner)
+	suite.Equal(testData, identity.Data)
 }
 
 func (suite *KeeperTestSuite) TestUpdateIdentity() {
@@ -80,7 +82,7 @@ func (suite *KeeperTestSuite) TestUpdateIdentity() {
 	newPubKey := testPubKeyECDSAInfo
 	newCredentials := "https://kyc.com/v2/user/10001"
 
-	err := suite.keeper.UpdateIdentity(suite.ctx, testID, &newPubKey, "", newCredentials, testOwner)
+	err := suite.keeper.UpdateIdentity(suite.ctx, testID, &newPubKey, "", newCredentials, testData, testOwner)
 	suite.NoError(err)
 
 	identity, found := suite.keeper.GetIdentity(suite.ctx, testID)
@@ -94,6 +96,7 @@ func (suite *KeeperTestSuite) TestUpdateIdentity() {
 	suite.Equal(testCertificate, identity.Certificates[0])
 	suite.Equal(newCredentials, identity.Credentials)
 	suite.Equal(testOwner.String(), identity.Owner)
+	suite.Equal(testData, identity.Data)
 }
 
 const testCertificate = `-----BEGIN CERTIFICATE-----

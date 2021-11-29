@@ -27,7 +27,7 @@ func (m msgServer) CreateIdentity(goCtx context.Context, msg *types.MsgCreateIde
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.CreateIdentity(ctx, id, msg.PubKey, msg.Certificate, msg.Credentials, owner); err != nil {
+	if err := m.Keeper.CreateIdentity(ctx, id, msg.PubKey, msg.Certificate, msg.Credentials, msg.Data, owner); err != nil {
 		return nil, err
 	}
 
@@ -51,7 +51,7 @@ func (m msgServer) UpdateIdentity(goCtx context.Context, msg *types.MsgUpdateIde
 	owner, _ := sdk.AccAddressFromBech32(msg.Owner)
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := m.Keeper.UpdateIdentity(ctx, id, msg.PubKey, msg.Certificate, msg.Credentials, owner); err != nil {
+	if err := m.Keeper.UpdateIdentity(ctx, id, msg.PubKey, msg.Certificate, msg.Credentials, msg.Data, owner); err != nil {
 		return nil, err
 	}
 
