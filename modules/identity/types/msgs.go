@@ -32,6 +32,7 @@ func NewMsgCreateIdentity(
 	certificate string,
 	credentials string,
 	owner sdk.AccAddress,
+	data string,
 ) *MsgCreateIdentity {
 	return &MsgCreateIdentity{
 		Id:          id.String(),
@@ -39,6 +40,7 @@ func NewMsgCreateIdentity(
 		Certificate: certificate,
 		Credentials: credentials,
 		Owner:       owner.String(),
+		Data:        data,
 	}
 }
 
@@ -56,6 +58,7 @@ func (msg MsgCreateIdentity) ValidateBasic() error {
 		msg.Certificate,
 		msg.Credentials,
 		msg.Owner,
+		msg.Data,
 	)
 }
 
@@ -81,6 +84,7 @@ func NewMsgUpdateIdentity(
 	certificate string,
 	credentials string,
 	owner sdk.AccAddress,
+	data string,
 ) *MsgUpdateIdentity {
 	return &MsgUpdateIdentity{
 		Id:          id.String(),
@@ -88,6 +92,7 @@ func NewMsgUpdateIdentity(
 		Certificate: certificate,
 		Credentials: credentials,
 		Owner:       owner.String(),
+		Data:        data,
 	}
 }
 
@@ -111,6 +116,7 @@ func (msg MsgUpdateIdentity) ValidateBasic() error {
 		msg.Certificate,
 		msg.Credentials,
 		msg.Owner,
+		msg.Data,
 	)
 }
 
@@ -130,6 +136,7 @@ func ValidateIdentityFields(
 	certificate string,
 	credentials string,
 	owner string,
+	data string,
 ) error {
 	if owner == "" {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "owner missing")
