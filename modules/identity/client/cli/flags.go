@@ -13,6 +13,7 @@ const (
 	FlagPubKeyAlgo      = "pubkey-algo"
 	FlagCertificateFile = "cert-file"
 	FlagCredentials     = "credentials"
+	FlagData            = "data"
 )
 
 // common flagsets to add to various functions
@@ -27,9 +28,11 @@ func init() {
 	FsCreateIdentity.String(FlagPubKeyAlgo, "", "algorithm of the public key (rsa|dsa|ecdsa|ed25519|sm2)")
 	FsCreateIdentity.String(FlagCertificateFile, "", "X.509 certificate file path")
 	FsCreateIdentity.String(FlagCredentials, "", "uri pointing to credentials of the identity")
+	FsCreateIdentity.String(FlagData, "", "data of the identity")
 
 	FsUpdateIdentity.BytesHex(FlagPubKey, nil, "hex encoded public key to be added")
 	FsUpdateIdentity.String(FlagPubKeyAlgo, "", "algorithm of the public key (rsa|dsa|ecdsa|ed25519|sm2)")
 	FsUpdateIdentity.String(FlagCertificateFile, "", "file path of the X.509 certificate to be added")
 	FsUpdateIdentity.String(FlagCredentials, types.DoNotModifyDesc, "uri pointing to credentials of the identity")
+	FsUpdateIdentity.String(FlagData, "", "data of the identity")
 }
