@@ -22,6 +22,7 @@ func (k Keeper) CreateIdentity(
 	pubKey *types.PubKeyInfo,
 	certificate,
 	credentials string,
+	data string,
 	owner sdk.AccAddress,
 ) error {
 	if k.HasIdentity(ctx, id) {
@@ -44,6 +45,10 @@ func (k Keeper) CreateIdentity(
 		k.SetCredentials(ctx, id, credentials)
 	}
 
+	if len(data) > 0 {
+		k.SetData(ctx, id, data)
+	}
+
 	k.SetOwner(ctx, id, owner)
 
 	return nil
@@ -57,6 +62,7 @@ func (k Keeper) UpdateIdentity(
 	pubKey *types.PubKeyInfo,
 	certificate string,
 	credentials string,
+	data string,
 	owner sdk.AccAddress,
 ) error {
 	identityOwner, found := k.GetOwner(ctx, id)
@@ -82,6 +88,9 @@ func (k Keeper) UpdateIdentity(
 
 	if credentials != types.DoNotModifyDesc {
 		k.SetCredentials(ctx, id, credentials)
+	}
+	if len(data) > 0 {
+		k.SetData(ctx, id, data)
 	}
 
 	return nil
