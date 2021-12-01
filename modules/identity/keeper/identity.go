@@ -89,7 +89,7 @@ func (k Keeper) UpdateIdentity(
 	if credentials != types.DoNotModifyDesc {
 		k.SetCredentials(ctx, id, credentials)
 	}
-	if len(data) > 0 {
+	if data != types.DoNotModifyDesc {
 		k.SetData(ctx, id, data)
 	}
 

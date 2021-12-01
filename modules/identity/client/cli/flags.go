@@ -34,5 +34,5 @@ func init() {
 	FsUpdateIdentity.String(FlagPubKeyAlgo, "", "algorithm of the public key (rsa|dsa|ecdsa|ed25519|sm2)")
 	FsUpdateIdentity.String(FlagCertificateFile, "", "file path of the X.509 certificate to be added")
 	FsUpdateIdentity.String(FlagCredentials, types.DoNotModifyDesc, "uri pointing to credentials of the identity")
-	FsUpdateIdentity.String(FlagData, "", "data of the identity")
+	FsUpdateIdentity.String(FlagData, types.DoNotModifyDesc, "data of the identity")
 }
