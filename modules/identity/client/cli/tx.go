@@ -122,6 +122,7 @@ func NewUpdateIdentityCmd() *cobra.Command {
 				"--pubkey-algo=<pubkey-algorithm> "+
 				"--cert-file=<certificate-file> "+
 				"--credentials=<credentials-uri> "+
+				"--data=<data> "+
 				"--from mykey",
 			version.AppName,
 		),
