@@ -26,18 +26,19 @@ var (
 
 	testCredentials = "https://kyc.com/user/10001"
 	testOwner       = sdk.AccAddress([]byte("test-ownertest-owner"))
+	testData        = "test_data"
 )
 
 // TestMsgCreateIdentityRoute tests Route for MsgCreateIdentity
 func TestMsgCreateIdentityRoute(t *testing.T) {
-	msg := NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
+	msg := NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData)
 
 	require.Equal(t, RouterKey, msg.Route())
 }
 
 // TestMsgCreateIdentityType tests Type for MsgCreateIdentity
 func TestMsgCreateIdentityType(t *testing.T) {
-	msg := NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
+	msg := NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData)
 
 	require.Equal(t, "create_identity", msg.Type())
 }
@@ -52,14 +53,14 @@ func TestMsgCreateIdentityValidation(t *testing.T) {
 	invalidCredentials := testCredentials + strings.Repeat("c", MaxURILength)
 
 	testMsgs := []*MsgCreateIdentity{
-		NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner),    // valid msg
-		NewMsgCreateIdentity(testID, nil, "", "", testOwner),                                             // public key, certificate and credentials are allowed to be empty
-		NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, emptyAddress), // missing owner address
-		NewMsgCreateIdentity(nil, &testPubKeySM2Info, testCertificate, testCredentials, testOwner),       // missing ID
-		NewMsgCreateIdentity(invalidID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner), // invalid ID
-		NewMsgCreateIdentity(testID, &invalidPubKey, testCertificate, testCredentials, testOwner),        // invalid public key
-		NewMsgCreateIdentity(testID, &testPubKeySM2Info, invalidCertificate, testCredentials, testOwner), // invalid certificate
-		NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, invalidCredentials, testOwner), // invalid credentials
+		NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData),    // valid msg
+		NewMsgCreateIdentity(testID, nil, "", "", testOwner, testData),                                             // public key, certificate and credentials are allowed to be empty
+		NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, emptyAddress, testData), // missing owner address
+		NewMsgCreateIdentity(nil, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData),       // missing ID
+		NewMsgCreateIdentity(invalidID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData), // invalid ID
+		NewMsgCreateIdentity(testID, &invalidPubKey, testCertificate, testCredentials, testOwner, testData),        // invalid public key
+		NewMsgCreateIdentity(testID, &testPubKeySM2Info, invalidCertificate, testCredentials, testOwner, testData), // invalid certificate
+		NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, invalidCredentials, testOwner, testData), // invalid credentials
 	}
 
 	testCases := []struct {
@@ -89,16 +90,16 @@ func TestMsgCreateIdentityValidation(t *testing.T) {
 
 // TestMsgCreateIdentityGetSignBytes tests GetSignBytes for MsgCreateIdentity
 func TestMsgCreateIdentityGetSignBytes(t *testing.T) {
-	msg := NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
+	msg := NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData)
 	res := msg.GetSignBytes()
 
-	expected := fmt.Sprintf(`{"type":"iritamod/identity/MsgCreateIdentity","value":{"certificate":"%s","credentials":"https://kyc.com/user/10001","id":"%s","owner":"cosmos1w3jhxapddamkuetjw3jhxapddamkuetjgzplvk","pubkey":{"algorithm":"SM2","pubkey":"%s"}}}`, strings.ReplaceAll(testCertificate, "\n", "\\n"), testIDStr, testPubKeySM2Str)
+	expected := fmt.Sprintf(`{"type":"iritamod/identity/MsgCreateIdentity","value":{"certificate":"%s","credentials":"https://kyc.com/user/10001","data":"%s","id":"%s","owner":"cosmos1w3jhxapddamkuetjw3jhxapddamkuetjgzplvk","pubkey":{"algorithm":"SM2","pubkey":"%s"}}}`, strings.ReplaceAll(testCertificate, "\n", "\\n"), testData, testIDStr, testPubKeySM2Str)
 	require.Equal(t, expected, string(res))
 }
 
 // TestMsgCreateIdentityGetSigners tests GetSigners for MsgCreateIdentity
 func TestMsgCreateIdentityGetSigners(t *testing.T) {
-	msg := NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
+	msg := NewMsgCreateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData)
 	res := msg.GetSigners()
 
 	expected := "[746573742D6F776E6572746573742D6F776E6572]"
@@ -107,14 +108,14 @@ func TestMsgCreateIdentityGetSigners(t *testing.T) {
 
 // TestMsgUpdateIdentityRoute tests Route for MsgUpdateIdentity
 func TestMsgUpdateIdentityRoute(t *testing.T) {
-	msg := NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
+	msg := NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData)
 
 	require.Equal(t, RouterKey, msg.Route())
 }
 
 // TestMsgUpdateIdentityType tests Type for MsgUpdateIdentity
 func TestMsgUpdateIdentityType(t *testing.T) {
-	msg := NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
+	msg := NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData)
 
 	require.Equal(t, "update_identity", msg.Type())
 }
@@ -129,14 +130,14 @@ func TestMsgUpdateIdentityValidation(t *testing.T) {
 	invalidCredentials := testCredentials + strings.Repeat("c", MaxURILength)
 
 	testMsgs := []*MsgUpdateIdentity{
-		NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner), // valid msg
-		NewMsgUpdateIdentity(testID, nil, "", "", testOwner),                                          // public key, certificate and credentials are allowed to be empty
-		NewMsgUpdateIdentity(testID, nil, "", "", emptyAddress),                                       // missing owner address
-		NewMsgUpdateIdentity(nil, nil, "", "", testOwner),                                             // missing ID
-		NewMsgUpdateIdentity(invalidID, nil, "", "", testOwner),                                       // invalid ID
-		NewMsgUpdateIdentity(testID, &invalidPubKey, "", "", testOwner),                               // invalid public key
-		NewMsgUpdateIdentity(testID, nil, invalidCertificate, "", testOwner),                          // invalid certificate
-		NewMsgUpdateIdentity(testID, nil, "", invalidCredentials, testOwner),                          // invalid credentials
+		NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData), // valid msg
+		NewMsgUpdateIdentity(testID, nil, "", "", testOwner, testData),                                          // public key, certificate and credentials are allowed to be empty
+		NewMsgUpdateIdentity(testID, nil, "", "", emptyAddress, testData),                                       // missing owner address
+		NewMsgUpdateIdentity(nil, nil, "", "", testOwner, testData),                                             // missing ID
+		NewMsgUpdateIdentity(invalidID, nil, "", "", testOwner, testData),                                       // invalid ID
+		NewMsgUpdateIdentity(testID, &invalidPubKey, "", "", testOwner, testData),                               // invalid public key
+		NewMsgUpdateIdentity(testID, nil, invalidCertificate, "", testOwner, testData),                          // invalid certificate
+		NewMsgUpdateIdentity(testID, nil, "", invalidCredentials, testOwner, testData),                          // invalid credentials
 	}
 
 	testCases := []struct {
@@ -166,16 +167,16 @@ func TestMsgUpdateIdentityValidation(t *testing.T) {
 
 // TestMsgUpdateIdentityGetSignBytes tests GetSignBytes for MsgUpdateIdentity
 func TestMsgUpdateIdentityGetSignBytes(t *testing.T) {
-	msg := NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
+	msg := NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData)
 	res := msg.GetSignBytes()
 
-	expected := fmt.Sprintf(`{"type":"iritamod/identity/MsgUpdateIdentity","value":{"certificate":"%s","credentials":"https://kyc.com/user/10001","id":"%s","owner":"cosmos1w3jhxapddamkuetjw3jhxapddamkuetjgzplvk","pubkey":{"algorithm":"SM2","pubkey":"%s"}}}`, strings.ReplaceAll(testCertificate, "\n", "\\n"), testIDStr, testPubKeySM2Str)
+	expected := fmt.Sprintf(`{"type":"iritamod/identity/MsgUpdateIdentity","value":{"certificate":"%s","credentials":"https://kyc.com/user/10001","data":"%s","id":"%s","owner":"cosmos1w3jhxapddamkuetjw3jhxapddamkuetjgzplvk","pubkey":{"algorithm":"SM2","pubkey":"%s"}}}`, strings.ReplaceAll(testCertificate, "\n", "\\n"), testData, testIDStr, testPubKeySM2Str)
 	require.Equal(t, expected, string(res))
 }
 
 // TestMsgUpdateIdentityGetSigners tests GetSigners for MsgUpdateIdentity
 func TestMsgUpdateIdentityGetSigners(t *testing.T) {
-	msg := NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
+	msg := NewMsgUpdateIdentity(testID, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData)
 	res := msg.GetSigners()
 
 	expected := "[746573742D6F776E6572746573742D6F776E6572]"

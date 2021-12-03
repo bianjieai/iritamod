@@ -31,6 +31,7 @@ type CreateIdentityReq struct {
 	PubKeyAlgo  string         `json:"pubkey_algo" yaml:"pubkey_algo"`
 	Certificate string         `json:"certificate" yaml:"certificate"`
 	Credentials string         `json:"credentials" yaml:"credentials"`
+	Data        string         `json:"data" yaml:"data"`
 	Owner       sdk.AccAddress `json:"owner" yaml:"owner"`
 }
 
@@ -41,6 +42,7 @@ type UpdateIdentityReq struct {
 	PubKeyAlgo  string         `json:"pubkey_algo" yaml:"pubkey_algo"`
 	Certificate string         `json:"certificate" yaml:"certificate"`
 	Credentials string         `json:"credentials" yaml:"credentials"`
+	Data        string         `json:"data" yaml:"data"`
 	Owner       sdk.AccAddress `json:"owner" yaml:"owner"`
 }
 
@@ -77,7 +79,7 @@ func createIdentityHandlerFn(clientCtx client.Context) http.HandlerFunc {
 			pubKeyInfo.Algorithm = types.PubKeyAlgorithmFromString(req.PubKeyAlgo)
 		}
 
-		msg := types.NewMsgCreateIdentity(id, pubKeyInfo, req.Certificate, req.Credentials, req.Owner)
+		msg := types.NewMsgCreateIdentity(id, pubKeyInfo, req.Certificate, req.Credentials, req.Owner, req.Data)
 		if err := msg.ValidateBasic(); err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
@@ -115,7 +117,7 @@ func updateIdentityHandlerFn(clientCtx client.Context) http.HandlerFunc {
 			pubKeyInfo.Algorithm = types.PubKeyAlgorithmFromString(req.PubKeyAlgo)
 		}
 
-		msg := types.NewMsgUpdateIdentity(id, pubKeyInfo, req.Certificate, req.Credentials, req.Owner)
+		msg := types.NewMsgUpdateIdentity(id, pubKeyInfo, req.Certificate, req.Credentials, req.Owner, req.Data)
 		if err := msg.ValidateBasic(); err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return
