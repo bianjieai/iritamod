@@ -1,0 +1,33 @@
+syntax = "proto3";
+package iritamod.wevm;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/wevm/types";
+option (gogoproto.goproto_getters_all) = false;
+
+
+service Msg {
+  rpc AddToContractDenyList(MsgAddToContractDenyList) returns (MsgAddToContractDenyListResponse);
+  rpc RemoveFromContractDenyList(MsgRemoveFromContractDenyList) returns (MsgRemoveFromContractDenyListResponse);
+}
+
+message MsgAddToContractDenyList {
+  option (gogoproto.goproto_getters) = false;
+
+  string contract_address = 1;
+
+  string from =2;
+}
+
+message MsgAddToContractDenyListResponse{}
+
+
+message MsgRemoveFromContractDenyList {
+  option (gogoproto.goproto_getters) = false;
+
+  string contract_address = 1;
+
+  string from =2;
+}
+message MsgRemoveFromContractDenyListResponse{}

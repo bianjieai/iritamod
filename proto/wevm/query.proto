@@ -1,0 +1,37 @@
+syntax = "proto3";
+package iritamod.wevm;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+
+
+option go_package = "github.com/bianjieai/iritamod/modules/wevm/types";
+
+service Query {
+  rpc ContractState(QueryContractStateRequest) returns (QueryContractStateResponse) {
+    option (google.api.http).get = "/ethermint/evm/v1/contract/{address}";
+  }
+  rpc ContractDenyList(QueryContractDenyListRequest) returns (QueryContractDenyListResponse) {
+    option (google.api.http).get = "/ethermint/evm/v1/contracts";
+  }
+}
+
+message QueryContractStateRequest {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+
+  string address = 1;
+}
+
+message QueryContractStateResponse {
+  bool exist = 1;
+}
+
+message QueryContractDenyListRequest {
+  option (gogoproto.equal) = false;
+  option (gogoproto.goproto_getters) = false;
+}
+
+message QueryContractDenyListResponse {
+  repeated string contract_address = 1;
+}

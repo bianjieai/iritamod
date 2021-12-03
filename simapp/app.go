@@ -72,6 +72,10 @@ import (
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
 	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	cslashing "github.com/bianjieai/iritamod/modules/slashing"
+
+	"github.com/bianjieai/iritamod/modules/wevm"
+	wevmkeeper "github.com/bianjieai/iritamod/modules/wevm/keeper"
+	wevmtypes "github.com/bianjieai/iritamod/modules/wevm/types"
 )
 
 const appName = "SimApp"
@@ -101,6 +105,7 @@ var (
 		perm.AppModuleBasic{},
 		identity.AppModuleBasic{},
 		node.AppModuleBasic{},
+		wevm.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -144,6 +149,7 @@ type SimApp struct {
 	IdentityKeeper identitykeeper.Keeper
 	NodeKeeper     nodekeeper.Keeper
 	FeeGrantKeeper feegrantkeeper.Keeper
+	WevmKeeper     wevmkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -193,6 +199,7 @@ func NewSimApp(
 		permtypes.StoreKey,
 		identitytypes.StoreKey,
 		nodetypes.StoreKey,
+		wevmtypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -243,6 +250,8 @@ func NewSimApp(
 	app.PermKeeper = permkeeper.NewKeeper(appCodec, keys[permtypes.StoreKey])
 	app.IdentityKeeper = identitykeeper.NewKeeper(appCodec, keys[identitytypes.StoreKey])
 
+	app.WevmKeeper = wevmkeeper.NewKeeper(appCodec, keys[wevmtypes.StoreKey])
+
 	/****  Module Options ****/
 
 	// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
@@ -265,6 +274,7 @@ func NewSimApp(
 		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
+		wevm.NewAppModule(app.WevmKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -292,6 +302,7 @@ func NewSimApp(
 		evidencetypes.ModuleName,
 		identitytypes.ModuleName,
 		feegrant.ModuleName,
+		wevmtypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -317,6 +328,7 @@ func NewSimApp(
 		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
+		wevm.NewAppModule(app.WevmKeeper),
 	)
 
 	app.sm.RegisterStoreDecoders()
