@@ -55,11 +55,13 @@ func (AppModuleBasic) GetTxCmd() *cobra.Command {
 func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	types.RegisterInterfaces(registry)
 }
+
 //TODO
 func (AppModuleBasic) DefaultGenesis(codec.JSONCodec) json.RawMessage {
 	return nil
 
 }
+
 //TODO
 func (AppModuleBasic) ValidateGenesis(codec.JSONCodec, client.TxEncodingConfig, json.RawMessage) error {
 	return nil

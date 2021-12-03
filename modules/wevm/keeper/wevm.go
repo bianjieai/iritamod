@@ -1,10 +1,11 @@
 package keeper
 
 import (
-	"github.com/bianjieai/iritamod/modules/wevm/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/errors"
 	"github.com/ethereum/go-ethereum/common"
+
+	"github.com/bianjieai/iritamod/modules/wevm/types"
 )
 
 func (k Keeper) AddToContractDenyList(ctx sdk.Context, contractAddress string) error {

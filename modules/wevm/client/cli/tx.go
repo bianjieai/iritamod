@@ -1,11 +1,12 @@
 package cli
 
 import (
-	"github.com/bianjieai/iritamod/modules/wevm/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/spf13/cobra"
+
+	"github.com/bianjieai/iritamod/modules/wevm/types"
 )
 
 func NewTxCmd() *cobra.Command {
