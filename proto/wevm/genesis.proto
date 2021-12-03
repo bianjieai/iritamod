@@ -1,6 +1,5 @@
 syntax = "proto3";
-package iritamod.identity;
-
+package iritamod.wevm;
 
 option go_package = "github.com/bianjieai/iritamod/modules/wevm/types";
 
