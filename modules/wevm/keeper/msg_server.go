@@ -24,6 +24,7 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 var _ types.MsgServer = msgServer{}
 
+// AddToContractDenyList add contract address to ContractDenyList
 func (k msgServer) AddToContractDenyList(goCtx context.Context, list *types.MsgAddToContractDenyList) (*types.MsgAddToContractDenyListResponse, error) {
 	if !common.IsHexAddress(list.ContractAddress) {
 		return &types.MsgAddToContractDenyListResponse{},
@@ -45,6 +46,7 @@ func (k msgServer) AddToContractDenyList(goCtx context.Context, list *types.MsgA
 	return &types.MsgAddToContractDenyListResponse{}, nil
 }
 
+// RemoveFromContractDenyList remove contract address from ContractDenyList
 func (k msgServer) RemoveFromContractDenyList(goCtx context.Context, list *types.MsgRemoveFromContractDenyList) (*types.MsgRemoveFromContractDenyListResponse, error) {
 	if !common.IsHexAddress(list.ContractAddress) {
 		return &types.MsgRemoveFromContractDenyListResponse{},

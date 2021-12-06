@@ -8,6 +8,7 @@ import (
 	"github.com/bianjieai/iritamod/modules/wevm/types"
 )
 
+// AddToContractDenyList add contract address to ContractDenyList
 func (k Keeper) AddToContractDenyList(ctx sdk.Context, contractAddress string) error {
 	store := k.GetStore(ctx)
 	contractAddr := common.HexToAddress(contractAddress)
@@ -18,6 +19,7 @@ func (k Keeper) AddToContractDenyList(ctx sdk.Context, contractAddress string) e
 	return nil
 }
 
+// RemoveFromContractDenyList remove contract address from ContractDenyList
 func (k Keeper) RemoveFromContractDenyList(ctx sdk.Context, contractAddress string) error {
 	store := k.GetStore(ctx)
 	contractAddr := common.HexToAddress(contractAddress)
@@ -30,6 +32,7 @@ func (k Keeper) RemoveFromContractDenyList(ctx sdk.Context, contractAddress stri
 	return nil
 }
 
+// GetContractState Check if the contract is in the ContractDenyList
 func (k Keeper) GetContractState(ctx sdk.Context, contractAddress string) (bool, error) {
 	store := k.GetStore(ctx)
 	contractAddr := common.HexToAddress(contractAddress)
@@ -41,6 +44,7 @@ func (k Keeper) GetContractState(ctx sdk.Context, contractAddress string) (bool,
 	}
 }
 
+// GetContractDenyList get the ContractDenyList
 func (k Keeper) GetContractDenyList(ctx sdk.Context) ([]string, error) {
 	list, err := k.IteratorContractDanyList(ctx)
 	if err != nil {

@@ -22,11 +22,13 @@ func NewKeeper(cdc codec.Codec, storeKey sdk.StoreKey) Keeper {
 	}
 }
 
+// GetStore get the store by keeper.storeKey
 func (k Keeper) GetStore(ctx sdk.Context) sdk.KVStore {
 	store := ctx.KVStore(k.storeKey)
 	return store
 }
 
+// IteratorContractDanyList iterator the contract addresses in ContractDanyList
 func (k Keeper) IteratorContractDanyList(goCtx sdk.Context) ([]string, error) {
 	gm := make([]string, 0)
 	store := k.GetStore(goCtx)
