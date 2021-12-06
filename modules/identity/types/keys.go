@@ -25,6 +25,7 @@ var (
 	CertificateKey    = []byte{0x03} // prefix for certificate
 	CredentialsKey    = []byte{0x04} // prefix for credentials
 	PubKeyIdentityKey = []byte{0x05} // prefix for mapping public key to identity
+	DataKey           = []byte{0x06}
 )
 
 // GetOwnerKey gets the key for the owner of the specified identity
@@ -52,6 +53,12 @@ func GetCertificateKey(identityID []byte, certHash []byte) []byte {
 // VALUE: []byte (credentials)
 func GetCredentialsKey(identityID []byte) []byte {
 	return append(CredentialsKey, identityID...)
+}
+
+// GetDataKey gets the key for the data of the specified identity
+// VALUE: []byte (data)
+func GetDataKey(identityID []byte) []byte {
+	return append(DataKey, identityID...)
 }
 
 // GetPubKeyIdentityKey gets the key for mapping the specified public key to the identity ID
