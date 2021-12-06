@@ -36,7 +36,7 @@ func (k Keeper) IteratorContractDanyList(goCtx sdk.Context) ([]string, error) {
 		key := iterator.Key()
 		split := strings.Split(string(key), "/")
 		if len(split) < 2 {
-			return nil, errors.Wrapf(types.ErrNotFound, "do not found contract address from ContractDanyList")
+			return nil, errors.Wrapf(types.ErrNotFound, "not found any contract address from ContractDanyList")
 		}
 		gm = append(gm, split[1])
 	}

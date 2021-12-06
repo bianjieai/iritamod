@@ -40,6 +40,7 @@ func (k Keeper) GetContractState(ctx sdk.Context, contractAddress string) (bool,
 		return false, nil
 	}
 }
+
 func (k Keeper) GetContractDenyList(ctx sdk.Context) ([]string, error) {
 	list, err := k.IteratorContractDanyList(ctx)
 	if err != nil {

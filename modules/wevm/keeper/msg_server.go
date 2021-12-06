@@ -35,6 +35,13 @@ func (k msgServer) AddToContractDenyList(goCtx context.Context, list *types.MsgA
 		return &types.MsgAddToContractDenyListResponse{}, err
 	}
 
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			sdk.EventTypeMessage,
+			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
+			sdk.NewAttribute(types.EventTypeAdd, list.ContractAddress),
+		),
+	})
 	return &types.MsgAddToContractDenyListResponse{}, nil
 }
 
@@ -48,5 +55,12 @@ func (k msgServer) RemoveFromContractDenyList(goCtx context.Context, list *types
 	if err != nil {
 		return &types.MsgRemoveFromContractDenyListResponse{}, err
 	}
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			sdk.EventTypeMessage,
+			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
+			sdk.NewAttribute(types.EventTypeRemove, list.ContractAddress),
+		),
+	})
 	return &types.MsgRemoveFromContractDenyListResponse{}, nil
 }
