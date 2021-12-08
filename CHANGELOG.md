@@ -37,6 +37,14 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ## [Unreleased]
 
+## [v1.2.0] - 2021-12-07
+### Improvements
+- (modules/identity) [#32] add `data` field, and the field length limit is only related to the block and transaction size limit.
+
+## [v1.1.0] - 2021-10-27
+### Bug Fixes
+- [#30] Bump Cosmos-SDK to v0.44.2
+
 ## [v1.0.0] - 2021-04-13
 
 ### Features
@@ -45,4 +53,9 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 <!-- Release links -->
 
+[v1.1.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.1.0
 [v1.0.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.0.0
+
+<!-- Pull request links -->
+[#32]: https://github.com/bianjieai/iritamod/pull/32
+[#30]: https://github.com/bianjieai/iritamod/pull/30
