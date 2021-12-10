@@ -20,6 +20,7 @@ func NewIdentity(
 	certificates []string,
 	credentials string,
 	owner sdk.AccAddress,
+	data string,
 ) Identity {
 	return Identity{
 		Id:           id.String(),
@@ -27,6 +28,7 @@ func NewIdentity(
 		Certificates: certificates,
 		Credentials:  credentials,
 		Owner:        owner.String(),
+		Data:         data,
 	}
 }
 

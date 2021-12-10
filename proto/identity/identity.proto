@@ -4,7 +4,7 @@ package iritamod.identity;
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/bianjieai/iritamod/modules/identity/types";
-option (gogoproto.goproto_getters_all)  = false;
+option (gogoproto.goproto_getters_all) = false;
 
 // Identity defines a struct for an identity
 message Identity {
@@ -14,11 +14,12 @@ message Identity {
   repeated PubKeyInfo pub_keys = 2 [
     (gogoproto.nullable) = false,
     (gogoproto.moretags) = "yaml:\"pubkeys\"",
-    (gogoproto.jsontag)  = "pubkeys"
+    (gogoproto.jsontag) = "pubkeys"
   ];
   repeated string certificates = 3;
-  string credentials           = 4;
-  string owner       = 5;
+  string credentials = 4;
+  string owner = 5;
+  string data = 6;
 }
 
 // PubKey represents a public key along with the corresponding algorithm
@@ -27,16 +28,16 @@ message PubKeyInfo {
 
   string pub_key = 1 [
     (gogoproto.moretags) = "yaml:\"pubkey\"",
-    (gogoproto.jsontag)  = "pubkey"
+    (gogoproto.jsontag) = "pubkey"
   ];
   PubKeyAlgorithm algorithm = 2;
 }
 
 // PubKeyAlgorithm defines the algorithm names for the public key
 enum PubKeyAlgorithm {
-  option (gogoproto.enum_stringer)         = true;
+  option (gogoproto.enum_stringer) = true;
   option (gogoproto.goproto_enum_stringer) = false;
-  option (gogoproto.goproto_enum_prefix)   = false;
+  option (gogoproto.goproto_enum_prefix) = false;
 
   // UnknownPubKeyAlgorithm defines an unknown algorithm name
   UnknownPubKeyAlgorithm = 0 [(gogoproto.enumvalue_customname) = "UnknownPubKeyAlgorithm"];
