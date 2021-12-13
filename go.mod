@@ -32,6 +32,5 @@ replace (
 	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.34.4-0.20211014092340-3c5e5a840642
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
 	github.com/tendermint/tendermint => github.com/bianjieai/tendermint v0.34.8-irita-210413.0.20210908054213-781a5fed16d6
-	//github.com/tharsis/ethermint => github.com/bianjieai/ethermint v0.8.2-0.20211209034154-93392c59d6dc
-	github.com/tharsis/ethermint => /Users/bianjie/work/gowork/bianjieai/ethermint
+	github.com/tharsis/ethermint => github.com/bianjieai/ethermint v0.8.2-0.20211213103812-95805b5f22cb
 )
