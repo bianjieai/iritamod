@@ -22,12 +22,13 @@ func NewTxCmd() *cobra.Command {
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
 	}
-
 	permTxCmd.AddCommand(
 		NewAssignRolesCmd(),
 		NewUnassignRolesCmd(),
 		NewBlockAccountCmd(),
 		NewUnblockAccountCmd(),
+		NewBlockContractCmd(),
+		NewUnblockContractCmd(),
 	)
 
 	return permTxCmd
@@ -206,5 +207,57 @@ func NewUnblockAccountCmd() *cobra.Command {
 	flags.AddTxFlagsToCmd(cmd)
 	_ = cmd.MarkFlagRequired(flags.FlagFrom)
 
+	return cmd
+}
+
+func NewBlockContractCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "block-contract [contractAddress] [flags]",
+		Args:  cobra.ExactArgs(1),
+		Short: "Block a contract",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+			sender := clientCtx.GetFromAddress().String()
+			contractAddr := args[0]
+			msg := types.NewMsgBlockContract(
+				contractAddr,
+				sender,
+			)
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+	flags.AddTxFlagsToCmd(cmd)
+	return cmd
+}
+
+func NewUnblockContractCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "unblock-contract [contractAddress] [flags]",
+		Args:  cobra.ExactArgs(1),
+		Short: "Unblock a contract",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+			sender := clientCtx.GetFromAddress().String()
+			contractAddr := args[0]
+			msg := types.NewMsgUnblockContract(
+				contractAddr,
+				sender,
+			)
+			if err := msg.ValidateBasic(); err != nil {
+				return err
+			}
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+	flags.AddTxFlagsToCmd(cmd)
 	return cmd
 }

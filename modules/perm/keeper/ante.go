@@ -5,6 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	evmtypes "github.com/tharsis/ethermint/x/evm/types"
 
 	"github.com/bianjieai/iritamod/modules/perm/types"
 )
@@ -43,5 +44,30 @@ func (ad AuthDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, ne
 		}
 	}
 	// continue
+	return next(ctx, tx, simulate)
+}
+
+type EthCanCallDecorator struct {
+	keeper Keeper
+}
+
+func NewEthCanCallDecorator(Keeper Keeper) EthCanCallDecorator {
+	return EthCanCallDecorator{keeper: Keeper}
+}
+
+func (e EthCanCallDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+	for _, msg := range tx.GetMsgs() {
+		msgEthTx, ok := msg.(*evmtypes.MsgEthereumTx)
+		if !ok {
+			return ctx, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "invalid transaction type %T, expected %T", tx, (*evmtypes.MsgEthereumTx)(nil))
+		}
+		ethTx := msgEthTx.AsTransaction()
+		if ethTx.To() != nil {
+			state := e.keeper.GetBlockContract(ctx, *ethTx.To())
+			if state {
+				return ctx, sdkerrors.Wrapf(types.ErrContractDisable, "the contract %s is in contract deny list ! ", ethTx.To())
+			}
+		}
+	}
 	return next(ctx, tx, simulate)
 }

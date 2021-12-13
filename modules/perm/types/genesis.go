@@ -7,10 +7,11 @@ import (
 )
 
 // NewGenesisState creates a new GenesisState instance
-func NewGenesisState(roleAccounts []RoleAccount, blackList []string) *GenesisState {
+func NewGenesisState(roleAccounts []RoleAccount, blackList, contractDenyList []string) *GenesisState {
 	return &GenesisState{
-		RoleAccounts: roleAccounts,
-		BlackList:    blackList,
+		RoleAccounts:     roleAccounts,
+		BlackList:        blackList,
+		ContractDenyList: contractDenyList,
 	}
 }
 

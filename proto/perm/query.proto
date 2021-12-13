@@ -14,6 +14,10 @@ service Query {
     // Blacklist queries the black list
     rpc Blacklist (QueryBlacklistRequest) returns (QueryBlacklistResponse) {
     }
+
+    // ContractDenyList queries the contract deny list
+    rpc ContractDenyList (QueryContractDenyList) returns (QueryContractDenyListResponse) {
+    }
 }
 
 // QueryRolesRequest is request type for the Query/Roles RPC method
@@ -32,5 +36,14 @@ message QueryBlacklistRequest {
 
 // QueryBlacklistResponse is response type for the Query/Blacklist RPC method
 message QueryBlacklistResponse {
+    repeated string addresses = 1;
+}
+
+// QueryBlacklistRequest is request type for the Query/Blacklist RPC method
+message QueryContractDenyList {
+}
+
+// QueryBlacklistResponse is response type for the Query/Blacklist RPC method
+message QueryContractDenyListResponse {
     repeated string addresses = 1;
 }

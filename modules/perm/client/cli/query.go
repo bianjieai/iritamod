@@ -20,9 +20,11 @@ func GetQueryCmd() *cobra.Command {
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
 	}
+
 	permQueryCmd.AddCommand(
 		GetCmdQueryRoles(),
-		GetCmdQueryBlackList(),
+		GetCmdQueryAccountBlackList(),
+		GetCmdQueryContractBlockList(),
 	)
 
 	return permQueryCmd
@@ -53,11 +55,11 @@ func GetCmdQueryRoles() *cobra.Command {
 	return cmd
 }
 
-// GetCmdQueryBlackList implements the black list query command.
-func GetCmdQueryBlackList() *cobra.Command {
+// GetCmdQueryAccountBlackList implements the black list query command.
+func GetCmdQueryAccountBlackList() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:   "blacklist",
-		Short: "Query blacklist",
+		Use:   "block-list-account",
+		Short: "Query account blockList",
 		Args:  cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -76,5 +78,30 @@ func GetCmdQueryBlackList() *cobra.Command {
 		},
 	}
 	flags.AddQueryFlagsToCmd(cmd)
+	return cmd
+}
+
+func GetCmdQueryContractBlockList() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "block-list-contract  [flags]",
+		Short: "Query contract blockList ",
+		Long:  "Query contract blockList",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientQueryContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			queryClient := types.NewQueryClient(clientCtx)
+
+			req := &types.QueryContractDenyList{}
+			res, err := queryClient.ContractDenyList(context.Background(), req)
+			if err != nil {
+				return err
+			}
+
+			return clientCtx.PrintProto(res)
+		},
+	}
 	return cmd
 }

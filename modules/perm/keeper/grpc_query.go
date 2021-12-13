@@ -40,3 +40,13 @@ func (k Keeper) Blacklist(c context.Context, req *types.QueryBlacklistRequest) (
 
 	return &types.QueryBlacklistResponse{Addresses: k.GetAllBlackAccounts(ctx)}, nil
 }
+
+// ContractDenyList queries all blocked contract
+func (k Keeper) ContractDenyList(c context.Context, req *types.QueryContractDenyList) (*types.QueryContractDenyListResponse, error) {
+	if req == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "empty request")
+	}
+	ctx := sdk.UnwrapSDKContext(c)
+	return &types.QueryContractDenyListResponse{Addresses: k.GetContractDenyList(ctx)}, nil
+
+}

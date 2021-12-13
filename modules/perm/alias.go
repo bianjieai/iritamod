@@ -34,15 +34,18 @@ var (
 	NewKeeper                   = keeper.NewKeeper
 	NewAuthDecorator            = keeper.NewAuthDecorator
 	GetGenesisStateFromAppState = types.GetGenesisStateFromAppState
+	NewEthCanCallDecorator      = keeper.NewEthCanCallDecorator
 )
 
 type (
-	MsgAssignRoles    = types.MsgAssignRoles
-	MsgUnassignRoles  = types.MsgUnassignRoles
-	MsgBlockAccount   = types.MsgBlockAccount
-	MsgUnblockAccount = types.MsgUnblockAccount
-	Keeper            = keeper.Keeper
-	GenesisState      = types.GenesisState
-	RoleAccount       = types.RoleAccount
-	Role              = types.Role
+	MsgAssignRoles     = types.MsgAssignRoles
+	MsgUnassignRoles   = types.MsgUnassignRoles
+	MsgBlockAccount    = types.MsgBlockAccount
+	MsgUnblockAccount  = types.MsgUnblockAccount
+	Keeper             = keeper.Keeper
+	GenesisState       = types.GenesisState
+	RoleAccount        = types.RoleAccount
+	Role               = types.Role
+	MsgBlockContract   = types.MsgBlockContract
+	MsgUnblockContract = types.MsgUnblockContract
 )
