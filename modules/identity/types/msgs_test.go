@@ -2,9 +2,12 @@ package types
 
 import (
 	"crypto/rand"
+	"encoding/hex"
 	"fmt"
+	mathrand "math/rand"
 	"strings"
 	"testing"
+	"time"
 
 	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/require"
@@ -13,6 +16,7 @@ import (
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/simulation"
 )
 
 var (
@@ -47,7 +51,7 @@ func TestMsgCreateIdentityType(t *testing.T) {
 func TestMsgCreateIdentityValidation(t *testing.T) {
 	emptyAddress := sdk.AccAddress{}
 
-	invalidID := []byte("invalidID")
+	invalidID := []byte("ID")
 	invalidPubKey := PubKeyInfo{PubKey: "invalidPubKey", Algorithm: UnknownPubKeyAlgorithm}
 	invalidCertificate := "invalidCertificate"
 	invalidCredentials := testCredentials + strings.Repeat("c", MaxURILength)
@@ -124,7 +128,7 @@ func TestMsgUpdateIdentityType(t *testing.T) {
 func TestMsgUpdateIdentityValidation(t *testing.T) {
 	emptyAddress := sdk.AccAddress{}
 
-	invalidID := []byte("invalidID")
+	invalidID := []byte("Id")
 	invalidPubKey := PubKeyInfo{PubKey: "invalidPubKey", Algorithm: UnknownPubKeyAlgorithm}
 	invalidCertificate := "invalidCertificate"
 	invalidCredentials := testCredentials + strings.Repeat("c", MaxURILength)
@@ -217,4 +221,35 @@ func TestValidateGenesis(t *testing.T) {
 	}
 	err := ValidateGenesis(GenesisState{[]Identity{id}})
 	require.NoError(t, err)
+}
+
+// TestValMsgCreateIdentity tests ValidateBasic for MsgCreateIdentity
+func TestValMsgCreateIdentity(t *testing.T) {
+	r := mathrand.New(mathrand.NewSource(time.Now().UnixNano()))
+	testCases := []struct {
+		name   string
+		id     string
+		result bool
+	}{
+		{"id is null", "", false},
+		{"id < 3", simulation.RandStringOfLength(r, 2), false},
+		{"id = 3", simulation.RandStringOfLength(r, 3), true},
+		{"3< id < 128", simulation.RandStringOfLength(r, 100), true},
+		{"id = 128", simulation.RandStringOfLength(r, 128), true},
+		{"id > 128", simulation.RandStringOfLength(r, 129), false},
+	}
+
+	for _, tc := range testCases {
+		idStr := tc.id
+		encode := hex.EncodeToString([]byte(idStr))
+		id, err := hex.DecodeString(encode)
+		require.NoError(t, err)
+		msg := NewMsgCreateIdentity(id, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData)
+		err = msg.ValidateBasic()
+		if tc.result == true {
+			require.NoError(t, err)
+		} else {
+			require.Error(t, err)
+		}
+	}
 }

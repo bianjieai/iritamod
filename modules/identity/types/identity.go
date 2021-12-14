@@ -42,10 +42,9 @@ func (i Identity) Validate() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "wrong address format")
 	}
 
-	if len(i.Id) != IDLength*2 {
-		return sdkerrors.Wrapf(ErrInvalidID, "size of the ID must be %d in bytes", IDLength)
+	if len(i.Id) > IdLengthMax*2 || len(i.Id) < IdLengthMin*2 {
+		return sdkerrors.Wrapf(ErrInvalidID, "size of the ID must be %d ~ %d in bytes", IdLengthMin, IdLengthMax)
 	}
-
 	for _, pubKey := range i.PubKeys {
 		if err := pubKey.Validate(); err != nil {
 			return err
