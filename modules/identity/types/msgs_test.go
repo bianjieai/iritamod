@@ -244,7 +244,7 @@ func TestValMsgCreateIdentity(t *testing.T) {
 		encode := hex.EncodeToString([]byte(idStr))
 		id, err := hex.DecodeString(encode)
 		require.NoError(t, err)
-		msg := NewMsgCreateIdentity(id, &testPubKeySM2Info, testCertificate, testCredentials, testOwner)
+		msg := NewMsgCreateIdentity(id, &testPubKeySM2Info, testCertificate, testCredentials, testOwner, testData)
 		err = msg.ValidateBasic()
 		if tc.result == true {
 			require.NoError(t, err)
