@@ -69,7 +69,7 @@ func GetCmdQueryAccountBlackList() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			res, err := queryClient.Blacklist(context.Background(), &types.QueryBlacklistRequest{})
+			res, err := queryClient.AccountBlockList(context.Background(), &types.QueryBlockListRequest{})
 			if err != nil {
 				return err
 			}

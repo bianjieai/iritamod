@@ -118,21 +118,21 @@ func (m *QueryRolesResponse) GetRoles() []Role {
 }
 
 // QueryBlacklistRequest is request type for the Query/Blacklist RPC method
-type QueryBlacklistRequest struct {
+type QueryBlockListRequest struct {
 }
 
-func (m *QueryBlacklistRequest) Reset()         { *m = QueryBlacklistRequest{} }
-func (m *QueryBlacklistRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryBlacklistRequest) ProtoMessage()    {}
-func (*QueryBlacklistRequest) Descriptor() ([]byte, []int) {
+func (m *QueryBlockListRequest) Reset()         { *m = QueryBlockListRequest{} }
+func (m *QueryBlockListRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryBlockListRequest) ProtoMessage()    {}
+func (*QueryBlockListRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2eb4a541d751d093, []int{2}
 }
-func (m *QueryBlacklistRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryBlockListRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryBlacklistRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryBlockListRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryBlacklistRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryBlockListRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -142,35 +142,35 @@ func (m *QueryBlacklistRequest) XXX_Marshal(b []byte, deterministic bool) ([]byt
 		return b[:n], nil
 	}
 }
-func (m *QueryBlacklistRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryBlacklistRequest.Merge(m, src)
+func (m *QueryBlockListRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryBlockListRequest.Merge(m, src)
 }
-func (m *QueryBlacklistRequest) XXX_Size() int {
+func (m *QueryBlockListRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryBlacklistRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryBlacklistRequest.DiscardUnknown(m)
+func (m *QueryBlockListRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryBlockListRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryBlacklistRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryBlockListRequest proto.InternalMessageInfo
 
 // QueryBlacklistResponse is response type for the Query/Blacklist RPC method
-type QueryBlacklistResponse struct {
+type QueryBlockListResponse struct {
 	Addresses []string `protobuf:"bytes,1,rep,name=addresses,proto3" json:"addresses,omitempty"`
 }
 
-func (m *QueryBlacklistResponse) Reset()         { *m = QueryBlacklistResponse{} }
-func (m *QueryBlacklistResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryBlacklistResponse) ProtoMessage()    {}
-func (*QueryBlacklistResponse) Descriptor() ([]byte, []int) {
+func (m *QueryBlockListResponse) Reset()         { *m = QueryBlockListResponse{} }
+func (m *QueryBlockListResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryBlockListResponse) ProtoMessage()    {}
+func (*QueryBlockListResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2eb4a541d751d093, []int{3}
 }
-func (m *QueryBlacklistResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryBlockListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryBlacklistResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryBlockListResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryBlacklistResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryBlockListResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -180,19 +180,19 @@ func (m *QueryBlacklistResponse) XXX_Marshal(b []byte, deterministic bool) ([]by
 		return b[:n], nil
 	}
 }
-func (m *QueryBlacklistResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryBlacklistResponse.Merge(m, src)
+func (m *QueryBlockListResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryBlockListResponse.Merge(m, src)
 }
-func (m *QueryBlacklistResponse) XXX_Size() int {
+func (m *QueryBlockListResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryBlacklistResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryBlacklistResponse.DiscardUnknown(m)
+func (m *QueryBlockListResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryBlockListResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryBlacklistResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryBlockListResponse proto.InternalMessageInfo
 
-func (m *QueryBlacklistResponse) GetAddresses() []string {
+func (m *QueryBlockListResponse) GetAddresses() []string {
 	if m != nil {
 		return m.Addresses
 	}
@@ -284,8 +284,8 @@ func (m *QueryContractDenyListResponse) GetAddresses() []string {
 func init() {
 	proto.RegisterType((*QueryRolesRequest)(nil), "iritamod.perm.QueryRolesRequest")
 	proto.RegisterType((*QueryRolesResponse)(nil), "iritamod.perm.QueryRolesResponse")
-	proto.RegisterType((*QueryBlacklistRequest)(nil), "iritamod.perm.QueryBlacklistRequest")
-	proto.RegisterType((*QueryBlacklistResponse)(nil), "iritamod.perm.QueryBlacklistResponse")
+	proto.RegisterType((*QueryBlockListRequest)(nil), "iritamod.perm.QueryBlockListRequest")
+	proto.RegisterType((*QueryBlockListResponse)(nil), "iritamod.perm.QueryBlockListResponse")
 	proto.RegisterType((*QueryContractDenyList)(nil), "iritamod.perm.QueryContractDenyList")
 	proto.RegisterType((*QueryContractDenyListResponse)(nil), "iritamod.perm.QueryContractDenyListResponse")
 }
@@ -293,29 +293,29 @@ func init() {
 func init() { proto.RegisterFile("perm/query.proto", fileDescriptor_2eb4a541d751d093) }
 
 var fileDescriptor_2eb4a541d751d093 = []byte{
-	// 340 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x12, 0x28, 0x48, 0x2d, 0xca,
-	0xd5, 0x2f, 0x2c, 0x4d, 0x2d, 0xaa, 0xd4, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0xcd, 0x2c,
-	0xca, 0x2c, 0x49, 0xcc, 0xcd, 0x4f, 0xd1, 0x03, 0x49, 0x49, 0xf1, 0x83, 0x15, 0x80, 0x08, 0x88,
-	0xbc, 0x92, 0x2e, 0x97, 0x60, 0x20, 0x48, 0x79, 0x50, 0x7e, 0x4e, 0x6a, 0x71, 0x50, 0x6a, 0x61,
-	0x69, 0x6a, 0x71, 0x89, 0x90, 0x04, 0x17, 0x7b, 0x62, 0x4a, 0x4a, 0x51, 0x6a, 0x71, 0xb1, 0x04,
-	0xa3, 0x02, 0xa3, 0x06, 0x67, 0x10, 0x8c, 0xab, 0x64, 0xcf, 0x25, 0x84, 0xac, 0xbc, 0xb8, 0x20,
-	0x3f, 0xaf, 0x38, 0x55, 0x48, 0x93, 0x8b, 0xb5, 0x08, 0x24, 0x20, 0xc1, 0xa8, 0xc0, 0xac, 0xc1,
-	0x67, 0x24, 0xac, 0x87, 0x62, 0xa9, 0x1e, 0x48, 0x71, 0x10, 0x44, 0x85, 0x92, 0x38, 0x97, 0x28,
-	0xd8, 0x00, 0xa7, 0x9c, 0xc4, 0xe4, 0xec, 0x9c, 0xcc, 0xe2, 0x12, 0xa8, 0x9d, 0x4a, 0x66, 0x5c,
-	0x62, 0xe8, 0x12, 0x50, 0xd3, 0x65, 0xb8, 0x38, 0xa1, 0xd6, 0x43, 0x6d, 0xe0, 0x0c, 0x42, 0x08,
-	0xc0, 0x0d, 0x74, 0xce, 0xcf, 0x2b, 0x29, 0x4a, 0x4c, 0x2e, 0x71, 0x49, 0xcd, 0xab, 0xf4, 0xc9,
-	0x2c, 0x2e, 0x51, 0xb2, 0xe5, 0x92, 0xc5, 0x2a, 0x41, 0x9c, 0xb9, 0x46, 0x73, 0x99, 0xb8, 0x58,
-	0xc1, 0xfa, 0x85, 0xfc, 0xb8, 0x58, 0xc1, 0xde, 0x15, 0x52, 0x40, 0xf3, 0x17, 0x46, 0xc0, 0x49,
-	0x29, 0xe2, 0x51, 0x01, 0xb1, 0x55, 0x89, 0x41, 0x28, 0x8a, 0x8b, 0x13, 0xee, 0x49, 0x21, 0x15,
-	0x6c, 0x3a, 0xd0, 0x03, 0x47, 0x4a, 0x95, 0x80, 0x2a, 0xb8, 0xd9, 0x19, 0x5c, 0x02, 0xe8, 0xfe,
-	0xc5, 0x6e, 0x05, 0xba, 0x2a, 0x29, 0x1d, 0x62, 0x54, 0x21, 0x6c, 0x72, 0xf2, 0x3a, 0xf1, 0x48,
-	0x8e, 0xf1, 0xc2, 0x23, 0x39, 0xc6, 0x07, 0x8f, 0xe4, 0x18, 0x27, 0x3c, 0x96, 0x63, 0xb8, 0xf0,
-	0x58, 0x8e, 0xe1, 0xc6, 0x63, 0x39, 0x86, 0x28, 0x83, 0xf4, 0xcc, 0x92, 0x8c, 0xd2, 0x24, 0xbd,
-	0xe4, 0xfc, 0x5c, 0xfd, 0xa4, 0xcc, 0xc4, 0xbc, 0xac, 0xcc, 0xd4, 0xc4, 0x4c, 0x7d, 0x98, 0xe9,
-	0xfa, 0xb9, 0xf9, 0x29, 0xa5, 0x39, 0xa9, 0xc5, 0xe0, 0x44, 0xa8, 0x5f, 0x52, 0x59, 0x90, 0x5a,
-	0x9c, 0xc4, 0x06, 0x4e, 0x8b, 0xc6, 0x80, 0x00, 0x00, 0x00, 0xff, 0xff, 0xf4, 0x28, 0x74, 0x7d,
-	0xbf, 0x02, 0x00, 0x00,
+	// 344 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x92, 0x41, 0x4b, 0xf3, 0x30,
+	0x18, 0xc7, 0xdb, 0xf7, 0x65, 0xca, 0x1e, 0x50, 0x67, 0x44, 0x1d, 0x45, 0xcb, 0x0c, 0x0a, 0x13,
+	0xb4, 0x95, 0x09, 0xde, 0x44, 0x9c, 0x9e, 0x44, 0x04, 0x7b, 0xf4, 0x96, 0xb5, 0xc1, 0x45, 0xd7,
+	0xa6, 0x4b, 0xd2, 0xc3, 0xbe, 0x85, 0x1f, 0xc2, 0x0f, 0xe3, 0x71, 0x47, 0x8f, 0xb2, 0x7d, 0x11,
+	0x49, 0xd6, 0x6d, 0x5a, 0x8b, 0xee, 0x52, 0x68, 0x9e, 0xdf, 0xf3, 0xff, 0xf1, 0x0f, 0x81, 0x5a,
+	0x4a, 0x45, 0xec, 0xf7, 0x33, 0x2a, 0x06, 0x5e, 0x2a, 0xb8, 0xe2, 0x68, 0x85, 0x09, 0xa6, 0x48,
+	0xcc, 0x23, 0x4f, 0x8f, 0x9c, 0x35, 0x03, 0xe8, 0xcf, 0x64, 0x8e, 0x8f, 0x61, 0xfd, 0x5e, 0xe3,
+	0x01, 0xef, 0x51, 0x19, 0xd0, 0x7e, 0x46, 0xa5, 0x42, 0x75, 0x58, 0x26, 0x51, 0x24, 0xa8, 0x94,
+	0x75, 0xbb, 0x61, 0x37, 0xab, 0xc1, 0xf4, 0x17, 0x5f, 0x00, 0xfa, 0x8a, 0xcb, 0x94, 0x27, 0x92,
+	0xa2, 0x43, 0xa8, 0x08, 0x7d, 0x50, 0xb7, 0x1b, 0xff, 0x9b, 0xab, 0xad, 0x0d, 0xef, 0x9b, 0xd4,
+	0xd3, 0x70, 0x30, 0x21, 0xf0, 0x36, 0x6c, 0x9a, 0x80, 0x76, 0x8f, 0x87, 0xcf, 0xb7, 0x4c, 0xaa,
+	0xdc, 0x89, 0xcf, 0x60, 0xab, 0x38, 0xc8, 0xd3, 0x77, 0xa0, 0x9a, 0xeb, 0x73, 0x43, 0x35, 0x98,
+	0x1f, 0xcc, 0x02, 0xaf, 0x78, 0xa2, 0x04, 0x09, 0xd5, 0x35, 0x4d, 0x06, 0x7a, 0x1d, 0x9f, 0xc3,
+	0x6e, 0xe9, 0x60, 0xb1, 0xdc, 0xd6, 0xeb, 0x3f, 0xa8, 0x98, 0x7d, 0x74, 0x07, 0x15, 0x53, 0x17,
+	0x35, 0x0a, 0xbd, 0x7e, 0x5c, 0x9c, 0xb3, 0xf7, 0x0b, 0x31, 0xb1, 0x62, 0x0b, 0x11, 0xa8, 0x5d,
+	0x86, 0x21, 0xcf, 0x12, 0x35, 0xeb, 0x8a, 0xf6, 0xcb, 0x16, 0x8b, 0x77, 0xe4, 0x1c, 0xfc, 0x41,
+	0xcd, 0x14, 0x5d, 0xa8, 0x15, 0x6b, 0x97, 0x2b, 0x8a, 0x94, 0x73, 0xb4, 0x08, 0x35, 0x37, 0xb5,
+	0x6f, 0xde, 0x46, 0xae, 0x3d, 0x1c, 0xb9, 0xf6, 0xc7, 0xc8, 0xb5, 0x5f, 0xc6, 0xae, 0x35, 0x1c,
+	0xbb, 0xd6, 0xfb, 0xd8, 0xb5, 0x1e, 0x4e, 0x1e, 0x99, 0xea, 0x66, 0x1d, 0x2f, 0xe4, 0xb1, 0xdf,
+	0x61, 0x24, 0x79, 0x62, 0x94, 0x30, 0x7f, 0x9a, 0xee, 0xc7, 0x3c, 0xca, 0x7a, 0x54, 0x9a, 0xb7,
+	0xe8, 0xab, 0x41, 0x4a, 0x65, 0x67, 0xc9, 0x3c, 0xc9, 0xd3, 0xcf, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0x27, 0x4f, 0x82, 0xe8, 0xc6, 0x02, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -333,7 +333,7 @@ type QueryClient interface {
 	// Roles queries the roles of a given address
 	Roles(ctx context.Context, in *QueryRolesRequest, opts ...grpc.CallOption) (*QueryRolesResponse, error)
 	// Blacklist queries the black list
-	Blacklist(ctx context.Context, in *QueryBlacklistRequest, opts ...grpc.CallOption) (*QueryBlacklistResponse, error)
+	AccountBlockList(ctx context.Context, in *QueryBlockListRequest, opts ...grpc.CallOption) (*QueryBlockListResponse, error)
 	// ContractDenyList queries the contract deny list
 	ContractDenyList(ctx context.Context, in *QueryContractDenyList, opts ...grpc.CallOption) (*QueryContractDenyListResponse, error)
 }
@@ -355,9 +355,9 @@ func (c *queryClient) Roles(ctx context.Context, in *QueryRolesRequest, opts ...
 	return out, nil
 }
 
-func (c *queryClient) Blacklist(ctx context.Context, in *QueryBlacklistRequest, opts ...grpc.CallOption) (*QueryBlacklistResponse, error) {
-	out := new(QueryBlacklistResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.perm.Query/Blacklist", in, out, opts...)
+func (c *queryClient) AccountBlockList(ctx context.Context, in *QueryBlockListRequest, opts ...grpc.CallOption) (*QueryBlockListResponse, error) {
+	out := new(QueryBlockListResponse)
+	err := c.cc.Invoke(ctx, "/iritamod.perm.Query/AccountBlockList", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -378,7 +378,7 @@ type QueryServer interface {
 	// Roles queries the roles of a given address
 	Roles(context.Context, *QueryRolesRequest) (*QueryRolesResponse, error)
 	// Blacklist queries the black list
-	Blacklist(context.Context, *QueryBlacklistRequest) (*QueryBlacklistResponse, error)
+	AccountBlockList(context.Context, *QueryBlockListRequest) (*QueryBlockListResponse, error)
 	// ContractDenyList queries the contract deny list
 	ContractDenyList(context.Context, *QueryContractDenyList) (*QueryContractDenyListResponse, error)
 }
@@ -390,8 +390,8 @@ type UnimplementedQueryServer struct {
 func (*UnimplementedQueryServer) Roles(ctx context.Context, req *QueryRolesRequest) (*QueryRolesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Roles not implemented")
 }
-func (*UnimplementedQueryServer) Blacklist(ctx context.Context, req *QueryBlacklistRequest) (*QueryBlacklistResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Blacklist not implemented")
+func (*UnimplementedQueryServer) AccountBlockList(ctx context.Context, req *QueryBlockListRequest) (*QueryBlockListResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AccountBlockList not implemented")
 }
 func (*UnimplementedQueryServer) ContractDenyList(ctx context.Context, req *QueryContractDenyList) (*QueryContractDenyListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ContractDenyList not implemented")
@@ -419,20 +419,20 @@ func _Query_Roles_Handler(srv interface{}, ctx context.Context, dec func(interfa
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Blacklist_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryBlacklistRequest)
+func _Query_AccountBlockList_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryBlockListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Blacklist(ctx, in)
+		return srv.(QueryServer).AccountBlockList(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.perm.Query/Blacklist",
+		FullMethod: "/iritamod.perm.Query/AccountBlockList",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Blacklist(ctx, req.(*QueryBlacklistRequest))
+		return srv.(QueryServer).AccountBlockList(ctx, req.(*QueryBlockListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -464,8 +464,8 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_Roles_Handler,
 		},
 		{
-			MethodName: "Blacklist",
-			Handler:    _Query_Blacklist_Handler,
+			MethodName: "AccountBlockList",
+			Handler:    _Query_AccountBlockList_Handler,
 		},
 		{
 			MethodName: "ContractDenyList",
@@ -547,7 +547,7 @@ func (m *QueryRolesResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryBlacklistRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryBlockListRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -557,12 +557,12 @@ func (m *QueryBlacklistRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryBlacklistRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryBlockListRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryBlacklistRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryBlockListRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -570,7 +570,7 @@ func (m *QueryBlacklistRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryBlacklistResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryBlockListResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -580,12 +580,12 @@ func (m *QueryBlacklistResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryBlacklistResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryBlockListResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryBlacklistResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryBlockListResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -697,7 +697,7 @@ func (m *QueryRolesResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryBlacklistRequest) Size() (n int) {
+func (m *QueryBlockListRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -706,7 +706,7 @@ func (m *QueryBlacklistRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryBlacklistResponse) Size() (n int) {
+func (m *QueryBlockListResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -958,7 +958,7 @@ func (m *QueryRolesResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryBlacklistRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryBlockListRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -981,10 +981,10 @@ func (m *QueryBlacklistRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryBlacklistRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryBlockListRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryBlacklistRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryBlockListRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		default:
@@ -1011,7 +1011,7 @@ func (m *QueryBlacklistRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryBlacklistResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryBlockListResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -1034,10 +1034,10 @@ func (m *QueryBlacklistResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryBlacklistResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryBlockListResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryBlacklistResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryBlockListResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:

@@ -174,7 +174,7 @@ func (suite *KeeperTestSuite) TestBlockAccount() {
 	err = suite.keeper.Block(suite.ctx, account)
 	suite.Error(err)
 
-	blackList := suite.keeper.GetAllBlackAccounts(suite.ctx)
+	blackList := suite.keeper.GetAllBlockAccounts(suite.ctx)
 	suite.Equal(1, len(blackList))
 	suite.Equal(account.String(), blackList[0])
 
@@ -184,6 +184,6 @@ func (suite *KeeperTestSuite) TestBlockAccount() {
 	err = suite.keeper.Unblock(suite.ctx, account)
 	suite.Error(err)
 
-	blackList = suite.keeper.GetAllBlackAccounts(suite.ctx)
+	blackList = suite.keeper.GetAllBlockAccounts(suite.ctx)
 	suite.Empty(blackList)
 }
