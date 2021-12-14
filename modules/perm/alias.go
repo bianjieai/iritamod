@@ -34,7 +34,6 @@ var (
 	NewKeeper                   = keeper.NewKeeper
 	NewAuthDecorator            = keeper.NewAuthDecorator
 	GetGenesisStateFromAppState = types.GetGenesisStateFromAppState
-	NewEthCanCallDecorator      = keeper.NewEthCanCallDecorator
 )
 
 type (
