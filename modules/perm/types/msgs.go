@@ -3,7 +3,6 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/ethereum/go-ethereum/common"
 )
 
 const (
@@ -240,7 +239,7 @@ func (m MsgBlockContract) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
 	}
 
-	if !common.IsHexAddress(m.ContractAddress) {
+	if !IsHexAddress(m.ContractAddress) {
 		return sdkerrors.Wrap(ErrInvalidContractAddress, "invalid from address")
 	}
 	return nil
@@ -270,7 +269,7 @@ func (m MsgUnblockContract) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
 	}
 
-	if !common.IsHexAddress(m.ContractAddress) {
+	if !IsHexAddress(m.ContractAddress) {
 		return sdkerrors.Wrap(ErrInvalidContractAddress, "invalid from address")
 	}
 	return nil

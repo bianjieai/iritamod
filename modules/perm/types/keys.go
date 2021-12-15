@@ -2,7 +2,6 @@ package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/ethereum/go-ethereum/common"
 )
 
 const (
@@ -40,6 +39,6 @@ func GetBlackKey(addr sdk.AccAddress) []byte {
 }
 
 // GetContractDenyListKey defines the full key under which a contract deny list is stored.
-func GetContractDenyListKey(contractAddress common.Address) []byte {
+func GetContractDenyListKey(contractAddress Address) []byte {
 	return append(ContractDenyListKey, contractAddress[:]...)
 }

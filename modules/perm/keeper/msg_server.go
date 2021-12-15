@@ -3,10 +3,8 @@ package keeper
 import (
 	"context"
 
-	"github.com/cosmos/cosmos-sdk/types/errors"
-	"github.com/ethereum/go-ethereum/common"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/bianjieai/iritamod/modules/perm/types"
 )
@@ -135,7 +133,7 @@ func (m msgServer) UnblockAccount(goCtx context.Context, msg *types.MsgUnblockAc
 	return &types.MsgUnblockAccountResponse{}, nil
 }
 func (m msgServer) BlockContract(c context.Context, msg *types.MsgBlockContract) (*types.MsgBlockContractResponse, error) {
-	if !common.IsHexAddress(msg.ContractAddress) {
+	if !types.IsHexAddress(msg.ContractAddress) {
 		return &types.MsgBlockContractResponse{},
 			errors.Wrapf(types.ErrInvalidContractAddress, "contract Address %s is invalid", msg.ContractAddress)
 	}
@@ -160,7 +158,7 @@ func (m msgServer) BlockContract(c context.Context, msg *types.MsgBlockContract)
 	return &types.MsgBlockContractResponse{}, nil
 }
 func (m msgServer) UnblockContract(c context.Context, msg *types.MsgUnblockContract) (*types.MsgUnblockContractResponse, error) {
-	if !common.IsHexAddress(msg.ContractAddress) {
+	if !types.IsHexAddress(msg.ContractAddress) {
 		return &types.MsgUnblockContractResponse{},
 			errors.Wrapf(types.ErrInvalidContractAddress, "contract Address %s is invalid", msg.ContractAddress)
 	}

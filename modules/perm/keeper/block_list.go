@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"github.com/ethereum/go-ethereum/common"
 	gogotypes "github.com/gogo/protobuf/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -74,7 +73,7 @@ func (k Keeper) GetAllBlockAccounts(ctx sdk.Context) (accounts []string) {
 
 // BlockContract blocks a contract
 func (k Keeper) BlockContract(ctx sdk.Context, contractAddress string) error {
-	contractAddr := common.HexToAddress(contractAddress)
+	contractAddr := types.HexToAddress(contractAddress)
 	if k.GetBlockContract(ctx, contractAddr) {
 		return sdkerrors.Wrap(types.ErrAlreadyBlockedAccount, contractAddr.String())
 	}
@@ -84,7 +83,7 @@ func (k Keeper) BlockContract(ctx sdk.Context, contractAddress string) error {
 
 // UnblockContract unblocks a contract
 func (k Keeper) UnblockContract(ctx sdk.Context, contractAddress string) error {
-	address := common.HexToAddress(contractAddress)
+	address := types.HexToAddress(contractAddress)
 	if !k.GetBlockContract(ctx, address) {
 		return sdkerrors.Wrap(types.ErrUnknownBlockedAccount, address.String())
 	}
@@ -100,7 +99,7 @@ func (k Keeper) GetContractDenyList(ctx sdk.Context) (accounts []string) {
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		account := common.BytesToAddress(iterator.Key()[1:])
+		account := types.BytesToAddress(iterator.Key()[1:])
 		accounts = append(accounts, account.String())
 	}
 
@@ -108,7 +107,7 @@ func (k Keeper) GetContractDenyList(ctx sdk.Context) (accounts []string) {
 }
 
 // GetBlockContract return a contract blocked
-func (k Keeper) GetBlockContract(ctx sdk.Context, address common.Address) bool {
+func (k Keeper) GetBlockContract(ctx sdk.Context, address types.Address) bool {
 	store := ctx.KVStore(k.storeKey)
 
 	value := store.Get(types.GetContractDenyListKey(address))
@@ -122,12 +121,12 @@ func (k Keeper) GetBlockContract(ctx sdk.Context, address common.Address) bool {
 	return true
 }
 
-func (k Keeper) deleteContractDenyList(ctx sdk.Context, address common.Address) {
+func (k Keeper) deleteContractDenyList(ctx sdk.Context, address types.Address) {
 	store := ctx.KVStore(k.storeKey)
 	store.Delete(types.GetContractDenyListKey(address))
 }
 
-func (k Keeper) setContractDenyList(ctx sdk.Context, address common.Address) {
+func (k Keeper) setContractDenyList(ctx sdk.Context, address types.Address) {
 	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&gogotypes.BoolValue{Value: true})
 	store.Set(types.GetContractDenyListKey(address), bz)

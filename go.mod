@@ -4,7 +4,6 @@ go 1.16
 
 require (
 	github.com/cosmos/cosmos-sdk v0.44.3
-	github.com/ethereum/go-ethereum v1.10.11
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/mux v1.8.0
@@ -20,8 +19,8 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/tendermint/tendermint v0.34.14
 	github.com/tendermint/tm-db v0.6.4
-	github.com/tharsis/ethermint v0.8.1
 	github.com/tjfoc/gmsm v1.4.0
+	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5
 	google.golang.org/genproto v0.0.0-20211116182654-e63d96a377c4
 	google.golang.org/grpc v1.41.0
 	google.golang.org/protobuf v1.27.1
@@ -32,5 +31,4 @@ replace (
 	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.34.4-0.20211014092340-3c5e5a840642
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
 	github.com/tendermint/tendermint => github.com/bianjieai/tendermint v0.34.8-irita-210413.0.20210908054213-781a5fed16d6
-	github.com/tharsis/ethermint => github.com/bianjieai/ethermint v0.8.2-0.20211213103812-95805b5f22cb
 )
