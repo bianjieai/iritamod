@@ -74,7 +74,7 @@ func (k Keeper) GetAllBlockAccounts(ctx sdk.Context) (accounts []string) {
 // BlockContract blocks a contract
 func (k Keeper) BlockContract(ctx sdk.Context, contractAddress string) error {
 	contractAddr := types.HexToAddress(contractAddress)
-	if k.GetBlockContract(ctx, contractAddr) {
+	if k.GetBlockContract(ctx, contractAddr.Bytes()) {
 		return sdkerrors.Wrap(types.ErrAlreadyBlockedAccount, contractAddr.String())
 	}
 	k.setContractDenyList(ctx, contractAddr)
@@ -84,7 +84,7 @@ func (k Keeper) BlockContract(ctx sdk.Context, contractAddress string) error {
 // UnblockContract unblocks a contract
 func (k Keeper) UnblockContract(ctx sdk.Context, contractAddress string) error {
 	address := types.HexToAddress(contractAddress)
-	if !k.GetBlockContract(ctx, address) {
+	if !k.GetBlockContract(ctx, address.Bytes()) {
 		return sdkerrors.Wrap(types.ErrUnknownBlockedAccount, address.String())
 	}
 	k.deleteContractDenyList(ctx, address)
@@ -107,10 +107,10 @@ func (k Keeper) GetContractDenyList(ctx sdk.Context) (accounts []string) {
 }
 
 // GetBlockContract return a contract blocked
-func (k Keeper) GetBlockContract(ctx sdk.Context, address types.Address) bool {
+func (k Keeper) GetBlockContract(ctx sdk.Context, address []byte) bool {
 	store := ctx.KVStore(k.storeKey)
-
-	value := store.Get(types.GetContractDenyListKey(address))
+	addr := types.BytesToAddress(address)
+	value := store.Get(types.GetContractDenyListKey(addr))
 	if value == nil {
 		return false
 	}
