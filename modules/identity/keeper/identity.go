@@ -310,7 +310,9 @@ func (k Keeper) IteratePubKeys(
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
-		pubKeyInfoKey := iterator.Key()[1+types.IDLength:]
+		//pubKeyInfoKey := iterator.Key()[1+types.IDLength:]
+
+		pubKeyInfoKey := iterator.Key()[1+len(identityID):]
 
 		pubKeyAlgo := types.PubKeyAlgorithm(binary.BigEndian.Uint32(pubKeyInfoKey[0:4]))
 		pubKey := pubKeyInfoKey[4:]
