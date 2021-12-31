@@ -41,7 +41,7 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ### Application
 
-(modules/perm) [#33 ]  Add EVM contract permission management
+(modules/perm) [#33]  Add EVM contract permission management
 
 ## [v1.1.1] - 2021-12-07
 ### Improvements
@@ -58,7 +58,7 @@ Ref: https://keepachangelog.com/en/1.0.0/
 * Add modules `perm`, `params`, `node`, `slashing`, `identity`, `upgrade`.
 
 <!-- Release links -->
-
+[v1.2.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.2.0
 [v1.1.1]: https://github.com/bianjieai/iritamod/releases/tag/v1.1.1
 [v1.1.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.1.0
 [v1.0.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.0.0
