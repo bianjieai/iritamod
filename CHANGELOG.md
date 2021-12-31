@@ -41,7 +41,7 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ### Application
 
-[\#33](https://github.com/bianjieai/iritamod/pull/33) Add the permission to enable/disable contracts in the perm module
+(modules/perm) [#33 ]  Add EVM contract permission management
 
 ## [v1.1.1] - 2021-12-07
 ### Improvements
