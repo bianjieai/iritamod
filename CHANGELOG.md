@@ -37,6 +37,12 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ## [Unreleased]
 
+## [v1.2.0] - 2021-12-31
+
+### Application
+
+[\#33](https://github.com/bianjieai/iritamod/pull/33) Add the permission to enable/disable contracts in the perm module
+
 ## [v1.1.1] - 2021-12-07
 ### Improvements
 - (modules/identity) [#32] add `data` field, and the field length limit is only related to the block and transaction size limit.
