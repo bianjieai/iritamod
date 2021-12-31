@@ -64,5 +64,6 @@ Ref: https://keepachangelog.com/en/1.0.0/
 [v1.0.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.0.0
 
 <!-- Pull request links -->
+[#33]: https://github.com/bianjieai/iritamod/pull/33
 [#32]: https://github.com/bianjieai/iritamod/pull/32
 [#30]: https://github.com/bianjieai/iritamod/pull/30
