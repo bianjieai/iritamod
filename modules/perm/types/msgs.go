@@ -220,3 +220,68 @@ func (m MsgUnblockAccount) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(m.Operator)
 	return []sdk.AccAddress{addr}
 }
+
+var (
+	_ sdk.Msg = &MsgBlockContract{}
+	_ sdk.Msg = &MsgUnblockContract{}
+)
+
+func NewMsgBlockContract(contractAddr, from string) *MsgBlockContract {
+	return &MsgBlockContract{
+		contractAddr,
+		from,
+	}
+}
+
+func (m MsgBlockContract) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(m.Operator)
+	if err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
+	}
+
+	if !IsHexAddress(m.ContractAddress) {
+		return sdkerrors.Wrap(ErrInvalidContractAddress, "invalid from address")
+	}
+	return nil
+}
+
+func (m *MsgBlockContract) GetSigners() []sdk.AccAddress {
+	if len(m.Operator) == 0 {
+		panic("do not have signer")
+	}
+	accAddr, err := sdk.AccAddressFromBech32(m.Operator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{accAddr}
+}
+
+func NewMsgUnblockContract(contractAddr, from string) *MsgUnblockContract {
+	return &MsgUnblockContract{
+		contractAddr,
+		from,
+	}
+}
+
+func (m MsgUnblockContract) ValidateBasic() error {
+	_, err := sdk.AccAddressFromBech32(m.Operator)
+	if err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
+	}
+
+	if !IsHexAddress(m.ContractAddress) {
+		return sdkerrors.Wrap(ErrInvalidContractAddress, "invalid from address")
+	}
+	return nil
+}
+
+func (m *MsgUnblockContract) GetSigners() []sdk.AccAddress {
+	if len(m.Operator) == 0 {
+		panic("do not have signer")
+	}
+	accAddr, err := sdk.AccAddressFromBech32(m.Operator)
+	if err != nil {
+		panic(err)
+	}
+	return []sdk.AccAddress{accAddr}
+}

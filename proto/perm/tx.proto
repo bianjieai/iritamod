@@ -20,6 +20,12 @@ service Msg {
 
     // UnblockAccount defines a method for unblocking a blocked account
     rpc UnblockAccount(MsgUnblockAccount) returns (MsgUnblockAccountResponse);
+
+    // BlockContract defines a method for blocking an contract
+    rpc BlockContract(MsgBlockContract) returns (MsgBlockContractResponse);
+
+    // UnblockContract defines a method for unblocking a blocked contract
+    rpc UnblockContract(MsgUnblockContract) returns (MsgUnblockContractResponse);
 }
 
 // MsgAssignRoles defines an SDK message for assigning roles to an address.
@@ -67,3 +73,26 @@ message MsgUnblockAccount {
 
 // MsgUnblockAccountResponse defines the Msg/UnblockAccount response type.
 message MsgUnblockAccountResponse { }
+
+
+// MsgBlockContract defines an SDK message for blocking an contract.
+message MsgBlockContract {
+    option (gogoproto.equal) = true;
+
+    string contract_address = 1;
+    string operator = 2;
+}
+
+// MsgBlockContractResponse defines the Msg/MsgBlockContract response type.
+message MsgBlockContractResponse { }
+
+// MsgUnblockContract defines an SDK message for unblocking an contract.
+message MsgUnblockContract {
+    option (gogoproto.equal) = true;
+
+    string contract_address = 1;
+    string operator = 2;
+}
+
+// MsgUnblockAccountResponse defines the Msg/MsgUnblockContract response type.
+message MsgUnblockContractResponse { }

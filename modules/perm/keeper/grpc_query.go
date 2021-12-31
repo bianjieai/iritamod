@@ -30,13 +30,23 @@ func (k Keeper) Roles(c context.Context, req *types.QueryRolesRequest) (*types.Q
 	return &types.QueryRolesResponse{Roles: auth.Roles()}, nil
 }
 
-// Blacklist queries all blocked accounts
-func (k Keeper) Blacklist(c context.Context, req *types.QueryBlacklistRequest) (*types.QueryBlacklistResponse, error) {
+// AccountBlockList queries all blocked accounts
+func (k Keeper) AccountBlockList(c context.Context, req *types.QueryBlockListRequest) (*types.QueryBlockListResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
 
-	return &types.QueryBlacklistResponse{Addresses: k.GetAllBlackAccounts(ctx)}, nil
+	return &types.QueryBlockListResponse{Addresses: k.GetAllBlockAccounts(ctx)}, nil
+}
+
+// ContractDenyList queries all blocked contract
+func (k Keeper) ContractDenyList(c context.Context, req *types.QueryContractDenyList) (*types.QueryContractDenyListResponse, error) {
+	if req == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "empty request")
+	}
+	ctx := sdk.UnwrapSDKContext(c)
+	return &types.QueryContractDenyListResponse{Addresses: k.GetContractDenyList(ctx)}, nil
+
 }

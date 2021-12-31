@@ -53,7 +53,7 @@ func queryBlacklist(ctx sdk.Context, req abci.RequestQuery, k Keeper, legacyQuer
 		return nil, sdkerrors.Wrap(sdkerrors.ErrJSONUnmarshal, err.Error())
 	}
 
-	blackAccounts := k.GetAllBlackAccounts(ctx)
+	blackAccounts := k.GetAllBlockAccounts(ctx)
 
 	start, end := client.Paginate(len(blackAccounts), params.Page, params.Limit, DefaultLimit)
 	if start < 0 || end < 0 {

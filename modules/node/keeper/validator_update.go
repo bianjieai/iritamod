@@ -16,8 +16,8 @@ func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx sdk.Context) (updates []ab
 		ctx,
 		func(index int64, pubkey string, power int64) bool {
 			var pk cryptotypes.PubKey
-			bz, err := sdk.GetFromBech32(pubkey,sdk.GetConfig().GetBech32ConsensusPubPrefix())
-			pk,err  = legacy.PubKeyFromBytes(bz)
+			bz, err := sdk.GetFromBech32(pubkey, sdk.GetConfig().GetBech32ConsensusPubPrefix())
+			pk, err = legacy.PubKeyFromBytes(bz)
 			if err != nil {
 				panic(err)
 			}

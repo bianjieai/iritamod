@@ -1,10 +1,11 @@
 package types
 
 import (
-	"github.com/cosmos/cosmos-sdk/codec/legacy"
-	"github.com/cosmos/cosmos-sdk/types/bech32"
 	"sort"
 	"strings"
+
+	"github.com/cosmos/cosmos-sdk/codec/legacy"
+	"github.com/cosmos/cosmos-sdk/types/bech32"
 
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	tmprotocrypto "github.com/tendermint/tendermint/proto/tendermint/crypto"
@@ -33,7 +34,7 @@ func NewValidator(
 	var pkStr string
 	var err error
 	if pubKey != nil {
-		pkStr,err = bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(pubKey))
+		pkStr, err = bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(pubKey))
 	}
 	if err != nil {
 		panic(err)
@@ -94,8 +95,8 @@ func (v Validator) GetOperator() sdk.ValAddress {
 
 // ConsPubKey returns the validator PubKey as a cryptotypes.PubKey.
 func (v Validator) ConsPubKey() (pk cryptotypes.PubKey, err error) {
-	bz, err := sdk.GetFromBech32(v.Pubkey,sdk.GetConfig().GetBech32ConsensusPubPrefix() )
-	return  legacy.PubKeyFromBytes(bz)
+	bz, err := sdk.GetFromBech32(v.Pubkey, sdk.GetConfig().GetBech32ConsensusPubPrefix())
+	return legacy.PubKeyFromBytes(bz)
 }
 
 // TmConsPublicKey casts Validator.ConsensusPubkey to tmprotocrypto.PubKey.

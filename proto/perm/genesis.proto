@@ -15,6 +15,10 @@ message GenesisState {
     repeated string black_list = 2 [
       (gogoproto.moretags) = "yaml:\"black_list\""
     ];
+    repeated string contract_deny_list = 3 [
+      (gogoproto.moretags) = "yaml:\"contract_deny_list\""
+    ];
+
 }
 
 // RoleAccount represents an account with roles.

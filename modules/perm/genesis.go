@@ -33,7 +33,7 @@ func InitGenesis(ctx sdk.Context, k Keeper, data GenesisState) (res []abci.Valid
 
 // ExportGenesis - output genesis account role set
 func ExportGenesis(ctx sdk.Context, k Keeper) *GenesisState {
-	return NewGenesisState(k.GetRoles(ctx), k.GetAllBlackAccounts(ctx))
+	return NewGenesisState(k.GetRoles(ctx), k.GetAllBlockAccounts(ctx), k.GetContractDenyList(ctx))
 }
 
 // ValidateGenesis validates the provided perm genesis state

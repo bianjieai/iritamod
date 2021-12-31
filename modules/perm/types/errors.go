@@ -11,6 +11,9 @@ var (
 	ErrRemoveRootAdmin       = sdkerrors.Register(ModuleName, 7, "can not remove root account")
 	ErrRemoveUnknownRole     = sdkerrors.Register(ModuleName, 8, "the account does not have this role")
 	ErrInvalidMsgURL         = sdkerrors.Register(ModuleName, 9, "invalid url")
+	// ErrInvalidContractAddress returns an error that the contract address is invalid
+	ErrInvalidContractAddress = sdkerrors.Register(ModuleName, 10, "contract address is invalid")
+	ErrContractDisable        = sdkerrors.Register(ModuleName, 11, "contract is disable")
 
 	ErrOperateRootAdmin = sdkerrors.Wrap(ErrUnauthorizedOperation, "can not operate root admin")
 	ErrOperatePermAdmin = sdkerrors.Wrap(ErrUnauthorizedOperation, "can not operate another permission admin")

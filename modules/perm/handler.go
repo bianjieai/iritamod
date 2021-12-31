@@ -30,6 +30,14 @@ func NewHandler(k Keeper) sdk.Handler {
 			res, err := msgServer.UnblockAccount(sdk.WrapSDKContext(ctx), msg)
 			return sdk.WrapServiceResult(ctx, res, err)
 
+		case *MsgBlockContract:
+			res, err := msgServer.BlockContract(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
+		case *MsgUnblockContract:
+			res, err := msgServer.UnblockContract(sdk.WrapSDKContext(ctx), msg)
+			return sdk.WrapServiceResult(ctx, res, err)
+
 		default:
 			return nil, sdkerrors.Wrapf(sdkerrors.ErrUnknownRequest, "unrecognized %s message type: %T", ModuleName, msg)
 		}
