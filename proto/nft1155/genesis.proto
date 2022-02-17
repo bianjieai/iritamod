@@ -1,12 +1,12 @@
 syntax = "proto3";
-package irismod.nft;
+package iritamod.nft1155;
 
 import "gogoproto/gogo.proto";
 import "nft1155/nft1155.proto";
 
-option go_package = "github.com/irisnet/irismod/modules/nft/types";
+option go_package = "github.com/bianjieai/iritamod/modules/nft1155/types";
 
-// GenesisState defines the NFT module's genesis state
+// GenesisState defines the NFT1155 module's genesis state
 message GenesisState {
-    repeated Collection collections = 1 [ (gogoproto.nullable) = false ];
+  repeated Owner owner = 1 [(gogoproto.nullable) = false];
 }

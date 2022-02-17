@@ -1,122 +1,76 @@
 syntax = "proto3";
-package irismod.nft;
+package iritamod.nft1155;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/irisnet/irismod/modules/nft/types";
+option go_package = "github.com/bianjieai/iritamod/modules/nft1155/types";
 option (gogoproto.goproto_getters_all) = false;
 
-// Msg defines the nft Msg service.
+// Msg defines the Token Msg service.
 service Msg {
-    // IssueDenom defines a method for issue a denom.
-    rpc IssueDenom(MsgIssueDenom) returns (MsgIssueDenomResponse);
+  // IssueToken defines a method for issue a Token.
+  rpc IssueToken(MsgIssueToken) returns (MsgIssueTokenResponse);
 
-    // MintNFT defines a method for mint a new nft
-    rpc MintNFT(MsgMintNFT) returns (MsgMintNFTResponse);
+  // MintToken defines a method for mint a new Token
+  rpc MintToken(MsgMintToken) returns (MsgMintTokenResponse);
 
-    // RefundHTLC defines a method for editing a nft.
-    rpc EditNFT(MsgEditNFT) returns (MsgEditNFTResponse);
+  // BurnToken defines a method for burning a Token.
+  rpc BurnToken(MsgBurnToken) returns (MsgBurnTokenResponse);
 
-    // TransferNFT defines a method for transferring a nft.
-    rpc TransferNFT(MsgTransferNFT) returns (MsgTransferNFTResponse);
-
-    // BurnNFT defines a method for burning a nft.
-    rpc BurnNFT(MsgBurnNFT) returns (MsgBurnNFTResponse);
-
-    // TransferDenom defines a method for transferring a denom.
-    rpc TransferDenom(MsgTransferDenom) returns (MsgTransferDenomResponse);
+  // TransferToken defines a method for transferring a Token.
+  rpc TransferToken(MsgTransferToken) returns (MsgTransferTokenResponse);
 }
 
-// MsgIssueDenom defines an SDK message for creating a new denom.
-message MsgIssueDenom {
-    option (gogoproto.equal) = true;
+// MsgIssueToken defines an SDK message for creating a new Token.
+message MsgIssueToken {
+  option (gogoproto.equal) = true;
 
-    string id = 1;
-    string name = 2;
-    string schema = 3;
-    string sender = 4;
-    string symbol = 5;
-    bool mint_restricted = 6 ;
-    bool update_restricted = 7 ;
-    string description = 8;
-    string uri = 9;
-    string uri_hash = 10;
-    string data = 11;
+  string id = 1;
+  string owner = 2;
+  uint64 max_supply = 3;
+  bytes metadata = 4;
 }
 
-// MsgIssueDenomResponse defines the Msg/IssueDenom response type.
-message MsgIssueDenomResponse {}
+// MsgIssueTokenResponse defines the Msg/IssueToken response type.
+message MsgIssueTokenResponse {}
 
-// MsgTransferNFT defines an SDK message for transferring an NFT to recipient.
-message MsgTransferNFT {
-    option (gogoproto.equal) = true;
 
-    string id = 1;
-    string denom_id = 2 [ (gogoproto.moretags) = "yaml:\"denom_id\"" ];
-    string name = 3;
-    string uri = 4 [ (gogoproto.customname) = "URI" ];
-    string data = 5;
-    string sender = 6;
-    string recipient = 7;
-    string uri_hash = 8;
+// MsgMintToken defines an SDK message for creating a new Token.
+message MsgMintToken {
+  option (gogoproto.equal) = true;
+
+  string id = 1;
+  string owner = 2;   //owner = sender
+  string recipient = 3;
+  uint64 amount = 4;
 }
 
-// MsgTransferNFTResponse defines the Msg/TransferNFT response type.
-message MsgTransferNFTResponse {}
+// MsgMintTokenResponse defines the Msg/MintToken response type.
+message MsgMintTokenResponse {}
 
-// MsgEditNFT defines an SDK message for editing a nft.
-message MsgEditNFT {
-    option (gogoproto.equal) = true;
 
-    string id = 1;
-    string denom_id = 2 [ (gogoproto.moretags) = "yaml:\"denom_id\"" ];
-    string name = 3;
-    string uri = 4 [ (gogoproto.customname) = "URI" ];
-    string data = 5;
-    string sender = 6;
-    string uri_hash = 7;
+// MsgBurnToken defines an SDK message for burning a Token.
+message MsgBurnToken {
+  option (gogoproto.equal) = true;
+
+  string id = 1;
+  uint64 amount = 2;
+  string sender = 3;
 }
 
-// MsgEditNFTResponse defines the Msg/EditNFT response type.
-message MsgEditNFTResponse {}
+// MsgBurnTokenResponse defines the Msg/BurnToken response type.
+message MsgBurnTokenResponse {}
 
-// MsgMintNFT defines an SDK message for creating a new NFT.
-message MsgMintNFT {
-    option (gogoproto.equal) = true;
 
-    string id = 1;
-    string denom_id = 2 [ (gogoproto.moretags) = "yaml:\"denom_id\"" ];
-    string name = 3;
-    string uri = 4 [ (gogoproto.customname) = "URI" ];
-    string data = 5;
-    string sender = 6;
-    string recipient = 7;
-    string uri_hash = 8;
+// MsgTransferToken defines an SDK message for transferring an Token to recipient.
+message MsgTransferToken {
+  option (gogoproto.equal) = true;
+  string sender = 1;
+  string recipient = 2;
+  string token_id = 3;
+  string amount = 4;
+  bytes metadata = 5;
 }
 
-// MsgMintNFTResponse defines the Msg/MintNFT response type.
-message MsgMintNFTResponse {}
-
-// MsgBurnNFT defines an SDK message for burning a NFT.
-message MsgBurnNFT {
-    option (gogoproto.equal) = true;
-
-    string id = 1;
-    string denom_id = 2 [ (gogoproto.moretags) = "yaml:\"denom_id\"" ];
-    string sender = 3;
-}
-
-// MsgBurnNFTResponse defines the Msg/BurnNFT response type.
-message MsgBurnNFTResponse {}
-
-
-// MsgTransferDenom defines an SDK message for transferring an denom to recipient.
-message MsgTransferDenom {
-    option (gogoproto.equal) = true;
-    string id = 1;
-    string sender = 2;
-    string recipient = 3;
-}
-
-// MsgTransferDenomResponse defines the Msg/TransferDenom response type.
-message MsgTransferDenomResponse {}
+// MsgTransferTokenResponse defines the Msg/TransferToken response type.
+message MsgTransferTokenResponse {}
