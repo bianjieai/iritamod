@@ -34,6 +34,9 @@ func (a Auth) Roles() (rs []Role) {
 	if a.Access(RoleRelayerUser.Auth()) {
 		rs = append(rs, RoleRelayerUser)
 	}
+	if a.Access(RolePlatformAccount.Auth()) {
+		rs = append(rs, RolePlatformAccount)
+	}
 
 	return rs
 }
