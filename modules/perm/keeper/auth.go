@@ -51,6 +51,11 @@ func (k Keeper) IsBaseM1Admin(ctx sdk.Context, address sdk.AccAddress) bool {
 	return (auth & types.RoleBaseM1Admin.Auth()) > 0
 }
 
+func (k Keeper) IsPlatformAccount(ctx sdk.Context, address sdk.AccAddress) bool {
+	auth := k.GetAuth(ctx, address)
+	return (auth & types.RolePlatformAccount.Auth()) > 0
+}
+
 func (k Keeper) IsAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
 	auth := k.GetAuth(ctx, address)
 	return (auth&types.RoleRootAdmin.Auth()) > 0 ||
