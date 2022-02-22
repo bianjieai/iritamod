@@ -39,7 +39,7 @@ func NewAssignRolesCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "assign-roles [address] [roles]",
 		Long: strings.TrimSpace(fmt.Sprintf(
-			"Assign roles to an account.\n\n Auth options: %s, %s, %s, %s, %s, %s, %s, %s\n",
+			"Assign roles to an account.\n\n Auth options: %s, %s, %s, %s, %s, %s, %s, %s, %s\n",
 			types.RolePermAdmin,
 			types.RoleBlacklistAdmin,
 			types.RoleNodeAdmin,
@@ -48,6 +48,7 @@ func NewAssignRolesCmd() *cobra.Command {
 			types.RoleBaseM1Admin,
 			types.RolePowerUser,
 			types.RoleRelayerUser,
+			types.RolePlatformUser,
 		)),
 		Args: cobra.MinimumNArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -91,7 +92,7 @@ func NewUnassignRolesCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "unassign-roles [address] [roles]",
 		Long: strings.TrimSpace(fmt.Sprintf(
-			"Unassign roles from an account.\n\nAuth options: %s, %s, %s, %s, %s, %s, %s, %s",
+			"Unassign roles from an account.\n\nAuth options: %s, %s, %s, %s, %s, %s, %s, %s, %s\n",
 			types.RolePermAdmin,
 			types.RoleBlacklistAdmin,
 			types.RoleNodeAdmin,
@@ -100,6 +101,7 @@ func NewUnassignRolesCmd() *cobra.Command {
 			types.RoleBaseM1Admin,
 			types.RolePowerUser,
 			types.RoleRelayerUser,
+			types.RolePlatformUser,
 		)),
 		Args: cobra.MinimumNArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
