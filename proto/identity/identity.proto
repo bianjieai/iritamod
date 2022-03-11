@@ -51,4 +51,6 @@ enum PubKeyAlgorithm {
   ED25519 = 4 [(gogoproto.enumvalue_customname) = "ED25519"];
   // SM2 defines an SM2 algorithm name.
   SM2 = 5 [(gogoproto.enumvalue_customname) = "SM2"];
+  // GMSSL defines an GMSSL algorithm name.
+  GMSSL = 6 [(gogoproto.enumvalue_customname) = "GMSSL"];
 }

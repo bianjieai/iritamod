@@ -26,6 +26,9 @@ func ReadCertificateFromMem(data []byte) (Cert, error) {
 	case algo.SM2:
 		return ReadSM2CertFromMem(data)
 
+	case algo.GMSSL:
+		return ReadGMSSLCertFromMem(data)
+
 	default:
 		return ReadX509CertFromMem(data)
 	}

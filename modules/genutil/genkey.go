@@ -7,12 +7,16 @@ import (
 	"github.com/tendermint/tendermint/crypto"
 	ed25519util "github.com/tendermint/tendermint/crypto/ed25519"
 	"github.com/tendermint/tendermint/crypto/sm2"
+	"github.com/tendermint/tendermint/crypto/gmssl"
 
 	cautil "github.com/bianjieai/iritamod/utils/ca"
 )
 
 func Genkey(privKey crypto.PrivKey) ([]byte, error) {
 	switch pk := privKey.(type) {
+	case *gmssl.PrivKeySm2:
+		priKey := privKey.(*gmssl.PrivKeySm2)
+		return cautil.GmSSLCert{PrivateKey: priKey.Key}.WritePrivateKeytoMem()
 	case sm2.PrivKeySm2:
 		privKey := privKey.(sm2.PrivKeySm2)
 		return cautil.Sm2Cert{PrivateKey: privKey.GetPrivateKey()}.WritePrivateKeytoMem()
