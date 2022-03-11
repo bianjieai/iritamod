@@ -39,7 +39,7 @@ mkfile_dir := $(shell cd $(shell dirname $(mkfile_path)); pwd)
 # tools
 ###
 
-PREFIX ?= /usr/local
+PREFIX ?= $(GOPATH)
 BIN ?= $(PREFIX)/bin
 UNAME_S ?= $(shell uname -s)
 UNAME_M ?= $(shell uname -m)
@@ -106,7 +106,7 @@ ifeq (, $(shell which protoc-gen-swagger))
 	@go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger
 	@npm install -g swagger-combine
 else
-	@echo "protoc-gen-grpc-gateway already installed; skipping..."
+	@echo "protoc-gen-swagger already installed; skipping..."
 endif
 
 buf: buf-stamp
