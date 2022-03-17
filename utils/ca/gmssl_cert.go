@@ -25,5 +25,5 @@ func (gc GmSSLCert) VerifyCertFromRoot(rootCert Cert) error {
 	if rc, ok := rootCert.(GmSSLCert); ok {
 		return gc.Certificate.CheckSignatureFrom(rc.Certificate)
 	}
-	return errors.New("can not verify sm2 certificate by other algorithm certificate")
+	return errors.New("can not verify gmssl certificate by other algorithm certificate")
 }

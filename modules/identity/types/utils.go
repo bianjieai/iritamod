@@ -92,7 +92,7 @@ func parseASN1Certificate(asn1Data []byte) (*certificate, error) {
 
 // parseCertificate parses the X.509 certificate with the given public key algorithm
 func parseCertificate(asn1Data []byte, pkAlgo PubKeyAlgorithm) (interface{}, error) {
-	if pkAlgo == SM2 {
+	if pkAlgo == SM2 || pkAlgo == GMSSL {
 		x509Cert, err := sm2x509.ParseCertificate(asn1Data)
 		if err != nil {
 			return nil, sdkerrors.Wrap(ErrInvalidCertificate, err.Error())
@@ -177,7 +177,7 @@ func getPubKey(asn1Cert *certificate, pkAlgo PubKeyAlgorithm) []byte {
 	case ED25519:
 		return pubKeyASN1
 
-	case ECDSA, SM2:
+	case ECDSA, SM2, GMSSL:
 		paramsData := asn1Cert.TBSCertificate.PublicKey.Algorithm.Parameters.FullBytes
 		namedCurveOID := new(asn1.ObjectIdentifier)
 

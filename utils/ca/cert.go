@@ -14,6 +14,7 @@ import (
 	"github.com/tendermint/tendermint/crypto/algo"
 	ed25519util "github.com/tendermint/tendermint/crypto/ed25519"
 	tmsm2 "github.com/tendermint/tendermint/crypto/sm2"
+	tmgmssl "github.com/tendermint/tendermint/crypto/gmssl"
 )
 
 type Cert interface {
@@ -41,8 +42,16 @@ func VerifyCertFromRoot(cert, rootCert Cert) error {
 // GetPubkeyFromCert gets the pubkey from certificate
 func GetPubkeyFromCert(cert Cert) (crypto.PubKey, error) {
 	switch c := cert.(type) {
+	case GmSSLCert:
+		fmt.Println(c)
+		pk, err := c.Certificate.GetPublicKey()
+		if err != nil {
+			return nil, err
+		}
+		return &tmgmssl.PubKeySm2{Key: pk}, nil
 	case Sm2Cert:
 		expectedPubKeyAlgo := c.Certificate.PublicKeyAlgorithm
+		fmt.Println(expectedPubKeyAlgo)
 		pub, ok := c.Certificate.PublicKey.(*ecdsa.PublicKey)
 		if !ok || expectedPubKeyAlgo != sm2x509.ECDSA {
 			return nil, UnexpectedPubKeyAlgo("ECDSA", c.Certificate.PublicKey)

@@ -7,6 +7,7 @@ import (
 
 	"github.com/tendermint/tendermint/crypto/ed25519"
 	"github.com/tendermint/tendermint/crypto/sm2"
+	"github.com/tendermint/tendermint/crypto/gmssl"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -104,6 +105,11 @@ func (pki PubKeyInfo) Validate() error {
 	case SM2:
 		if len(pubKey) != sm2.PubKeySize {
 			return sdkerrors.Wrapf(ErrInvalidPubKey, "size of the SM2 public key must be %d in bytes", sm2.PubKeySize)
+		}
+
+	case GMSSL:
+		if len(pubKey) != gmssl.PubKeySize {
+			return sdkerrors.Wrapf(ErrInvalidPubKey, "size of the GMSSL public key must be %d in bytes", gmssl.PubKeySize)
 		}
 
 	default:
