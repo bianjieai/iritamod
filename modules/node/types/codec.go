@@ -6,6 +6,8 @@ import (
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/msgservice"
+	"github.com/tendermint/tendermint/crypto"
+	tmsm2 "github.com/tendermint/tendermint/crypto/sm2"
 )
 
 var (
@@ -27,6 +29,8 @@ func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgRemoveValidator{}, "iritamod/validator/MsgRemoveValidator", nil)
 	cdc.RegisterConcrete(&MsgGrantNode{}, "iritamod/node/MsgGrantNode", nil)
 	cdc.RegisterConcrete(&MsgRevokeNode{}, "iritamod/node/MsgRevokeNode", nil)
+	cdc.RegisterInterface((*crypto.PubKey)(nil), nil)
+	cdc.RegisterConcrete(tmsm2.PubKeySm2{}, tmsm2.PubKeyName, nil)
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {
