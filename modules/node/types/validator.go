@@ -1,6 +1,7 @@
 package types
 
 import (
+	"github.com/tendermint/tendermint/crypto"
 	"sort"
 	"strings"
 
@@ -96,7 +97,17 @@ func (v Validator) GetOperator() sdk.ValAddress {
 // ConsPubKey returns the validator PubKey as a cryptotypes.PubKey.
 func (v Validator) ConsPubKey() (pk cryptotypes.PubKey, err error) {
 	bz, err := sdk.GetFromBech32(v.Pubkey, sdk.GetConfig().GetBech32ConsensusPubPrefix())
-	return legacy.PubKeyFromBytes(bz)
+	pk, err = legacy.PubKeyFromBytes(bz)
+	if err != nil {
+		// 兼容
+		var tmpk crypto.PubKey
+		e := legacy.Cdc.Unmarshal(bz, &tmpk)
+		if e != nil {
+			return nil, e
+		}
+		pk, err = cryptocodec.FromTmPubKeyInterface(tmpk)
+	}
+	return
 }
 
 // TmConsPublicKey casts Validator.ConsensusPubkey to tmprotocrypto.PubKey.
