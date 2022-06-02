@@ -130,6 +130,7 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 
 		validator.Name = msg.Name
 	}
+	validator.Operator = msg.Operator
 	k.SetValidator(ctx, validator)
 	return nil
 }
