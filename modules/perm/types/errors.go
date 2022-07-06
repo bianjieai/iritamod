@@ -15,7 +15,7 @@ var (
 	ErrInvalidContractAddress = sdkerrors.Register(ModuleName, 10, "contract address is invalid")
 	ErrContractDisable        = sdkerrors.Register(ModuleName, 11, "contract is disable")
 
-	ErrrRolePowerUser = sdkerrors.Register(ModuleName, 12, "the authorized role must be POWER_USER")
+	ErrOperatePowerUser = sdkerrors.Wrap(ErrUnauthorizedOperation, "POWER_USER_ADMIN can only optrate POWER_USER roles ")
 
 	ErrOperateRootAdmin = sdkerrors.Wrap(ErrUnauthorizedOperation, "can not operate root admin")
 	ErrOperatePermAdmin = sdkerrors.Wrap(ErrUnauthorizedOperation, "can not operate another permission admin")
