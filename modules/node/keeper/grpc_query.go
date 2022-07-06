@@ -55,7 +55,7 @@ func (q Querier) Validators(c context.Context, req *types.QueryValidatorsRequest
 	validatorStore := prefix.NewStore(store, types.ValidatorsKey)
 	pageRes, err := query.Paginate(
 		validatorStore,
-		req.Pagination,
+		shapePageRequest(req.Pagination),
 		func(key []byte, value []byte) error {
 			var validator types.Validator
 			if err := q.cdc.Unmarshal(value, &validator); err != nil {
@@ -121,7 +121,7 @@ func (q Querier) Nodes(c context.Context, req *types.QueryNodesRequest) (*types.
 	nodes := make([]types.Node, 0)
 	store := ctx.KVStore(q.storeKey)
 	nodeStore := prefix.NewStore(store, types.NodeKey)
-	pageRes, err := query.Paginate(nodeStore, req.Pagination, func(key []byte, value []byte) error {
+	pageRes, err := query.Paginate(nodeStore, shapePageRequest(req.Pagination), func(key []byte, value []byte) error {
 		var node types.Node
 		err := q.cdc.Unmarshal(value, &node)
 		if err != nil {
