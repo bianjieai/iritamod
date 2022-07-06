@@ -69,3 +69,17 @@ func (k Keeper) IsAdmin(ctx sdk.Context, address sdk.AccAddress) bool {
 		(auth&types.RoleNodeAdmin.Auth()) > 0 ||
 		(auth&types.RoleParamAdmin.Auth()) > 0
 }
+
+func (k Keeper) IsAdminPerm(ctx sdk.Context, address sdk.AccAddress) bool {
+	auth := k.GetAuth(ctx, address)
+	return (auth&types.RoleRootAdmin.Auth()) > 0 ||
+		(auth&types.RolePermAdmin.Auth()) > 0
+}
+
+func (k Keeper) IsPowerAdminPerm(ctx sdk.Context, address sdk.AccAddress) bool {
+	auth := k.GetAuth(ctx, address)
+	return (auth&types.RoleRootAdmin.Auth()) > 0 ||
+		(auth&types.RolePermAdmin.Auth()) > 0 ||
+		(auth&types.RolePowerUserAdmin.Auth()) > 0
+
+}
