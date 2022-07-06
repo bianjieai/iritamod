@@ -64,14 +64,26 @@ func (k *Keeper) Authorize(ctx sdk.Context, address, operator sdk.AccAddress, rs
 		return types.ErrOperatePermAdmin
 	}
 	auth := k.GetAuth(ctx, address)
-	for _, r := range rs {
-		if r == types.RoleRootAdmin {
-			return types.ErrAddRootAdmin
+	if k.IsPowerUserAdmin(ctx, operator) {
+		for _, r := range rs {
+			if r == types.RoleRootAdmin {
+				return types.ErrAddRootAdmin
+			}
+			if r != types.RolePowerUser && (!k.IsRootAdmin(ctx, operator) || !k.IsPermAdmin(ctx, operator)) {
+				return types.ErrrRolePowerUser
+			}
+			auth = auth | r.Auth()
 		}
-		if r == types.RolePermAdmin && !k.IsRootAdmin(ctx, operator) {
-			return sdkerrors.Wrap(types.ErrUnauthorizedOperation, "can not add permission admin role")
+	} else {
+		for _, r := range rs {
+			if r == types.RoleRootAdmin {
+				return types.ErrAddRootAdmin
+			}
+			if r == types.RolePermAdmin && !k.IsRootAdmin(ctx, operator) {
+				return sdkerrors.Wrap(types.ErrUnauthorizedOperation, "can not add permission admin role")
+			}
+			auth = auth | r.Auth()
 		}
-		auth = auth | r.Auth()
 	}
 	k.SetAuth(ctx, address, auth)
 	return nil
@@ -88,14 +100,26 @@ func (k Keeper) Unauthorize(ctx sdk.Context, address, operator sdk.AccAddress, r
 	}
 
 	auth := k.GetAuth(ctx, address)
-	for _, r := range roles {
-		if r == types.RoleRootAdmin {
-			return types.ErrRemoveRootAdmin
+	if k.IsPowerUserAdmin(ctx, operator) {
+		for _, r := range roles {
+			if r == types.RoleRootAdmin {
+				return types.ErrAddRootAdmin
+			}
+			if r != types.RolePowerUser && (!k.IsRootAdmin(ctx, operator) || !k.IsPermAdmin(ctx, operator)) {
+				return types.ErrrRolePowerUser
+			}
+			auth = auth | r.Auth()
 		}
-		if !auth.Access(r.Auth()) {
-			return sdkerrors.Wrapf(types.ErrRemoveUnknownRole, "%s", r)
+	} else {
+		for _, r := range roles {
+			if r == types.RoleRootAdmin {
+				return types.ErrRemoveRootAdmin
+			}
+			if !auth.Access(r.Auth()) {
+				return sdkerrors.Wrapf(types.ErrRemoveUnknownRole, "%s", r)
+			}
+			auth = auth & (auth ^ r.Auth())
 		}
-		auth = auth & (auth ^ r.Auth())
 	}
 	if auth == types.AuthDefault {
 		k.DeleteAuth(ctx, address)
