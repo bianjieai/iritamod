@@ -60,7 +60,7 @@ func NewKeeper(
 
 // Logger returns a module-specific logger.
 func (k Keeper) Logger(ctx sdk.Context) log.Logger {
-	return ctx.Logger().With("module", fmt.Sprintf("irita/%s", types.ModuleName))
+	return ctx.Logger().With("module", fmt.Sprintf("iritamod/%s", types.ModuleName))
 }
 
 // Mint mints the base native token by the specified amount
