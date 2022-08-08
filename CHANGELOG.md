@@ -37,6 +37,18 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ## [Unreleased]
 
+## [v1.3.0] - 2021-12-31
+
+### Application
+
+- (modules/perm) [#41]  Add role: power_user_admin
+
+### Bug Fixes
+
+- [#40] Bump Cosmos-SDK to v0.45.1
+- [#39] Fix: node pagination limit
+
+
 ## [v1.2.0] - 2021-12-31
 
 ### Application
