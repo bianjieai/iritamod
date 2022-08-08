@@ -72,6 +72,7 @@ import (
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
 	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	cslashing "github.com/bianjieai/iritamod/modules/slashing"
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 )
 
 const appName = "SimApp"
@@ -272,10 +273,34 @@ func NewSimApp(
 	// CanWithdrawInvariant invariant.
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	app.mm.SetOrderBeginBlockers(
-		upgradetypes.ModuleName, slashingtypes.ModuleName, evidencetypes.ModuleName,
+		permtypes.ModuleName,
+		authtypes.ModuleName,
 		nodetypes.ModuleName,
+		banktypes.ModuleName,
+		slashingtypes.ModuleName,
+		crisistypes.ModuleName,
+		evidencetypes.ModuleName,
+		identitytypes.ModuleName,
+		feegrant.ModuleName,
+		upgradetypes.ModuleName,
+		paramstypes.ModuleName,
+		genutiltypes.ModuleName,
 	)
-	app.mm.SetOrderEndBlockers()
+
+	app.mm.SetOrderEndBlockers(
+		permtypes.ModuleName,
+		authtypes.ModuleName,
+		nodetypes.ModuleName,
+		banktypes.ModuleName,
+		slashingtypes.ModuleName,
+		crisistypes.ModuleName,
+		evidencetypes.ModuleName,
+		identitytypes.ModuleName,
+		feegrant.ModuleName,
+		upgradetypes.ModuleName,
+		paramstypes.ModuleName,
+		genutiltypes.ModuleName,
+	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
 	// properly initialized with tokens from genesis accounts.
@@ -292,6 +317,24 @@ func NewSimApp(
 		evidencetypes.ModuleName,
 		identitytypes.ModuleName,
 		feegrant.ModuleName,
+		upgradetypes.ModuleName,
+		paramstypes.ModuleName,
+		genutiltypes.ModuleName,
+	)
+
+	app.mm.SetOrderMigrations(
+		permtypes.ModuleName,
+		authtypes.ModuleName,
+		nodetypes.ModuleName,
+		banktypes.ModuleName,
+		slashingtypes.ModuleName,
+		crisistypes.ModuleName,
+		evidencetypes.ModuleName,
+		identitytypes.ModuleName,
+		feegrant.ModuleName,
+		upgradetypes.ModuleName,
+		paramstypes.ModuleName,
+		genutiltypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
