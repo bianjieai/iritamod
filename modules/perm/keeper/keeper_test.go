@@ -31,6 +31,12 @@ var (
 	account1    = sdk.AccAddress("test_account1")
 	addRoles    = []types.Role{types.RolePermAdmin, types.RoleBlacklistAdmin, types.RoleNodeAdmin}
 	removeRoles = []types.Role{types.RoleParamAdmin, types.RolePowerUser}
+
+	accountPowerUser      = sdk.AccAddress("test_account_power_user")
+	accountPowerUserAdmin = sdk.AccAddress("test_account_power_user_admin")
+
+	addPowerUserAdmin = []types.Role{types.RolePowerUserAdmin}
+	addPowerUser      = []types.Role{types.RolePowerUser}
 )
 
 func TestKeeperTestSuite(t *testing.T) {
@@ -186,4 +192,31 @@ func (suite *KeeperTestSuite) TestBlockAccount() {
 
 	blackList = suite.keeper.GetAllBlockAccounts(suite.ctx)
 	suite.Empty(blackList)
+}
+
+func (suite *KeeperTestSuite) TestPowerAdmin() {
+	err := suite.keeper.Authorize(suite.ctx, accountPowerUserAdmin, rootAdmin, types.RolePowerUserAdmin)
+	suite.NoError(err)
+
+	// can not add the following roles
+	roles := []types.Role{
+		types.RoleRootAdmin,
+		types.RolePermAdmin,
+		types.RoleBlacklistAdmin,
+		types.RoleNodeAdmin,
+		types.RoleParamAdmin,
+		types.RoleRelayerUser,
+		types.RoleIDAdmin,
+		types.RoleBaseM1Admin,
+		types.RolePlatformUser,
+		types.RolePowerUserAdmin,
+	}
+	for _, role := range roles {
+		err = suite.keeper.Authorize(suite.ctx, accountPowerUser, accountPowerUserAdmin, role)
+		suite.Error(err)
+	}
+
+	err = suite.keeper.Authorize(suite.ctx, accountPowerUser, accountPowerUserAdmin, types.RolePowerUser)
+	suite.NoError(err)
+
 }
