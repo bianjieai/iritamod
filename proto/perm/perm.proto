@@ -33,4 +33,6 @@ enum Role {
     BASE_M1_ADMIN = 8 [(gogoproto.enumvalue_customname) = "RoleBaseM1Admin"];
     // Chain_Account_Role defines the platform admin role index.
     PLATFORM_USER = 9 [(gogoproto.enumvalue_customname) = "RolePlatformUser"];
+    // POWER_USER_ADMIN defines the power admin role index.
+    POWER_USER_ADMIN = 10 [(gogoproto.enumvalue_customname) = "RolePowerUserAdmin"];
 }

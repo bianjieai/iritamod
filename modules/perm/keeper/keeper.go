@@ -64,15 +64,25 @@ func (k *Keeper) Authorize(ctx sdk.Context, address, operator sdk.AccAddress, rs
 		return types.ErrOperatePermAdmin
 	}
 	auth := k.GetAuth(ctx, address)
+
 	for _, r := range rs {
 		if r == types.RoleRootAdmin {
 			return types.ErrAddRootAdmin
 		}
+
 		if r == types.RolePermAdmin && !k.IsRootAdmin(ctx, operator) {
 			return sdkerrors.Wrap(types.ErrUnauthorizedOperation, "can not add permission admin role")
 		}
+
+		if r != types.RolePowerUser && !k.IsAdminPerm(ctx, operator) {
+			return types.ErrUnauthorizedOperation
+		} else if r == types.RolePowerUser && !k.IsPowerAdminPerm(ctx, operator) {
+			return types.ErrUnauthorizedOperation
+		}
+
 		auth = auth | r.Auth()
 	}
+
 	k.SetAuth(ctx, address, auth)
 	return nil
 }
@@ -88,15 +98,25 @@ func (k Keeper) Unauthorize(ctx sdk.Context, address, operator sdk.AccAddress, r
 	}
 
 	auth := k.GetAuth(ctx, address)
+
 	for _, r := range roles {
 		if r == types.RoleRootAdmin {
 			return types.ErrRemoveRootAdmin
 		}
+
 		if !auth.Access(r.Auth()) {
 			return sdkerrors.Wrapf(types.ErrRemoveUnknownRole, "%s", r)
 		}
+
+		if r != types.RolePowerUser && !k.IsAdminPerm(ctx, operator) {
+			return types.ErrUnauthorizedOperation
+		} else if r == types.RolePowerUser && !k.IsPowerAdminPerm(ctx, operator) {
+			return types.ErrUnauthorizedOperation
+		}
+
 		auth = auth & (auth ^ r.Auth())
 	}
+
 	if auth == types.AuthDefault {
 		k.DeleteAuth(ctx, address)
 	} else {
