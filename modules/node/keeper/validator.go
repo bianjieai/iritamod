@@ -419,9 +419,7 @@ func (k *Keeper) TotalBondedTokens(ctx sdk.Context) sdk.Int {
 	total := sdk.NewInt(0)
 	k.IterateValidators(ctx,
 		func(index int64, validator staking.ValidatorI) bool {
-			if !validator.IsJailed() {
-				total = total.Sub(validator.GetTokens())
-			}
+			total = total.Add(validator.GetBondedTokens())
 			return false
 		},
 	)
