@@ -38,7 +38,7 @@ func (k Keeper) CreateValidator(ctx sdk.Context, msg types.MsgCreateValidator) (
 		return nil, types.ErrValidatorNameExists
 	}
 
-	cert, err := k.VerifyCert(ctx, msg.Certificate)
+	cert, err := k.verifyCertFn(ctx, msg.Certificate)
 	if err != nil {
 		return nil, err
 	}
@@ -99,7 +99,7 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 	}
 
 	if len(msg.Certificate) > 0 && msg.Certificate != validator.Certificate {
-		cert, err := k.VerifyCert(ctx, msg.Certificate)
+		cert, err := k.verifyCertFn(ctx, msg.Certificate)
 		if err != nil {
 			return err
 		}
