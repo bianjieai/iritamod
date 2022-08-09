@@ -120,13 +120,15 @@ func validateGenesisStateValidators(rootCert cautil.Cert, validators []Validator
 
 	for i := 0; i < len(validators); i++ {
 		val := validators[i]
-		cert, err := cautil.ReadCertificateFromMem([]byte(val.Certificate))
-		if err != nil {
-			return sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
-		}
+		if len(val.Certificate) > 0 {
+			cert, err := cautil.ReadCertificateFromMem([]byte(val.Certificate))
+			if err != nil {
+				return sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
+			}
 
-		if err = cautil.VerifyCertFromRoot(cert, rootCert); err != nil {
-			return sdkerrors.Wrapf(types.ErrInvalidCert, "cannot be verified by root certificate, err: %s", err.Error())
+			if err = cautil.VerifyCertFromRoot(cert, rootCert); err != nil {
+				return sdkerrors.Wrapf(types.ErrInvalidCert, "cannot be verified by root certificate, err: %s", err.Error())
+			}
 		}
 
 		if _, ok := nameMap[val.Id]; ok {
