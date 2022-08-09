@@ -9,6 +9,7 @@ import (
 	"github.com/stretchr/testify/suite"
 
 	"github.com/tendermint/tendermint/crypto/tmhash"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -62,7 +63,16 @@ func (suite *KeeperTestSuite) setNode() {
 
 func (suite *KeeperTestSuite) TestCreateValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
-	id, err := suite.keeper.CreateValidator(suite.ctx, *msg)
+	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+	err := suite.keeper.CreateValidator(suite.ctx,
+		id,
+		msg.Name,
+		msg.Certificate,
+		nil,
+		msg.Power,
+		msg.Description,
+		msg.Operator,
+	)
 	suite.NoError(err)
 
 	validator, found := suite.keeper.GetValidator(suite.ctx, id)
@@ -98,7 +108,16 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 
 func (suite *KeeperTestSuite) TestUpdateValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
-	id, err := suite.keeper.CreateValidator(suite.ctx, *msg)
+	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+	err := suite.keeper.CreateValidator(suite.ctx,
+		id,
+		msg.Name,
+		msg.Certificate,
+		nil,
+		msg.Power,
+		msg.Description,
+		msg.Operator,
+	)
 	suite.NoError(err)
 
 	_, found := suite.keeper.GetValidator(suite.ctx, id)
@@ -117,12 +136,11 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	suite.NoError(err)
 
 	// error name
-	msg1 := types.NewMsgUpdateValidator([]byte{0x1}, name1, details1, certStr1, power1, operator1)
-	err = suite.keeper.UpdateValidator(suite.ctx, *msg1)
+	err = suite.keeper.UpdateValidator(suite.ctx, []byte{0x1}, name1, "", power1, details1, operator1.String())
 	suite.Error(err)
 
 	msg2 := types.NewMsgUpdateValidator(id, "", details1, certStr1, power1, operator1)
-	err = suite.keeper.UpdateValidator(suite.ctx, *msg2)
+	err = suite.keeper.UpdateValidator(suite.ctx, id, "", certStr1, power1, details1, operator1.String())
 	suite.NoError(err)
 
 	validator, found := suite.keeper.GetValidator(suite.ctx, id)
@@ -158,7 +176,7 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 			suite.Equal(int64(0), power)
 		case pkStr1:
 			updatesTotal++
-			suite.Equal(msg1.Power, power)
+			suite.Equal(power1, power)
 		default:
 			panic("unexpected case")
 		}
@@ -169,14 +187,22 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 
 func (suite *KeeperTestSuite) TestRemoveValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
-	id, err := suite.keeper.CreateValidator(suite.ctx, *msg)
+	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+	err := suite.keeper.CreateValidator(suite.ctx,
+		id,
+		msg.Name,
+		msg.Certificate,
+		nil,
+		msg.Power,
+		msg.Description,
+		msg.Operator,
+	)
 	suite.NoError(err)
 
 	_, found := suite.keeper.GetValidator(suite.ctx, id)
 	suite.True(found)
 
-	msg1 := types.NewMsgRemoveValidator(id, operator)
-	err = suite.keeper.RemoveValidator(suite.ctx, *msg1)
+	err = suite.keeper.RemoveValidator(suite.ctx, id, operator.String())
 	suite.NoError(err)
 
 	_, found = suite.keeper.GetValidator(suite.ctx, id)

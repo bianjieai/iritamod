@@ -13,4 +13,5 @@ var (
 	ErrInvalidNodeID         = sdkerrors.Register(ModuleName, 7, "invalid node ID")
 	ErrNodeExists            = sdkerrors.Register(ModuleName, 8, "node already exists")
 	ErrUnknownNode           = sdkerrors.Register(ModuleName, 9, "unknown node")
+	ErrInvalidValidatorID    = sdkerrors.Register(ModuleName, 10, "invalid validator id")
 )

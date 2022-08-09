@@ -5,6 +5,8 @@ import (
 	"encoding/hex"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/tendermint/tendermint/crypto/tmhash"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	"github.com/bianjieai/iritamod/modules/node/types"
 )
@@ -23,8 +25,16 @@ var _ types.MsgServer = msgServer{}
 
 func (m msgServer) CreateValidator(goCtx context.Context, msg *types.MsgCreateValidator) (*types.MsgCreateValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	id, err := m.Keeper.CreateValidator(ctx, *msg)
-	if err != nil {
+	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+	if err := m.Keeper.CreateValidator(ctx,
+		id,
+		msg.Name,
+		msg.Certificate,
+		nil,
+		msg.Power,
+		msg.Description,
+		msg.Operator,
+	); err != nil {
 		return nil, err
 	}
 
@@ -47,7 +57,19 @@ func (m msgServer) CreateValidator(goCtx context.Context, msg *types.MsgCreateVa
 
 func (m msgServer) UpdateValidator(goCtx context.Context, msg *types.MsgUpdateValidator) (*types.MsgUpdateValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := m.Keeper.UpdateValidator(ctx, *msg); err != nil {
+	id, err := hex.DecodeString(msg.Id)
+	if err != nil {
+		return &types.MsgUpdateValidatorResponse{}, types.ErrInvalidValidatorID
+	}
+
+	if err := m.Keeper.UpdateValidator(ctx,
+		id,
+		msg.Name,
+		msg.Certificate,
+		msg.Power,
+		msg.Description,
+		msg.Operator,
+	); err != nil {
 		return nil, err
 	}
 
@@ -67,7 +89,12 @@ func (m msgServer) UpdateValidator(goCtx context.Context, msg *types.MsgUpdateVa
 
 func (m msgServer) RemoveValidator(goCtx context.Context, msg *types.MsgRemoveValidator) (*types.MsgRemoveValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := m.Keeper.RemoveValidator(ctx, *msg); err != nil {
+	id, err := hex.DecodeString(msg.Id)
+	if err != nil {
+		return &types.MsgRemoveValidatorResponse{}, types.ErrInvalidValidatorID
+	}
+
+	if err := m.Keeper.RemoveValidator(ctx, id, msg.Operator); err != nil {
 		return nil, err
 	}
 
