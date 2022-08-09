@@ -9,10 +9,10 @@ import (
 
 	gogotypes "github.com/gogo/protobuf/types"
 
-	"github.com/tendermint/tendermint/crypto/tmhash"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
+	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -33,73 +33,91 @@ func (k *Keeper) SetHooks(sh staking.StakingHooks) *Keeper {
 }
 
 // CreateValidator create a new validator
-func (k Keeper) CreateValidator(ctx sdk.Context, msg types.MsgCreateValidator) (tmbytes.HexBytes, error) {
-	if k.HasValidatorName(ctx, msg.Name) {
-		return nil, types.ErrValidatorNameExists
+func (k Keeper) CreateValidator(ctx sdk.Context,
+	id tmbytes.HexBytes,
+	name string,
+	certificate string,
+	pubKey cryptotypes.PubKey,
+	power int64,
+	description string,
+	operator string,
+) error {
+	if k.HasValidatorName(ctx, name) {
+		return types.ErrValidatorNameExists
 	}
 
-	cert, err := k.verifyCertFn(ctx, msg.Certificate)
+	if len(certificate) > 0 {
+		cert, err := k.VerifyCert(ctx, certificate)
+		if err != nil {
+			return err
+		}
+
+		pk, err := cautil.GetPubkeyFromCert(cert)
+		if err != nil {
+			return sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
+		}
+
+		pubKey, err = cryptocodec.FromTmPubKeyInterface(pk)
+		if err != nil {
+			return err
+		}
+	}
+
+	if pubKey == nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "certificate")
+	}
+
+	if _, found := k.GetValidatorByConsAddr(ctx, sdk.GetConsAddress(pubKey)); found {
+		return types.ErrValidatorPubkeyExists
+	}
+
+	operatorAddr, err := sdk.AccAddressFromBech32(operator)
 	if err != nil {
-		return nil, err
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, err.Error())
 	}
-
-	pk, err := cautil.GetPubkeyFromCert(cert)
-	if err != nil {
-		return nil, sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
-	}
-
-	pubkey, err := cryptocodec.FromTmPubKeyInterface(pk)
-	if err != nil {
-		return nil, err
-	}
-
-	if _, found := k.GetValidatorByConsAddr(ctx, sdk.GetConsAddress(pubkey)); found {
-		return nil, types.ErrValidatorPubkeyExists
-	}
-
-	operator, err := sdk.AccAddressFromBech32(msg.Operator)
-	if err != nil {
-		return nil, sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, err.Error())
-	}
-	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
-
 	validator := types.NewValidator(
 		id,
-		msg.Name,
-		msg.Description,
-		pubkey,
-		msg.Certificate,
-		msg.Power,
-		operator,
+		name,
+		description,
+		pubKey,
+		certificate,
+		power,
+		operatorAddr,
 	)
 
 	k.SetValidator(ctx, validator)
 	consAddr, err := validator.GetConsAddr()
 	if err != nil {
-		return nil, err
+		return err
 	}
 	k.SetValidatorConsAddrIndex(ctx, id, consAddr)
-	k.EnqueueValidatorsUpdate(ctx, validator, msg.Power)
+	k.EnqueueValidatorsUpdate(ctx, validator, power)
 
 	k.hooks.AfterValidatorCreated(ctx, validator.GetOperator())
 	k.hooks.AfterValidatorBonded(ctx, consAddr, validator.GetOperator())
-	return id, nil
+	return nil
 }
 
 // UpdateValidator updates an existing validator record
-func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) error {
-	if k.HasValidatorName(ctx, msg.Name) {
+func (k Keeper) UpdateValidator(ctx sdk.Context,
+	id tmbytes.HexBytes,
+	name string,
+	certificate string,
+	power int64,
+	description string,
+	operator string,
+) error {
+	if k.HasValidatorName(ctx, name) {
 		return types.ErrValidatorNameExists
 	}
 
-	id, _ := hex.DecodeString(msg.Id)
 	validator, found := k.GetValidator(ctx, id)
 	if !found {
 		return types.ErrUnknownValidator
 	}
 
-	if len(msg.Certificate) > 0 && msg.Certificate != validator.Certificate {
-		cert, err := k.verifyCertFn(ctx, msg.Certificate)
+	if len(certificate) > 0 && certificate != validator.Certificate {
+		cert, err := k.VerifyCert(ctx, certificate)
 		if err != nil {
 			return err
 		}
@@ -122,7 +140,7 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 		k.EnqueueValidatorsUpdate(ctx, validator, 0)
 
 		validator.Pubkey = pkStr
-		validator.Certificate = msg.Certificate
+		validator.Certificate = certificate
 		newConsAddr, err := validator.GetConsAddr()
 		if err != nil {
 			return err
@@ -130,29 +148,31 @@ func (k Keeper) UpdateValidator(ctx sdk.Context, msg types.MsgUpdateValidator) e
 		k.SetValidatorConsAddrIndex(ctx, id, newConsAddr)
 		k.EnqueueValidatorsUpdate(ctx, validator, validator.Power)
 	}
-	if msg.Power > 0 {
-		validator.Power = msg.Power
+	if power > 0 {
+		validator.Power = power
 		// override it if already exists
 		k.EnqueueValidatorsUpdate(ctx, validator, validator.Power)
 	}
-	if len(msg.Description) > 0 && msg.Description != types.DoNotModifyDesc {
-		validator.Description = msg.Description
+	if len(description) > 0 && description != types.DoNotModifyDesc {
+		validator.Description = description
 	}
-	if len(msg.Name) > 0 && msg.Name != types.DoNotModifyDesc {
+	if len(name) > 0 && name != types.DoNotModifyDesc {
 		//delete old name
 		store := ctx.KVStore(k.storeKey)
 		store.Delete(types.GetValidatorNameKey(validator.Name))
 
-		validator.Name = msg.Name
+		validator.Name = name
 	}
-	validator.Operator = msg.Operator
+	validator.Operator = operator
 	k.SetValidator(ctx, validator)
 	return nil
 }
 
 // RemoveValidator deletes an existing validator record
-func (k Keeper) RemoveValidator(ctx sdk.Context, msg types.MsgRemoveValidator) error {
-	id, _ := hex.DecodeString(msg.Id)
+func (k Keeper) RemoveValidator(ctx sdk.Context,
+	id tmbytes.HexBytes,
+	operator string,
+) error {
 	validator, found := k.GetValidator(ctx, id)
 	if !found {
 		return types.ErrUnknownValidator
