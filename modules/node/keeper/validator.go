@@ -225,16 +225,26 @@ func (k Keeper) DeleteValidatorConsAddrIndex(ctx sdk.Context, addr sdk.ConsAddre
 
 // GetValidatorByConsAddr returns validator with pubkey
 func (k Keeper) GetValidatorByConsAddr(ctx sdk.Context, addr sdk.ConsAddress) (validator types.Validator, found bool) {
-	store := ctx.KVStore(k.storeKey)
 
+	fmt.Println("=======================================")
+	fmt.Printf("GetValidatorByConsAddr ctx: %+v", ctx)
+	fmt.Println("GetValidatorByConsAddr step-0: start")
+	fmt.Println("GetValidatorByConsAddr step-1: k.storeKey.String() = ", k.storeKey.String())
+	store := ctx.KVStore(k.storeKey)
+	fmt.Println("GetValidatorByConsAddr step-2: addr = ", addr.String())
+	fmt.Println("GetValidatorByConsAddr step-3: types.GetValidatorConsAddrKey(addr)")
 	value := store.Get(types.GetValidatorConsAddrKey(addr))
 	if value == nil {
 		return validator, false
 	}
 
+	fmt.Println("GetValidatorByConsAddr step-4: k.cdc.MustUnmarshal(value, &id)")
 	var id gogotypes.BytesValue
 	k.cdc.MustUnmarshal(value, &id)
-
+	v, _ := k.GetValidator(ctx, id.Value)
+	fmt.Println("GetValidatorByConsAddr step-5: k.GetValidator(ctx, id.Value) = ", v)
+	fmt.Println("GetValidatorByConsAddr step-6: end ")
+	fmt.Println("=======================================")
 	return k.GetValidator(ctx, id.Value)
 }
 
