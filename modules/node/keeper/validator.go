@@ -1,9 +1,10 @@
 package keeper
 
 import (
-	"cosmossdk.io/math"
 	"encoding/hex"
 	"fmt"
+
+	"cosmossdk.io/math"
 
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
 	"github.com/cosmos/cosmos-sdk/types/bech32"

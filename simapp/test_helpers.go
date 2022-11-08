@@ -5,12 +5,13 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
-	cautil "github.com/bianjieai/iritamod/utils/ca"
 	"math/rand"
 	"strconv"
 	"testing"
 	"time"
+
+	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
+	cautil "github.com/bianjieai/iritamod/utils/ca"
 
 	"github.com/stretchr/testify/require"
 
