@@ -25,7 +25,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	"github.com/bianjieai/iritamod/modules/slashing/client/cli"
-	"github.com/bianjieai/iritamod/modules/slashing/client/rest"
 	"github.com/bianjieai/iritamod/modules/slashing/keeper"
 	slashingtypes "github.com/bianjieai/iritamod/modules/slashing/types"
 )
@@ -68,7 +67,7 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncod
 
 // RegisterRESTRoutes registers the REST routes for the slashing module.
 func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
-	rest.RegisterRoutes(clientCtx, rtr)
+	//rest.RegisterRoutes(clientCtx, rtr)
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the slashing module.
@@ -101,6 +100,8 @@ type AppModule struct {
 	accountKeeper AccountKeeper
 	bankKeeper    BankKeeper
 	stakingKeeper StakingKeeper
+
+	slashingAppModule slashing.AppModule
 }
 
 // RegisterServices registers module services.
@@ -114,12 +115,14 @@ func NewAppModule(
 	cdc codec.Codec, keeper Keeper, ak AccountKeeper,
 	bk BankKeeper, sk StakingKeeper,
 ) AppModule {
+	slashingAppModule := slashing.NewAppModule(cdc, keeper.Keeper, ak, bk, sk)
 	return AppModule{
-		AppModuleBasic: AppModuleBasic{cdc: cdc},
-		keeper:         keeper,
-		accountKeeper:  ak,
-		bankKeeper:     bk,
-		stakingKeeper:  sk,
+		AppModuleBasic:    AppModuleBasic{cdc: cdc},
+		keeper:            keeper,
+		accountKeeper:     ak,
+		bankKeeper:        bk,
+		stakingKeeper:     sk,
+		slashingAppModule: slashingAppModule,
 	}
 }
 
@@ -154,16 +157,14 @@ func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sd
 // InitGenesis performs genesis initialization for the slashing module. It returns
 // no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
-	var genesisState GenesisState
-	cdc.MustUnmarshalJSON(data, &genesisState)
-	slashing.InitGenesis(ctx, am.keeper.Keeper, am.stakingKeeper, &genesisState)
+	am.slashingAppModule.InitGenesis(ctx, cdc, data)
 	return []abci.ValidatorUpdate{}
 }
 
 // ExportGenesis returns the exported genesis state as raw bytes for the slashing module.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	gs := slashing.ExportGenesis(ctx, am.keeper.Keeper)
-	return cdc.MustMarshalJSON(gs)
+	//gs := slashing.ExportGenesis(ctx, am.keeper.Keeper)
+	return am.slashingAppModule.ExportGenesis(ctx, cdc)
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.

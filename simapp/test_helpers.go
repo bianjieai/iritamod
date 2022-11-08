@@ -5,9 +5,13 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	"math/rand"
 	"strconv"
 	"testing"
 	"time"
+
+	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
+	cautil "github.com/bianjieai/iritamod/utils/ca"
 
 	"github.com/stretchr/testify/require"
 
@@ -62,6 +66,7 @@ func Setup(isCheckTx bool) *SimApp {
 	db := dbm.NewMemDB()
 	app := NewSimApp(log.NewNopLogger(), db, nil, true, map[int64]bool{}, DefaultNodeHome, 5, MakeEncodingConfig(), EmptyAppOptions{})
 	if !isCheckTx {
+
 		// init chain must be called to stop deliverState from being nil
 		genesisState := NewDefaultGenesisState()
 
@@ -80,6 +85,56 @@ func Setup(isCheckTx bool) *SimApp {
 		// add root cert
 		validatorGenState := node.GetGenesisStateFromAppState(app.appCodec, genesisState)
 		validatorGenState.RootCert = rootCert
+
+		// add validator
+		msgCreateValidator := nodetypes.MsgCreateValidator{
+			Name:        "node0",
+			Certificate: "-----BEGIN CERTIFICATE-----\nMIIBbDCCAR4CFB2I0lIue38hFWmniTZ2Iu0ghc82MAUGAytlcDBYMQswCQYDVQQG\nEwJDTjENMAsGA1UECAwEcm9vdDENMAsGA1UEBwwEcm9vdDENMAsGA1UECgwEcm9v\ndDENMAsGA1UECwwEcm9vdDENMAsGA1UEAwwEcm9vdDAeFw0yMjExMDgwOTE4MTBa\nFw0yMzExMDgwOTE4MTBaMFkxCzAJBgNVBAYTAkNOMQ0wCwYDVQQIDAR0ZXN0MQ0w\nCwYDVQQHDAR0ZXN0MQ0wCwYDVQQKDAR0ZXN0MQ0wCwYDVQQLDAR0ZXN0MQ4wDAYD\nVQQDDAVub2RlMDAqMAUGAytlcAMhAJFp5csgL+MGaE74B3RA84GzXKlryJr1pG63\nnXVgjjVIMAUGAytlcANBALTtfYF4pw44ZeUfaSiYBl3CVcfFTesjCxjtVSPaOYEB\n3r/UTI3fYuGYYoflcDN9FURAu9CRynm446wbQUpaMAE=\n-----END CERTIFICATE-----\n", Power: 100,
+			Description: "node0",
+			Operator:    "cosmos14pkwhm82lktza59y25vdzh2zs5h926t3u9fzu6",
+		}
+
+		cert, err := cautil.ReadCertificateFromMem([]byte(msgCreateValidator.Certificate))
+		if err != nil {
+			panic("failed to convert certificate")
+		}
+
+		rootCertInfo, err := cautil.ReadCertificateFromMem([]byte(validatorGenState.RootCert))
+		if err != nil {
+			panic("failed to convert root certificate")
+		}
+
+		if err = cert.VerifyCertFromRoot(rootCertInfo); err != nil {
+			panic("invalid certificate, cannot be verified by root certificate")
+		}
+
+		pk, err := cautil.GetPubkeyFromCert(cert)
+		if err != nil {
+			panic("invalid pk")
+		}
+		cospk, err := cryptocodec.FromTmPubKeyInterface(pk)
+		if err != nil {
+			panic("invalid FromTmPubKeyInterface")
+		}
+
+		operator, err := sdk.AccAddressFromBech32(msgCreateValidator.Operator)
+		if err != nil {
+			panic("invalid AccAddressFromBech32")
+		}
+
+		validatorGenState.Validators = append(
+			validatorGenState.Validators,
+			nodetypes.NewValidator(
+				tmhash.Sum(msgCreateValidator.GetSignBytes()),
+				msgCreateValidator.Name,
+				msgCreateValidator.Description,
+				cospk,
+				msgCreateValidator.Certificate,
+				msgCreateValidator.Power,
+				operator,
+			),
+		)
+
 		validatorGenStateBz := app.cdc.MustMarshalJSON(validatorGenState)
 		genesisState[node.ModuleName] = validatorGenStateBz
 
@@ -241,7 +296,7 @@ func createIncrementalAccounts(accNum int) []sdk.AccAddress {
 		buffer.WriteString("A58856F0FD53BF058B4909A21AEC019107BA6") //base address string
 
 		buffer.WriteString(numString) //adding on final two digits to make addresses unique
-		res, _ := sdk.AccAddressFromHex(buffer.String())
+		res, _ := sdk.AccAddressFromHexUnsafe(buffer.String())
 		bech := res.String()
 		addr, _ := TestAddr(buffer.String(), bech)
 
@@ -298,7 +353,7 @@ func ConvertAddrsToValAddrs(addrs []sdk.AccAddress) []sdk.ValAddress {
 }
 
 func TestAddr(addr string, bech string) (sdk.AccAddress, error) {
-	res, err := sdk.AccAddressFromHex(addr)
+	res, err := sdk.AccAddressFromHexUnsafe(addr)
 	if err != nil {
 		return nil, err
 	}
@@ -333,7 +388,8 @@ func SignCheckDeliver(
 	chainID string, accNums, accSeqs []uint64, expSimPass, expPass bool, priv ...cryptotypes.PrivKey,
 ) (sdk.GasInfo, *sdk.Result, error) {
 
-	tx, err := helpers.GenTx(
+	tx, err := helpers.GenSignedMockTx(
+		rand.New(rand.NewSource(time.Now().UnixNano())),
 		txCfg,
 		msgs,
 		sdk.Coins{sdk.NewInt64Coin(sdk.DefaultBondDenom, 0)},
@@ -360,7 +416,7 @@ func SignCheckDeliver(
 
 	// Simulate a sending a transaction and committing a block
 	app.BeginBlock(abci.RequestBeginBlock{Header: header})
-	gInfo, res, err := app.Deliver(txCfg.TxEncoder(), tx)
+	gInfo, res, err := app.SimDeliver(txCfg.TxEncoder(), tx)
 
 	if expPass {
 		require.NoError(t, err)
@@ -386,7 +442,8 @@ func GenSequenceOfTxs(
 	txs := make([]sdk.Tx, numToGenerate)
 	var err error
 	for i := 0; i < numToGenerate; i++ {
-		txs[i], err = helpers.GenTx(
+		txs[i], err = helpers.GenSignedMockTx(
+			rand.New(rand.NewSource(time.Now().UnixNano())),
 			txGen,
 			msgs,
 			sdk.Coins{sdk.NewInt64Coin(sdk.DefaultBondDenom, 0)},
@@ -448,15 +505,17 @@ func (ao EmptyAppOptions) Get(o string) interface{} {
 	return nil
 }
 
-const rootCert = `-----BEGIN CERTIFICATE-----
-MIIBxTCCAXegAwIBAgIUHMPutrm+7FT7fIFf2fEgyQnIg8kwBQYDK2VwMFgxCzAJ
-BgNVBAYTAkNOMQ0wCwYDVQQIDARyb290MQ0wCwYDVQQHDARyb290MQ0wCwYDVQQK
-DARyb290MQ0wCwYDVQQLDARyb290MQ0wCwYDVQQDDARyb290MB4XDTIwMDYxOTA3
-MDExMVoXDTIxMDYxOTA3MDExMVowWDELMAkGA1UEBhMCQ04xDTALBgNVBAgMBHJv
-b3QxDTALBgNVBAcMBHJvb3QxDTALBgNVBAoMBHJvb3QxDTALBgNVBAsMBHJvb3Qx
-DTALBgNVBAMMBHJvb3QwKjAFBgMrZXADIQDdzGFcck4I7Wa1vRj4JsdQ9RjVgH92
-7iOhXJ8mFLwQKaNTMFEwHQYDVR0OBBYEFPrjTGR+/g4RUduZ9E8JSXNyI4mzMB8G
-A1UdIwQYMBaAFPrjTGR+/g4RUduZ9E8JSXNyI4mzMA8GA1UdEwEB/wQFMAMBAf8w
-BQYDK2VwA0EAT8EG5nGxwCAP4ZlfQvAhrnJI+SojlsOoE3rZ8W6/knZsrnVb6RI8
-QAVleeE0pMY+MtENXcQ2wH0QRXs+wO0XCw==
------END CERTIFICATE-----`
+const rootCert = "-----BEGIN CERTIFICATE-----\nMIIBxTCCAXegAwIBAgIUEZ/5EYm5NlzCME1hGwKTy+xKWWgwBQYDK2VwMFgxCzAJ\nBgNVBAYTAkNOMQ0wCwYDVQQIDARyb290MQ0wCwYDVQQHDARyb290MQ0wCwYDVQQK\nDARyb290MQ0wCwYDVQQLDARyb290MQ0wCwYDVQQDDARyb290MB4XDTIyMTEwODA5\nMTgxMFoXDTIzMTEwODA5MTgxMFowWDELMAkGA1UEBhMCQ04xDTALBgNVBAgMBHJv\nb3QxDTALBgNVBAcMBHJvb3QxDTALBgNVBAoMBHJvb3QxDTALBgNVBAsMBHJvb3Qx\nDTALBgNVBAMMBHJvb3QwKjAFBgMrZXADIQC5ePayMpiUcVTtpba/wFDAwNUJyzsR\nCkagHKVHEnIGW6NTMFEwHQYDVR0OBBYEFFEggcBFd2WZ0Vfycim/fEoOzxCFMB8G\nA1UdIwQYMBaAFFEggcBFd2WZ0Vfycim/fEoOzxCFMA8GA1UdEwEB/wQFMAMBAf8w\nBQYDK2VwA0EAHgPbmbrsAZn2WXYEsJka2xsmJcntZpHHKEzafInZ/EUgoYvFzeqn\na1Gaon2ryC2/iWoje1gejXsNcjAZZFdhDA==\n-----END CERTIFICATE-----\n"
+
+//const rootCert = `-----BEGIN CERTIFICATE-----
+//MIIBxTCCAXegAwIBAgIUHMPutrm+7FT7fIFf2fEgyQnIg8kwBQYDK2VwMFgxCzAJ
+//BgNVBAYTAkNOMQ0wCwYDVQQIDARyb290MQ0wCwYDVQQHDARyb290MQ0wCwYDVQQK
+//DARyb290MQ0wCwYDVQQLDARyb290MQ0wCwYDVQQDDARyb290MB4XDTIwMDYxOTA3
+//MDExMVoXDTIxMDYxOTA3MDExMVowWDELMAkGA1UEBhMCQ04xDTALBgNVBAgMBHJv
+//b3QxDTALBgNVBAcMBHJvb3QxDTALBgNVBAoMBHJvb3QxDTALBgNVBAsMBHJvb3Qx
+//DTALBgNVBAMMBHJvb3QwKjAFBgMrZXADIQDdzGFcck4I7Wa1vRj4JsdQ9RjVgH92
+//7iOhXJ8mFLwQKaNTMFEwHQYDVR0OBBYEFPrjTGR+/g4RUduZ9E8JSXNyI4mzMB8G
+//A1UdIwQYMBaAFPrjTGR+/g4RUduZ9E8JSXNyI4mzMA8GA1UdEwEB/wQFMAMBAf8w
+//BQYDK2VwA0EAT8EG5nGxwCAP4ZlfQvAhrnJI+SojlsOoE3rZ8W6/knZsrnVb6RI8
+//QAVleeE0pMY+MtENXcQ2wH0QRXs+wO0XCw==
+//-----END CERTIFICATE-----`

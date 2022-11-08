@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"fmt"
 
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
+
 	"github.com/tendermint/tendermint/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -18,7 +20,7 @@ import (
 // Keeper defines the OPB keeper
 type Keeper struct {
 	cdc      codec.Codec
-	storeKey sdk.StoreKey
+	storeKey storetypes.StoreKey
 
 	accountKeeper types.AccountKeeper
 	bankKeeper    types.BankKeeper
@@ -31,7 +33,7 @@ type Keeper struct {
 // NewKeeper creates a new Keeper instance
 func NewKeeper(
 	cdc codec.Codec,
-	storeKey sdk.StoreKey,
+	storeKey storetypes.StoreKey,
 	accountKeeper types.AccountKeeper,
 	bankKeeper types.BankKeeper,
 	tokenKeeper types.TokenKeeper,
