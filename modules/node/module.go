@@ -23,7 +23,6 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
 	"github.com/bianjieai/iritamod/modules/node/client/cli"
-	"github.com/bianjieai/iritamod/modules/node/client/rest"
 	"github.com/bianjieai/iritamod/modules/node/keeper"
 	"github.com/bianjieai/iritamod/modules/node/types"
 )
@@ -66,7 +65,7 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncod
 
 // RegisterRESTRoutes registers the REST routes for the node module.
 func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
-	rest.RegisterRoutes(clientCtx, rtr)
+	//rest.RegisterRoutes(clientCtx, rtr)
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the node module.

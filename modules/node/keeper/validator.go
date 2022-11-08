@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/math"
 	"encoding/hex"
 	"fmt"
 
@@ -357,7 +358,9 @@ func (k Keeper) ValidatorByConsAddr(ctx sdk.Context, consAddr sdk.ConsAddress) s
 }
 
 // Slash not implement
-func (k Keeper) Slash(ctx sdk.Context, consAddr sdk.ConsAddress, i int64, i2 int64, dec sdk.Dec) {}
+func (k Keeper) Slash(sdk.Context, sdk.ConsAddress, int64, int64, sdk.Dec) math.Int {
+	return sdk.NewInt(0)
+}
 
 // Jail disable the validator
 func (k Keeper) Jail(ctx sdk.Context, consAddr sdk.ConsAddress) {
