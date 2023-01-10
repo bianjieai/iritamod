@@ -10,7 +10,7 @@ import (
 
 func GenRootCert(keyPath, certPath, subj string) {
 	switch algo.Algo {
-	case algo.SM2:
+	case algo.SM2, algo.GMSSL:
 		cmd := exec.Command("openssl", "ecparam", "-genkey", "-name", "SM2", "-out", keyPath)
 		executeCmd(cmd)
 	// ed25519
@@ -23,7 +23,7 @@ func GenRootCert(keyPath, certPath, subj string) {
 
 func GenSelfSignCert(keyPath, certPath, subj string) {
 	switch algo.Algo {
-	case algo.SM2:
+	case algo.SM2, algo.GMSSL:
 		cmd := exec.Command(
 			"openssl", "req", "-new", "-x509", "-sm3", "-sigopt", "distid:1234567812345678",
 			"-key", keyPath, "-subj", subj, "-out", certPath, "-days", "365",
@@ -41,7 +41,7 @@ func GenSelfSignCert(keyPath, certPath, subj string) {
 
 func GenCertRequest(keyPath, cerPath, subj string) {
 	switch algo.Algo {
-	case algo.SM2:
+	case algo.SM2, algo.GMSSL:
 		cmd := exec.Command(
 			"openssl", "req", "-new", "-sm3", "-sigopt", "distid:1234567812345678",
 			"-key", keyPath, "-subj", subj, "-out", cerPath,
@@ -60,7 +60,7 @@ func GenCertRequest(keyPath, cerPath, subj string) {
 
 func IssueCert(cerPath, caPath, caKeyPath, certPath string) {
 	switch algo.Algo {
-	case algo.SM2:
+	case algo.SM2, algo.GMSSL:
 		cmd := exec.Command(
 			"openssl", "x509", "-req", "-in", cerPath,
 			"-CA", caPath, "-CAkey", caKeyPath, "-CAcreateserial", "-out", certPath, "-days", "365",
