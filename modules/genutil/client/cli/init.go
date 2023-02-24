@@ -11,6 +11,7 @@ import (
 	"github.com/spf13/viper"
 
 	cfg "github.com/tendermint/tendermint/config"
+	"github.com/tendermint/tendermint/crypto/algo"
 	"github.com/tendermint/tendermint/libs/cli"
 	tmos "github.com/tendermint/tendermint/libs/os"
 	tmrand "github.com/tendermint/tendermint/libs/rand"
@@ -23,6 +24,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 
 	"github.com/bianjieai/iritamod/modules/genutil"
+	icli "github.com/bianjieai/iritamod/modules/node/client/cli"
+	"github.com/bianjieai/iritamod/utils/ca"
 )
 
 const (
@@ -77,6 +80,12 @@ func InitCmd(mbm module.BasicManager, defaultNodeHome string) *cobra.Command { /
 			if chainID == "" {
 				chainID = fmt.Sprintf("test-chain-%v", tmrand.Str(6))
 			}
+
+			nodeCertAlgo, _ := cmd.Flags().GetString(icli.FlagNodeAlgo)
+			if _, err := ca.IsSupportedAlgorithms(nodeCertAlgo); err != nil {
+				return err
+			}
+			algo.Algo = nodeCertAlgo
 
 			nodeKey, _, err := genutil.InitializeNodeValidatorFiles(config)
 			if err != nil {

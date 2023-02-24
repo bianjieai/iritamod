@@ -10,6 +10,8 @@ import (
 	"github.com/tendermint/tendermint/p2p"
 	"github.com/tendermint/tendermint/privval"
 	tmtypes "github.com/tendermint/tendermint/types"
+
+	"github.com/bianjieai/iritamod/utils/ca"
 )
 
 // ExportGenesisFile creates and writes the genesis configuration to disk. An
@@ -18,6 +20,8 @@ func ExportGenesisFile(genDoc *tmtypes.GenesisDoc, genFile string) error {
 	if err := genDoc.ValidateAndComplete(); err != nil {
 		return err
 	}
+
+	genDoc.ConsensusParams.Validator.PubKeyTypes = ca.NodeAlgoList
 
 	return genDoc.SaveAs(genFile)
 }
@@ -38,6 +42,8 @@ func ExportGenesisFileWithTime(
 	if err := genDoc.ValidateAndComplete(); err != nil {
 		return err
 	}
+
+	genDoc.ConsensusParams.Validator.PubKeyTypes = ca.NodeAlgoList
 
 	return genDoc.SaveAs(genFile)
 }

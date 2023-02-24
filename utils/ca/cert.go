@@ -82,3 +82,23 @@ func UnexpectedPubKeyAlgo(expected string, pubkey interface{}) error {
 		expected, pubkey,
 	)
 }
+
+// NodeAlgoList supported certificate types
+var NodeAlgoList = []string{algo.SM2, algo.ED25519}
+
+func IsSupportedAlgorithms(algoStr string) (bool, error) {
+	for _, algos := range NodeAlgoList {
+		if algoStr == algos {
+			return true, nil
+		}
+	}
+	return false, fmt.Errorf("the %q type is not supported", algoStr)
+}
+
+func SetSupportedAlgorithms(algoStr string) error {
+	if len(NodeAlgoList) == 0 {
+		return fmt.Errorf("enter the correct type name")
+	}
+	NodeAlgoList = append(NodeAlgoList, algoStr)
+	return nil
+}
