@@ -22,6 +22,11 @@ f0hqjHYwBQYDK2VwA0EA0fo8y+saUl+8UiyKpKdjv2DsqYWqmqJDz9u3NaioOvrQ
 Z0mOxdgj9wfO0t3voldCRUw3hCekjC+GEOoXH5ysDQ==
 -----END CERTIFICATE-----`
 
+var certStruct = &Certificate{
+	Key:   "sm2",
+	Value: certStr,
+}
+
 var (
 	cert, _ = cautil.ReadCertificateFromMem([]byte(certStr))
 	pk, _   = cautil.GetPubkeyFromCert(cert)
@@ -32,19 +37,19 @@ var (
 	nodeName = "test_node"
 
 	emptyAddr sdk.AccAddress
-	emptyCert = ""
+	emptyCert = &Certificate{}
 )
 
 // test ValidateBasic for MsgCreateValidator
 func TestMsgCreateValidator(t *testing.T) {
 	testMsgs := []*MsgCreateValidator{
-		NewMsgCreateValidator("a", "b", certStr, 1, accAddr),
-		NewMsgCreateValidator("a", "b", certStr, 1, emptyAddr),
-		NewMsgCreateValidator("", "b", certStr, 1, accAddr),
-		NewMsgCreateValidator("  ", "b", certStr, 1, accAddr),
+		NewMsgCreateValidator("a", "b", certStruct, 1, accAddr),
+		NewMsgCreateValidator("a", "b", certStruct, 1, emptyAddr),
+		NewMsgCreateValidator("", "b", certStruct, 1, accAddr),
+		NewMsgCreateValidator("  ", "b", certStruct, 1, accAddr),
 		NewMsgCreateValidator("a", "b", emptyCert, 1, accAddr),
-		NewMsgCreateValidator("a", "b", certStr, -1, accAddr),
-		NewMsgCreateValidator("a", "b", certStr, 0, accAddr),
+		NewMsgCreateValidator("a", "b", certStruct, -1, accAddr),
+		NewMsgCreateValidator("a", "b", certStruct, 0, accAddr),
 	}
 
 	testCases := []struct {
@@ -74,10 +79,10 @@ func TestMsgCreateValidator(t *testing.T) {
 // test ValidateBasic for MsgUpdateValidator
 func TestMsgUpdateValidator(t *testing.T) {
 	testMsgs := []*MsgUpdateValidator{
-		NewMsgUpdateValidator([]byte("a"), "b", "b", certStr, 1, accAddr),
-		NewMsgUpdateValidator([]byte("a"), "b", "b", certStr, 1, emptyAddr),
-		NewMsgUpdateValidator([]byte{}, "b", "b", certStr, 1, accAddr),
-		NewMsgUpdateValidator([]byte("a"), "b", "b", certStr, -1, accAddr),
+		NewMsgUpdateValidator([]byte("a"), "b", "b", certStruct, 1, accAddr),
+		NewMsgUpdateValidator([]byte("a"), "b", "b", certStruct, 1, emptyAddr),
+		NewMsgUpdateValidator([]byte{}, "b", "b", certStruct, 1, accAddr),
+		NewMsgUpdateValidator([]byte("a"), "b", "b", certStruct, -1, accAddr),
 	}
 
 	testCases := []struct {
@@ -131,27 +136,30 @@ func TestMsgRemoveValidator(t *testing.T) {
 
 // TestMsgGrantNodeRoute tests Route for MsgGrantNode
 func TestMsgGrantNodeRoute(t *testing.T) {
-	msg := NewMsgGrantNode(nodeName, certStr, accAddr)
+	msg := NewMsgGrantNode(nodeName, certStruct, accAddr)
 
 	require.Equal(t, RouterKey, msg.Route())
 }
 
 // TestMsgGrantNode tests Type for MsgGrantNode
 func TestMsgGrantNodeType(t *testing.T) {
-	msg := NewMsgGrantNode(nodeName, certStr, accAddr)
+	msg := NewMsgGrantNode(nodeName, certStruct, accAddr)
 
 	require.Equal(t, "grant_node", msg.Type())
 }
 
 // TestMsgGrantNodeValidation tests ValidateBasic for MsgGrantNode
 func TestMsgGrantNodeValidation(t *testing.T) {
-	invalidCertificate := "invalidCertificate"
+	invalidCertificate := &Certificate{
+		Key:   "sm2",
+		Value: "invalidCertificate",
+	}
 
 	testMsgs := []*MsgGrantNode{
-		NewMsgGrantNode(nodeName, certStr, accAddr),            // valid msg
-		NewMsgGrantNode(nodeName, certStr, emptyAddr),          // missing operator address
-		NewMsgGrantNode("", certStr, accAddr),                  // name can not be empty
-		NewMsgGrantNode(nodeName, "", accAddr),                 // missing certificate
+		NewMsgGrantNode(nodeName, certStruct, accAddr),         // valid msg
+		NewMsgGrantNode(nodeName, certStruct, emptyAddr),       // missing operator address
+		NewMsgGrantNode("", certStruct, accAddr),               // name can not be empty
+		NewMsgGrantNode(nodeName, emptyCert, accAddr),          // missing certificate
 		NewMsgGrantNode(nodeName, invalidCertificate, accAddr), // invalid certificate
 	}
 
@@ -179,16 +187,16 @@ func TestMsgGrantNodeValidation(t *testing.T) {
 
 // TestMsgGrantNodeGetSignBytes tests GetSignBytes for MsgGrantNode
 func TestMsgGrantNodeGetSignBytes(t *testing.T) {
-	msg := NewMsgGrantNode(nodeName, certStr, accAddr)
+	msg := NewMsgGrantNode(nodeName, certStruct, accAddr)
 	res := msg.GetSignBytes()
 
-	expected := `{"type":"iritamod/node/MsgGrantNode","value":{"certificate":"-----BEGIN CERTIFICATE-----\nMIIBazCCAR0CFGTwvE8oG+N3uNm1gonJBh6pie5TMAUGAytlcDBYMQswCQYDVQQG\nEwJDTjENMAsGA1UECAwEcm9vdDENMAsGA1UEBwwEcm9vdDENMAsGA1UECgwEcm9v\ndDENMAsGA1UECwwEcm9vdDENMAsGA1UEAwwEcm9vdDAeFw0yMDA2MTkwNzAyMzla\nFw0yMDA3MTkwNzAyMzlaMFgxCzAJBgNVBAYTAkNOMQ0wCwYDVQQIDAR0ZXN0MQ0w\nCwYDVQQHDAR0ZXN0MQ0wCwYDVQQKDAR0ZXN0MQ0wCwYDVQQLDAR0ZXN0MQ0wCwYD\nVQQDDAR0ZXN0MCowBQYDK2VwAyEA27WvK0goa1sSjsp6eb/xCkgjBEoPC9vfL/6h\nf0hqjHYwBQYDK2VwA0EA0fo8y+saUl+8UiyKpKdjv2DsqYWqmqJDz9u3NaioOvrQ\nZ0mOxdgj9wfO0t3voldCRUw3hCekjC+GEOoXH5ysDQ==\n-----END CERTIFICATE-----","name":"test_node","operator":"cosmos1z0hd0wjhlsl2jj33439ppy7u2crvlwyq8qedsm"}}`
+	expected := `{"type":"iritamod/node/MsgGrantNode","value":{"certificate":{"key":"sm2","value":"-----BEGIN CERTIFICATE-----\nMIIBazCCAR0CFGTwvE8oG+N3uNm1gonJBh6pie5TMAUGAytlcDBYMQswCQYDVQQG\nEwJDTjENMAsGA1UECAwEcm9vdDENMAsGA1UEBwwEcm9vdDENMAsGA1UECgwEcm9v\ndDENMAsGA1UECwwEcm9vdDENMAsGA1UEAwwEcm9vdDAeFw0yMDA2MTkwNzAyMzla\nFw0yMDA3MTkwNzAyMzlaMFgxCzAJBgNVBAYTAkNOMQ0wCwYDVQQIDAR0ZXN0MQ0w\nCwYDVQQHDAR0ZXN0MQ0wCwYDVQQKDAR0ZXN0MQ0wCwYDVQQLDAR0ZXN0MQ0wCwYD\nVQQDDAR0ZXN0MCowBQYDK2VwAyEA27WvK0goa1sSjsp6eb/xCkgjBEoPC9vfL/6h\nf0hqjHYwBQYDK2VwA0EA0fo8y+saUl+8UiyKpKdjv2DsqYWqmqJDz9u3NaioOvrQ\nZ0mOxdgj9wfO0t3voldCRUw3hCekjC+GEOoXH5ysDQ==\n-----END CERTIFICATE-----"},"name":"test_node","operator":"cosmos1z0hd0wjhlsl2jj33439ppy7u2crvlwyq8qedsm"}}`
 	require.Equal(t, expected, string(res))
 }
 
 // TestMsgGrantNodeGetSigners tests GetSigners for MsgGrantNode
 func TestMsgGrantNodeGetSigners(t *testing.T) {
-	msg := NewMsgGrantNode(nodeName, certStr, accAddr)
+	msg := NewMsgGrantNode(nodeName, certStruct, accAddr)
 	res := msg.GetSigners()
 
 	expected := "[13EED7BA57FC3EA94A31AC4A1093DC5606CFB880]"
