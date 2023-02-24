@@ -16,7 +16,7 @@ import (
 func NewNode(
 	id tmbytes.HexBytes,
 	name string,
-	cert string,
+	cert *Certificate,
 ) Node {
 	return Node{
 		Id:          id.String(),
@@ -60,8 +60,8 @@ func ValidateNodeID(id string) error {
 }
 
 // ValidateCertificate validates the node certificate
-func ValidateCertificate(cert string) error {
-	_, err := cautils.ReadCertificateFromMem([]byte(cert))
+func ValidateCertificate(cert *Certificate) error {
+	_, err := cautils.ReadCertificateFromMemByType([]byte(cert.Value), cert.Key)
 	if err != nil {
 		return sdkerrors.Wrap(ErrInvalidCert, err.Error())
 	}

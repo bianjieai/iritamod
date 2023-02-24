@@ -94,13 +94,13 @@ func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) 
 
 // CreateValidatorMsgHelpers - used for gen-tx
 func (AppModuleBasic) CreateValidatorMsgHelpers(ipDefault string) (
-	fs *flag.FlagSet, pubkeyFlag, powerFlag, defaultsDesc string) {
+	fs *flag.FlagSet, certTypeFlag, pubkeyFlag, powerFlag, defaultsDesc string) {
 	return cli.CreateValidatorMsgHelpers(ipDefault)
 }
 
 // PrepareFlagsForTxCreateValidator - used for gen-tx
-func (AppModuleBasic) PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID string, chainID string, cert string) {
-	cli.PrepareFlagsForTxCreateValidator(config, nodeID, chainID, cert)
+func (AppModuleBasic) PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID string, chainID string, certType string, cert string) {
+	cli.PrepareFlagsForTxCreateValidator(config, nodeID, chainID, certType, cert)
 }
 
 // BuildCreateValidatorMsg - used for gen-tx

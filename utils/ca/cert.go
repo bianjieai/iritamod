@@ -22,10 +22,13 @@ type Cert interface {
 }
 
 func ReadCertificateFromMem(data []byte) (Cert, error) {
-	switch algo.Algo {
+	return ReadCertificateFromMemByType(data, algo.Algo)
+}
+
+func ReadCertificateFromMemByType(data []byte, certType string) (Cert, error) {
+	switch certType {
 	case algo.SM2:
 		return ReadSM2CertFromMem(data)
-
 	default:
 		return ReadX509CertFromMem(data)
 	}

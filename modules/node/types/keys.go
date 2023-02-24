@@ -31,6 +31,8 @@ var (
 	ValidatorsUpdateQueueKey = []byte{0x05} // prefix for each key of a validator to be updated
 	HistoricalInfoKey        = []byte{0x06} // prefix for each key of a validator to be updated
 	NodeKey                  = []byte{0x07} // prefix for node
+
+	delimiter = []byte("/")
 )
 
 // GetValidatorIDKey gets the key for the validator with id
@@ -62,4 +64,10 @@ func GetHistoricalInfoKey(height int64) []byte {
 // VALUE: Node
 func GetNodeKey(id tmbytes.HexBytes) []byte {
 	return append(NodeKey, id...)
+}
+
+// GetRootCertKey gets the key for the cert type
+func GetRootCertKey(certType string) []byte {
+	key := append(RootCertKey, delimiter...)
+	return append(key, []byte(certType)...)
 }

@@ -28,7 +28,7 @@ var (
 
 // NewMsgCreateValidator creates a new MsgCreateValidator instance.
 func NewMsgCreateValidator(
-	name, description string, cert string, power int64, operator sdk.AccAddress,
+	name, description string, cert *Certificate, power int64, operator sdk.AccAddress,
 ) *MsgCreateValidator {
 	return &MsgCreateValidator{
 		Name:        name,
@@ -64,7 +64,7 @@ func (m MsgCreateValidator) ValidateBasic() error {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "validator name cannot be blank")
 	}
 
-	if len(m.Certificate) == 0 {
+	if len(m.Certificate.Value) == 0 {
 		return sdkerrors.Wrap(sdkerrors.ErrInvalidRequest, "certificate missing")
 	}
 	if m.Power <= 0 {
@@ -90,7 +90,7 @@ func (m MsgCreateValidator) GetSigners() []sdk.AccAddress {
 
 // NewMsgUpdateValidator creates a new MsgUpdateValidator instance.
 func NewMsgUpdateValidator(
-	id tmbytes.HexBytes, name, description string, cert string, power int64, operator sdk.AccAddress,
+	id tmbytes.HexBytes, name, description string, cert *Certificate, power int64, operator sdk.AccAddress,
 ) *MsgUpdateValidator {
 	return &MsgUpdateValidator{
 		Id:          id.String(),
@@ -199,7 +199,7 @@ func (m MsgRemoveValidator) GetSigners() []sdk.AccAddress {
 // NewMsgGrantNode creates a new MsgGrantNode instance
 func NewMsgGrantNode(
 	name string,
-	cert string,
+	cert *Certificate,
 	operator sdk.AccAddress,
 ) *MsgGrantNode {
 	return &MsgGrantNode{

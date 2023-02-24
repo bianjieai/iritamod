@@ -36,7 +36,7 @@ func (k *Keeper) SetHooks(sh staking.StakingHooks) *Keeper {
 func (k Keeper) CreateValidator(ctx sdk.Context,
 	id tmbytes.HexBytes,
 	name string,
-	certificate string,
+	certificate *types.Certificate,
 	pubKey cryptotypes.PubKey,
 	power int64,
 	description string,
@@ -46,7 +46,7 @@ func (k Keeper) CreateValidator(ctx sdk.Context,
 		return types.ErrValidatorNameExists
 	}
 
-	if len(certificate) > 0 {
+	if len(certificate.Value) > 0 {
 		cert, err := k.VerifyCert(ctx, certificate)
 		if err != nil {
 			return err
@@ -102,7 +102,7 @@ func (k Keeper) CreateValidator(ctx sdk.Context,
 func (k Keeper) UpdateValidator(ctx sdk.Context,
 	id tmbytes.HexBytes,
 	name string,
-	certificate string,
+	certificate *types.Certificate,
 	power int64,
 	description string,
 	operator string,
@@ -116,7 +116,7 @@ func (k Keeper) UpdateValidator(ctx sdk.Context,
 		return types.ErrUnknownValidator
 	}
 
-	if len(certificate) > 0 && certificate != validator.Certificate {
+	if len(certificate.Value) > 0 && certificate != validator.Certificate {
 		cert, err := k.VerifyCert(ctx, certificate)
 		if err != nil {
 			return err
@@ -452,14 +452,17 @@ func (k *Keeper) IterateDelegations(
 ) {
 }
 
-func (k *Keeper) VerifyCert(ctx sdk.Context, certStr string) (cert cautil.Cert, err error) {
-	rootCertStr, _ := k.GetRootCert(ctx)
-	rootCert, err := cautil.ReadCertificateFromMem([]byte(rootCertStr))
+func (k *Keeper) VerifyCert(ctx sdk.Context, certificate *types.Certificate) (cert cautil.Cert, err error) {
+	rootCertificate, found := k.GetRootCertByType(ctx, certificate.Key)
+	if !found {
+		return cert, sdkerrors.Wrapf(types.ErrInvalidRootCert, "There is no %s type root certificate", certificate.Key)
+	}
+	rootCert, err := cautil.ReadCertificateFromMemByType([]byte(rootCertificate.Value), rootCertificate.Key)
 	if err != nil {
 		return cert, sdkerrors.Wrap(types.ErrInvalidRootCert, err.Error())
 	}
 
-	cert, err = cautil.ReadCertificateFromMem([]byte(certStr))
+	cert, err = cautil.ReadCertificateFromMemByType([]byte(certificate.Value), certificate.Key)
 	if err != nil {
 		return cert, sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
 	}

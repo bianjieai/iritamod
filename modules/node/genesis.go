@@ -4,6 +4,7 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"github.com/tendermint/tendermint/crypto/algo"
 
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
 
@@ -99,13 +100,25 @@ func ValidateGenesis(data GenesisState) error {
 	if len(data.RootCert) == 0 {
 		return errors.New("root certificate is not set in genesis state")
 	}
+	rootCertMap := make(map[string]cautil.Cert, len(data.RootCert))
 
-	rootCert, err := cautil.ReadCertificateFromMem([]byte(data.RootCert))
-	if err != nil {
-		return fmt.Errorf("invalid root certificate in genesis state, %s", err.Error())
+	for _, cert := range data.RootCert {
+		rootCert, err := cautil.ReadCertificateFromMemByType([]byte(cert.Value), cert.Key)
+		if err != nil {
+			return fmt.Errorf("invalid root certificate in genesis state, %s", err.Error())
+		}
+
+		switch cert.Key {
+		case algo.SM2:
+			rootCertMap[algo.SM2] = rootCert
+		case algo.ED25519:
+			rootCertMap[algo.ED25519] = rootCert
+		default:
+			return fmt.Errorf("unsupported certificate type")
+		}
 	}
 
-	err = validateGenesisStateValidators(rootCert, data.Validators)
+	err := validateGenesisStateValidators(rootCertMap, data.Validators)
 	if err != nil {
 		return err
 	}
@@ -113,20 +126,26 @@ func ValidateGenesis(data GenesisState) error {
 	return validateNodes(data.Nodes)
 }
 
-func validateGenesisStateValidators(rootCert cautil.Cert, validators []Validator) error {
+func validateGenesisStateValidators(rootCertMap map[string]cautil.Cert, validators []Validator) error {
 	nameMap := make(map[string]bool, len(validators))
 	pubkeyMap := make(map[string]bool, len(validators))
 	idMap := make(map[string]bool, len(validators))
 
 	for i := 0; i < len(validators); i++ {
 		val := validators[i]
-		if len(val.Certificate) > 0 {
-			cert, err := cautil.ReadCertificateFromMem([]byte(val.Certificate))
+		if len(val.Certificate.Value) > 0 {
+			cert, err := cautil.ReadCertificateFromMemByType([]byte(val.Certificate.Value), val.Certificate.Key)
 			if err != nil {
 				return sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
 			}
 
-			if err = cautil.VerifyCertFromRoot(cert, rootCert); err != nil {
+			switch cert.(type) {
+			case cautil.Sm2Cert:
+				err = cautil.VerifyCertFromRoot(cert, rootCertMap[algo.SM2])
+			case cautil.X509Cert:
+				err = cautil.VerifyCertFromRoot(cert, rootCertMap[algo.ED25519])
+			}
+			if err != nil {
 				return sdkerrors.Wrapf(types.ErrInvalidCert, "cannot be verified by root certificate, err: %s", err.Error())
 			}
 		}
