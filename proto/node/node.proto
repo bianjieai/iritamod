@@ -15,7 +15,7 @@ message Validator {
     string id = 1;
     string name = 2;
     string pubkey = 3;
-    string certificate = 4;
+    Certificate certificate = 4;
     int64 power = 5;
     string description = 6;
     bool jailed = 7;
@@ -35,7 +35,7 @@ message Node {
     
     string id = 1;
     string name = 2;
-    string certificate = 3;
+    Certificate certificate = 3;
 }
 
 // Params defines the parameters for the node module.
@@ -43,4 +43,11 @@ message Params {
     option (gogoproto.equal) = true;
 
     uint32 historical_entries = 1 [(gogoproto.moretags) = "yaml:\"historical_entries\""];
+}
+
+message Certificate {
+    option (gogoproto.equal) = true;
+
+    string key = 1;
+    string value = 2;
 }
