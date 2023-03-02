@@ -37,6 +37,15 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ## [Unreleased]
 
+## [v1.4.0] - 2023-02-28
+
+### Application
+
+- (modules/node) [#51]  Multiple certificate types for the node module are supported
+
+### Bug Fixes
+
+
 ## [v1.3.0] - 2022-08-08
 
 ### Application
