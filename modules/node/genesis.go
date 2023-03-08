@@ -108,14 +108,10 @@ func ValidateGenesis(data GenesisState) error {
 			return fmt.Errorf("invalid root certificate in genesis state, %s", err.Error())
 		}
 
-		switch cert.Key {
-		case algo.SM2:
-			rootCertMap[algo.SM2] = rootCert
-		case algo.ED25519:
-			rootCertMap[algo.ED25519] = rootCert
-		default:
-			return fmt.Errorf("unsupported certificate type")
+		if _, err := cautil.IsSupportedAlgorithms(cert.Key); err != nil {
+			return err
 		}
+		rootCertMap[cert.Key] = rootCert
 	}
 
 	err := validateGenesisStateValidators(rootCertMap, data.Validators)

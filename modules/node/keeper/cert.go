@@ -1,11 +1,10 @@
 package keeper
 
 import (
-	"github.com/tendermint/tendermint/crypto/algo"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/bianjieai/iritamod/modules/node/types"
+	cautil "github.com/bianjieai/iritamod/utils/ca"
 )
 
 func (k *Keeper) GetRootCert(ctx sdk.Context) (certs []types.Certificate, found bool) {
@@ -25,14 +24,10 @@ func (k *Keeper) GetRootCertByType(ctx sdk.Context, certType string) (cert types
 	store := ctx.KVStore(k.storeKey)
 	var RootCertKey []byte
 
-	switch certType {
-	case algo.SM2:
-		RootCertKey = types.GetRootCertKey(algo.SM2)
-	case algo.ED25519:
-		RootCertKey = types.GetRootCertKey(algo.ED25519)
-	default:
+	if _, err := cautil.IsSupportedAlgorithms(certType); err != nil {
 		return types.Certificate{}, false
 	}
+	RootCertKey = types.GetRootCertKey(certType)
 
 	value := store.Get(RootCertKey)
 	if value == nil {
@@ -50,12 +45,10 @@ func (k *Keeper) SetRootCert(ctx sdk.Context, certs []types.Certificate) {
 	for _, cert := range certs {
 		var RootCertKey, bz []byte
 
-		switch cert.Key {
-		case algo.SM2, "SM2":
-			RootCertKey = types.GetRootCertKey(algo.SM2)
-		case algo.ED25519, "ED25519":
-			RootCertKey = types.GetRootCertKey(algo.ED25519)
+		if _, err := cautil.IsSupportedAlgorithms(cert.Key); err != nil {
+			panic(err)
 		}
+		RootCertKey = types.GetRootCertKey(cert.Key)
 
 		bz = k.cdc.MustMarshal(&cert)
 		store.Set(RootCertKey, bz)
