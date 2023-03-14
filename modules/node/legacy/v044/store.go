@@ -9,19 +9,16 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/tendermint/tendermint/crypto/algo"
-
 	"github.com/bianjieai/iritamod/modules/node/types"
 	cautil "github.com/bianjieai/iritamod/utils/ca"
 )
 
-// TODO 生成的 ed25519 根证书放置此处
-// NOTE：Place the root certificate and certificate type that you want to add here.
+// NOTE：If a node module needs to be migrated, assign this variable in the upgrade plan.
 var (
-	addNewRootCertValue = ``
-	addNewRootCertType  = ""
+	AddNewRootCertValue = ""
+	AddNewRootCertType  = ""
 
-	oldRootCertType = algo.SM2
+	OldRootCertType = ""
 )
 
 // MigrateStore performs in-place store migrations from v1 to v2. The
@@ -30,8 +27,12 @@ var (
 // - The `Certificate` type is added.
 // - Change the root certificate type to array `Certificate` type.
 // - Change the certificate type of the validator and node.
-func MigrateStore(ctx sdk.Context, storeKey sdk.StoreKey, cdc codec.BinaryCodec) error {
+func MigrateStore(ctx sdk.Context, storeKey sdk.StoreKey, cdc codec.BinaryCodec, historicalEntries uint32) error {
 	store := ctx.KVStore(storeKey)
+
+	if AddNewRootCertValue == "" || AddNewRootCertType == "" || OldRootCertType == "" {
+		return fmt.Errorf("missing certificate parameter")
+	}
 
 	// overwrite the root certificate
 	err := migrateRootCert(ctx, store, cdc)
@@ -39,8 +40,8 @@ func MigrateStore(ctx sdk.Context, storeKey sdk.StoreKey, cdc codec.BinaryCodec)
 		return err
 	}
 
-	// updated the certificate structure in kv database
-	err = migrateCertStruct(ctx, store, cdc)
+	// updated the certificate structure in kv database, certificate of node is empty
+	err = migrateCertStruct(ctx, store, cdc, historicalEntries)
 	if err != nil {
 		return err
 	}
@@ -59,12 +60,12 @@ func migrateRootCert(ctx sdk.Context, store sdk.KVStore, cdc codec.BinaryCodec) 
 	oldRootCertStr := certStr.Value
 
 	newRootCert := []types.Certificate{{
-		Key:   addNewRootCertType,
-		Value: addNewRootCertValue,
+		Key:   AddNewRootCertType,
+		Value: AddNewRootCertValue,
 	}}
 	newRootCert = append(newRootCert, types.Certificate{
-		Key:   oldRootCertStr,
-		Value: oldRootCertType,
+		Key:   OldRootCertType,
+		Value: oldRootCertStr,
 	})
 
 	// set root cert
@@ -83,7 +84,7 @@ func migrateRootCert(ctx sdk.Context, store sdk.KVStore, cdc codec.BinaryCodec) 
 	return nil
 }
 
-func migrateCertStruct(ctx sdk.Context, store sdk.KVStore, cdc codec.BinaryCodec) error {
+func migrateCertStruct(ctx sdk.Context, store sdk.KVStore, cdc codec.BinaryCodec, historicalEntries uint32) error {
 	// node
 	nodeIterator := sdk.KVStorePrefixIterator(store, types.NodeKey)
 	defer nodeIterator.Close()
@@ -120,7 +121,7 @@ func migrateCertStruct(ctx sdk.Context, store sdk.KVStore, cdc codec.BinaryCodec
 			Jailed:      oldValidator.Jailed,
 			Operator:    oldValidator.Operator,
 			Certificate: &types.Certificate{
-				Key:   oldRootCertType,
+				Key:   OldRootCertType,
 				Value: oldValidator.Certificate,
 			},
 		}
@@ -128,6 +129,41 @@ func migrateCertStruct(ctx sdk.Context, store sdk.KVStore, cdc codec.BinaryCodec
 		bz := cdc.MustMarshal(&newValidator)
 		id, _ := hex.DecodeString(oldValidator.Id)
 		store.Set(types.GetValidatorIDKey(id), bz)
+	}
+
+	// historical info
+	for height := ctx.BlockHeight() - int64(historicalEntries); height <= ctx.BlockHeight(); height++ {
+		key := types.GetHistoricalInfoKey(height)
+		value := store.Get(key)
+		if value == nil {
+			continue
+		}
+
+		var oldHiInfo OldHistoricalInfo
+		var newValidator []types.Validator
+		cdc.MustUnmarshal(value, &oldHiInfo)
+
+		for _, valset := range oldHiInfo.Valset {
+			newValidator = append(newValidator, types.Validator{
+				Id:          valset.Id,
+				Name:        valset.Name,
+				Pubkey:      valset.Pubkey,
+				Power:       valset.Power,
+				Description: valset.Description,
+				Jailed:      valset.Jailed,
+				Operator:    valset.Operator,
+				Certificate: &types.Certificate{
+					Key:   OldRootCertType,
+					Value: valset.Certificate,
+				},
+			})
+		}
+
+		newHiInfo := types.HistoricalInfo{
+			Header: oldHiInfo.Header,
+			Valset: newValidator,
+		}
+		store.Set(key, cdc.MustMarshal(&newHiInfo))
 	}
 
 	return nil

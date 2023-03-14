@@ -67,25 +67,25 @@ func (m *OldValidator) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Validator proto.InternalMessageInfo
 
-// HistoricalInfo contains the historical information that gets stored at
+// OldHistoricalInfo contains the historical information that gets stored at
 // each height.
-type HistoricalInfo struct {
+type OldHistoricalInfo struct {
 	Header types.Header   `protobuf:"bytes,1,opt,name=header,proto3" json:"header"`
 	Valset []OldValidator `protobuf:"bytes,2,rep,name=valset,proto3" json:"valset"`
 }
 
-func (m *HistoricalInfo) Reset()         { *m = HistoricalInfo{} }
-func (m *HistoricalInfo) String() string { return proto.CompactTextString(m) }
-func (*HistoricalInfo) ProtoMessage()    {}
-func (*HistoricalInfo) Descriptor() ([]byte, []int) {
+func (m *OldHistoricalInfo) Reset()         { *m = OldHistoricalInfo{} }
+func (m *OldHistoricalInfo) String() string { return proto.CompactTextString(m) }
+func (*OldHistoricalInfo) ProtoMessage()    {}
+func (*OldHistoricalInfo) Descriptor() ([]byte, []int) {
 	return fileDescriptor_a18530e439628818, []int{1}
 }
-func (m *HistoricalInfo) XXX_Unmarshal(b []byte) error {
+func (m *OldHistoricalInfo) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *HistoricalInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *OldHistoricalInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_HistoricalInfo.Marshal(b, m, deterministic)
+		return xxx_messageInfo_OldHistoricalInfo.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -95,17 +95,17 @@ func (m *HistoricalInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, erro
 		return b[:n], nil
 	}
 }
-func (m *HistoricalInfo) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_HistoricalInfo.Merge(m, src)
+func (m *OldHistoricalInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_OldHistoricalInfo.Merge(m, src)
 }
-func (m *HistoricalInfo) XXX_Size() int {
+func (m *OldHistoricalInfo) XXX_Size() int {
 	return m.Size()
 }
-func (m *HistoricalInfo) XXX_DiscardUnknown() {
-	xxx_messageInfo_HistoricalInfo.DiscardUnknown(m)
+func (m *OldHistoricalInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_OldHistoricalInfo.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_HistoricalInfo proto.InternalMessageInfo
+var xxx_messageInfo_OldHistoricalInfo proto.InternalMessageInfo
 
 // OldNode defines a struct to represent a node identity
 type OldNode struct {
@@ -187,7 +187,7 @@ var xxx_messageInfo_Params proto.InternalMessageInfo
 
 func init() {
 	proto.RegisterType((*OldValidator)(nil), "iritamod.node.OldValidator")
-	proto.RegisterType((*HistoricalInfo)(nil), "iritamod.node.HistoricalInfo")
+	proto.RegisterType((*OldHistoricalInfo)(nil), "iritamod.node.OldHistoricalInfo")
 	proto.RegisterType((*OldNode)(nil), "iritamod.node.OldNode")
 	proto.RegisterType((*Params)(nil), "iritamod.node.Params")
 }
@@ -405,7 +405,7 @@ func (m *OldValidator) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *HistoricalInfo) Marshal() (dAtA []byte, err error) {
+func (m *OldHistoricalInfo) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -415,12 +415,12 @@ func (m *HistoricalInfo) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *HistoricalInfo) MarshalTo(dAtA []byte) (int, error) {
+func (m *OldHistoricalInfo) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *HistoricalInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *OldHistoricalInfo) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -574,7 +574,7 @@ func (m *OldValidator) Size() (n int) {
 	return n
 }
 
-func (m *HistoricalInfo) Size() (n int) {
+func (m *OldHistoricalInfo) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -914,7 +914,7 @@ func (m *OldValidator) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *HistoricalInfo) Unmarshal(dAtA []byte) error {
+func (m *OldHistoricalInfo) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -937,10 +937,10 @@ func (m *HistoricalInfo) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: HistoricalInfo: wiretype end group for non-group")
+			return fmt.Errorf("proto: OldHistoricalInfo: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: HistoricalInfo: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: OldHistoricalInfo: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
