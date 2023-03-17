@@ -99,9 +99,15 @@ func NewUpdateValidatorCmd() *cobra.Command {
 
 			certType := viper.GetString(FlagCertType)
 			certPath := viper.GetString(FlagCert)
-			cert, err := buildCertificate(certType, certPath)
-			if err != nil {
-				return err
+			var cert = &types.Certificate{}
+			if len(certType) > 0 || len(certPath) > 0 {
+				if certType == "" {
+					return fmt.Errorf("failed to read the certificate file: %s", certType)
+				}
+				cert, err = buildCertificate(certType, certPath)
+				if err != nil {
+					return err
+				}
 			}
 
 			id, err := hex.DecodeString(args[0])
