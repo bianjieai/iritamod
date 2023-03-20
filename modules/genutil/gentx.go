@@ -36,7 +36,7 @@ func AddGenTxsInAppGenesisState(
 	return SetGenesisStateInAppState(cdc, appGenesisState, genesisState), nil
 }
 
-type deliverTxfn func(abci.RequestDeliverTx) abci.ResponseDeliverTx
+type deliverTxfn func(abci.RequestDeliverTx, sdk.Context) abci.ResponseDeliverTx
 
 // DeliverGenTxs iterates over all genesis txs, decodes each into a StdTx and
 // invokes the provided deliverTxfn with the decoded StdTx. It returns the result
@@ -57,7 +57,7 @@ func DeliverGenTxs(
 			panic(err)
 		}
 
-		res := deliverTx(abci.RequestDeliverTx{Tx: bz})
+		res := deliverTx(abci.RequestDeliverTx{Tx: bz}, ctx)
 		if !res.IsOK() {
 			panic(res.Log)
 		}
