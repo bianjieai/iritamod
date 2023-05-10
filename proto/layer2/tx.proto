@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+package iritamod.nftl2;
+
+import "gogoproto/gogo.proto";
+import "nftl2/nftl2.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/nftl2/types";
+
+service Msg {
+  rpc CreateNFTs(MsgCreateNFTs) returns (MsgCreateNFTsResponse);
+
+  rpc UpdateNFTs(MsgUpdateNFTs) returns (MsgUpdateNFTsResponse);
+
+  rpc DeleteNFTs(MsgDeleteNFTs) returns (MsgDeleteNFTsResponse);
+
+  rpc DepositClass(MsgDepositClass) returns (MsgDepositClassResponse);
+
+  rpc WithdrawClass(MsgWithdrawClass) returns (MsgWithdrawClassRespnose);
+
+  rpc DepositNFT(MsgDepositNFT) returns (MsgDepositNFTResponse);
+
+  rpc WithdrawNFT(MsgWithdrawNFT) returns (MsgWithdrawNFTResponse);
+
+  rpc CreateL2Space(MsgCreateL2Space) returns (MsgCreateL2SpaceResponse);
+
+  rpc TransferL2Space(MsgTransferL2Space) returns (MsgCreateL2SpaceResponse);
+}
+
+message MsgCreateNFTs {
+  string space_id = 1;
+  string class_id = 2;
+  repeated NFT nfts = 3;
+  string sender = 4;
+}
+message MsgCreateNFTsResponse {}
+
+message MsgUpdateNFTs {
+  string space_id = 1;
+  string clsss_id = 2;
+  repeated NFT nfts = 3;
+  string sender = 4;
+}
+message MsgUpdateNFTsResponse {}
+
+message MsgDeleteNFTs {
+  string space_id = 1;
+  string class_id = 2;
+  repeated string nft_ids = 3;
+  string sender = 4;
+}
+
+message MsgDeleteNFTsResponse {}
+
+message MsgDepositClass {
+  string class_id = 1;
+  string sender = 2; // class_owner
+  string base_uri = 3; // token_uri prefix
+}
+
+message MsgDepositClassResponse {}
+
+message MsgWithdrawClass {
+  string class_id = 1;
+  string owner = 2; // class_owner
+  string sender = 3; // l2_user
+}
+
+message MsgWithdrawClassRespnose {}
+
+message MsgDepositNFT {
+  string space_id = 1;
+  string class_id = 2;
+  string nft_id = 3;
+  string sender = 4; // nft_owner
+}
+
+message MsgDepositNFTResponse {}
+
+message MsgWithdrawNFT {
+  string space_id = 1;
+  string class_id = 2;
+  string nft_id = 3;
+  string owner = 4; // layer2 nft_owner
+  string sender = 5; // l2_user
+  string name = 6;
+  string uri = 7;
+  string uri_hash = 8;
+  string data = 9;
+}
+
+message MsgWithdrawNFTResponse {}
+
+message MsgCreateL2Space {
+  string sender = 1;
+}
+
+message MsgCreateL2SpaceResponse {
+  string space_id = 1;
+}
+
+message MsgTransferL2Space {
+  string space_id = 1;
+  string sender = 2;
+  string recipient = 3;
+}
+
+message MsgTransferL2SpaceResponse {}

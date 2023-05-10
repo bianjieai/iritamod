@@ -1,0 +1,12 @@
+syntax = "proto3";
+package iritamod.nftl2;
+
+import "gogoproto/gogo.proto";
+import "nftl2/nftl2.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/nftl2/types";
+
+message GenesisState {
+  repeated Class classes = 1  [ (gogoproto.nullable) = false ];
+  repeated Space spaces = 2  [ (gogoproto.nullable) = false ];
+}

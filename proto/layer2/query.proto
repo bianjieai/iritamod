@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package iritamod.nftl2;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "nftl2/nftl2.proto";
+import "cosmos/query/pagination.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/nftl2/types";
+
+
+service Query {
+  rpc Class(QueryClassRequest) returns (QueryClassResponse) {
+    option (google.api.http).get = "/iritamod/nftl2/classes/{class_id}";
+  }
+
+  rpc Classes(QueryClassesRequest) returns (QueryClassesResponse) {
+    option (google.api.http).get = "/iritamod/nftl2/classes";
+  }
+
+  rpc NFT(QueryNFTRequest) returns (QueryNFTResponse) {
+    option (google.api.http).get = "/iritamod/nftl2/nfts/{space_id}/{class_id}/{nft_id}";
+  }
+
+  rpc CollectionOfSpace(QueryCollectionOfSpaceRequest) returns (QueryCollectionOfSpaceResponse) {
+    option (google.api.http).get = "/iritamod/nftl2/collections/{space_id}/{class_id}";
+  }
+
+  rpc NFTsOfOwner(QueryNFTsOfOwnerRequest) returns (QueryNFTsOfOwnerResponse) {
+    option (google.api.http).get = "/iritamod/nftl2/nfts/{space_id}/{class_id}/{owner}";
+  }
+
+  rpc BaseUri(QueryBaseUriRequest) returns (QueryBaseUriResponse) {
+    option (google.api.http).get = "/iritamod/nftl2/uris/{class_id}";
+  }
+
+  rpc TokenUri(QueryTokenUriRequest) returns (QueryTokenUriResponse) {
+    option (google.api.http).get = "/iritamod/nftl2/uris/{space_id}/{class_id}/{token_id}";
+  }
+
+  rpc Space(QuerySpaceRequest) returns (QuerySpaceResponse) {
+    option (google.api.http).get = "/iritamod/nftl2/spaces/{space_id}";
+  }
+
+  rpc SpaceOfOwner(QuerySpaceOfOwnerRequest) returns (QuerySpaceOfOwnerResponse) {
+    option (google.api.http).get = "/iritamod/nftl2/spaces";
+  }
+}
+
+message QueryClassRequest {
+  string class_id = 1;
+  cosmos.query.PageRequest pagination = 2;
+}
+
+message QueryClassResponse {
+  Class class = 1;
+}
+
+message QueryClassesRequest {
+  cosmos.query.PageRequest pagination = 1;
+}
+
+message QueryClassesResponse {
+  repeated Class classes = 1;
+  cosmos.query.PageResponse pagination = 2;
+}
+
+message QueryNFTRequest {
+  string space_id = 1;
+  string class_id = 2;
+  string nft_id = 3;
+}
+
+message QueryNFTResponse {
+  string owner = 1;
+}
+
+message QueryCollectionOfSpaceRequest {
+  string space_id = 1;
+  string class_id = 2;
+  cosmos.query.PageRequest pagination = 3;
+}
+
+message QueryCollectionOfSpaceResponse {
+  string class_id = 1;
+  repeated NFT nfts = 2;
+  cosmos.query.PageResponse pagination = 3;
+}
+
+message QueryNFTsOfOwnerRequest {
+  string space_id = 1;
+  string class_id = 2;
+  string owner = 3;
+  cosmos.query.PageRequest pagination = 4;
+}
+
+message QueryNFTsOfOwnerResponse {
+  string class_id = 1;
+  repeated string nft_ids = 2;
+  cosmos.query.PageResponse pagination = 3;
+}
+
+message QueryBaseUriRequest {
+  string class_id = 1;
+}
+
+message QueryBaseUriResponse {
+  string base_uri = 1;
+}
+
+message QueryTokenUriRequest {
+  string space_id = 1;
+  string class_id = 2;
+  string token_id = 3;
+}
+
+message QueryTokenUriResponse {
+  string token_uri = 1;
+}
+
+message QuerySpaceRequest {
+  string space_id = 1;
+}
+
+message QuerySpaceResponse {
+  Space space = 1;
+}
+
+message QuerySpaceOfOwnerRequest {
+  string owner = 1;
+}
+
+message QuerySpaceOfOwnerResponse {
+  repeated string space_ids = 1;
+  cosmos.query.PageResponse pagination = 2;
+}
