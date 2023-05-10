@@ -5,31 +5,40 @@ import "gogoproto/gogo.proto";
 
 option go_package = "github.com/bianjieai/iritamod/modules/layer2/types";
 
+// Space defines the space info of the layer2 module
 message Space {
   string id = 1;
   string owner = 2;
 }
 
-// NFT Asset Mappings
-
-message NFTMappings {
-  repeated Class classes = 1  [ (gogoproto.nullable) = false ];
-  repeated Collection collections = 2  [ (gogoproto.nullable) = false ];
+// Record defines the record info from a layer2
+message Record {
+  // TODO： define the Record
 }
 
-message Class {
+// MappingsForNFT defines all the mappings info of native NFT from layer2.
+message MappingsForNFT {
+  repeated ClassForNFT classes = 1  [ (gogoproto.nullable) = false ];
+  repeated CollectionForNFT collections = 2  [ (gogoproto.nullable) = false ];
+}
+
+// CollectionForNFT defines the collection info of native NFT from layer2.
+message CollectionForNFT {
+  string space_id = 1;
+  string class_id = 2;
+  repeated TokenForNFT tokens = 3;
+}
+
+// ClassForNFT defines the class mapping info of native NFT from layer2.
+message ClassForNFT {
   string id = 1;
   string owner = 2;
   string baseUri = 3;
   bool layer1_mint_restricted = 4;
 }
 
-message Collection {
-  string class_id = 1;
-  repeated NFT nfts = 2;
-}
-
-message NFT {
+// TokenForNFT defines the token mapping info of native NFT from layer2.
+message TokenForNFT {
   string id = 1;
   string owner = 2;
 }

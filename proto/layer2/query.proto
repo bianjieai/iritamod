@@ -9,129 +9,171 @@ import "cosmos/query/pagination.proto";
 
 option go_package = "github.com/bianjieai/iritamod/modules/layer2/types";
 
-
+// Query defines the gRPC querier service for layer2 module.
 service Query {
-  rpc Class(QueryClassRequest) returns (QueryClassResponse) {
-    option (google.api.http).get = "/iritamod/layer2/classes/{class_id}";
+  // ClassForNFT queries a native class mapping.
+  rpc ClassForNFT(QueryClassForNFTRequest) returns (QueryClassForNFTResponse) {
+    option (google.api.http).get = "/iritamod/layer2/nft/classes/{class_id}";
   }
 
-  rpc Classes(QueryClassesRequest) returns (QueryClassesResponse) {
-    option (google.api.http).get = "/iritamod/layer2/classes";
+  // ClassesForNFT queries all native NFT Class mappings.
+  rpc ClassesForNFT(QueryClassesForNFTRequest) returns (QueryClassesForNFTResponse) {
+    option (google.api.http).get = "/iritamod/layer2/nft/classes";
   }
 
-  rpc NFT(QueryNFTRequest) returns (QueryNFTResponse) {
-    option (google.api.http).get = "/iritamod/layer2/nfts/{space_id}/{class_id}/{nft_id}";
+  // TokenForNFT queries a native NFT mapping.
+  rpc TokenForNFT(QueryTokenForNFTRequest) returns (QueryTokenForNFTResponse) {
+    option (google.api.http).get = "/iritamod/layer2/nft/nfts/{space_id}/{class_id}/{nft_id}";
   }
 
-  rpc CollectionOfSpace(QueryCollectionOfSpaceRequest) returns (QueryCollectionOfSpaceResponse) {
-    option (google.api.http).get = "/iritamod/layer2/collections/{space_id}/{class_id}";
+  // CollectionForNFT queries all native NFT mappings under a class of a space.
+  rpc CollectionForNFT(QueryCollectionForNFTRequest) returns (QueryCollectionForNFTResponse) {
+    option (google.api.http).get = "/iritamod/layer2/nft/collections/{space_id}/{class_id}";
   }
 
-  rpc NFTsOfOwner(QueryNFTsOfOwnerRequest) returns (QueryNFTsOfOwnerResponse) {
+  // TokensOfOwnerForNFT queries all native NFT mappings owned by an address.
+  rpc TokensOfOwnerForNFT(QueryTokensOfOwnerForNFTRequest) returns (QueryTokensOfOwnerForNFTResponse) {
     option (google.api.http).get = "/iritamod/layer2/nfts/{space_id}/{class_id}/{owner}";
   }
 
-  rpc BaseUri(QueryBaseUriRequest) returns (QueryBaseUriResponse) {
-    option (google.api.http).get = "/iritamod/layer2/uris/{class_id}";
+  // BaseUriForNFT queries the base URI of a native NFT Class.
+  rpc BaseUriForNFT(QueryBaseUriForNFTRequest) returns (QueryBaseUriForNFTResponse) {
+    option (google.api.http).get = "/iritamod/layer2/nft/uris/{class_id}";
   }
 
-  rpc TokenUri(QueryTokenUriRequest) returns (QueryTokenUriResponse) {
-    option (google.api.http).get = "/iritamod/layer2/uris/{space_id}/{class_id}/{token_id}";
+  // TokenUriForNFT queries the URI of a native NFT.
+  rpc TokenUriForNFT(QueryTokenUriForNFTRequest) returns (QueryTokenUriForNFTResponse) {
+    option (google.api.http).get = "/iritamod/layer2/nft/uris/{space_id}/{class_id}/{token_id}";
   }
 
+  // Space queries a space.
   rpc Space(QuerySpaceRequest) returns (QuerySpaceResponse) {
     option (google.api.http).get = "/iritamod/layer2/spaces/{space_id}";
   }
 
+  // SpaceOfOwner queries all spaces owned by an address.
   rpc SpaceOfOwner(QuerySpaceOfOwnerRequest) returns (QuerySpaceOfOwnerResponse) {
     option (google.api.http).get = "/iritamod/layer2/spaces";
   }
+
+  // Record queries a record.
+  rpc Record(QueryRecordRequest) returns (QueryRecordResponse) {
+    option (google.api.http).get = "/iritamod/layer2/records";
+  }
 }
 
-message QueryClassRequest {
+// QueryClassForNFTRequest is the request type for the Query/ClassForNFT RPC
+message QueryClassForNFTRequest {
   string class_id = 1;
   cosmos.query.PageRequest pagination = 2;
 }
 
-message QueryClassResponse {
-  Class class = 1;
+// QueryClassForNFTResponse is the response type for the Query/ClassForNFT RPC
+message QueryClassForNFTResponse {
+  ClassForNFT class = 1;
 }
 
-message QueryClassesRequest {
+// QueryClassesForNFTRequest is the request type for the Query/ClassesForNFT RPC
+message QueryClassesForNFTRequest {
   cosmos.query.PageRequest pagination = 1;
 }
 
-message QueryClassesResponse {
-  repeated Class classes = 1;
+// QueryClassesForNFTResponse is the response type for the Query/ClassesForNFT RPC
+message QueryClassesForNFTResponse {
+  repeated ClassForNFT classes = 1;
   cosmos.query.PageResponse pagination = 2;
 }
 
-message QueryNFTRequest {
+// QueryTokenForNFTRequest is the request type for the Query/TokenForNFT RPC
+message QueryTokenForNFTRequest {
   string space_id = 1;
   string class_id = 2;
   string nft_id = 3;
 }
 
-message QueryNFTResponse {
+// QueryTokenForNFTResponse is the response type for the Query/TokenForNFT RPC
+message QueryTokenForNFTResponse {
   string owner = 1;
 }
 
-message QueryCollectionOfSpaceRequest {
+// QueryCollectionForNFTRequest is the request type for the Query/CollectionForNFT RPC
+message QueryCollectionForNFTRequest {
   string space_id = 1;
   string class_id = 2;
   cosmos.query.PageRequest pagination = 3;
 }
 
-message QueryCollectionOfSpaceResponse {
+// QueryCollectionForNFTResponse is the response type for the Query/CollectionForNFT RPC
+message QueryCollectionForNFTResponse {
   string class_id = 1;
-  repeated NFT nfts = 2;
+  repeated TokenForNFT nfts = 2;
   cosmos.query.PageResponse pagination = 3;
 }
 
-message QueryNFTsOfOwnerRequest {
+// QueryTokensOfOwnerForNFTRequest is the request type for the Query/TokensOfOwnerForNFT RPC
+message QueryTokensOfOwnerForNFTRequest {
   string space_id = 1;
   string class_id = 2;
   string owner = 3;
   cosmos.query.PageRequest pagination = 4;
 }
 
-message QueryNFTsOfOwnerResponse {
+// QueryTokensOfOwnerForNFTResponse is the response type for the Query/TokensOfOwnerForNFT RPC
+message QueryTokensOfOwnerForNFTResponse {
   string class_id = 1;
   repeated string nft_ids = 2;
   cosmos.query.PageResponse pagination = 3;
 }
 
-message QueryBaseUriRequest {
+// QueryBaseUriForNFTRequest is the request type for the Query/BaseUriForNFT RPC
+message QueryBaseUriForNFTRequest {
   string class_id = 1;
 }
 
-message QueryBaseUriResponse {
+// QueryBaseUriForNFTResponse is the response type for the Query/BaseUriForNFT RPC
+message QueryBaseUriForNFTResponse {
   string base_uri = 1;
 }
 
-message QueryTokenUriRequest {
+// QueryTokenUriForNFTRequest is the request type for the Query/TokenUriForNFT RPC
+message QueryTokenUriForNFTRequest {
   string space_id = 1;
   string class_id = 2;
   string token_id = 3;
 }
 
-message QueryTokenUriResponse {
+// QueryTokenUriForNFTResponse is the response type for the Query/TokenUriForNFT RPC
+message QueryTokenUriForNFTResponse {
   string token_uri = 1;
 }
 
+// QuerySpaceRequest is the request type for the Query/Space RPC
 message QuerySpaceRequest {
   string space_id = 1;
 }
 
+// QuerySpaceResponse is the response type for the Query/Space RPC
 message QuerySpaceResponse {
   Space space = 1;
 }
 
+// QuerySpaceOfOwnerRequest is the request type for the Query/SpaceOfOwner RPC
 message QuerySpaceOfOwnerRequest {
   string owner = 1;
 }
 
+// QuerySpaceOfOwnerResponse is the response type for the Query/SpaceOfOwner RPC
 message QuerySpaceOfOwnerResponse {
   repeated string space_ids = 1;
   cosmos.query.PageResponse pagination = 2;
+}
+
+// QueryRecordRequest is the request type for the Query/Record RPC
+message QueryRecordRequest {
+
+}
+
+// QueryRecordResponse is the response type for the Query/Record RPC
+message QueryRecordResponse {
+
 }

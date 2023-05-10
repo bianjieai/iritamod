@@ -8,6 +8,6 @@ option go_package = "github.com/bianjieai/iritamod/modules/layer2/types";
 
 message GenesisState {
   repeated Space spaces = 1  [ (gogoproto.nullable) = false ];
-  // repeated BlockHeader block = 2  [ (gogoproto.nullable) = false ];
-  NFTMappings nft_mappings = 3;
+  repeated Record records = 2  [ (gogoproto.nullable) = false ];
+  MappingsForNFT nft_mappings = 3;
 }

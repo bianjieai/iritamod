@@ -2,7 +2,11 @@ package layer2
 
 import (
 	"encoding/json"
+	"fmt"
+	"context"
+	"github.com/bianjieai/iritamod/modules/layer2/types"
 	"github.com/bianjieai/iritamod/modules/node/keeper"
+	"github.com/bianjieai/iritamod/modules/opb/client/cli"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -22,45 +26,54 @@ var (
 	_ module.AppModuleSimulation = AppModule{}
 )
 
-// AppModuleBasic defines the basic application module used by this module.
+// AppModuleBasic defines the basic application module used by layer2 module.
 type AppModuleBasic struct {
 	cdc codec.Codec
 }
 
-func (AppModuleBasic) Name() string {
-	panic("implement me")
-}
+// Name returns the layer2 module's name.
+func (AppModuleBasic) Name() string { return types.ModuleName }
 
+// RegisterLegacyAminoCodec registers the layer2 module's types on the LegacyAmino codec.
 func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
-	panic("implement me")
+	types.RegisterLegacyAminoCodec(cdc)
 }
 
-func (AppModuleBasic) RegisterInterfaces(codectypes.InterfaceRegistry) {
-	panic("implement me")
+// RegisterInterfaces registers the layer2 module's interface types
+func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
+	types.RegisterInterfaces(registry)
 }
 
+// DefaultGenesis returns default genesis state as raw bytes for the layer2 module.
 func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
-	panic("implement me")
+	return cdc.MustMarshalJSON(types.DefaultGenesisState())
 }
 
-func (AppModuleBasic) ValidateGenesis(codec.JSONCodec, client.TxEncodingConfig, json.RawMessage) error {
-	panic("implement me")
+// ValidateGenesis performs genesis state validation for the layer2 module.
+func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, _ client.TxEncodingConfig, bz json.RawMessage) error {
+	var data types.GenesisState
+	if err := cdc.UnmarshalJSON(bz, &data); err != nil {
+		return fmt.Errorf("failed to unmarshal %s genesis state: %w", types.ModuleName, err)
+	}
+	return types.ValidateGenesis(data)
 }
 
-func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
-	panic("implement me")
-}
+// RegisterRESTRoutes registers the REST routes for the layer2 module.
+func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {}
 
+// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the layer2 module.
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	panic("implement me")
+	_ = types.RegisterQueryHandlerClient(context.Background(), mux, types.NewQueryClient(clientCtx))
 }
 
+// GetTxCmd returns the root tx command for the layer2 module.
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
-	panic("implement me")
+    return cli.NewTxCmd()
 }
 
+// GetQueryCmd returns no root query command for the layer2 module.
 func (AppModuleBasic) GetQueryCmd() *cobra.Command {
-	panic("implement me")
+	return cli.GetQueryCmd()
 }
 
 // AppModule Implementation

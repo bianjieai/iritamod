@@ -32,11 +32,11 @@ var _ = utilities.NewDoubleArray
 var _ = descriptor.ForMessage
 
 var (
-	filter_Query_Class_0 = &utilities.DoubleArray{Encoding: map[string]int{"class_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
+	filter_Query_ClassForNFT_0 = &utilities.DoubleArray{Encoding: map[string]int{"class_id": 0}, Base: []int{1, 1, 0}, Check: []int{0, 1, 2}}
 )
 
-func request_Query_Class_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryClassRequest
+func request_Query_ClassForNFT_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryClassForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -60,17 +60,17 @@ func request_Query_Class_0(ctx context.Context, marshaler runtime.Marshaler, cli
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_Class_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_ClassForNFT_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.Class(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.ClassForNFT(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_Query_Class_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryClassRequest
+func local_request_Query_ClassForNFT_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryClassForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -94,53 +94,53 @@ func local_request_Query_Class_0(ctx context.Context, marshaler runtime.Marshale
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_Class_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_ClassForNFT_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.Class(ctx, &protoReq)
+	msg, err := server.ClassForNFT(ctx, &protoReq)
 	return msg, metadata, err
 
 }
 
 var (
-	filter_Query_Classes_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
+	filter_Query_ClassesForNFT_0 = &utilities.DoubleArray{Encoding: map[string]int{}, Base: []int(nil), Check: []int(nil)}
 )
 
-func request_Query_Classes_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryClassesRequest
+func request_Query_ClassesForNFT_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryClassesForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_Classes_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_ClassesForNFT_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.Classes(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.ClassesForNFT(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_Query_Classes_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryClassesRequest
+func local_request_Query_ClassesForNFT_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryClassesForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_Classes_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_ClassesForNFT_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.Classes(ctx, &protoReq)
+	msg, err := server.ClassesForNFT(ctx, &protoReq)
 	return msg, metadata, err
 
 }
 
-func request_Query_NFT_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryNFTRequest
+func request_Query_TokenForNFT_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryTokenForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -183,13 +183,13 @@ func request_Query_NFT_0(ctx context.Context, marshaler runtime.Marshaler, clien
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "nft_id", err)
 	}
 
-	msg, err := client.NFT(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.TokenForNFT(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_Query_NFT_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryNFTRequest
+func local_request_Query_TokenForNFT_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryTokenForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -232,17 +232,17 @@ func local_request_Query_NFT_0(ctx context.Context, marshaler runtime.Marshaler,
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "nft_id", err)
 	}
 
-	msg, err := server.NFT(ctx, &protoReq)
+	msg, err := server.TokenForNFT(ctx, &protoReq)
 	return msg, metadata, err
 
 }
 
 var (
-	filter_Query_CollectionOfSpace_0 = &utilities.DoubleArray{Encoding: map[string]int{"space_id": 0, "class_id": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
+	filter_Query_CollectionForNFT_0 = &utilities.DoubleArray{Encoding: map[string]int{"space_id": 0, "class_id": 1}, Base: []int{1, 1, 2, 0, 0}, Check: []int{0, 1, 1, 2, 3}}
 )
 
-func request_Query_CollectionOfSpace_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryCollectionOfSpaceRequest
+func request_Query_CollectionForNFT_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryCollectionForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -277,17 +277,17 @@ func request_Query_CollectionOfSpace_0(ctx context.Context, marshaler runtime.Ma
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_CollectionOfSpace_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_CollectionForNFT_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.CollectionOfSpace(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.CollectionForNFT(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_Query_CollectionOfSpace_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryCollectionOfSpaceRequest
+func local_request_Query_CollectionForNFT_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryCollectionForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -322,21 +322,21 @@ func local_request_Query_CollectionOfSpace_0(ctx context.Context, marshaler runt
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_CollectionOfSpace_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_CollectionForNFT_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.CollectionOfSpace(ctx, &protoReq)
+	msg, err := server.CollectionForNFT(ctx, &protoReq)
 	return msg, metadata, err
 
 }
 
 var (
-	filter_Query_NFTsOfOwner_0 = &utilities.DoubleArray{Encoding: map[string]int{"space_id": 0, "class_id": 1, "owner": 2}, Base: []int{1, 1, 2, 3, 0, 0, 0}, Check: []int{0, 1, 1, 1, 2, 3, 4}}
+	filter_Query_TokensOfOwnerForNFT_0 = &utilities.DoubleArray{Encoding: map[string]int{"space_id": 0, "class_id": 1, "owner": 2}, Base: []int{1, 1, 2, 3, 0, 0, 0}, Check: []int{0, 1, 1, 1, 2, 3, 4}}
 )
 
-func request_Query_NFTsOfOwner_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryNFTsOfOwnerRequest
+func request_Query_TokensOfOwnerForNFT_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryTokensOfOwnerForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -382,17 +382,17 @@ func request_Query_NFTsOfOwner_0(ctx context.Context, marshaler runtime.Marshale
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_NFTsOfOwner_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_TokensOfOwnerForNFT_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.NFTsOfOwner(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.TokensOfOwnerForNFT(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_Query_NFTsOfOwner_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryNFTsOfOwnerRequest
+func local_request_Query_TokensOfOwnerForNFT_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryTokensOfOwnerForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -438,17 +438,17 @@ func local_request_Query_NFTsOfOwner_0(ctx context.Context, marshaler runtime.Ma
 	if err := req.ParseForm(); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_NFTsOfOwner_0); err != nil {
+	if err := runtime.PopulateQueryParameters(&protoReq, req.Form, filter_Query_TokensOfOwnerForNFT_0); err != nil {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.NFTsOfOwner(ctx, &protoReq)
+	msg, err := server.TokensOfOwnerForNFT(ctx, &protoReq)
 	return msg, metadata, err
 
 }
 
-func request_Query_BaseUri_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryBaseUriRequest
+func request_Query_BaseUriForNFT_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryBaseUriForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -469,13 +469,13 @@ func request_Query_BaseUri_0(ctx context.Context, marshaler runtime.Marshaler, c
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "class_id", err)
 	}
 
-	msg, err := client.BaseUri(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.BaseUriForNFT(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_Query_BaseUri_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryBaseUriRequest
+func local_request_Query_BaseUriForNFT_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryBaseUriForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -496,62 +496,13 @@ func local_request_Query_BaseUri_0(ctx context.Context, marshaler runtime.Marsha
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "class_id", err)
 	}
 
-	msg, err := server.BaseUri(ctx, &protoReq)
+	msg, err := server.BaseUriForNFT(ctx, &protoReq)
 	return msg, metadata, err
 
 }
 
-func request_Query_TokenUri_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryTokenUriRequest
-	var metadata runtime.ServerMetadata
-
-	var (
-		val string
-		ok  bool
-		err error
-		_   = err
-	)
-
-	val, ok = pathParams["space_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "space_id")
-	}
-
-	protoReq.SpaceId, err = runtime.String(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "space_id", err)
-	}
-
-	val, ok = pathParams["class_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "class_id")
-	}
-
-	protoReq.ClassId, err = runtime.String(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "class_id", err)
-	}
-
-	val, ok = pathParams["token_id"]
-	if !ok {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "token_id")
-	}
-
-	protoReq.TokenId, err = runtime.String(val)
-
-	if err != nil {
-		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "token_id", err)
-	}
-
-	msg, err := client.TokenUri(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
-	return msg, metadata, err
-
-}
-
-func local_request_Query_TokenUri_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryTokenUriRequest
+func request_Query_TokenUriForNFT_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryTokenUriForNFTRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -594,7 +545,56 @@ func local_request_Query_TokenUri_0(ctx context.Context, marshaler runtime.Marsh
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "token_id", err)
 	}
 
-	msg, err := server.TokenUri(ctx, &protoReq)
+	msg, err := client.TokenUriForNFT(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Query_TokenUriForNFT_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryTokenUriForNFTRequest
+	var metadata runtime.ServerMetadata
+
+	var (
+		val string
+		ok  bool
+		err error
+		_   = err
+	)
+
+	val, ok = pathParams["space_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "space_id")
+	}
+
+	protoReq.SpaceId, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "space_id", err)
+	}
+
+	val, ok = pathParams["class_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "class_id")
+	}
+
+	protoReq.ClassId, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "class_id", err)
+	}
+
+	val, ok = pathParams["token_id"]
+	if !ok {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "missing parameter %s", "token_id")
+	}
+
+	protoReq.TokenId, err = runtime.String(val)
+
+	if err != nil {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "type mismatch, parameter: %s, error: %v", "token_id", err)
+	}
+
+	msg, err := server.TokenUriForNFT(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -689,13 +689,31 @@ func local_request_Query_SpaceOfOwner_0(ctx context.Context, marshaler runtime.M
 
 }
 
+func request_Query_Record_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryRecordRequest
+	var metadata runtime.ServerMetadata
+
+	msg, err := client.Record(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+
+}
+
+func local_request_Query_Record_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq QueryRecordRequest
+	var metadata runtime.ServerMetadata
+
+	msg, err := server.Record(ctx, &protoReq)
+	return msg, metadata, err
+
+}
+
 // RegisterQueryHandlerServer registers the http handlers for service Query to "mux".
 // UnaryRPC     :call QueryServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
 // Note that using this registration option will cause many gRPC library features (such as grpc.SendHeader, etc) to stop working. Consider using RegisterQueryHandlerFromEndpoint instead.
 func RegisterQueryHandlerServer(ctx context.Context, mux *runtime.ServeMux, server QueryServer) error {
 
-	mux.Handle("GET", pattern_Query_Class_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_ClassForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -704,18 +722,18 @@ func RegisterQueryHandlerServer(ctx context.Context, mux *runtime.ServeMux, serv
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Query_Class_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Query_ClassForNFT_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_Class_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_ClassForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_Query_Classes_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_ClassesForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -724,18 +742,18 @@ func RegisterQueryHandlerServer(ctx context.Context, mux *runtime.ServeMux, serv
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Query_Classes_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Query_ClassesForNFT_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_Classes_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_ClassesForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_Query_NFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_TokenForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -744,18 +762,18 @@ func RegisterQueryHandlerServer(ctx context.Context, mux *runtime.ServeMux, serv
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Query_NFT_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Query_TokenForNFT_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_NFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_TokenForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_Query_CollectionOfSpace_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_CollectionForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -764,18 +782,18 @@ func RegisterQueryHandlerServer(ctx context.Context, mux *runtime.ServeMux, serv
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Query_CollectionOfSpace_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Query_CollectionForNFT_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_CollectionOfSpace_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_CollectionForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_Query_NFTsOfOwner_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_TokensOfOwnerForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -784,18 +802,18 @@ func RegisterQueryHandlerServer(ctx context.Context, mux *runtime.ServeMux, serv
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Query_NFTsOfOwner_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Query_TokensOfOwnerForNFT_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_NFTsOfOwner_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_TokensOfOwnerForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_Query_BaseUri_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_BaseUriForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -804,18 +822,18 @@ func RegisterQueryHandlerServer(ctx context.Context, mux *runtime.ServeMux, serv
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Query_BaseUri_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Query_BaseUriForNFT_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_BaseUri_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_BaseUriForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_Query_TokenUri_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_TokenUriForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -824,14 +842,14 @@ func RegisterQueryHandlerServer(ctx context.Context, mux *runtime.ServeMux, serv
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Query_TokenUri_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Query_TokenUriForNFT_0(rctx, inboundMarshaler, server, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_TokenUri_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_TokenUriForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -872,6 +890,26 @@ func RegisterQueryHandlerServer(ctx context.Context, mux *runtime.ServeMux, serv
 		}
 
 		forward_Query_SpaceOfOwner_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
+	mux.Handle("GET", pattern_Query_Record_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_Query_Record_0(rctx, inboundMarshaler, server, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Query_Record_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -916,7 +954,7 @@ func RegisterQueryHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc
 // "QueryClient" to call the correct interceptors.
 func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, client QueryClient) error {
 
-	mux.Handle("GET", pattern_Query_Class_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_ClassForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -925,18 +963,18 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Query_Class_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Query_ClassForNFT_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_Class_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_ClassForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_Query_Classes_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_ClassesForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -945,18 +983,18 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Query_Classes_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Query_ClassesForNFT_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_Classes_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_ClassesForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_Query_NFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_TokenForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -965,18 +1003,18 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Query_NFT_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Query_TokenForNFT_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_NFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_TokenForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_Query_CollectionOfSpace_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_CollectionForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -985,18 +1023,18 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Query_CollectionOfSpace_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Query_CollectionForNFT_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_CollectionOfSpace_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_CollectionForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_Query_NFTsOfOwner_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_TokensOfOwnerForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -1005,18 +1043,18 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Query_NFTsOfOwner_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Query_TokensOfOwnerForNFT_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_NFTsOfOwner_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_TokensOfOwnerForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_Query_BaseUri_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_BaseUriForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -1025,18 +1063,18 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Query_BaseUri_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Query_BaseUriForNFT_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_BaseUri_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_BaseUriForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_Query_TokenUri_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Query_TokenUriForNFT_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
@@ -1045,14 +1083,14 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Query_TokenUri_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Query_TokenUriForNFT_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Query_TokenUri_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Query_TokenUriForNFT_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -1096,45 +1134,69 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 
 	})
 
+	mux.Handle("GET", pattern_Query_Record_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		rctx, err := runtime.AnnotateContext(ctx, mux, req)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_Query_Record_0(rctx, inboundMarshaler, client, req, pathParams)
+		ctx = runtime.NewServerMetadataContext(ctx, md)
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+
+		forward_Query_Record_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+
+	})
+
 	return nil
 }
 
 var (
-	pattern_Query_Class_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"iritamod", "layer2", "classes", "class_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ClassForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"iritamod", "layer2", "nft", "classes", "class_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Classes_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"iritamod", "layer2", "classes"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ClassesForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"iritamod", "layer2", "nft", "classes"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_NFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"iritamod", "layer2", "nfts", "space_id", "class_id", "nft_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_TokenForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"iritamod", "layer2", "nft", "nfts", "space_id", "class_id", "nft_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_CollectionOfSpace_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4}, []string{"iritamod", "layer2", "collections", "space_id", "class_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_CollectionForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"iritamod", "layer2", "nft", "collections", "space_id", "class_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_NFTsOfOwner_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"iritamod", "layer2", "nfts", "space_id", "class_id", "owner"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_TokensOfOwnerForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"iritamod", "layer2", "nfts", "space_id", "class_id", "owner"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_BaseUri_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"iritamod", "layer2", "uris", "class_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_BaseUriForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"iritamod", "layer2", "nft", "uris", "class_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_TokenUri_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"iritamod", "layer2", "uris", "space_id", "class_id", "token_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_TokenUriForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"iritamod", "layer2", "nft", "uris", "space_id", "class_id", "token_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_Space_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"iritamod", "layer2", "spaces", "space_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
 	pattern_Query_SpaceOfOwner_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"iritamod", "layer2", "spaces"}, "", runtime.AssumeColonVerbOpt(true)))
+
+	pattern_Query_Record_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"iritamod", "layer2", "records"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (
-	forward_Query_Class_0 = runtime.ForwardResponseMessage
+	forward_Query_ClassForNFT_0 = runtime.ForwardResponseMessage
 
-	forward_Query_Classes_0 = runtime.ForwardResponseMessage
+	forward_Query_ClassesForNFT_0 = runtime.ForwardResponseMessage
 
-	forward_Query_NFT_0 = runtime.ForwardResponseMessage
+	forward_Query_TokenForNFT_0 = runtime.ForwardResponseMessage
 
-	forward_Query_CollectionOfSpace_0 = runtime.ForwardResponseMessage
+	forward_Query_CollectionForNFT_0 = runtime.ForwardResponseMessage
 
-	forward_Query_NFTsOfOwner_0 = runtime.ForwardResponseMessage
+	forward_Query_TokensOfOwnerForNFT_0 = runtime.ForwardResponseMessage
 
-	forward_Query_BaseUri_0 = runtime.ForwardResponseMessage
+	forward_Query_BaseUriForNFT_0 = runtime.ForwardResponseMessage
 
-	forward_Query_TokenUri_0 = runtime.ForwardResponseMessage
+	forward_Query_TokenUriForNFT_0 = runtime.ForwardResponseMessage
 
 	forward_Query_Space_0 = runtime.ForwardResponseMessage
 
 	forward_Query_SpaceOfOwner_0 = runtime.ForwardResponseMessage
+
+	forward_Query_Record_0 = runtime.ForwardResponseMessage
 )
