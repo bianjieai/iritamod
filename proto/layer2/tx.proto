@@ -54,7 +54,7 @@ message MsgCreateNFTsResponse {}
 // MsgUpdateNFTs defines the Msg/UpdateNFTs request type.
 message MsgUpdateNFTs {
   string space_id = 1;
-  string clsss_id = 2;
+  string class_id = 2;
   repeated TokenForNFT nfts = 3;
   string sender = 4;
 }

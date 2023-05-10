@@ -28,3 +28,4 @@ var (
 	Delimiter = []byte{0x00}
 	Placeholder = []byte{0x01}
 )
+
