@@ -8,7 +8,6 @@ option go_package = "github.com/bianjieai/iritamod/modules/layer2/types";
 message Space {
   string id = 1;
   string owner = 2;
-  repeated Collection collections = 3;
 }
 
 // NFT Asset Mappings

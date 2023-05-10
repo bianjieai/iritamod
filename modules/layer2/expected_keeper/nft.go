@@ -1,4 +1,4 @@
-package types
+package expected_keeper
 
 import sdk "github.com/cosmos/cosmos-sdk/types"
 
