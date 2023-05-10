@@ -7,37 +7,37 @@ import (
 
 var _ types.QueryServer = Keeper{}
 
-func (k Keeper) Class(ctx context.Context, request *types.QueryClassRequest) (*types.QueryClassResponse, error) {
+func (k Keeper) ClassForNFT(ctx context.Context, request *types.QueryClassForNFTRequest) (*types.QueryClassForNFTResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (k Keeper) Classes(ctx context.Context, request *types.QueryClassesRequest) (*types.QueryClassesResponse, error) {
+func (k Keeper) ClassesForNFT(ctx context.Context, request *types.QueryClassesForNFTRequest) (*types.QueryClassesForNFTResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (k Keeper) NFT(ctx context.Context, request *types.QueryNFTRequest) (*types.QueryNFTResponse, error) {
+func (k Keeper) TokenForNFT(ctx context.Context, request *types.QueryTokenForNFTRequest) (*types.QueryTokenForNFTResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (k Keeper) CollectionOfSpace(ctx context.Context, request *types.QueryCollectionOfSpaceRequest) (*types.QueryCollectionOfSpaceResponse, error) {
+func (k Keeper) CollectionForNFT(ctx context.Context, request *types.QueryCollectionForNFTRequest) (*types.QueryCollectionForNFTResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (k Keeper) NFTsOfOwner(ctx context.Context, request *types.QueryNFTsOfOwnerRequest) (*types.QueryNFTsOfOwnerResponse, error) {
+func (k Keeper) TokensOfOwnerForNFT(ctx context.Context, request *types.QueryTokensOfOwnerForNFTRequest) (*types.QueryTokensOfOwnerForNFTResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (k Keeper) BaseUri(ctx context.Context, request *types.QueryBaseUriRequest) (*types.QueryBaseUriResponse, error) {
+func (k Keeper) BaseUriForNFT(ctx context.Context, request *types.QueryBaseUriForNFTRequest) (*types.QueryBaseUriForNFTResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (k Keeper) TokenUri(ctx context.Context, request *types.QueryTokenUriRequest) (*types.QueryTokenUriResponse, error) {
+func (k Keeper) TokenUriForNFT(ctx context.Context, request *types.QueryTokenUriForNFTRequest) (*types.QueryTokenUriForNFTResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }
@@ -48,6 +48,11 @@ func (k Keeper) Space(ctx context.Context, request *types.QuerySpaceRequest) (*t
 }
 
 func (k Keeper) SpaceOfOwner(ctx context.Context, request *types.QuerySpaceOfOwnerRequest) (*types.QuerySpaceOfOwnerResponse, error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (k Keeper) Record(ctx context.Context, request *types.QueryRecordRequest) (*types.QueryRecordResponse, error) {
 	//TODO implement me
 	panic("implement me")
 }

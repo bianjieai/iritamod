@@ -1,11 +1,11 @@
 package layer2
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
-	"context"
+	"github.com/bianjieai/iritamod/modules/layer2/keeper"
 	"github.com/bianjieai/iritamod/modules/layer2/types"
-	"github.com/bianjieai/iritamod/modules/node/keeper"
 	"github.com/bianjieai/iritamod/modules/opb/client/cli"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -84,68 +84,80 @@ type AppModule struct {
 	keeper keeper.Keeper
 }
 
-func NewAppModule() AppModule {
-	panic("implement me")
+// NewAppModule creates a new AppModule object
+func NewAppModule(cdc codec.Codec, keeper keeper.Keeper) AppModule {
+	return AppModule{
+		AppModuleBasic: AppModuleBasic{cdc: cdc},
+		keeper:         keeper,
+	}
 }
 
+// RegisterInvariants registers the layer2 module invariants.
 func (AppModule) RegisterInvariants(sdk.InvariantRegistry) {
-	panic("implement me")
+	//TODO: add what invariants for layer2 module?
 }
 
-func (AppModule) Route() sdk.Route {
-	panic("implement me")
+// Route returns the message routing key for the layer2 module.
+func (am AppModule) Route() sdk.Route {
+	return sdk.Route{}
 }
 
+// NewHandler returns the layer2 module's querier route name.
 func (AppModule) QuerierRoute() string {
-	panic("implement me")
+	return ""
 }
 
+// LegacyQuerierHandler returns the layer2 module's querier r.
 func (AppModule) LegacyQuerierHandler(*codec.LegacyAmino) sdk.Querier {
-	panic("implement me")
+    return nil
 }
 
-func (AppModule) RegisterServices(module.Configurator) {
-	panic("implement me")
+func (am AppModule) RegisterServices(cfg module.Configurator) {
+	types.RegisterMsgServer(cfg.MsgServer(), am.keeper)
+	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
 }
 
+// ConsensusVersion implements AppModule/ConsensusVersion.
 func (AppModule) ConsensusVersion() uint64 {
-	panic("implement me")
+	return 1
 }
 
-func (AppModule) BeginBlock(sdk.Context, abci.RequestBeginBlock) {
-	panic("implement me")
-}
+// BeginBlock returns the begin blocker for the layer2 module.
+func (AppModule) BeginBlock(sdk.Context, abci.RequestBeginBlock) {}
 
+// EndBlock returns the end blocker for the layer2 module.
 func (AppModule) EndBlock(sdk.Context, abci.RequestEndBlock) []abci.ValidatorUpdate {
-	panic("implement me")
+	return nil
 }
 
-func (AppModule) InitGenesis(sdk.Context, codec.JSONCodec, json.RawMessage) []abci.ValidatorUpdate {
-	panic("implement me")
+// InitGenesis performs genesis initialization for the layer2 module. It returns no validator updates.
+func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
+	var genesisState types.GenesisState
+	cdc.MustUnmarshalJSON(data, &genesisState)
+	am.keeper.InitGenesis(ctx, &genesisState)
+
+	return []abci.ValidatorUpdate{}
 }
 
-func (AppModule) ExportGenesis(ctx sdk.Context, jsonCodec codec.JSONCodec) json.RawMessage {
-	panic("implement me")
+func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
+	gs := am.keeper.ExportGenesis(ctx)
+	return cdc.MustMarshalJSON(gs)
 }
 
 // AppModuleSimulation Implementation
-
-func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
-	panic("implement me")
-}
+// NOTE: we haven't made a concrete implementation for simulation of the layer2 module
+func (AppModule) GenerateGenesisState(simState *module.SimulationState) {}
 
 func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
-	panic("implement me")
+	return nil
 }
 
 func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
-	panic("implement me")
+	return nil
 }
 
-func (AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {
-	panic("implement me")
-}
+func (AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {}
 
 func (AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
-	panic("implement me")
+	return nil
 }
