@@ -1,0 +1,38 @@
+syntax = "proto3";
+package iritamod.layer2;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/layer2/types";
+
+message Space {
+  string id = 1;
+  string owner = 2;
+  repeated Collection collections = 3;
+}
+
+// NFT Asset Mappings
+
+message NFTMappings {
+  repeated Class classes = 1  [ (gogoproto.nullable) = false ];
+  repeated Collection collections = 2  [ (gogoproto.nullable) = false ];
+}
+
+message Class {
+  string id = 1;
+  string owner = 2;
+  string baseUri = 3;
+  bool layer1_mint_restricted = 4;
+}
+
+message Collection {
+  string class_id = 1;
+  repeated NFT nfts = 2;
+}
+
+message NFT {
+  string id = 1;
+  string owner = 2;
+}
+
+

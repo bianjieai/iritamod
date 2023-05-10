@@ -1,11 +1,11 @@
 syntax = "proto3";
 
-package iritamod.nftl2;
+package iritamod.layer2;
 
 import "gogoproto/gogo.proto";
-import "nftl2/nftl2.proto";
+import "layer2/layer2.proto";
 
-option go_package = "github.com/bianjieai/iritamod/modules/nftl2/types";
+option go_package = "github.com/bianjieai/iritamod/modules/layer2/types";
 
 service Msg {
   rpc CreateNFTs(MsgCreateNFTs) returns (MsgCreateNFTsResponse);
@@ -16,7 +16,7 @@ service Msg {
 
   rpc DepositClass(MsgDepositClass) returns (MsgDepositClassResponse);
 
-  rpc WithdrawClass(MsgWithdrawClass) returns (MsgWithdrawClassRespnose);
+  rpc WithdrawClass(MsgWithdrawClass) returns (MsgWithdrawClassResponse);
 
   rpc DepositNFT(MsgDepositNFT) returns (MsgDepositNFTResponse);
 
@@ -24,7 +24,7 @@ service Msg {
 
   rpc CreateL2Space(MsgCreateL2Space) returns (MsgCreateL2SpaceResponse);
 
-  rpc TransferL2Space(MsgTransferL2Space) returns (MsgCreateL2SpaceResponse);
+  rpc TransferL2Space(MsgTransferL2Space) returns (MsgTransferL2SpaceResponse);
 }
 
 message MsgCreateNFTs {
@@ -66,7 +66,7 @@ message MsgWithdrawClass {
   string sender = 3; // l2_user
 }
 
-message MsgWithdrawClassRespnose {}
+message MsgWithdrawClassResponse {}
 
 message MsgDepositNFT {
   string space_id = 1;

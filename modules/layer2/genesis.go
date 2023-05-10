@@ -1,8 +1,8 @@
-package nftl2
+package layer2
 
 import (
-	"github.com/bianjieai/iritamod/modules/nftl2/keeper"
-	"github.com/bianjieai/iritamod/modules/nftl2/types"
+	"github.com/bianjieai/iritamod/modules/layer2/keeper"
+	"github.com/bianjieai/iritamod/modules/layer2/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 

@@ -1,50 +1,50 @@
 syntax = "proto3";
 
-package iritamod.nftl2;
+package iritamod.layer2;
 
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "nftl2/nftl2.proto";
+import "layer2/layer2.proto";
 import "cosmos/query/pagination.proto";
 
-option go_package = "github.com/bianjieai/iritamod/modules/nftl2/types";
+option go_package = "github.com/bianjieai/iritamod/modules/layer2/types";
 
 
 service Query {
   rpc Class(QueryClassRequest) returns (QueryClassResponse) {
-    option (google.api.http).get = "/iritamod/nftl2/classes/{class_id}";
+    option (google.api.http).get = "/iritamod/layer2/classes/{class_id}";
   }
 
   rpc Classes(QueryClassesRequest) returns (QueryClassesResponse) {
-    option (google.api.http).get = "/iritamod/nftl2/classes";
+    option (google.api.http).get = "/iritamod/layer2/classes";
   }
 
   rpc NFT(QueryNFTRequest) returns (QueryNFTResponse) {
-    option (google.api.http).get = "/iritamod/nftl2/nfts/{space_id}/{class_id}/{nft_id}";
+    option (google.api.http).get = "/iritamod/layer2/nfts/{space_id}/{class_id}/{nft_id}";
   }
 
   rpc CollectionOfSpace(QueryCollectionOfSpaceRequest) returns (QueryCollectionOfSpaceResponse) {
-    option (google.api.http).get = "/iritamod/nftl2/collections/{space_id}/{class_id}";
+    option (google.api.http).get = "/iritamod/layer2/collections/{space_id}/{class_id}";
   }
 
   rpc NFTsOfOwner(QueryNFTsOfOwnerRequest) returns (QueryNFTsOfOwnerResponse) {
-    option (google.api.http).get = "/iritamod/nftl2/nfts/{space_id}/{class_id}/{owner}";
+    option (google.api.http).get = "/iritamod/layer2/nfts/{space_id}/{class_id}/{owner}";
   }
 
   rpc BaseUri(QueryBaseUriRequest) returns (QueryBaseUriResponse) {
-    option (google.api.http).get = "/iritamod/nftl2/uris/{class_id}";
+    option (google.api.http).get = "/iritamod/layer2/uris/{class_id}";
   }
 
   rpc TokenUri(QueryTokenUriRequest) returns (QueryTokenUriResponse) {
-    option (google.api.http).get = "/iritamod/nftl2/uris/{space_id}/{class_id}/{token_id}";
+    option (google.api.http).get = "/iritamod/layer2/uris/{space_id}/{class_id}/{token_id}";
   }
 
   rpc Space(QuerySpaceRequest) returns (QuerySpaceResponse) {
-    option (google.api.http).get = "/iritamod/nftl2/spaces/{space_id}";
+    option (google.api.http).get = "/iritamod/layer2/spaces/{space_id}";
   }
 
   rpc SpaceOfOwner(QuerySpaceOfOwnerRequest) returns (QuerySpaceOfOwnerResponse) {
-    option (google.api.http).get = "/iritamod/nftl2/spaces";
+    option (google.api.http).get = "/iritamod/layer2/spaces";
   }
 }
 

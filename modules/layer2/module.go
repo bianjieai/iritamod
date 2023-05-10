@@ -1,7 +1,8 @@
-package nftl2
+package layer2
 
 import (
 	"encoding/json"
+	"github.com/bianjieai/iritamod/modules/node/keeper"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -66,7 +67,8 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 
 type AppModule struct {
 	AppModuleBasic
-	// TODO: add keeper
+
+	keeper keeper.Keeper
 }
 
 func NewAppModule() AppModule {
