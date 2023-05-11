@@ -13,52 +13,52 @@ option go_package = "github.com/bianjieai/iritamod/modules/layer2/types";
 service Query {
   // ClassForNFT queries a native class mapping.
   rpc ClassForNFT(QueryClassForNFTRequest) returns (QueryClassForNFTResponse) {
-    option (google.api.http).get = "/iritamod/layer2/nft/classes/{class_id}";
+    option (google.api.http).get = "/iritamod/layer2/v1/nft/classes/{class_id}";
   }
 
   // ClassesForNFT queries all native NFT Class mappings.
   rpc ClassesForNFT(QueryClassesForNFTRequest) returns (QueryClassesForNFTResponse) {
-    option (google.api.http).get = "/iritamod/layer2/nft/classes";
+    option (google.api.http).get = "/iritamod/layer2/v1/nft/classes";
   }
 
   // TokenForNFT queries a native NFT mapping.
   rpc TokenForNFT(QueryTokenForNFTRequest) returns (QueryTokenForNFTResponse) {
-    option (google.api.http).get = "/iritamod/layer2/nft/nfts/{space_id}/{class_id}/{nft_id}";
+    option (google.api.http).get = "/iritamod/layer2/v1/nft/nfts/{space_id}/{class_id}/{nft_id}";
   }
 
   // CollectionForNFT queries all native NFT mappings under a class of a space.
   rpc CollectionForNFT(QueryCollectionForNFTRequest) returns (QueryCollectionForNFTResponse) {
-    option (google.api.http).get = "/iritamod/layer2/nft/collections/{space_id}/{class_id}";
+    option (google.api.http).get = "/iritamod/layer2/v1/nft/collections/{space_id}/{class_id}";
   }
 
   // TokensOfOwnerForNFT queries all native NFT mappings owned by an address.
   rpc TokensOfOwnerForNFT(QueryTokensOfOwnerForNFTRequest) returns (QueryTokensOfOwnerForNFTResponse) {
-    option (google.api.http).get = "/iritamod/layer2/nfts/{space_id}/{class_id}/{owner}";
+    option (google.api.http).get = "/iritamod/layer2/v1/nfts/{space_id}/{class_id}/{owner}";
   }
 
   // BaseUriForNFT queries the base URI of a native NFT Class.
   rpc BaseUriForNFT(QueryBaseUriForNFTRequest) returns (QueryBaseUriForNFTResponse) {
-    option (google.api.http).get = "/iritamod/layer2/nft/uris/{class_id}";
+    option (google.api.http).get = "/iritamod/layer2/v1/nft/uris/{class_id}";
   }
 
   // TokenUriForNFT queries the URI of a native NFT.
   rpc TokenUriForNFT(QueryTokenUriForNFTRequest) returns (QueryTokenUriForNFTResponse) {
-    option (google.api.http).get = "/iritamod/layer2/nft/uris/{space_id}/{class_id}/{token_id}";
+    option (google.api.http).get = "/iritamod/layer2/v1/nft/uris/{space_id}/{class_id}/{token_id}";
   }
 
   // Space queries a space.
   rpc Space(QuerySpaceRequest) returns (QuerySpaceResponse) {
-    option (google.api.http).get = "/iritamod/layer2/spaces/{space_id}";
+    option (google.api.http).get = "/iritamod/layer2/v1/spaces/{space_id}";
   }
 
   // SpaceOfOwner queries all spaces owned by an address.
   rpc SpaceOfOwner(QuerySpaceOfOwnerRequest) returns (QuerySpaceOfOwnerResponse) {
-    option (google.api.http).get = "/iritamod/layer2/spaces/{owner}";
+    option (google.api.http).get = "/iritamod/layer2/v1/spaces/{owner}";
   }
 
   // Record queries a record.
   rpc Record(QueryRecordRequest) returns (QueryRecordResponse) {
-    option (google.api.http).get = "/iritamod/layer2/records/{height}";
+    option (google.api.http).get = "/iritamod/layer2/v1/records/{height}";
   }
 }
 

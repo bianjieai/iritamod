@@ -1230,25 +1230,25 @@ func RegisterQueryHandlerClient(ctx context.Context, mux *runtime.ServeMux, clie
 }
 
 var (
-	pattern_Query_ClassForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"iritamod", "layer2", "nft", "classes", "class_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ClassForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"iritamod", "layer2", "v1", "nft", "classes", "class_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_ClassesForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3}, []string{"iritamod", "layer2", "nft", "classes"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_ClassesForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4}, []string{"iritamod", "layer2", "v1", "nft", "classes"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_TokenForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"iritamod", "layer2", "nft", "nfts", "space_id", "class_id", "nft_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_TokenForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6, 1, 0, 4, 1, 5, 7}, []string{"iritamod", "layer2", "v1", "nft", "nfts", "space_id", "class_id", "nft_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_CollectionForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"iritamod", "layer2", "nft", "collections", "space_id", "class_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_CollectionForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"iritamod", "layer2", "v1", "nft", "collections", "space_id", "class_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_TokensOfOwnerForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5}, []string{"iritamod", "layer2", "nfts", "space_id", "class_id", "owner"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_TokensOfOwnerForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"iritamod", "layer2", "v1", "nfts", "space_id", "class_id", "owner"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_BaseUriForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"iritamod", "layer2", "nft", "uris", "class_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_BaseUriForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5}, []string{"iritamod", "layer2", "v1", "nft", "uris", "class_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_TokenUriForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6}, []string{"iritamod", "layer2", "nft", "uris", "space_id", "class_id", "token_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_TokenUriForNFT_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 2, 4, 1, 0, 4, 1, 5, 5, 1, 0, 4, 1, 5, 6, 1, 0, 4, 1, 5, 7}, []string{"iritamod", "layer2", "v1", "nft", "uris", "space_id", "class_id", "token_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Space_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"iritamod", "layer2", "spaces", "space_id"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Space_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"iritamod", "layer2", "v1", "spaces", "space_id"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_SpaceOfOwner_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"iritamod", "layer2", "spaces", "owner"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_SpaceOfOwner_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"iritamod", "layer2", "v1", "spaces", "owner"}, "", runtime.AssumeColonVerbOpt(true)))
 
-	pattern_Query_Record_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 1, 0, 4, 1, 5, 3}, []string{"iritamod", "layer2", "records", "height"}, "", runtime.AssumeColonVerbOpt(true)))
+	pattern_Query_Record_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2, 2, 3, 1, 0, 4, 1, 5, 4}, []string{"iritamod", "layer2", "v1", "records", "height"}, "", runtime.AssumeColonVerbOpt(true)))
 )
 
 var (
