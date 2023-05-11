@@ -35,4 +35,6 @@ enum Role {
     PLATFORM_USER = 9 [(gogoproto.enumvalue_customname) = "RolePlatformUser"];
     // POWER_USER_ADMIN defines the power admin role index.
     POWER_USER_ADMIN = 10 [(gogoproto.enumvalue_customname) = "RolePowerUserAdmin"];
+    //LAYER2_USER defines the layer2 user role index.
+    LAYER2_USER = 11 [(gogoproto.enumvalue_customname) = "RoleLayer2User"];
 }
