@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package iritamod.layer2;
+package iritamod.layer2.v1;
 
 import "gogoproto/gogo.proto";
-import "layer2/layer2.proto";
+import "layer2/v1/layer2.proto";
 
 option go_package = "github.com/bianjieai/iritamod/modules/layer2/types";
 
@@ -76,8 +76,8 @@ message MsgDeleteNFTsResponse {}
 // MsgDepositClassForNFT defines the Msg/DepositClassForNFT request type.
 message MsgDepositClassForNFT {
   string class_id = 1;
-  string sender = 2; // class_owner
-  string base_uri = 3; // token_uri prefix
+  string base_uri = 2; // token_uri prefix
+  string sender = 3; // class_owner
 }
 
 // MsgDepositClassForNFTResponse defines the Msg/DepositClassForNFT response type.
@@ -110,11 +110,11 @@ message MsgWithdrawTokenForNFT {
   string class_id = 2;
   string nft_id = 3;
   string owner = 4; // layer2 nft_owner
-  string sender = 5; // l2_user
-  string name = 6;
-  string uri = 7;
-  string uri_hash = 8;
-  string data = 9;
+  string name = 5;
+  string uri = 6;
+  string uri_hash = 7;
+  string data = 8;
+  string sender = 9; // l2_user
 }
 
 // MsgWithdrawTokenForNFTResponse defines the Msg/WithdrawTokenForNFT response type.
@@ -133,8 +133,8 @@ message MsgCreateL2SpaceResponse {
 // MsgTransferL2Space defines the Msg/TransferL2Space request type.
 message MsgTransferL2Space {
   uint64 space_id = 1;
-  string sender = 2;
-  string recipient = 3;
+  string recipient = 2;
+  string sender = 3;
 }
 
 // MsgTransferL2SpaceResponse defines the Msg/TransferL2Space response type.
@@ -144,8 +144,8 @@ message MsgTransferL2SpaceResponse {}
 message MsgCreateL2Record {
   uint64 space_id = 1;
   uint64 height = 2;
-  string sender = 3;
-  string header = 4;
+  string header = 3;
+  string sender = 4;
 }
 
 // MsgCreateL2RecordResponse defines the Msg/CreateL2Record response type.

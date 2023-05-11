@@ -1,8 +1,8 @@
 syntax = "proto3";
-package iritamod.layer2;
+package iritamod.layer2.v1;
 
 import "gogoproto/gogo.proto";
-import "layer2/layer2.proto";
+import "layer2/v1/layer2.proto";
 
 option go_package = "github.com/bianjieai/iritamod/modules/layer2/types";
 

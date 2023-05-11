@@ -1,5 +1,5 @@
 syntax = "proto3";
-package iritamod.layer2;
+package iritamod.layer2.v1;
 
 import "gogoproto/gogo.proto";
 
