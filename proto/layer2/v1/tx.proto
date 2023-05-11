@@ -1,0 +1,152 @@
+syntax = "proto3";
+
+package iritamod.layer2.v1;
+
+import "gogoproto/gogo.proto";
+import "layer2/v1/layer2.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/layer2/types";
+
+// Msg defines the layer2 service
+service Msg {
+  // CreateNFTs defines a method for creating NFT mappings on Layer2 module.
+  rpc CreateNFTs(MsgCreateNFTs) returns (MsgCreateNFTsResponse);
+
+  // UpdateNFTs defines a method for updating NFT mappings on Layer2 module.
+  rpc UpdateNFTs(MsgUpdateNFTs) returns (MsgUpdateNFTsResponse);
+
+  // DeleteNFTs defines a method for deleting NFT mappings on Layer2 module.
+  rpc DeleteNFTs(MsgDeleteNFTs) returns (MsgDeleteNFTsResponse);
+
+  // DepositClass defines a method for depositing Native NFT Class from Layer1 to Layer2
+  rpc DepositClassForNFT(MsgDepositClassForNFT) returns (MsgDepositClassForNFTResponse);
+
+  // WithdrawClass defines a method for withdrawing Native NFT Class from Layer2 to Layer1
+  rpc WithdrawClassForNFT(MsgWithdrawClassForNFT) returns (MsgWithdrawClassForNFTResponse);
+
+  // DepositToken defines a method for depositing Native NFT Token from Layer1 to Layer2
+  rpc DepositTokenForNFT(MsgDepositTokenForNFT) returns (MsgDepositTokenForNFTResponse);
+
+  // WithdrawToken defines a method for withdrawing Native NFT Token from Layer2 to Layer1
+  rpc WithdrawTokenForNFT(MsgWithdrawTokenForNFT) returns (MsgWithdrawTokenForNFTResponse);
+
+  // CreateL2Space defines a method for creating a Layer2 space
+  rpc CreateL2Space(MsgCreateL2Space) returns (MsgCreateL2SpaceResponse);
+
+  // TransferL2Space defines a method for transferring a Layer2 space
+  rpc TransferL2Space(MsgTransferL2Space) returns (MsgTransferL2SpaceResponse);
+
+  // CreateL2Record defines a method for creating a Layer2 record
+  rpc CreateL2Record(MsgCreateL2Record) returns (MsgCreateL2RecordResponse);
+}
+
+// MsgCreateNFTs defines the Msg/CreateNFTs request type.
+message MsgCreateNFTs {
+  uint64 space_id = 1;
+  string class_id = 2;
+  repeated TokenForNFT nfts = 3;
+  string sender = 4;
+}
+
+// MsgCreateNFTsResponse defines the Msg/CreateNFTs response type.
+message MsgCreateNFTsResponse {}
+
+// MsgUpdateNFTs defines the Msg/UpdateNFTs request type.
+message MsgUpdateNFTs {
+  uint64 space_id = 1;
+  string class_id = 2;
+  repeated TokenForNFT nfts = 3;
+  string sender = 4;
+}
+
+// MsgUpdateNFTsResponse defines the Msg/UpdateNFTs response type.
+message MsgUpdateNFTsResponse {}
+
+// MsgDeleteNFTs defines the Msg/DeleteNFTs request type.
+message MsgDeleteNFTs {
+  uint64 space_id = 1;
+  string class_id = 2;
+  repeated string nft_ids = 3;
+  string sender = 4;
+}
+
+// MsgDeleteNFTsResponse defines the Msg/DeleteNFTs response type.
+message MsgDeleteNFTsResponse {}
+
+// MsgDepositClassForNFT defines the Msg/DepositClassForNFT request type.
+message MsgDepositClassForNFT {
+  string class_id = 1;
+  string base_uri = 2; // token_uri prefix
+  string sender = 3; // class_owner
+}
+
+// MsgDepositClassForNFTResponse defines the Msg/DepositClassForNFT response type.
+message MsgDepositClassForNFTResponse {}
+
+// MsgWithdrawClassForNFT defines the Msg/WithdrawClassForNFT request type.
+message MsgWithdrawClassForNFT {
+  string class_id = 1;
+  string owner = 2; // class_owner
+  string sender = 3; // l2_user
+}
+
+// MsgWithdrawClassForNFTResponse defines the Msg/WithdrawClassForNFT response type.
+message MsgWithdrawClassForNFTResponse {}
+
+// MsgDepositTokenForNFT defines the Msg/DepositTokenForNFT request type.
+message MsgDepositTokenForNFT {
+  uint64 space_id = 1;
+  string class_id = 2;
+  string nft_id = 3;
+  string sender = 4; // nft_owner
+}
+
+// MsgDepositTokenForNFTResponse defines the Msg/DepositTokenForNFT response type.
+message MsgDepositTokenForNFTResponse {}
+
+// MsgWithdrawTokenForNFT defines the Msg/WithdrawTokenForNFT request type.
+message MsgWithdrawTokenForNFT {
+  uint64 space_id = 1;
+  string class_id = 2;
+  string nft_id = 3;
+  string owner = 4; // layer2 nft_owner
+  string name = 5;
+  string uri = 6;
+  string uri_hash = 7;
+  string data = 8;
+  string sender = 9; // l2_user
+}
+
+// MsgWithdrawTokenForNFTResponse defines the Msg/WithdrawTokenForNFT response type.
+message MsgWithdrawTokenForNFTResponse {}
+
+// MsgCreateL2Space defines the Msg/CreateL2Space request type.
+message MsgCreateL2Space {
+  string sender = 1;
+}
+
+// MsgCreateL2SpaceResponse defines the Msg/CreateL2Space response type.
+message MsgCreateL2SpaceResponse {
+  uint64 space_id = 1;
+}
+
+// MsgTransferL2Space defines the Msg/TransferL2Space request type.
+message MsgTransferL2Space {
+  uint64 space_id = 1;
+  string recipient = 2;
+  string sender = 3;
+}
+
+// MsgTransferL2SpaceResponse defines the Msg/TransferL2Space response type.
+message MsgTransferL2SpaceResponse {}
+
+// MsgCreateL2Record defines the Msg/CreateL2Record request type.
+message MsgCreateL2Record {
+  uint64 space_id = 1;
+  uint64 height = 2;
+  string header = 3;
+  string sender = 4;
+}
+
+// MsgCreateL2RecordResponse defines the Msg/CreateL2Record response type.
+message MsgCreateL2RecordResponse {}
