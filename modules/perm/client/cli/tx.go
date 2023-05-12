@@ -39,7 +39,7 @@ func NewAssignRolesCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "assign-roles [address] [roles]",
 		Long: strings.TrimSpace(fmt.Sprintf(
-			"Assign roles to an account.\n\n Auth options: %s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n",
+			"Assign roles to an account.\n\n Auth options: %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n",
 			types.RolePermAdmin,
 			types.RoleBlacklistAdmin,
 			types.RoleNodeAdmin,
@@ -94,7 +94,7 @@ func NewUnassignRolesCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use: "unassign-roles [address] [roles]",
 		Long: strings.TrimSpace(fmt.Sprintf(
-			"Unassign roles from an account.\n\nAuth options: %s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n",
+			"Unassign roles from an account.\n\nAuth options: %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s\n",
 			types.RolePermAdmin,
 			types.RoleBlacklistAdmin,
 			types.RoleNodeAdmin,
