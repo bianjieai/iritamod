@@ -16,18 +16,15 @@ const (
 )
 
 var (
-	SpaceMainKey = []byte{0x01}
-	RecordMainKey = []byte{0x02}
-	NFTMainKey = []byte{0x03}
-
-	// Space Subkey
-	Spacekey = []byte{0x01}
+	// Space storekey prefix
+	SpaceKey = []byte{0x01}
 	SpaceOfUserKey = []byte{0x02}
-
-	// NFT Subkey
-	ClassKeyForNft = []byte{0x01}
-	TokenKeyForNft = []byte{0x02}
-	NFTsOfOwnerKey = []byte{0x03}
+	// Record storekey prefix
+	RecordKey = []byte{0x03}
+	// NFT storekey prefix
+	NftClassKey = []byte{0x04}
+	NftTokenKey = []byte{0x05}
+	NftsOfOwnerKey = []byte{0x06}
 
 	Delimiter = []byte{0x00}
 	Placeholder = []byte{0x01}
@@ -37,28 +34,26 @@ var (
 
 // spaceStoreKey returns the byte representation of the space key
 // Items are stored with the following key: values
-// <0x01><0x01><space_id>
+// <0x01><space_id>
 func spaceStoreKey(spaceId uint64) []byte {
 	spaceIdStr := strconv.FormatUint(spaceId, 10)
-	key := make([]byte, len(SpaceMainKey)+len(Spacekey)+len(spaceIdStr))
-	copy(key, SpaceMainKey)
-	copy(key[len(SpaceMainKey):], Spacekey)
-	copy(key[len(SpaceMainKey)+len(Spacekey):], spaceIdStr)
+	key := make([]byte, len(SpaceKey)+len(spaceIdStr))
+	copy(key, SpaceKey)
+	copy(key[len(SpaceKey):], spaceIdStr)
 	return key
 }
 
 // spaceOfL2UserStoreKey returns the byte representation of the space of l2 user key
 // Items are stored with the following key: values
-// <0x01><0x02><owner><delimiter><space_id>
+// <0x02><owner><delimiter><space_id>
 func spaceOfL2UserStoreKey(owner sdk.AccAddress, spaceId uint64) []byte {
 	owner = address.MustLengthPrefix(owner)
 	spaceIdStr := strconv.FormatUint(spaceId, 10)
-	key := make([]byte, len(SpaceMainKey)+len(SpaceOfUserKey)+len(owner)+len(Delimiter)+len(spaceIdStr))
-	copy(key, SpaceMainKey)
-	copy(key[len(SpaceMainKey):], SpaceOfUserKey)
-	copy(key[len(SpaceMainKey)+len(SpaceOfUserKey):], owner)
-	copy(key[len(SpaceMainKey)+len(SpaceOfUserKey)+len(owner):], Delimiter)
-	copy(key[len(SpaceMainKey)+len(SpaceOfUserKey)+len(owner)+len(Delimiter):], spaceIdStr)
+	key := make([]byte, len(SpaceOfUserKey)+len(owner)+len(Delimiter)+len(spaceIdStr))
+	copy(key, SpaceOfUserKey)
+	copy(key[len(SpaceOfUserKey):], owner)
+	copy(key[len(SpaceOfUserKey)+len(owner):], Delimiter)
+	copy(key[len(SpaceOfUserKey)+len(owner)+len(Delimiter):], spaceIdStr)
 	return key
 }
 
@@ -66,75 +61,70 @@ func spaceOfL2UserStoreKey(owner sdk.AccAddress, spaceId uint64) []byte {
 
 // recordStoreKey returns the byte representation of the record key
 // Items are stored with the following key: values
-// <0x02><space_id><delimiter><block_height>
+// <0x03><space_id><delimiter><block_height>
 func recordStoreKey(spaceId, blockHeight uint64) []byte {
 	spaceIdStr := strconv.FormatUint(spaceId, 10)
 	blockHeightStr := strconv.FormatUint(blockHeight, 10)
-	key := make([]byte, len(RecordMainKey)+len(spaceIdStr)+len(Delimiter)+len(blockHeightStr))
-	copy(key, RecordMainKey)
-	copy(key[len(RecordMainKey):], spaceIdStr)
-	copy(key[len(RecordMainKey)+len(spaceIdStr):], Delimiter)
-	copy(key[len(RecordMainKey)+len(spaceIdStr)+len(Delimiter):], blockHeightStr)
+	key := make([]byte, len(RecordKey)+len(spaceIdStr)+len(Delimiter)+len(blockHeightStr))
+	copy(key, RecordKey)
+	copy(key[len(RecordKey):], spaceIdStr)
+	copy(key[len(RecordKey)+len(spaceIdStr):], Delimiter)
+	copy(key[len(RecordKey)+len(spaceIdStr)+len(Delimiter):], blockHeightStr)
 	return key
 }
 
 // nft mappings store key
 
-// classStoreKeyForNft returns the byte representation of the class key of nft mappings
+// nftClassStoreKey returns the byte representation of the class key of nft mappings
 // Items are stored with the following key: values
-// <0x03><0x01><space_id>
-func classStoreKeyForNft(classId string) []byte {
-	key := make([]byte, len(NFTMainKey)+len(ClassKeyForNft)+len(classId))
-	copy(key, NFTMainKey)
-	copy(key[len(NFTMainKey):], ClassKeyForNft)
-	copy(key[len(NFTMainKey)+len(ClassKeyForNft):], classId)
+// <0x04><space_id>
+func nftClassStoreKey(classId string) []byte {
+	key := make([]byte,len(NftClassKey)+len(classId))
+	copy(key, NftClassKey)
+	copy(key[len(NftClassKey):], classId)
 	return key
 }
 
-// nftStoreKeyForNft returns the byte representation of the nft key of nft mappings
+// nftTokenStoreKey returns the byte representation of the nft key of nft mappings
 // Items are stored with the following key: values
-// <0x03><0x02><space_id><delimiter><class_id><delimiter><token_id>
-func nftStoreKeyForNft(spaceId uint64, classId, tokenId string) []byte {
+// <0x05><space_id><delimiter><class_id><delimiter><token_id>
+func nftTokenStoreKey(spaceId uint64, classId, tokenId string) []byte {
 	spaceIdStr := strconv.FormatUint(spaceId, 10)
 
-	key := make([]byte,
-		len(NFTMainKey)+len(TokenKeyForNft)+
+	key := make([]byte, len(NftTokenKey)+
 		len(spaceIdStr)+len(Delimiter)+
 		len(classId)+len(Delimiter)+
 		len(tokenId))
 
-	copy(key, NFTMainKey)
-	copy(key[len(NFTMainKey):], TokenKeyForNft)
-	copy(key[len(NFTMainKey)+len(TokenKeyForNft):], spaceIdStr)
-	copy(key[len(NFTMainKey)+len(TokenKeyForNft)+len(spaceIdStr):], Delimiter)
-	copy(key[len(NFTMainKey)+len(TokenKeyForNft)+len(spaceIdStr)+len(Delimiter):], classId)
-	copy(key[len(NFTMainKey)+len(TokenKeyForNft)+len(spaceIdStr)+len(Delimiter)+len(classId):], Delimiter)
-	copy(key[len(NFTMainKey)+len(TokenKeyForNft)+len(spaceIdStr)+len(Delimiter)+len(classId)+len(Delimiter):], tokenId)
+	copy(key, NftTokenKey)
+	copy(key[len(NftTokenKey):], spaceIdStr)
+	copy(key[len(NftTokenKey)+len(spaceIdStr):], Delimiter)
+	copy(key[len(NftTokenKey)+len(spaceIdStr)+len(Delimiter):], classId)
+	copy(key[len(NftTokenKey)+len(spaceIdStr)+len(Delimiter)+len(classId):], Delimiter)
+	copy(key[len(NftTokenKey)+len(spaceIdStr)+len(Delimiter)+len(classId)+len(Delimiter):], tokenId)
 	return key
 }
 
-// nftsOfOwnerStoreKeyForNft returns the byte representation of the owner key of nft mappings
+// nftsOfOwnerStoreKey returns the byte representation of the owner key of nft mappings
 // Items are stored with the following key: values
-// <0x03><0x03><owner><delimiter><space_id><delimiter><class_id><delimiter><nft_id>
-func nftsOfOwnerStoreKeyForNft(owner sdk.AccAddress, spaceId uint64, classId, tokenId string) []byte{
+// <0x06><owner><delimiter><space_id><delimiter><class_id><delimiter><nft_id>
+func nftsOfOwnerStoreKey(owner sdk.AccAddress, spaceId uint64, classId, tokenId string) []byte{
 	owner = address.MustLengthPrefix(owner)
 	spaceIdStr := strconv.FormatUint(spaceId, 10)
 
-	key := make([]byte,
-		len(NFTMainKey)+len(NFTsOfOwnerKey)+
+	key := make([]byte, len(NftsOfOwnerKey)+
 		len(owner)+len(Delimiter)+
 		len(spaceIdStr)+len(Delimiter)+
 		len(classId)+len(Delimiter)+
 		len(tokenId))
 
-	copy(key, NFTMainKey)
-	copy(key[len(NFTMainKey):], NFTsOfOwnerKey)
-	copy(key[len(NFTMainKey)+len(NFTsOfOwnerKey):], owner)
-	copy(key[len(NFTMainKey)+len(NFTsOfOwnerKey)+len(owner):], Delimiter)
-	copy(key[len(NFTMainKey)+len(NFTsOfOwnerKey)+len(owner)+len(Delimiter):], spaceIdStr)
-	copy(key[len(NFTMainKey)+len(NFTsOfOwnerKey)+len(owner)+len(Delimiter)+len(spaceIdStr):], Delimiter)
-	copy(key[len(NFTMainKey)+len(NFTsOfOwnerKey)+len(owner)+len(Delimiter)+len(spaceIdStr)+len(Delimiter):], classId)
-	copy(key[len(NFTMainKey)+len(NFTsOfOwnerKey)+len(owner)+len(Delimiter)+len(spaceIdStr)+len(Delimiter)+len(classId):], Delimiter)
-	copy(key[len(NFTMainKey)+len(NFTsOfOwnerKey)+len(owner)+len(Delimiter)+len(spaceIdStr)+len(Delimiter)+len(classId)+len(Delimiter):], tokenId)
+	copy(key, NftsOfOwnerKey)
+	copy(key[len(NftsOfOwnerKey):], owner)
+	copy(key[len(NftsOfOwnerKey)+len(owner):], Delimiter)
+	copy(key[len(NftsOfOwnerKey)+len(owner)+len(Delimiter):], spaceIdStr)
+	copy(key[len(NftsOfOwnerKey)+len(owner)+len(Delimiter)+len(spaceIdStr):], Delimiter)
+	copy(key[len(NftsOfOwnerKey)+len(owner)+len(Delimiter)+len(spaceIdStr)+len(Delimiter):], classId)
+	copy(key[len(NftsOfOwnerKey)+len(owner)+len(Delimiter)+len(spaceIdStr)+len(Delimiter)+len(classId):], Delimiter)
+	copy(key[len(NftsOfOwnerKey)+len(owner)+len(Delimiter)+len(spaceIdStr)+len(Delimiter)+len(classId)+len(Delimiter):], tokenId)
 	return key
 }
