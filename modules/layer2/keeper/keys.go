@@ -67,20 +67,20 @@ func recordStoreKey(spaceId, blockHeight uint64) []byte {
 
 // nft mappings store key
 
-// ClassForNFTStoreKey returns the byte representation of the class key of nft mappings
+// classForNFTStoreKey returns the byte representation of the class key of nft mappings
 // Items are stored with the following key: values
 // <0x04><space_id>
-func ClassForNFTStoreKey(classId string) []byte {
+func classForNFTStoreKey(classId string) []byte {
 	key := make([]byte,len(KeyPrefixClassForNFT)+len(classId))
 	copy(key, KeyPrefixClassForNFT)
 	copy(key[len(KeyPrefixClassForNFT):], classId)
 	return key
 }
 
-// TokenForNFTStoreKey returns the byte representation of the nft key of nft mappings
+// tokenForNFTStoreKey returns the byte representation of the nft key of nft mappings
 // Items are stored with the following key: values
 // <0x05><space_id><delimiter><class_id><delimiter><token_id>
-func TokenForNFTStoreKey(spaceId uint64, classId, tokenId string) []byte {
+func tokenForNFTStoreKey(spaceId uint64, classId, tokenId string) []byte {
 	spaceIdStr := strconv.FormatUint(spaceId, 10)
 
 	key := make([]byte, len(KeyPrefixTokenForNFT)+

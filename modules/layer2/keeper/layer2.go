@@ -51,18 +51,18 @@ func (k Keeper) HasSpace(ctx sdk.Context, spaceId uint64) bool {
 }
 
 // GetSpaceOwner returns the space owner if space exists
-func (k Keeper) GetSpaceOwner(ctx sdk.Context, spaceId uint64) sdk.AccAddress {
-	if !k.HasSpace(ctx, spaceId) {
-		return nil
-	}
+func (k Keeper) GetSpaceOwner(ctx sdk.Context, spaceId uint64) (sdk.AccAddress, bool) {
 	store := ctx.KVStore(k.storeKey)
+	if !store.Has(spaceStoreKey(spaceId)) {
+		return nil, false
+	}
 	ownerbz := store.Get(spaceStoreKey(spaceId))
 	owner, _ := sdk.AccAddressFromBech32(string(ownerbz))
-	return owner
+	return owner, true
 }
 
 // HasSpaceByOwner return ture if the owner has the space
-func (k Keeper) HasSpaceByOwner(ctx sdk.Context,owner sdk.AccAddress, spaceId uint64) bool {
+func (k Keeper) HasSpaceByOwner(ctx sdk.Context, owner sdk.AccAddress, spaceId uint64) bool {
 	store := ctx.KVStore(k.storeKey)
 	return store.Has(spaceOfL2UserStoreKey(owner, spaceId))
 }
@@ -75,7 +75,7 @@ func (k Keeper) CreateRecord(ctx sdk.Context, spaceId, height uint64, header str
 	}
 
 	if k.HasRecord(ctx, spaceId, height) {
-		return sdkerrors.Wrapf(types.ErrRecordAlreadyExist,"space: d%, height: d%", spaceId, height)
+		return sdkerrors.Wrapf(types.ErrRecordAlreadyExist,"space: %d, height: %d", spaceId, height)
 	}
 
 	k.setRecord(ctx, spaceId, height, header)
