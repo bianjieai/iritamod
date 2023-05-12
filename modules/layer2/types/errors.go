@@ -8,7 +8,7 @@ var (
 	ErrNotOwnerOfSpace = sdkerrors.Register(ModuleName, 4, "the space is not owned by this address")
 	ErrDuplicateSpace = sdkerrors.Register(ModuleName, 5, "duplicate space")
 	ErrInvalidRecord = sdkerrors.Register(ModuleName, 6, "invalid record")
-	ErrDuplicateRecord = sdkerrors.Register(ModuleName, 7, "duplicate record")
+	ErrRecordAlreadyExist = sdkerrors.Register(ModuleName, 7, "record already exist")
 
 	ErrInvalidClassIdForNFT = sdkerrors.Register(ModuleName, 11, "invalid class id for nft mapping")
 	ErrInvalidTokenIdForNFT = sdkerrors.Register(ModuleName, 12, "invalid class id for nft mapping")
