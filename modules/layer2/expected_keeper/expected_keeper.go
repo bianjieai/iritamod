@@ -5,12 +5,7 @@ import (
 )
 
 type NFT interface {
-	GetID() string
-	GetName() string
 	GetOwner() sdk.AccAddress
-	GetURI() string
-	GetURIHash() string
-	GetData() string
 }
 
 type Class interface {
