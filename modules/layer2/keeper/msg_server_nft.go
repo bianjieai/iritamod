@@ -261,7 +261,7 @@ func (k Keeper) DepositTokenForNFT(goCtx context.Context, msg *types.MsgDepositT
 	}
 
 	if !k.HasSpace(ctx, msg.SpaceId) {
-		return nil, sdkerrors.Wrapf(types.ErrUnknownSpace, "space %s not exist", msg.SpaceId)
+		return nil, sdkerrors.Wrapf(types.ErrUnknownSpace, "space %d not exist", msg.SpaceId)
 	}
 
 	if err := k.createTokenForNFT(ctx, msg.SpaceId, msg.ClassId, msg.NftId, sender); err != nil {
@@ -308,7 +308,7 @@ func (k Keeper) WithdrawTokenForNFT(goCtx context.Context, msg *types.MsgWithdra
 	}
 
 	if !k.HasSpaceByOwner(ctx, sender, msg.SpaceId) {
-		return nil, sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space %s not owned by %s", msg.SpaceId, msg.Sender)
+		return nil, sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space %d not owned by %s", msg.SpaceId, msg.Sender)
 	}
 
 	tokenOwner, exist := k.GetTokenOwnerForNFT(ctx, msg.SpaceId, msg.ClassId, msg.NftId)
