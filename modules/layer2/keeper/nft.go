@@ -13,7 +13,7 @@ func (k Keeper) CreateTokensForNFT(ctx sdk.Context,
 	spaceId uint64,
 	classId string,
 	nfts []*types.TokenForNFT,
-	sender  sdk.AccAddress) error {
+	sender sdk.AccAddress) error {
 	ok, err := k.HasL2UserRole(ctx, sender)
 	if !ok {
 		return err
@@ -135,17 +135,72 @@ func (k Keeper) HasTokenForNFT(ctx sdk.Context,
 	return store.Has(tokenKey)
 }
 
-func (k Keeper) CreateClassForNFT() {
-	panic("implement me")
+// CreateClassForNFT creates  a class mapping for nft.
+// NOTE: examine the existence of class mapping and ownership of layer 1 class before calling.
+func (k Keeper) CreateClassForNFT(ctx sdk.Context,
+	classId,
+	baseUri,
+	owner string,
+	mintRestricted bool) error {
+
+	class := types.ClassForNFT{
+		Id:                   classId,
+		Owner:                owner,
+		BaseUri:              baseUri,
+		Layer1MintRestricted: mintRestricted,
+	}
+
+	bz, err := k.cdc.Marshal(&class)
+	if err != nil {
+		return err
+	}
+
+	store := ctx.KVStore(k.storeKey)
+	store.Set(classForNFTStoreKey(classId), bz)
+	return nil
 }
 
-func (k Keeper) UpdateClassForNFT() {
-	panic("implement me")
+func (k Keeper) UpdateClassForNFT(ctx sdk.Context,
+	classId,
+	baseUri,
+	owner string) error {
+	class, ok := k.GetClassForNFT(ctx, classId)
+	if !ok {
+		return sdkerrors.Wrapf(types.ErrClassForNFTNotExist, "classId: %s", classId)
+	}
+
+	class.BaseUri = baseUri
+	class.Owner = owner
+
+	bz, err := k.cdc.Marshal(&class)
+	if err != nil {
+		return err
+	}
+
+	store := ctx.KVStore(k.storeKey)
+	store.Set(classForNFTStoreKey(classId), bz)
+	return nil
 }
 
 func (k Keeper) HasClassForNFT(ctx sdk.Context,
 	classId string) bool {
-	panic("implement me")
+	store := ctx.KVStore(k.storeKey)
+	classKey := classForNFTStoreKey(classId)
+	return store.Has(classKey)
+}
+
+func (k Keeper) GetClassForNFT(ctx sdk.Context,
+	classId string) (types.ClassForNFT, bool) {
+	store := ctx.KVStore(k.storeKey)
+	classKey := classForNFTStoreKey(classId)
+	var classForNFT types.ClassForNFT
+	if !store.Has(classKey) {
+		return classForNFT, false
+	}
+
+	classBz := store.Get(classKey)
+	k.cdc.MustUnmarshal(classBz, &classForNFT)
+	return classForNFT, true
 }
 
 func (k Keeper) setTokenForNFT(ctx sdk.Context,
