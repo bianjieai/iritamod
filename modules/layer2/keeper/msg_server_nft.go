@@ -2,9 +2,7 @@ package keeper
 
 import (
 	"context"
-	"github.com/bianjieai/iritamod/modules/layer2/expected_keeper"
 	"github.com/bianjieai/iritamod/modules/layer2/types"
-	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	"strconv"
@@ -109,13 +107,13 @@ func (k Keeper) DepositClassForNFT(goCtx context.Context, msg *types.MsgDepositC
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	// check if the denom exists
-	denomInfo, err := k.nft.GetDenomInfo(ctx, msg.ClassId)
+	// check if the class exists
+	class, err := k.nft.GetClass(ctx, msg.ClassId)
 	if err != nil {
 		return nil, err
 	}
 	// check if the denom owned by sender
-	if denomInfo.Creator != msg.Sender {
+	if class.GetCreator() != msg.Sender {
 		return nil, sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "class %s is not owned by %s", msg.ClassId, msg.Sender)
 	}
 
@@ -124,7 +122,9 @@ func (k Keeper) DepositClassForNFT(goCtx context.Context, msg *types.MsgDepositC
 			return nil, err
 		}
 	} else {
-		if err := k.CreateClassForNFT(ctx, msg.ClassId, msg.BaseUri, msg.Sender, denomInfo.MintRestricted); err != nil {
+		mintRestricted := class.GetMintRestricted()
+
+		if err := k.CreateClassForNFT(ctx, msg.ClassId, msg.BaseUri, msg.Sender, mintRestricted); err != nil {
 			return nil, err
 		}
 	}
@@ -135,7 +135,7 @@ func (k Keeper) DepositClassForNFT(goCtx context.Context, msg *types.MsgDepositC
 		return nil, err
 	}
 
-	if err := k.nft.TransferDenomOwner(ctx, msg.ClassId, sender, moduleAddr); err != nil {
+	if err := k.nft.TransferClass(ctx, msg.ClassId, sender, moduleAddr); err != nil {
 		return nil, err
 	}
 
@@ -176,14 +176,14 @@ func (k Keeper) WithdrawClassForNFT(goCtx context.Context, msg *types.MsgWithdra
 		return nil, sdkerrors.Wrapf(types.ErrClassForNFTNotExist, "class mapping %s not exist", msg.ClassId)
 	}
 
-	// check if the class exist
-	denom, err := k.nft.GetDenomInfo(ctx, msg.ClassId)
+	// check if the class exists
+	class, err := k.nft.GetClass(ctx, msg.ClassId)
 	if err != nil {
 		return nil, err
 	}
 
 	// check if the class owned by module account
-	if denom.Creator != types.ModuleAddress.String() {
+	if class.GetCreator() != types.ModuleAddress.String() {
 		return nil, sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "class %s is not locked by %s", msg.ClassId, types.ModuleAddress.String())
 	}
 
@@ -200,33 +200,11 @@ func (k Keeper) WithdrawClassForNFT(goCtx context.Context, msg *types.MsgWithdra
 	}
 
 	// recover mint_restricted
-	denomMetadata := &expected_keeper.DenomMetadata{
-		Creator:          denom.Creator,
-		Schema:           denom.Schema,
-		MintRestricted:   denom.MintRestricted,
-		UpdateRestricted: classForNFT.Layer1MintRestricted,
-		Data:             denom.Data,
-	}
-	data, err := codectypes.NewAnyWithValue(denomMetadata)
-	if err != nil {
-		return nil, err
-	}
-	class := expected_keeper.Class{
-		Id:     denom.Id,
-		Name:   denom.Name,
-		Symbol: denom.Symbol,
-		Data:   data,
-
-		Description: denom.Description,
-		Uri:         denom.Uri,
-		UriHash:     denom.UriHash,
-	}
-
-	if err := k.nft.UpdateClass(ctx, class); err != nil {
+	if err := k.nft.UpdateClassMintRestricted(ctx, class, classForNFT.Layer1MintRestricted, moduleAddr); err != nil {
 		return nil, err
 	}
 
-	if err := k.nft.TransferDenomOwner(ctx, msg.ClassId, moduleAddr, owner); err != nil {
+	if err := k.nft.TransferClass(ctx, msg.ClassId, moduleAddr, owner); err != nil {
 		return nil, err
 	}
 
@@ -273,7 +251,7 @@ func (k Keeper) DepositTokenForNFT(goCtx context.Context, msg *types.MsgDepositT
 	if err != nil {
 		return nil, err
 	}
-	if err := k.nft.Transfer(ctx, msg.ClassId, msg.NftId, moduleAddr); err == nil {
+	if err := k.nft.TransferNFT(ctx, msg.ClassId, msg.NftId, sender, moduleAddr); err == nil {
 		return nil, err
 	}
 
@@ -333,7 +311,11 @@ func (k Keeper) WithdrawTokenForNFT(goCtx context.Context, msg *types.MsgWithdra
 		}
 
 		// nft exist, update and transfer ownership
-		if err := k.nft.TransferOwnership(ctx, msg.ClassId, msg.NftId, msg.Name, msg.Uri, msg.UriHash, msg.Data, moduleAddr, owner); err != nil {
+		if err := k.nft.UpdateNFT(ctx, msg.ClassId, msg.NftId, msg.Name, msg.Uri, msg.UriHash, msg.Data, moduleAddr); err != nil {
+			return nil, err
+		}
+
+		if err := k.nft.TransferNFT(ctx, msg.ClassId, msg.NftId, moduleAddr, owner); err != nil {
 			return nil, err
 		}
 	}
