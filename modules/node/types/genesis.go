@@ -7,7 +7,7 @@ import (
 )
 
 // NewGenesisState creates a new GenesisState instance
-func NewGenesisState(rootCert string, params Params, validators []Validator, nodes []Node) *GenesisState {
+func NewGenesisState(rootCert []Certificate, params Params, validators []Validator, nodes []Node) *GenesisState {
 	return &GenesisState{
 		RootCert:   rootCert,
 		Params:     params,

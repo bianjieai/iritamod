@@ -12,8 +12,8 @@ import (
 )
 
 // AddNode adds a node
-func (k Keeper) AddNode(ctx sdk.Context, name string, cert string) (id tmbytes.HexBytes, err error) {
-	pubKey, err := k.VerifyCertificate(ctx, cert)
+func (k Keeper) AddNode(ctx sdk.Context, name string, cert *types.Certificate) (id tmbytes.HexBytes, err error) {
+	pubKey, err := k.VerifyCertificate(ctx, *cert)
 	if err != nil {
 		return nil, err
 	}
@@ -97,11 +97,14 @@ func (k Keeper) GetNodes(ctx sdk.Context) []types.Node {
 
 // VerifyCertificate verifies the given certificate against the root certificate
 // Ensure that the given certificate is a valid X.509 format
-func (k Keeper) VerifyCertificate(ctx sdk.Context, certificate string) (crypto.PubKey, error) {
-	cert, _ := cautils.ReadCertificateFromMem([]byte(certificate))
+func (k Keeper) VerifyCertificate(ctx sdk.Context, certificate types.Certificate) (crypto.PubKey, error) {
+	cert, err := cautils.ReadCertificateFromMemByType([]byte(certificate.Value), certificate.Key)
+	if err != nil {
+		return nil, sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
+	}
 
-	rootCertStr, _ := k.GetRootCert(ctx)
-	rootCert, _ := cautils.ReadCertificateFromMem([]byte(rootCertStr))
+	rootCertStr, _ := k.GetRootCertByType(ctx, certificate.Key)
+	rootCert, _ := cautils.ReadCertificateFromMemByType([]byte(rootCertStr.Value), certificate.Key)
 
 	if err := cautils.VerifyCertFromRoot(cert, rootCert); err != nil {
 		return nil, sdkerrors.Wrapf(types.ErrInvalidCert, "verification failed: %s", err)

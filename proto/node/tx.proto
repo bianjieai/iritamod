@@ -1,6 +1,7 @@
 syntax = "proto3";
 package iritamod.node;
 
+import "node/node.proto";
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/bianjieai/iritamod/modules/node/types";
@@ -29,7 +30,7 @@ message MsgCreateValidator {
     option (gogoproto.equal) = true;
 
     string name = 1;
-    string certificate = 2;
+    Certificate certificate = 2;
     int64 power = 3;
     string description = 4;
     string operator = 5 [(gogoproto.moretags) = "yaml:\"operator\""];
@@ -48,7 +49,7 @@ message MsgUpdateValidator {
 
     string id = 1;
     string name = 2;
-    string certificate = 3;
+    Certificate certificate = 3;
     int64 power = 4;
     string description = 5;
     string operator = 6;
@@ -73,7 +74,7 @@ message MsgGrantNode {
     option (gogoproto.equal) = true;
 
     string name = 1;
-    string certificate = 2;
+    Certificate certificate = 2;
     string operator = 3;
 }
 

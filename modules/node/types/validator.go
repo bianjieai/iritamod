@@ -27,7 +27,7 @@ func NewValidator(
 	name string,
 	description string,
 	pubKey cryptotypes.PubKey,
-	cert string,
+	cert *Certificate,
 	power int64,
 	operator sdk.AccAddress,
 ) Validator {

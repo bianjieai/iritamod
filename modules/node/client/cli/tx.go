@@ -20,6 +20,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/version"
 
 	"github.com/bianjieai/iritamod/modules/node/types"
+	"github.com/bianjieai/iritamod/utils/ca"
 )
 
 var defaultPower = 100
@@ -77,6 +78,7 @@ func NewCreateValidatorCmd() *cobra.Command {
 
 	_ = cmd.MarkFlagRequired(flags.FlagFrom)
 	_ = cmd.MarkFlagRequired(FlagName)
+	_ = cmd.MarkFlagRequired(FlagCertType)
 	_ = cmd.MarkFlagRequired(FlagCert)
 	_ = cmd.MarkFlagRequired(FlagPower)
 
@@ -95,8 +97,18 @@ func NewUpdateValidatorCmd() *cobra.Command {
 				return err
 			}
 
+			certType := viper.GetString(FlagCertType)
 			certPath := viper.GetString(FlagCert)
-			data, _ := ioutil.ReadFile(certPath)
+			var cert = &types.Certificate{}
+			if len(certType) > 0 || len(certPath) > 0 {
+				if certType == "" {
+					return fmt.Errorf("failed to read the certificate file: %s", certType)
+				}
+				cert, err = buildCertificate(certType, certPath)
+				if err != nil {
+					return err
+				}
+			}
 
 			id, err := hex.DecodeString(args[0])
 			if err != nil {
@@ -107,7 +119,7 @@ func NewUpdateValidatorCmd() *cobra.Command {
 				id,
 				viper.GetString(FlagName),
 				viper.GetString(FlagDescription),
-				string(data),
+				cert,
 				viper.GetInt64(FlagPower),
 				clientCtx.GetFromAddress(),
 			)
@@ -170,7 +182,7 @@ func NewGrantNodeCmd() *cobra.Command {
 		Short: "Grant a node access to the chain",
 		Long:  "Grant a node access to the chain based on the identity certificate",
 		Example: fmt.Sprintf(
-			"$ %s tx node grant --name=<name> --cert=<certificate-file> --from mykey",
+			"$ %s tx node grant --name=<name> --cert-type=<certificate-type> --cert=<certificate-file> --from mykey",
 			version.AppName,
 		),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -183,17 +195,17 @@ func NewGrantNodeCmd() *cobra.Command {
 
 			name := strings.TrimSpace(viper.GetString(FlagName))
 
-			certFile := strings.TrimSpace(viper.GetString(FlagCert))
-			if len(certFile) == 0 {
+			certType := viper.GetString(FlagCertType)
+			certPath := strings.TrimSpace(viper.GetString(FlagCert))
+			if len(certPath) == 0 {
 				return fmt.Errorf("the certificate file path must not be empty")
 			}
-
-			cert, err := ioutil.ReadFile(certFile)
+			cert, err := buildCertificate(certType, certPath)
 			if err != nil {
-				return fmt.Errorf("failed to read the certificate file: %s", err.Error())
+				return err
 			}
 
-			msg := types.NewMsgGrantNode(name, string(cert), operator)
+			msg := types.NewMsgGrantNode(name, cert, operator)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -203,6 +215,7 @@ func NewGrantNodeCmd() *cobra.Command {
 	}
 
 	cmd.Flags().AddFlagSet(FsGrantNode)
+	_ = cmd.MarkFlagRequired(FlagCertType)
 	_ = cmd.MarkFlagRequired(FlagCert)
 
 	flags.AddTxFlagsToCmd(cmd)
@@ -247,7 +260,7 @@ func NewRevokeNodeCmd() *cobra.Command {
 
 // CreateValidatorMsgHelpers Return the flagset, particular flags, and a description of defaults
 // this is anticipated to be used with the gen-tx
-func CreateValidatorMsgHelpers(ipDefault string) (fs *flag.FlagSet, pubkeyFlag, powerFlag, defaultsDesc string) {
+func CreateValidatorMsgHelpers(ipDefault string) (fs *flag.FlagSet, certTypeFlag, pubkeyFlag, powerFlag, defaultsDesc string) {
 	fs = flag.NewFlagSet("", flag.ContinueOnError)
 	fs.String(FlagIP, ipDefault, "The node's public IP")
 
@@ -255,11 +268,11 @@ func CreateValidatorMsgHelpers(ipDefault string) (fs *flag.FlagSet, pubkeyFlag, 
 
 	defaultsDesc = fmt.Sprintf("\n	power:		%d\n", defaultPower)
 
-	return fs, FlagCert, FlagPower, defaultsDesc
+	return fs, FlagCertType, FlagCert, FlagPower, defaultsDesc
 }
 
 // PrepareFlagsForTxCreateValidator prepare flags in config
-func PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID, chainID string, cert string) {
+func PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID, chainID string, certType, cert string) {
 	ip := viper.GetString(FlagIP)
 	if ip == "" {
 		_, _ = fmt.Fprintf(os.Stderr, "couldn't retrieve an external IP; the tx's memo field will be unset")
@@ -273,6 +286,7 @@ func PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID, chainID string
 
 	viper.Set(flags.FlagChainID, chainID)
 	viper.Set(flags.FlagFrom, viper.GetString(flags.FlagFrom))
+	viper.Set(FlagCertType, certType)
 	viper.Set(FlagCert, cert)
 	viper.Set(FlagDescription, details)
 	viper.Set(FlagNodeID, nodeID)
@@ -285,9 +299,10 @@ func PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID, chainID string
 
 // BuildCreateValidatorMsg makes a new MsgCreateValidator.
 func BuildCreateValidatorMsg(clientCtx client.Context, txBldr tx.Factory) (tx.Factory, sdk.Msg, error) {
+	certType := viper.GetString(FlagCertType)
 	certPath := viper.GetString(FlagCert)
 
-	data, err := ioutil.ReadFile(certPath)
+	cert, err := buildCertificate(certType, certPath)
 	if err != nil {
 		return txBldr, nil, err
 	}
@@ -295,7 +310,7 @@ func BuildCreateValidatorMsg(clientCtx client.Context, txBldr tx.Factory) (tx.Fa
 	msg := types.NewMsgCreateValidator(
 		viper.GetString(FlagName),
 		viper.GetString(FlagDescription),
-		string(data),
+		cert,
 		viper.GetInt64(FlagPower),
 		clientCtx.GetFromAddress(),
 	)
@@ -309,4 +324,20 @@ func BuildCreateValidatorMsg(clientCtx client.Context, txBldr tx.Factory) (tx.Fa
 		}
 	}
 	return txBldr, msg, nil
+}
+
+// buildCertificate makes a new certificate struct.
+func buildCertificate(certType, certPath string) (*types.Certificate, error) {
+	if _, err := ca.IsSupportedAlgorithms(certType); err != nil {
+		return nil, err
+	}
+	data, err := ioutil.ReadFile(certPath)
+	if err != nil {
+		return nil, fmt.Errorf("failed to read the certificate file: %s", err.Error())
+	}
+
+	return &types.Certificate{
+		Key:   certType,
+		Value: string(data),
+	}, nil
 }

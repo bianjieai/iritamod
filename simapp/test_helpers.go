@@ -34,6 +34,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/bianjieai/iritamod/modules/node"
+	"github.com/bianjieai/iritamod/modules/node/types"
 	"github.com/bianjieai/iritamod/modules/perm"
 )
 
@@ -79,7 +80,7 @@ func Setup(isCheckTx bool) *SimApp {
 
 		// add root cert
 		validatorGenState := node.GetGenesisStateFromAppState(app.appCodec, genesisState)
-		validatorGenState.RootCert = rootCert
+		validatorGenState.RootCert = append(validatorGenState.RootCert, rootCert)
 		validatorGenStateBz := app.cdc.MustMarshalJSON(validatorGenState)
 		genesisState[node.ModuleName] = validatorGenStateBz
 
@@ -448,7 +449,7 @@ func (ao EmptyAppOptions) Get(o string) interface{} {
 	return nil
 }
 
-const rootCert = `-----BEGIN CERTIFICATE-----
+const rootCertData = `-----BEGIN CERTIFICATE-----
 MIIBxTCCAXegAwIBAgIUHMPutrm+7FT7fIFf2fEgyQnIg8kwBQYDK2VwMFgxCzAJ
 BgNVBAYTAkNOMQ0wCwYDVQQIDARyb290MQ0wCwYDVQQHDARyb290MQ0wCwYDVQQK
 DARyb290MQ0wCwYDVQQLDARyb290MQ0wCwYDVQQDDARyb290MB4XDTIwMDYxOTA3
@@ -460,3 +461,8 @@ A1UdIwQYMBaAFPrjTGR+/g4RUduZ9E8JSXNyI4mzMA8GA1UdEwEB/wQFMAMBAf8w
 BQYDK2VwA0EAT8EG5nGxwCAP4ZlfQvAhrnJI+SojlsOoE3rZ8W6/knZsrnVb6RI8
 QAVleeE0pMY+MtENXcQ2wH0QRXs+wO0XCw==
 -----END CERTIFICATE-----`
+
+var rootCert = types.Certificate{
+	Key:   "ed25519",
+	Value: rootCertData,
+}

@@ -57,12 +57,12 @@ func (suite *KeeperTestSuite) SetupTest() {
 }
 
 func (suite *KeeperTestSuite) setNode() {
-	node := types.NewNode(nodeID, nodeName, certStr)
+	node := types.NewNode(nodeID, nodeName, certStruct)
 	suite.keeper.SetNode(suite.ctx, nodeID, node)
 }
 
 func (suite *KeeperTestSuite) TestCreateValidator() {
-	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
+	msg := types.NewMsgCreateValidator(name, details, certStruct, power, operator)
 	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	err := suite.keeper.CreateValidator(suite.ctx,
 		id,
@@ -107,7 +107,7 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 }
 
 func (suite *KeeperTestSuite) TestUpdateValidator() {
-	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
+	msg := types.NewMsgCreateValidator(name, details, certStruct, power, operator)
 	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	err := suite.keeper.CreateValidator(suite.ctx,
 		id,
@@ -136,11 +136,11 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	suite.NoError(err)
 
 	// error name
-	err = suite.keeper.UpdateValidator(suite.ctx, []byte{0x1}, name1, "", power1, details1, operator1.String())
+	err = suite.keeper.UpdateValidator(suite.ctx, []byte{0x1}, name1, &types.Certificate{}, power1, details1, operator1.String())
 	suite.Error(err)
 
-	msg2 := types.NewMsgUpdateValidator(id, "", details1, certStr1, power1, operator1)
-	err = suite.keeper.UpdateValidator(suite.ctx, id, "", certStr1, power1, details1, operator1.String())
+	msg2 := types.NewMsgUpdateValidator(id, "", details1, certStruct1, power1, operator1)
+	err = suite.keeper.UpdateValidator(suite.ctx, id, "", certStruct1, power1, details1, operator1.String())
 	suite.NoError(err)
 
 	validator, found := suite.keeper.GetValidator(suite.ctx, id)
@@ -186,7 +186,7 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 }
 
 func (suite *KeeperTestSuite) TestRemoveValidator() {
-	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
+	msg := types.NewMsgCreateValidator(name, details, certStruct, power, operator)
 	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	err := suite.keeper.CreateValidator(suite.ctx,
 		id,
@@ -231,14 +231,14 @@ func (suite *KeeperTestSuite) TestRemoveValidator() {
 }
 
 func (suite *KeeperTestSuite) TestAddNode() {
-	id, err := suite.keeper.AddNode(suite.ctx, nodeName, certStr)
+	id, err := suite.keeper.AddNode(suite.ctx, nodeName, certStruct)
 	suite.NoError(err)
 
 	node, found := suite.keeper.GetNode(suite.ctx, id)
 	suite.True(found)
 
 	suite.Equal(nodeID.String(), node.Id)
-	suite.Equal(certStr, node.Certificate)
+	suite.Equal(certStruct, node.Certificate)
 }
 
 func (suite *KeeperTestSuite) TestRemoveNode() {
@@ -273,3 +273,13 @@ VQQDDAR0ZXN0MCowBQYDK2VwAyEABowXNYsnvLHjFzk93HY7+OOaQAiso8f30dw/
 MlygOgSe/qRes/xvFG6ilC/v81ZuS6ll99tkEm+ZDA==
 -----END CERTIFICATE-----`
 )
+
+var certStruct = &types.Certificate{
+	Key:   "ed25519",
+	Value: certStr,
+}
+
+var certStruct1 = &types.Certificate{
+	Key:   "ed25519",
+	Value: certStr1,
+}

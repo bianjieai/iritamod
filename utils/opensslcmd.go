@@ -21,6 +21,28 @@ func GenRootCert(keyPath, certPath, subj string) {
 	GenSelfSignCert(keyPath, certPath, subj)
 }
 
+func GenMultiRootCert(keyPath, certPath map[string]string, subj string) {
+	// sm2
+	cmd := exec.Command("openssl", "ecparam", "-genkey", "-name", "SM2", "-out", keyPath[algo.SM2])
+	executeCmd(cmd)
+
+	cmd = exec.Command(
+		"openssl", "req", "-new", "-x509", "-sm3", "-sigopt", "distid:1234567812345678",
+		"-key", keyPath[algo.SM2], "-subj", subj, "-out", certPath[algo.SM2], "-days", "365",
+	)
+	executeCmd(cmd)
+
+	// ed25519
+	cmd = exec.Command("openssl", "genpkey", "-algorithm", "ED25519", "-out", keyPath[algo.ED25519])
+	executeCmd(cmd)
+
+	cmd = exec.Command(
+		"openssl", "req", "-new", "-x509",
+		"-key", keyPath[algo.ED25519], "-subj", subj, "-out", certPath[algo.ED25519], "-days", "365",
+	)
+	executeCmd(cmd)
+}
+
 func GenSelfSignCert(keyPath, certPath, subj string) {
 	switch algo.Algo {
 	case algo.SM2:
