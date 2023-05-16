@@ -73,6 +73,11 @@ import (
 	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	cslashing "github.com/bianjieai/iritamod/modules/slashing"
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+
+	"github.com/bianjieai/iritamod/modules/layer2"
+	layer2keeper "github.com/bianjieai/iritamod/modules/layer2/keeper"
+	layer2mock "github.com/bianjieai/iritamod/modules/layer2/mock"
+	layer2types "github.com/bianjieai/iritamod/modules/layer2/types"
 )
 
 const appName = "SimApp"
@@ -102,12 +107,14 @@ var (
 		perm.AppModuleBasic{},
 		identity.AppModuleBasic{},
 		node.AppModuleBasic{},
+		layer2.AppModuleBasic{},
 	)
 
 	// module account permissions
 	maccPerms = map[string][]string{
 		authtypes.FeeCollectorName: nil,
 		//gov.ModuleName:                  {authtypes.Burner},
+		layer2types.ModuleName: nil,
 	}
 
 	// module accounts that are allowed to receive tokens
@@ -145,6 +152,7 @@ type SimApp struct {
 	IdentityKeeper identitykeeper.Keeper
 	NodeKeeper     nodekeeper.Keeper
 	FeeGrantKeeper feegrantkeeper.Keeper
+	Layer2Keeper   layer2keeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -194,6 +202,7 @@ func NewSimApp(
 		permtypes.StoreKey,
 		identitytypes.StoreKey,
 		nodetypes.StoreKey,
+		layer2types.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -244,6 +253,9 @@ func NewSimApp(
 	app.PermKeeper = permkeeper.NewKeeper(appCodec, keys[permtypes.StoreKey])
 	app.IdentityKeeper = identitykeeper.NewKeeper(appCodec, keys[identitytypes.StoreKey])
 
+	nftKeeper := layer2mock.NewMockNFTKeeper()
+	app.Layer2Keeper = layer2keeper.NewKeeper(appCodec, keys[layer2types.StoreKey], app.PermKeeper, nftKeeper)
+
 	/****  Module Options ****/
 
 	// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
@@ -266,6 +278,7 @@ func NewSimApp(
 		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
+		layer2.NewAppModule(appCodec, app.Layer2Keeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -285,6 +298,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
+		layer2types.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -300,6 +314,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
+		layer2types.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -320,6 +335,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
+		layer2types.ModuleName,
 	)
 
 	app.mm.SetOrderMigrations(
@@ -335,6 +351,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
+		layer2types.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)

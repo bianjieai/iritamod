@@ -1,0 +1,23 @@
+{
+  "class_id": "badkids",
+  "token_ids": {
+    "kid001": {
+      "token_id": "kid001",
+      "token_name": "kid001",
+      "token_uri": "https://example.com",
+      "token_uri_hash": "hash",
+      "token_data": "data",
+      "owner": "cosmos1l4vsfaujy5sy9rcgkggv4vnlwefhwupc8t8362"
+    },
+    "kid002": {
+      "token_id": "kid002",
+      "token_name": "kid002",
+      "token_uri": "https://example.com",
+      "token_uri_hash": "hash",
+      "token_data": "data",
+      "owner": "cosmos1y7ud35l6tt50aeycd4xcjmu6z844v9edj90kt0"
+    }
+  },
+  "creator": "cosmos1l4vsfaujy5sy9rcgkggv4vnlwefhwupc8t8362",
+  "mint_restricted": true
+}

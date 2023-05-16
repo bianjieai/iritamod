@@ -90,7 +90,7 @@ func (k Keeper) DepositClassForNFT(goCtx context.Context, msg *types.MsgDepositC
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := k.depositClassForNFT(ctx, msg.ClassId, msg.BaseUri, sender); err != nil {
+	if err := k.DepositL1ClassForNFT(ctx, msg.ClassId, msg.BaseUri, sender); err != nil {
 		return nil, err
 	}
 
@@ -119,7 +119,7 @@ func (k Keeper) WithdrawClassForNFT(goCtx context.Context, msg *types.MsgWithdra
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := k.withdrawClassForNFT(ctx, msg.ClassId, sender, owner); err != nil {
+	if err := k.WithdrawL2ClassForNFT(ctx, msg.ClassId, sender, owner); err != nil {
 		return nil, err
 	}
 
@@ -143,7 +143,7 @@ func (k Keeper) DepositTokenForNFT(goCtx context.Context, msg *types.MsgDepositT
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := k.depositTokenForNFT(ctx, msg.SpaceId, msg.ClassId, msg.NftId, sender); err != nil {
+	if err := k.DepositL1TokenForNFT(ctx, msg.SpaceId, msg.ClassId, msg.NftId, sender); err != nil {
 		return nil, err
 	}
 
@@ -173,7 +173,7 @@ func (k Keeper) WithdrawTokenForNFT(goCtx context.Context, msg *types.MsgWithdra
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := k.withdrawTokenForNFT(ctx, msg.SpaceId, msg.ClassId, msg.NftId, msg.Name, msg.Uri, msg.UriHash, msg.Data, sender, owner); err != nil {
+	if err := k.WithdrawL2TokenForNFT(ctx, msg.SpaceId, msg.ClassId, msg.NftId, msg.Name, msg.Uri, msg.UriHash, msg.Data, sender, owner); err != nil {
 		return nil, err
 	}
 

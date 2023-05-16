@@ -135,7 +135,10 @@ func (k Keeper) GetTokenOwnerForNFT(ctx sdk.Context,
 		return nil, false
 	}
 	ownerbz := store.Get(tokenKey)
-	owner, _ := sdk.AccAddressFromBech32(string(ownerbz))
+	owner, err := sdk.AccAddressFromBech32(string(ownerbz))
+	if err != nil {
+		return nil, false
+	}
 	return owner, true
 }
 
@@ -169,8 +172,7 @@ func (k Keeper) CreateClassForNFT(ctx sdk.Context,
 		return err
 	}
 
-	store := ctx.KVStore(k.storeKey)
-	store.Set(classForNFTStoreKey(classId), bz)
+	k.setClassForNFT(ctx, classId, bz)
 	return nil
 }
 
@@ -191,9 +193,13 @@ func (k Keeper) UpdateClassForNFT(ctx sdk.Context,
 		return err
 	}
 
-	store := ctx.KVStore(k.storeKey)
-	store.Set(classForNFTStoreKey(classId), bz)
+	k.setClassForNFT(ctx, classId, bz)
 	return nil
+}
+
+func (k Keeper) setClassForNFT(ctx sdk.Context, classId string, classBz []byte) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(classForNFTStoreKey(classId), classBz)
 }
 
 func (k Keeper) HasClassForNFT(ctx sdk.Context,
@@ -256,7 +262,7 @@ func (k Keeper) deleteTokenOwnerForNFT(ctx sdk.Context,
 	store.Delete(nftsOwnerKey)
 }
 
-func (k Keeper) depositClassForNFT(ctx sdk.Context,
+func (k Keeper) DepositL1ClassForNFT(ctx sdk.Context,
 	classId,
 	baseUri string,
 	sender sdk.AccAddress) error {
@@ -294,7 +300,7 @@ func (k Keeper) depositClassForNFT(ctx sdk.Context,
 	return nil
 }
 
-func (k Keeper) withdrawClassForNFT(ctx sdk.Context,
+func (k Keeper) WithdrawL2ClassForNFT(ctx sdk.Context,
 	classId string,
 	sender,
 	owner sdk.AccAddress) error {
@@ -334,7 +340,7 @@ func (k Keeper) withdrawClassForNFT(ctx sdk.Context,
 	}
 
 	// recover mint_restricted
-	if err := k.nft.UpdateClassMintRestricted(ctx, class, classForNFT.Layer1MintRestricted, moduleAddr); err != nil {
+	if err := k.nft.UpdateClassMintRestricted(ctx, class.GetID(), classForNFT.Layer1MintRestricted, moduleAddr); err != nil {
 		return err
 	}
 
@@ -344,7 +350,7 @@ func (k Keeper) withdrawClassForNFT(ctx sdk.Context,
 	return nil
 }
 
-func (k Keeper) depositTokenForNFT(ctx sdk.Context,
+func (k Keeper) DepositL1TokenForNFT(ctx sdk.Context,
 	spaceId uint64,
 	classId,
 	tokenId string,
@@ -378,7 +384,7 @@ func (k Keeper) depositTokenForNFT(ctx sdk.Context,
 	return nil
 }
 
-func (k Keeper) withdrawTokenForNFT(ctx sdk.Context,
+func (k Keeper) WithdrawL2TokenForNFT(ctx sdk.Context,
 	spaceId uint64,
 	classId,
 	tokenId,

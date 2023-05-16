@@ -41,18 +41,3 @@ func (k Keeper) TokenUriForNFT(ctx context.Context, request *types.QueryTokenUri
 	//TODO implement me
 	panic("implement me")
 }
-
-func (k Keeper) Space(ctx context.Context, request *types.QuerySpaceRequest) (*types.QuerySpaceResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (k Keeper) SpaceOfOwner(ctx context.Context, request *types.QuerySpaceOfOwnerRequest) (*types.QuerySpaceOfOwnerResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (k Keeper) Record(ctx context.Context, request *types.QueryRecordRequest) (*types.QueryRecordResponse, error) {
-	//TODO implement me
-	panic("implement me")
-}

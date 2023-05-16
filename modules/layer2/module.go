@@ -68,7 +68,7 @@ func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *r
 
 // GetTxCmd returns the root tx command for the layer2 module.
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
-    return cli.NewTxCmd()
+	return cli.NewTxCmd()
 }
 
 // GetQueryCmd returns no root query command for the layer2 module.
@@ -109,7 +109,7 @@ func (AppModule) QuerierRoute() string {
 
 // LegacyQuerierHandler returns the layer2 module's querier r.
 func (AppModule) LegacyQuerierHandler(*codec.LegacyAmino) sdk.Querier {
-    return nil
+	return nil
 }
 
 func (am AppModule) RegisterServices(cfg module.Configurator) {
@@ -134,7 +134,7 @@ func (AppModule) EndBlock(sdk.Context, abci.RequestEndBlock) []abci.ValidatorUpd
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
 	var genesisState types.GenesisState
 	cdc.MustUnmarshalJSON(data, &genesisState)
-	am.keeper.InitGenesis(ctx, &genesisState)
+	am.keeper.InitGenesis(ctx, genesisState)
 
 	return []abci.ValidatorUpdate{}
 }

@@ -75,7 +75,7 @@ func (k Keeper) CreateRecord(ctx sdk.Context, spaceId, height uint64, header str
 	}
 
 	if k.HasRecord(ctx, spaceId, height) {
-		return sdkerrors.Wrapf(types.ErrRecordAlreadyExist,"space: %d, height: %d", spaceId, height)
+		return sdkerrors.Wrapf(types.ErrRecordAlreadyExist, "space: %d, height: %d", spaceId, height)
 	}
 
 	k.setRecord(ctx, spaceId, height, header)
@@ -105,12 +105,18 @@ func (k Keeper) getSpaceId(ctx sdk.Context) uint64 {
 	return sdk.BigEndianToUint64(bz)
 }
 
+func (k Keeper) setSpaceId(ctx sdk.Context, spaceId uint64) {
+	store := ctx.KVStore(k.storeKey)
+	spaceCountKey := spaceStoreKey(math.MaxUint64)
+	store.Set(spaceCountKey, sdk.Uint64ToBigEndian(spaceId))
+}
+
 // incrSpaceId increment the space unique id
 func (k Keeper) incrSpaceId(ctx sdk.Context) {
 	store := ctx.KVStore(k.storeKey)
 	currSpaceId := k.getSpaceId(ctx)
 	spaceCountKey := spaceStoreKey(math.MaxUint64)
-	store.Set(spaceCountKey, sdk.Uint64ToBigEndian(currSpaceId + 1))
+	store.Set(spaceCountKey, sdk.Uint64ToBigEndian(currSpaceId+1))
 }
 
 // setSpace set the space owner

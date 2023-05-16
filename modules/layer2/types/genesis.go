@@ -21,20 +21,16 @@ func NewGenesisState(startingSpaceId uint64,
 // DefaultGenesisState creates a default GenesisState object
 func DefaultGenesisState() *GenesisState {
 	mappingsForNFT := &MappingsForNFT{
-		Classes: []ClassForNFT{},
+		Classes:     []ClassForNFT{},
 		Collections: []CollectionForNFT{},
 	}
 
-	return NewGenesisState(1, []Space{}, []Record{}, mappingsForNFT)
+	return NewGenesisState(0, []Space{}, []Record{}, mappingsForNFT)
 }
 
 // ValidateGenesis validates the provided genesis state to ensure the
 // expected invariants holds.
 func ValidateGenesis(data GenesisState) error {
-	if data.StartingSpaceId == 0 {
-		return sdkerrors.Wrapf(ErrInvalidSpace, "invalid starting space id: %d", data.StartingSpaceId)
-	}
-
 	// validate Spaces
 	seenSpaceIds := make(map[uint64]bool)
 	for _, space := range data.Spaces {
