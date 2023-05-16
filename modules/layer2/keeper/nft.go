@@ -135,6 +135,7 @@ func (k Keeper) GetTokenOwnerForNFT(ctx sdk.Context,
 		return nil, false
 	}
 	ownerbz := store.Get(tokenKey)
+
 	owner, err := sdk.AccAddressFromBech32(string(ownerbz))
 	if err != nil {
 		return nil, false
