@@ -272,6 +272,7 @@ func (k Keeper) DepositL1ClassForNFT(ctx sdk.Context,
 		return err
 	}
 	// check if the denom owned by sender
+	// TODO: fix this, not necessary the creator
 	if class.GetCreator() != sender.String() {
 		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "class %s is not owned by %s", classId, sender)
 	}

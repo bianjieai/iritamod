@@ -56,16 +56,15 @@ service Query {
     option (google.api.http).get = "/iritamod/layer2/v1/spaces/{owner}";
   }
 
-  // Record queries a record.
-  rpc Record(QueryRecordRequest) returns (QueryRecordResponse) {
-    option (google.api.http).get = "/iritamod/layer2/v1/records/{height}";
+  // L2BlockHeader queries a layer2 block header.
+  rpc L2BlockHeader(QueryL2BlockHeader) returns (QueryL2BlockHeaderResponse) {
+    option (google.api.http).get = "/iritamod/layer2/v1/l2blockheaders/{space_id}/{height}";
   }
 }
 
 // QueryClassForNFTRequest is the request type for the Query/ClassForNFT RPC
 message QueryClassForNFTRequest {
   string class_id = 1;
-  cosmos.query.PageRequest pagination = 2;
 }
 
 // QueryClassForNFTResponse is the response type for the Query/ClassForNFT RPC
@@ -164,17 +163,17 @@ message QuerySpaceOfOwnerRequest {
 
 // QuerySpaceOfOwnerResponse is the response type for the Query/SpaceOfOwner RPC
 message QuerySpaceOfOwnerResponse {
-  repeated uint64 space_ids = 1;
+  repeated Space spaces = 1;
   cosmos.query.PageResponse pagination = 2;
 }
 
 // QueryRecordRequest is the request type for the Query/Record RPC
-message QueryRecordRequest {
+message QueryL2BlockHeader {
   uint64 space_id = 1;
   uint64 height = 2;
 }
 
 // QueryRecordResponse is the response type for the Query/Record RPC
-message QueryRecordResponse {
+message QueryL2BlockHeaderResponse {
   string header = 2;
 }
