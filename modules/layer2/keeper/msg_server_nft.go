@@ -57,6 +57,7 @@ func (k Keeper) UpdateNFTs(goCtx context.Context, msg *types.MsgUpdateNFTs) (*ty
 }
 
 // DeleteNFTs delete native nft mappings on layer2 module.
+// NOTE: this service is called as nfts on layer2 are burnt
 func (k Keeper) DeleteNFTs(goCtx context.Context, msg *types.MsgDeleteNFTs) (*types.MsgDeleteNFTsResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
@@ -81,8 +82,8 @@ func (k Keeper) DeleteNFTs(goCtx context.Context, msg *types.MsgDeleteNFTs) (*ty
 	return &types.MsgDeleteNFTsResponse{}, nil
 }
 
-// DepositClassForNFT deposit a class from layer1 to layer2
-func (k Keeper) DepositClassForNFT(goCtx context.Context, msg *types.MsgDepositClassForNFT) (*types.MsgDepositClassForNFTResponse, error) {
+// UpdateClassesForNFT update class mappings for nft
+func (k Keeper) UpdateClassesForNFT(goCtx context.Context, msg *types.MsgUpdateClassesForNFT) (*types.MsgUpdateCLassesForNFTResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
@@ -90,15 +91,44 @@ func (k Keeper) DepositClassForNFT(goCtx context.Context, msg *types.MsgDepositC
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := k.DepositL1ClassForNFT(ctx, msg.ClassId, msg.BaseUri, sender); err != nil {
+	if err := k.UpdateL2ClassesForNFT(ctx, msg.ClassUpdatesForNft, sender); err != nil {
+		return nil, err
+	}
+
+	ctx.EventManager().EmitEvents(sdk.Events{
+		sdk.NewEvent(
+			types.EventTypeUpdateClassesForNFT,
+			sdk.NewAttribute(types.AttributeKeyClassesAmountForNFT, strconv.Itoa(len(msg.ClassUpdatesForNft))),
+		),
+	})
+	return &types.MsgUpdateCLassesForNFTResponse{}, nil
+}
+
+// DepositClassForNFT deposit a class from layer1 to layer2
+func (k Keeper) DepositClassForNFT(goCtx context.Context, msg *types.MsgDepositClassForNFT) (*types.MsgDepositClassForNFTResponse, error) {
+	sender, err := sdk.AccAddressFromBech32(msg.Sender)
+	if err != nil {
+		return nil, err
+	}
+
+	recipient, err := sdk.AccAddressFromBech32(msg.Recipient)
+	if err != nil {
+		return nil, err
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	if err := k.DepositL1ClassForNFT(ctx, msg.SpaceId, msg.ClassId, msg.BaseUri, recipient, sender); err != nil {
 		return nil, err
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{
 		sdk.NewEvent(
 			types.EventTypeDepositClassForNFT,
+			sdk.NewAttribute(types.AttributeKeySpaceId, strconv.FormatUint(msg.SpaceId, 10)),
 			sdk.NewAttribute(types.AttributeKeyClassIdForNFT, msg.ClassId),
 			sdk.NewAttribute(types.AttributeKeySender, msg.Sender),
+			sdk.NewAttribute(types.AttributeKeyRecipient, msg.Recipient),
 		),
 	})
 
@@ -119,7 +149,7 @@ func (k Keeper) WithdrawClassForNFT(goCtx context.Context, msg *types.MsgWithdra
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := k.WithdrawL2ClassForNFT(ctx, msg.ClassId, sender, owner); err != nil {
+	if err := k.WithdrawL2ClassForNFT(ctx, msg.ClassId, owner, sender); err != nil {
 		return nil, err
 	}
 
@@ -127,7 +157,8 @@ func (k Keeper) WithdrawClassForNFT(goCtx context.Context, msg *types.MsgWithdra
 		sdk.NewEvent(
 			types.EventTypeWithdrawClassForNFT,
 			sdk.NewAttribute(types.AttributeKeyClassIdForNFT, msg.ClassId),
-			sdk.NewAttribute(types.AttributeKeySender, msg.Owner),
+			sdk.NewAttribute(types.AttributeKeySender, msg.Sender),
+			sdk.NewAttribute(types.AttributeKeyRecipient, msg.Owner),
 		),
 	})
 
@@ -173,7 +204,7 @@ func (k Keeper) WithdrawTokenForNFT(goCtx context.Context, msg *types.MsgWithdra
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := k.WithdrawL2TokenForNFT(ctx, msg.SpaceId, msg.ClassId, msg.NftId, msg.Name, msg.Uri, msg.UriHash, msg.Data, sender, owner); err != nil {
+	if err := k.WithdrawL2TokenForNFT(ctx, msg.SpaceId, msg.ClassId, msg.NftId, msg.Name, msg.Uri, msg.UriHash, msg.Data, owner, sender); err != nil {
 		return nil, err
 	}
 

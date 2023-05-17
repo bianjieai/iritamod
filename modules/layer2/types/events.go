@@ -6,6 +6,7 @@ const (
 	EventTypeCreateL2Record  = "create_l2_record"
 
 	AttributeKeySender       = "sender"
+	AttributeKeyOwner        = "owner"
 	AttributeKeyRecipient    = "recipient"
 	AttributeKeySpaceId      = "space_id"
 	AttributeKeyRecordHeight = "record_height"
@@ -13,9 +14,11 @@ const (
 	EventTypeCreateNFTs = "create_nfts"
 	EventTypeUpdateNFTs = "update_nfts"
 	EventTypeDeleteNFTs = "delete_nfts"
+	EventTypeUpdateClassesForNFT = "update_classes_for_nft"
 
 	AttributeKeyClassIdForNFT     = "class_id_for_nft"
 	AttributeKeyTokenIdForNFT     = "token_id_for_nft"
+	AttributeKeyClassesAmountForNFT = "classes_amount_for_nft"
 	AttributeKeyTokenAmountForNFT = "token_amount_for_nft"
 
 	EventTypeDepositClassForNFT  = "deposit_class_for_nft"

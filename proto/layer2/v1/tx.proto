@@ -87,7 +87,7 @@ message MsgUpdateCLassesForNFTResponse {}
 
 // MsgDepositClassForNFT defines the Msg/DepositClassForNFT request type.
 message MsgDepositClassForNFT {
-  string space_id = 1;
+  uint64 space_id = 1;
   string class_id = 2;
   string base_uri = 3; // token_uri prefix
   string recipient = 4; // class recipient
@@ -100,9 +100,8 @@ message MsgDepositClassForNFTResponse {}
 // MsgWithdrawClassForNFT defines the Msg/WithdrawClassForNFT request type.
 message MsgWithdrawClassForNFT {
   string class_id = 1;
-  string srcOwner = 2; // class_owner
-  string destOwner = 3; //
-  string sender = 4; // l2_user
+  string owner = 2; // class_owner
+  string sender = 3; // l2_user
 }
 
 // MsgWithdrawClassForNFTResponse defines the Msg/WithdrawClassForNFT response type.

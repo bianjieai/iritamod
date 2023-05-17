@@ -2,6 +2,7 @@ package types
 
 import sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
+// TODO: error names need to be refactored
 var (
 	ErrInvalidSpace       = sdkerrors.Register(ModuleName, 2, "invalid space id")
 	ErrUnknownSpace       = sdkerrors.Register(ModuleName, 3, "unknown space id")
@@ -21,4 +22,6 @@ var (
 	ErrUnknownClassIdForNFT         = sdkerrors.Register(ModuleName, 18, "unknown class id for nft mapping")
 	ErrClassNotOwnedByAccount       = sdkerrors.Register(ModuleName, 19, "the class is not owned by this address")
 	ErrTokenForNFTNotOwnedByAccount = sdkerrors.Register(ModuleName, 20, "the token for nft is not owned by this address")
+	ErrL1ClassNotFoundForNFT = sdkerrors.Register(ModuleName, 21, "the class for nft is not found")
+	ErrL1TokenNotFoundForNFT = sdkerrors.Register(ModuleName, 22, "the token for nft is not found")
 )

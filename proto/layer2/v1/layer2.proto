@@ -43,5 +43,6 @@ message TokenForNFT {
 // UpdateClassForNFT defines the message for updating class mapping info.
 message UpdateClassForNFT {
   string id = 1;
-  string owner = 2;
+  string uri = 2;
+  string owner = 3;
 }
