@@ -2,30 +2,28 @@ package types
 
 import (
 	"fmt"
+
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // NewGenesisState creates a new GenesisState object
 func NewGenesisState(startingSpaceId uint64,
 	spaces []Space,
-	records []Record,
-	nftMappings *MappingsForNFT) *GenesisState {
+	blockHeaders []L2BlockHeader,
+	classesForNFT []ClassForNFT,
+	collectionsForNFT []CollectionForNFT) *GenesisState {
 	return &GenesisState{
-		StartingSpaceId: startingSpaceId,
-		Spaces:          spaces,
-		Records:         records,
-		NftMappings:     nftMappings,
+		StartingSpaceId:   startingSpaceId,
+		Spaces:            spaces,
+		L2BlockHeaders:    blockHeaders,
+		ClassesForNft:     classesForNFT,
+		CollectionsForNft: collectionsForNFT,
 	}
 }
 
 // DefaultGenesisState creates a default GenesisState object
 func DefaultGenesisState() *GenesisState {
-	mappingsForNFT := &MappingsForNFT{
-		Classes:     []ClassForNFT{},
-		Collections: []CollectionForNFT{},
-	}
-
-	return NewGenesisState(0, []Space{}, []Record{}, mappingsForNFT)
+	return NewGenesisState(0, []Space{}, []L2BlockHeader{}, []ClassForNFT{}, []CollectionForNFT{})
 }
 
 // ValidateGenesis validates the provided genesis state to ensure the
@@ -44,24 +42,24 @@ func ValidateGenesis(data GenesisState) error {
 		seenSpaceIds[space.Id] = true
 	}
 
-	// validate Records
-	seenRecordMap := make(map[string]bool)
-	for _, record := range data.Records {
-		if !seenSpaceIds[record.SpaceId] {
-			return sdkerrors.Wrapf(ErrInvalidSpace, "unknown space id: %d during record validation", record.SpaceId)
+	// validate L2BlockHeader
+	seenBlockHeaderMap := make(map[string]bool)
+	for _, header := range data.L2BlockHeaders {
+		if !seenSpaceIds[header.SpaceId] {
+			return sdkerrors.Wrapf(ErrInvalidSpace, "unknown space id: %d during record validation", header.SpaceId)
 		}
 
 		// space_id/height is unique
-		seenRecord := fmt.Sprintf("%d-%d", record.SpaceId, record.Height)
-		if seenRecordMap[seenRecord] {
-			return sdkerrors.Wrapf(ErrDuplicateRecord, "duplicate record: %s during record validation", seenRecord)
+		seenBlockHeader := fmt.Sprintf("%d-%d", header.SpaceId, header.Height)
+		if seenBlockHeaderMap[seenBlockHeader] {
+			return sdkerrors.Wrapf(ErrDuplicateRecord, "duplicate record: %s during record validation", seenBlockHeader)
 		}
-		seenRecordMap[seenRecord] = true
+		seenBlockHeaderMap[seenBlockHeader] = true
 	}
 
 	// validate classes from NFT mappings
 	seenClassesForNFT := make(map[string]bool)
-	for _, class := range data.NftMappings.Classes {
+	for _, class := range data.ClassesForNft {
 		if err := ValidateClassIdForNFT(class.Id); err != nil {
 			return err
 		}
@@ -72,7 +70,7 @@ func ValidateGenesis(data GenesisState) error {
 		seenClassesForNFT[class.Id] = true
 	}
 
-	for _, collection := range data.NftMappings.Collections {
+	for _, collection := range data.CollectionsForNft {
 		if !seenSpaceIds[collection.SpaceId] {
 			return sdkerrors.Wrapf(ErrInvalidSpace, "unknown space id: %d during collection validation", collection.SpaceId)
 		}

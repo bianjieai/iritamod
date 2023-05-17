@@ -61,6 +61,8 @@ import (
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+
 	"github.com/bianjieai/iritamod/modules/identity"
 	identitykeeper "github.com/bianjieai/iritamod/modules/identity/keeper"
 	identitytypes "github.com/bianjieai/iritamod/modules/identity/types"
@@ -72,7 +74,6 @@ import (
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
 	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	cslashing "github.com/bianjieai/iritamod/modules/slashing"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 
 	"github.com/bianjieai/iritamod/modules/layer2"
 	layer2keeper "github.com/bianjieai/iritamod/modules/layer2/keeper"

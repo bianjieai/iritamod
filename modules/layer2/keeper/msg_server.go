@@ -2,8 +2,9 @@ package keeper
 
 import (
 	"context"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/bianjieai/iritamod/modules/layer2/types"
 )

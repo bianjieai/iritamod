@@ -1,11 +1,16 @@
 package keeper
 
 import (
-	"github.com/bianjieai/iritamod/modules/layer2/types"
-	"github.com/bianjieai/iritamod/modules/perm"
+	"bytes"
+	"github.com/cosmos/cosmos-sdk/store/prefix"
+	"math"
+	"strconv"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	"math"
+
+	"github.com/bianjieai/iritamod/modules/layer2/types"
+	"github.com/bianjieai/iritamod/modules/perm"
 )
 
 // CreateSpace creates a new space
@@ -46,9 +51,9 @@ func (k Keeper) TransferSpace(ctx sdk.Context, spaceId uint64, from, to sdk.AccA
 		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "spaceId: %d is not owned by: %s", spaceId, from)
 	}
 
-	space, ok := k.GetSpace(ctx, spaceId)
-	if !ok {
-		return sdkerrors.Wrapf(types.ErrUnknownSpace, "fail to get space: %d", spaceId)
+	space, err := k.GetSpace(ctx, spaceId)
+	if err != nil {
+		return err
 	}
 	space.Owner = to.String()
 
@@ -107,16 +112,30 @@ func (k Keeper) incrSpaceId(ctx sdk.Context) {
 	store.Set(spaceCountKey, sdk.Uint64ToBigEndian(currSpaceId+1))
 }
 
-func (k Keeper) GetSpace(ctx sdk.Context, spaceId uint64) (types.Space, bool) {
+func (k Keeper) GetSpaces(ctx sdk.Context) []types.Space {
+	spaces := make([]types.Space, 0)
+	store := ctx.KVStore(k.storeKey)
+	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefixSpace)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var space types.Space
+		k.cdc.MustUnmarshal(iterator.Value(), &space)
+		spaces = append(spaces, space)
+	}
+	return spaces
+}
+
+func (k Keeper) GetSpace(ctx sdk.Context, spaceId uint64) (types.Space, error) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.SpaceStoreKey(spaceId))
 	if bz == nil {
-		return types.Space{}, false
+		return types.Space{}, sdkerrors.Wrapf(types.ErrUnknownSpace, "spaceId: %d", spaceId)
 	}
 
 	var space types.Space
 	k.cdc.MustUnmarshal(bz, &space)
-	return space, true
+	return space, nil
 }
 
 func (k Keeper) HasSpace(ctx sdk.Context, spaceId uint64) bool {
@@ -146,6 +165,44 @@ func (k Keeper) deleteSpaceOfOwner(ctx sdk.Context, spaceId uint64, owner sdk.Ac
 	store.Delete(types.SpaceOfOwnerStoreKey(owner, spaceId))
 }
 
+func (k Keeper) GetL2BlockHeaders(ctx sdk.Context) []types.L2BlockHeader {
+	headers := make([]types.L2BlockHeader, 0)
+	store := ctx.KVStore(k.storeKey)
+	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefixL2BlockHeader)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		ret := bytes.Split(iterator.Key(), types.Delimiter)
+		if len(ret) != 2 {
+			panic("fail to split layer2 block header key")
+		}
+		var l2BlockHeader types.L2BlockHeader
+		spaceId, err := strconv.ParseUint(string(ret[0]), 10, 64)
+		if err != nil {
+			panic("fail to convert spaceId to uint64")
+		}
+		height, err := strconv.ParseUint(string(ret[1]), 10, 64)
+		if err != nil {
+			panic("fail to convert height to uint64")
+		}
+
+		l2BlockHeader.SpaceId = spaceId
+		l2BlockHeader.Height = height
+		l2BlockHeader.Header = string(iterator.Value())
+		headers = append(headers, l2BlockHeader)
+	}
+	return headers
+}
+
+func (k Keeper) GetL2BlockHeader(ctx sdk.Context, spaceId, height uint64) (string, error) {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.L2BlockHeaderStoreKey(spaceId, height))
+	if bz == nil {
+		return "", sdkerrors.Wrapf(types.ErrUnknownL2BlockHeader, "spaceId: %d, height: %d", spaceId, height)
+	}
+	return string(bz), nil
+}
+
 func (k Keeper) HasL2BlockHeader(ctx sdk.Context, spaceId, height uint64) bool {
 	store := ctx.KVStore(k.storeKey)
 	return store.Has(types.L2BlockHeaderStoreKey(spaceId, height))
@@ -154,4 +211,16 @@ func (k Keeper) HasL2BlockHeader(ctx sdk.Context, spaceId, height uint64) bool {
 func (k Keeper) setL2BlockHeader(ctx sdk.Context, spaceId, blockHeight uint64, header string) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.L2BlockHeaderStoreKey(spaceId, blockHeight), []byte(header))
+}
+
+func (k Keeper) getSpaceStore(ctx sdk.Context) prefix.Store {
+	store := ctx.KVStore(k.storeKey)
+	return prefix.NewStore(store, types.KeyPrefixSpace)
+}
+
+// getSpaceOfOwnerStore returns a prefix store of <0x02><owner><delimiter>
+func (k Keeper) getSpaceOfOwnerStore(ctx sdk.Context, owner sdk.AccAddress) prefix.Store {
+	store := ctx.KVStore(k.storeKey)
+	key := types.SpaceOfOwnerByOwnerStoreKey(owner)
+	return prefix.NewStore(store, key)
 }

@@ -4,9 +4,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/bianjieai/iritamod/modules/layer2/keeper"
-	"github.com/bianjieai/iritamod/modules/layer2/types"
-	"github.com/bianjieai/iritamod/modules/opb/client/cli"
+	"math/rand"
+
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -17,7 +16,10 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
-	"math/rand"
+
+	"github.com/bianjieai/iritamod/modules/layer2/keeper"
+	"github.com/bianjieai/iritamod/modules/layer2/types"
+	"github.com/bianjieai/iritamod/modules/opb/client/cli"
 )
 
 var (

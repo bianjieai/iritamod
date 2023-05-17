@@ -11,6 +11,7 @@ var (
 	ErrInvalidRecord      = sdkerrors.Register(ModuleName, 6, "invalid record")
 	ErrRecordAlreadyExist = sdkerrors.Register(ModuleName, 7, "record already exist")
 	ErrDuplicateRecord    = sdkerrors.Register(ModuleName, 8, "duplicate record")
+	ErrUnknownL2BlockHeader      = sdkerrors.Register(ModuleName, 9, "unknown l2 block record")
 
 	ErrInvalidClassIdForNFT         = sdkerrors.Register(ModuleName, 11, "invalid class id for nft mapping")
 	ErrInvalidTokenIdForNFT         = sdkerrors.Register(ModuleName, 12, "invalid class id for nft mapping")
@@ -22,6 +23,6 @@ var (
 	ErrUnknownClassIdForNFT         = sdkerrors.Register(ModuleName, 18, "unknown class id for nft mapping")
 	ErrClassNotOwnedByAccount       = sdkerrors.Register(ModuleName, 19, "the class is not owned by this address")
 	ErrTokenForNFTNotOwnedByAccount = sdkerrors.Register(ModuleName, 20, "the token for nft is not owned by this address")
-	ErrL1ClassNotFoundForNFT = sdkerrors.Register(ModuleName, 21, "the class for nft is not found")
-	ErrL1TokenNotFoundForNFT = sdkerrors.Register(ModuleName, 22, "the token for nft is not found")
+	ErrL1ClassNotFoundForNFT        = sdkerrors.Register(ModuleName, 21, "the class for nft is not found")
+	ErrL1TokenNotFoundForNFT        = sdkerrors.Register(ModuleName, 22, "the token for nft is not found")
 )

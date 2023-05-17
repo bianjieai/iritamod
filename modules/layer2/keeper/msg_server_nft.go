@@ -2,9 +2,11 @@ package keeper
 
 import (
 	"context"
-	"github.com/bianjieai/iritamod/modules/layer2/types"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/bianjieai/iritamod/modules/layer2/types"
 )
 
 // CreateNFTs create native nft mappings on layer2 module.
@@ -83,7 +85,7 @@ func (k Keeper) DeleteNFTs(goCtx context.Context, msg *types.MsgDeleteNFTs) (*ty
 }
 
 // UpdateClassesForNFT update class mappings for nft
-func (k Keeper) UpdateClassesForNFT(goCtx context.Context, msg *types.MsgUpdateClassesForNFT) (*types.MsgUpdateCLassesForNFTResponse, error) {
+func (k Keeper) UpdateClassesForNFT(goCtx context.Context, msg *types.MsgUpdateClassesForNFT) (*types.MsgUpdateClassesForNFTResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
@@ -101,7 +103,7 @@ func (k Keeper) UpdateClassesForNFT(goCtx context.Context, msg *types.MsgUpdateC
 			sdk.NewAttribute(types.AttributeKeyClassesAmountForNFT, strconv.Itoa(len(msg.ClassUpdatesForNft))),
 		),
 	})
-	return &types.MsgUpdateCLassesForNFTResponse{}, nil
+	return &types.MsgUpdateClassesForNFTResponse{}, nil
 }
 
 // DepositClassForNFT deposit a class from layer1 to layer2

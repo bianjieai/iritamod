@@ -119,9 +119,8 @@ message QueryTokensOfOwnerForNFTRequest {
 
 // QueryTokensOfOwnerForNFTResponse is the response type for the Query/TokensOfOwnerForNFT RPC
 message QueryTokensOfOwnerForNFTResponse {
-  string class_id = 1;
-  repeated string nft_ids = 2;
-  cosmos.query.PageResponse pagination = 3;
+  repeated TokenForNFTByOwner tokens = 1;
+  cosmos.query.PageResponse pagination = 2;
 }
 
 // QueryBaseUriForNFTRequest is the request type for the Query/BaseUriForNFT RPC
@@ -159,6 +158,7 @@ message QuerySpaceResponse {
 // QuerySpaceOfOwnerRequest is the request type for the Query/SpaceOfOwner RPC
 message QuerySpaceOfOwnerRequest {
   string owner = 1;
+  cosmos.query.PageRequest pagination = 2;
 }
 
 // QuerySpaceOfOwnerResponse is the response type for the Query/SpaceOfOwner RPC

@@ -19,7 +19,7 @@ service Msg {
   rpc DeleteNFTs(MsgDeleteNFTs) returns (MsgDeleteNFTsResponse);
 
   // UpdateClassesForNFT defines a method for updating NFT Class mappings on Layer2 module.
-  rpc UpdateClassesForNFT(MsgUpdateClassesForNFT) returns (MsgUpdateCLassesForNFTResponse);
+  rpc UpdateClassesForNFT(MsgUpdateClassesForNFT) returns (MsgUpdateClassesForNFTResponse);
 
   // DepositClass defines a method for depositing Native NFT Class from Layer1 to Layer2
   rpc DepositClassForNFT(MsgDepositClassForNFT) returns (MsgDepositClassForNFTResponse);
@@ -83,7 +83,7 @@ message MsgUpdateClassesForNFT {
 }
 
 // MsgUpdateClassesForNFTResponse defines the Msg/UpdateClassesForNFT response type.
-message MsgUpdateCLassesForNFTResponse {}
+message MsgUpdateClassesForNFTResponse {}
 
 // MsgDepositClassForNFT defines the Msg/DepositClassForNFT request type.
 message MsgDepositClassForNFT {

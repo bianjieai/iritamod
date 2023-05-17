@@ -4,8 +4,10 @@ import (
 	_ "embed"
 	"encoding/json"
 	"errors"
-	"github.com/bianjieai/iritamod/modules/layer2/expected_keeper"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/bianjieai/iritamod/modules/layer2/expected_keeper"
 )
 
 //go:embed nfts.json

@@ -46,3 +46,9 @@ message UpdateClassForNFT {
   string uri = 2;
   string owner = 3;
 }
+
+message TokenForNFTByOwner {
+  uint64 spaceId = 1;
+  string classId = 2;
+  string tokenId = 3;
+}

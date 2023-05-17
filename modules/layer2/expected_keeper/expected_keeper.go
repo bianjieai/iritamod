@@ -22,6 +22,6 @@ type NFTKeeper interface {
 	TransferClass(ctx sdk.Context, classID string, srcOwner, dstOwner sdk.AccAddress) error
 	UpdateClassMintRestricted(ctx sdk.Context, classID string, mintRestricted bool, owner sdk.AccAddress) error
 
-	GetClass(ctx sdk.Context, classID string) (Class, bool)
-	GetNFT(ctx sdk.Context, classID, tokenID string) (NFT, bool)
+	GetClass(ctx sdk.Context, classID string) (Class, error)
+	GetNFT(ctx sdk.Context, classID, tokenID string) (NFT, error)
 }
