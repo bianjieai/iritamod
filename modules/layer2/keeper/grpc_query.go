@@ -2,10 +2,12 @@ package keeper
 
 import (
 	"context"
-	"github.com/bianjieai/iritamod/modules/layer2/types"
+	"strconv"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
-	"strconv"
+
+	"github.com/bianjieai/iritamod/modules/layer2/types"
 )
 
 func (k Keeper) Space(goCtx context.Context, request *types.QuerySpaceRequest) (*types.QuerySpaceResponse, error) {

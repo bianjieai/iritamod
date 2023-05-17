@@ -10,8 +10,8 @@ import (
 	"github.com/bianjieai/iritamod/modules/layer2/expected_keeper"
 )
 
-//go:embed nfts.json
-var rawNFTsData []byte
+//go:embed mock_data/nfts.json
+var rawNFTsData []byte //nolint: golint
 
 type MockNFTKeeper struct {
 	store map[string]*MockClass

@@ -2,6 +2,7 @@ package keeper
 
 import (
 	"context"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/query"
 
@@ -40,7 +41,7 @@ func (k Keeper) ClassesForNFT(goCtx context.Context, req *types.QueryClassesForN
 	}
 
 	return &types.QueryClassesForNFTResponse{
-		Classes:     classes,
+		Classes:    classes,
 		Pagination: pageResp,
 	}, nil
 }
@@ -65,7 +66,7 @@ func (k Keeper) CollectionForNFT(goCtx context.Context, req *types.QueryCollecti
 		tokenId := string(key)
 		owner := sdk.AccAddress(value)
 		nft := types.TokenForNFT{
-			Id:   tokenId,
+			Id:    tokenId,
 			Owner: owner.String(),
 		}
 		nfts = append(nfts, &nft)
@@ -77,8 +78,8 @@ func (k Keeper) CollectionForNFT(goCtx context.Context, req *types.QueryCollecti
 	}
 
 	return &types.QueryCollectionForNFTResponse{
-		ClassId: req.ClassId,
-		Nfts:     nfts,
+		ClassId:    req.ClassId,
+		Nfts:       nfts,
 		Pagination: pageResp,
 	}, nil
 }
@@ -122,7 +123,7 @@ func (k Keeper) TokensOfOwnerForNFT(goCtx context.Context, req *types.QueryToken
 		}); err != nil {
 			return nil, err
 		}
-	case req.SpaceId > 0  && len(req.ClassId) > 0:
+	case req.SpaceId > 0 && len(req.ClassId) > 0:
 		if pageRes, err = query.Paginate(k.getNFTsOfOwnerBySpaceAndClassStore(ctx, owner, req.SpaceId, req.ClassId), req.Pagination, func(key []byte, _ []byte) error {
 			nft := types.TokenForNFTByOwner{
 				SpaceId: req.SpaceId,
@@ -137,7 +138,7 @@ func (k Keeper) TokensOfOwnerForNFT(goCtx context.Context, req *types.QueryToken
 	}
 
 	return &types.QueryTokensOfOwnerForNFTResponse{
-		Tokens: nfts,
+		Tokens:     nfts,
 		Pagination: pageRes,
 	}, nil
 }

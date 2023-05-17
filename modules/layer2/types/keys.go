@@ -133,7 +133,7 @@ func TokenForNFTStoreKey(spaceId uint64, classId, tokenId string) []byte {
 	return key
 }
 
-//  <0x05><space_id><delimiter><class_id><delimiter>
+// <0x05><space_id><delimiter><class_id><delimiter>
 func TokenForNFTByCollectionStoreKey(spaceId uint64, classId string) []byte {
 	spaceIdStr := strconv.FormatUint(spaceId, 10)
 
@@ -185,7 +185,7 @@ func NFTsOfOwnerAllStoreKey(owner sdk.AccAddress) []byte {
 	return key
 }
 
-//  ret =  <space_id> + <class_id> + <nft_id>
+// ret =  <space_id> + <class_id> + <nft_id>
 func ParseNFTsOfOwnerAllStoreKey(key []byte) (spaceId uint64, classId, tokenId string) {
 	ret := bytes.Split(key, Delimiter)
 	if len(ret) != 3 {
@@ -216,7 +216,7 @@ func NFTsOfOwnerBySpaceStoreKey(owner sdk.AccAddress, spaceId uint64) []byte {
 	return key
 }
 
-//  ret =   <class_id> + <nft_id>
+// ret =   <class_id> + <nft_id>
 func ParseNFTsOfOwnerBySpaceStoreKey(key []byte) (classId, tokenId string) {
 	ret := bytes.Split(key, Delimiter)
 	if len(ret) != 2 {
