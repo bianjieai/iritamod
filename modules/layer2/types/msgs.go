@@ -36,8 +36,10 @@ var (
 )
 
 // NewMsgCreateL2Space is a constructor function for MsgCreateL2Space
-func NewMsgCreateL2Space(sender string) *MsgCreateL2Space {
+func NewMsgCreateL2Space(name, uri, sender string) *MsgCreateL2Space {
 	return &MsgCreateL2Space{
+		Name:   name,
+		Uri:    uri,
 		Sender: sender,
 	}
 }
@@ -335,11 +337,13 @@ func (msg MsgUpdateClassesForNFT) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgDepositClassForNFT is a constructor function for NewMsgDepositClassForNFT
-func NewMsgDepositClassForNFT(classId, baseUri string, sender string) *MsgDepositClassForNFT {
+func NewMsgDepositClassForNFT(spaceId uint64, classId, baseUri, recipient, sender string) *MsgDepositClassForNFT {
 	return &MsgDepositClassForNFT{
-		ClassId: classId,
-		BaseUri: baseUri,
-		Sender:  sender,
+		SpaceId:   spaceId,
+		ClassId:   classId,
+		BaseUri:   baseUri,
+		Recipient: recipient,
+		Sender:    sender,
 	}
 }
 
@@ -372,9 +376,10 @@ func (msg MsgDepositClassForNFT) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgWithdrawClassForNFT is a constructor function for NewMsgWithdrawClassForNFT
-func NewMsgWithdrawClassForNFT(classId string, sender string) *MsgWithdrawClassForNFT {
+func NewMsgWithdrawClassForNFT(classId, owner, sender string) *MsgWithdrawClassForNFT {
 	return &MsgWithdrawClassForNFT{
 		ClassId: classId,
+		Owner:   owner,
 		Sender:  sender,
 	}
 }

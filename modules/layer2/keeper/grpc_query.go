@@ -55,7 +55,7 @@ func (k Keeper) SpaceOfOwner(goCtx context.Context, req *types.QuerySpaceOfOwner
 	}, nil
 }
 
-func (k Keeper) L2BlockHeader(goCtx context.Context, request *types.QueryL2BlockHeader) (*types.QueryL2BlockHeaderResponse, error) {
+func (k Keeper) L2BlockHeader(goCtx context.Context, request *types.QueryL2BlockHeaderRequest) (*types.QueryL2BlockHeaderResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	header, err := k.GetL2BlockHeader(ctx, request.SpaceId, request.Height)

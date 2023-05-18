@@ -57,7 +57,7 @@ service Query {
   }
 
   // L2BlockHeader queries a layer2 block header.
-  rpc L2BlockHeader(QueryL2BlockHeader) returns (QueryL2BlockHeaderResponse) {
+  rpc L2BlockHeader(QueryL2BlockHeaderRequest) returns (QueryL2BlockHeaderResponse) {
     option (google.api.http).get = "/iritamod/layer2/v1/l2blockheaders/{space_id}/{height}";
   }
 }
@@ -168,7 +168,7 @@ message QuerySpaceOfOwnerResponse {
 }
 
 // QueryRecordRequest is the request type for the Query/Record RPC
-message QueryL2BlockHeader {
+message QueryL2BlockHeaderRequest {
   uint64 space_id = 1;
   uint64 height = 2;
 }

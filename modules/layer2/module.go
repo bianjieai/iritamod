@@ -17,9 +17,9 @@ import (
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
 
+	"github.com/bianjieai/iritamod/modules/layer2/client/cli"
 	"github.com/bianjieai/iritamod/modules/layer2/keeper"
 	"github.com/bianjieai/iritamod/modules/layer2/types"
-	"github.com/bianjieai/iritamod/modules/opb/client/cli"
 )
 
 var (

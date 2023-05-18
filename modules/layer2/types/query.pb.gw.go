@@ -708,7 +708,7 @@ func local_request_Query_SpaceOfOwner_0(ctx context.Context, marshaler runtime.M
 }
 
 func request_Query_L2BlockHeader_0(ctx context.Context, marshaler runtime.Marshaler, client QueryClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryL2BlockHeader
+	var protoReq QueryL2BlockHeaderRequest
 	var metadata runtime.ServerMetadata
 
 	var (
@@ -746,7 +746,7 @@ func request_Query_L2BlockHeader_0(ctx context.Context, marshaler runtime.Marsha
 }
 
 func local_request_Query_L2BlockHeader_0(ctx context.Context, marshaler runtime.Marshaler, server QueryServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq QueryL2BlockHeader
+	var protoReq QueryL2BlockHeaderRequest
 	var metadata runtime.ServerMetadata
 
 	var (
