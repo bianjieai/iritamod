@@ -148,7 +148,6 @@ func (k Keeper) setSpace(ctx sdk.Context, spaceId uint64, space types.Space) {
 	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&space)
 	store.Set(types.SpaceStoreKey(spaceId), bz)
-	k.incrSpaceId(ctx)
 }
 
 func (k Keeper) HasSpaceOfOwner(ctx sdk.Context, owner sdk.AccAddress, spaceId uint64) bool {

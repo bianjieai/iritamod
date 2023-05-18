@@ -10,19 +10,22 @@ import (
 	"github.com/bianjieai/iritamod/modules/layer2/expected_keeper"
 )
 
-//go:embed mock_data/nfts.json
-var rawNFTsData []byte //nolint: golint
+//go:embed mock_data/badKids.json
+var badKidsRawData []byte //nolint: golint
 
 type MockNFTKeeper struct {
 	store map[string]*MockClass
 }
 
 func NewMockNFTKeeper() *MockNFTKeeper {
-	var nfts map[string]*MockClass
-	json.Unmarshal(rawNFTsData, &nfts)
+	var badKids MockClass
+	json.Unmarshal(badKidsRawData, &badKids)
+
+	store := make(map[string]*MockClass)
+	store[badKids.ClassId] = &badKids
 
 	return &MockNFTKeeper{
-		store: nfts,
+		store: store,
 	}
 }
 

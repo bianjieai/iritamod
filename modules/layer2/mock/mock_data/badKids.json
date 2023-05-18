@@ -1,5 +1,5 @@
 {
-  "class_id": "badkids",
+  "class_id": "badKids",
   "token_ids": {
     "kid001": {
       "token_id": "kid001",
@@ -7,7 +7,7 @@
       "token_uri": "https://example.com",
       "token_uri_hash": "hash",
       "token_data": "data",
-      "owner": "cosmos1l4vsfaujy5sy9rcgkggv4vnlwefhwupc8t8362"
+      "owner": "cosmos16877jxzrdetmzsl3pntv4n402m8d0cpvwd74w7"
     },
     "kid002": {
       "token_id": "kid002",
@@ -15,9 +15,9 @@
       "token_uri": "https://example.com",
       "token_uri_hash": "hash",
       "token_data": "data",
-      "owner": "cosmos1y7ud35l6tt50aeycd4xcjmu6z844v9edj90kt0"
+      "owner": "cosmos1a53v8ksyd6x47sju572t48s3ynmqyan0n2c6kx"
     }
   },
-  "creator": "cosmos1l4vsfaujy5sy9rcgkggv4vnlwefhwupc8t8362",
+  "creator": "cosmos16877jxzrdetmzsl3pntv4n402m8d0cpvwd74w7",
   "mint_restricted": true
 }

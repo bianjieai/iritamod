@@ -23,3 +23,7 @@ func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey, perm perm.Keeper, 
 		nft:      nft,
 	}
 }
+
+func (k Keeper) GetNFTKeeper() nft.NFTKeeper {
+	return k.nft
+}
