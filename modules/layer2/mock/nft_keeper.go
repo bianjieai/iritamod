@@ -7,7 +7,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/bianjieai/iritamod/modules/layer2/expected_keeper"
+	"github.com/bianjieai/iritamod/modules/layer2/types"
 )
 
 //go:embed mock_data/badKids.json
@@ -157,7 +157,7 @@ func (mk *MockNFTKeeper) UpdateClassMintRestricted(_ sdk.Context, classID string
 	return nil
 }
 
-func (mk *MockNFTKeeper) GetClass(_ sdk.Context, classID string) (expected_keeper.Class, error) {
+func (mk *MockNFTKeeper) GetClass(_ sdk.Context, classID string) (types.Class, error) {
 	class, ok := mk.store[classID]
 	if !ok {
 		return nil, errors.New("class not found")
@@ -166,7 +166,7 @@ func (mk *MockNFTKeeper) GetClass(_ sdk.Context, classID string) (expected_keepe
 	return class, nil
 }
 
-func (mk *MockNFTKeeper) GetNFT(_ sdk.Context, classID, tokenID string) (expected_keeper.NFT, error) {
+func (mk *MockNFTKeeper) GetNFT(_ sdk.Context, classID, tokenID string) (types.NFT, error) {
 	class, ok := mk.store[classID]
 	if !ok {
 		return nil, errors.New("class not found")
