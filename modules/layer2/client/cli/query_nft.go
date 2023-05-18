@@ -45,7 +45,7 @@ func GetNftQueryNftClassCmd() *cobra.Command {
 
 func GetNftQueryNftClassesCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "classes [class-id]",
+		Use:     "classes",
 		Long:    "query all of class mapping info",
 		Example: fmt.Sprintf("$ %s q layer2 nft classes", version.AppName),
 		Args:    cobra.ExactArgs(0),

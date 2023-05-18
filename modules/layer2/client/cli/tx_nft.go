@@ -252,7 +252,7 @@ func GetCmdNftDepositToken() *cobra.Command {
 
 func GetCmdNftWithdrawToken() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "withdraw token [space-id] [class-id]",
+		Use:  "withdraw token [space-id] [class-id] [token-id] ",
 		Long: "withdraw an nft from layer2 to layer1 and update its metadata",
 		Example: fmt.Sprintf(
 			"$ %s tx layer2 nft withdraw-token [space-id] [class-id] [token-id]" +
@@ -365,7 +365,6 @@ func GetCmdNftDepositClass() *cobra.Command {
 	}
 
 	cmd.Flags().AddFlagSet(FsNftDepositClass)
-	_ = cmd.MarkFlagRequired(FlagNftClassBaseUri)
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
