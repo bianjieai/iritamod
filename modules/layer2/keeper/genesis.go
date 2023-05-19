@@ -11,7 +11,7 @@ func (k Keeper) InitGenesis(ctx sdk.Context, data types.GenesisState) {
 		panic(err.Error())
 	}
 
-	k.setSpaceId(ctx, data.StartingSpaceId)
+	k.setSpaceSequence(ctx, data.SpaceSequence)
 	for _, space := range data.Spaces {
 		owner, err := sdk.AccAddressFromBech32(space.Owner)
 		if err != nil {
@@ -40,14 +40,14 @@ func (k Keeper) InitGenesis(ctx sdk.Context, data types.GenesisState) {
 
 func (k Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	data := types.GenesisState{
-		StartingSpaceId:   0,
+		SpaceSequence:   0,
 		Spaces:            make([]types.Space, 0),
 		L2BlockHeaders:    make([]types.L2BlockHeader, 0),
 		ClassesForNft:     make([]types.ClassForNFT, 0),
 		CollectionsForNft: make([]types.CollectionForNFT, 0),
 	}
 
-	data.StartingSpaceId = k.getSpaceId(ctx)
+	data.SpaceSequence = k.GetSpaceSequence(ctx)
 	data.Spaces = k.GetSpaces(ctx)
 	data.L2BlockHeaders = k.GetL2BlockHeaders(ctx)
 	data.ClassesForNft = k.GetClassesForNFT(ctx)

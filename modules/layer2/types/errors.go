@@ -12,7 +12,7 @@ var (
 	ErrRecordAlreadyExist   = sdkerrors.Register(ModuleName, 7, "record already exist")
 	ErrDuplicateRecord      = sdkerrors.Register(ModuleName, 8, "duplicate record")
 	ErrUnknownL2BlockHeader = sdkerrors.Register(ModuleName, 9, "unknown l2 block record")
-
+	ErrNotL2UserRole = sdkerrors.Register(ModuleName, 10, "the account is not a l2 user")
 	ErrInvalidClassIdForNFT         = sdkerrors.Register(ModuleName, 11, "invalid class id for nft mapping")
 	ErrInvalidTokenIdForNFT         = sdkerrors.Register(ModuleName, 12, "invalid class id for nft mapping")
 	ErrClassForNFTNotExist          = sdkerrors.Register(ModuleName, 13, "the class for nft mapping does not exist")

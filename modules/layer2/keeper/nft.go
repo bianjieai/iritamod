@@ -16,9 +16,8 @@ func (k Keeper) CreateTokensForNFT(ctx sdk.Context,
 	classId string,
 	nfts []types.TokenForNFT,
 	sender sdk.AccAddress) error {
-	ok, err := k.HasL2UserRole(ctx, sender)
-	if !ok {
-		return err
+	if !k.HasL2UserRole(ctx, sender) {
+		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", sender)
 	}
 
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
@@ -47,9 +46,8 @@ func (k Keeper) UpdateTokensForNFT(ctx sdk.Context,
 	classId string,
 	nfts []types.TokenForNFT,
 	sender sdk.AccAddress) error {
-	ok, err := k.HasL2UserRole(ctx, sender)
-	if !ok {
-		return err
+	if !k.HasL2UserRole(ctx, sender) {
+		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", sender)
 	}
 
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
@@ -79,9 +77,8 @@ func (k Keeper) DeleteTokensForNFT(ctx sdk.Context,
 	classId string,
 	tokenIds []string,
 	sender sdk.AccAddress) error {
-	ok, err := k.HasL2UserRole(ctx, sender)
-	if !ok {
-		return err
+	if !k.HasL2UserRole(ctx, sender) {
+		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", sender)
 	}
 
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
@@ -114,9 +111,8 @@ func (k Keeper) DeleteTokensForNFT(ctx sdk.Context,
 func (k Keeper) UpdateL2ClassesForNFT(ctx sdk.Context,
 	classUpdates []types.UpdateClassForNFT,
 	sender sdk.AccAddress) error {
-	ok, err := k.HasL2UserRole(ctx, sender)
-	if !ok {
-		return err
+	if !k.HasL2UserRole(ctx, sender) {
+		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", sender)
 	}
 
 	for _, classUpdate := range classUpdates {
@@ -161,7 +157,7 @@ func (k Keeper) DepositL1ClassForNFT(ctx sdk.Context,
 	}
 
 	// TODO: fix this
-	if ok, _ := k.HasL2UserRole(ctx, sender); !ok && !sender.Equals(recipient) {
+	if !k.HasL2UserRole(ctx, sender) && !sender.Equals(recipient) {
 		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "recipient %s must be sender if not l2 user", sender)
 	}
 
@@ -188,9 +184,8 @@ func (k Keeper) WithdrawL2ClassForNFT(ctx sdk.Context,
 	owner,
 	sender sdk.AccAddress) error {
 	// sender must have l2 user
-	ok, err := k.HasL2UserRole(ctx, sender)
-	if !ok {
-		return err
+	if !k.HasL2UserRole(ctx, sender) {
+		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", sender)
 	}
 
 	// check if the class mapping exist
@@ -263,8 +258,8 @@ func (k Keeper) WithdrawL2TokenForNFT(ctx sdk.Context,
 	owner,
 	sender sdk.AccAddress,
 ) error {
-	if ok, err := k.HasL2UserRole(ctx, sender); !ok {
-		return err
+	if !k.HasL2UserRole(ctx, sender) {
+		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", sender)
 	}
 
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
@@ -440,13 +435,13 @@ func (k Keeper) deleteTokenOwnerForNFT(ctx sdk.Context,
 	store.Delete(key)
 }
 
-// prefix store of <0x04>
+// prefix store of <0x05>
 func (k Keeper) getClassStore(ctx sdk.Context) prefix.Store {
 	store := ctx.KVStore(k.storeKey)
 	return prefix.NewStore(store, types.KeyPrefixClassForNFT)
 }
 
-// prefix store of  <0x05><space_id><delimiter><class_id><delimiter>
+// prefix store of  <0x06><space_id><delimiter><class_id><delimiter>
 func (k Keeper) getCollectionStore(ctx sdk.Context, spaceId uint64, classId string) prefix.Store {
 	store := ctx.KVStore(k.storeKey)
 	return prefix.NewStore(store, types.TokenForNFTByCollectionStoreKey(spaceId, classId))

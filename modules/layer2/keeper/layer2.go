@@ -2,7 +2,6 @@ package keeper
 
 import (
 	"bytes"
-	"math"
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
@@ -16,14 +15,13 @@ import (
 
 // CreateSpace creates a new space
 func (k Keeper) CreateSpace(ctx sdk.Context, name, uri string, sender sdk.AccAddress) (uint64, error) {
-	ok, err := k.HasL2UserRole(ctx, sender)
-	if !ok {
-		return 0, err
+	if !k.HasL2UserRole(ctx, sender) {
+		return 0, sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", sender)
 	}
 
 	// increment the max space id and save it
-	k.incrSpaceId(ctx)
-	spaceId := k.getSpaceId(ctx)
+	k.incrSpaceSequence(ctx)
+	spaceId := k.GetSpaceSequence(ctx)
 
 	space := types.Space{
 		Id:    spaceId,
@@ -39,13 +37,12 @@ func (k Keeper) CreateSpace(ctx sdk.Context, name, uri string, sender sdk.AccAdd
 
 // TransferSpace transfer the space ownership
 func (k Keeper) TransferSpace(ctx sdk.Context, spaceId uint64, from, to sdk.AccAddress) error {
-	ok, err := k.HasL2UserRole(ctx, from)
-	if !ok {
-		return err
+	if !k.HasL2UserRole(ctx, from) {
+		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", from)
 	}
-	ok, err = k.HasL2UserRole(ctx, to)
-	if !ok {
-		return err
+
+	if !k.HasL2UserRole(ctx, to) {
+		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", to)
 	}
 
 	if !k.HasSpaceOfOwner(ctx, from, spaceId) {
@@ -67,9 +64,8 @@ func (k Keeper) TransferSpace(ctx sdk.Context, spaceId uint64, from, to sdk.AccA
 
 // CreateBlockHeader creates a layer2 block header record
 func (k Keeper) CreateBlockHeader(ctx sdk.Context, spaceId, height uint64, header string, addr sdk.AccAddress) error {
-	ok, err := k.HasL2UserRole(ctx, addr)
-	if !ok {
-		return err
+	if !k.HasL2UserRole(ctx, addr) {
+		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", addr)
 	}
 
 	if k.HasL2BlockHeader(ctx, spaceId, height) {
@@ -81,38 +77,36 @@ func (k Keeper) CreateBlockHeader(ctx sdk.Context, spaceId, height uint64, heade
 }
 
 // HasL2UserRole checks if an account has the l2 user role
-// TODO: (bool, err) => error
-func (k Keeper) HasL2UserRole(ctx sdk.Context, address sdk.AccAddress) (bool, error) {
+func (k Keeper) HasL2UserRole(ctx sdk.Context, address sdk.AccAddress) bool {
 	if err := k.perm.Access(ctx, address, perm.RoleLayer2User.Auth()); err != nil {
-		return false, err
+		return false
 	}
-	return true, nil
+	return true
 }
 
-// GetSpaceId return the current max id for space
-// we save the current max id into Space Store
-// <0x01><math.maxUint64> -> <currMaxSpaceId>
-// TODO： fix this
-func (k Keeper) getSpaceId(ctx sdk.Context) uint64 {
+// GetSpaceSequence return the current sequence for space
+// <0x01> -> <currSpaceSequence>
+func (k Keeper) GetSpaceSequence(ctx sdk.Context) uint64 {
 	store := ctx.KVStore(k.storeKey)
-	spaceCountKey := types.SpaceStoreKey(math.MaxUint64)
-	bz := store.Get(spaceCountKey)
+	key := types.SpaceSequenceStoreKey()
+	bz := store.Get(key)
 	return sdk.BigEndianToUint64(bz)
 }
 
-// setSpaceId set the current max id for space
-func (k Keeper) setSpaceId(ctx sdk.Context, spaceId uint64) {
+// setSpaceSequence set the current sequence for space
+func (k Keeper) setSpaceSequence(ctx sdk.Context, spaceId uint64) {
 	store := ctx.KVStore(k.storeKey)
-	spaceCountKey := types.SpaceStoreKey(math.MaxUint64)
-	store.Set(spaceCountKey, sdk.Uint64ToBigEndian(spaceId))
+	key := types.SpaceSequenceStoreKey()
+	store.Set(key, sdk.Uint64ToBigEndian(spaceId))
 }
 
-// incrSpaceId increment the space unique id
-func (k Keeper) incrSpaceId(ctx sdk.Context) {
+// incrSpaceId increment the space sequence id
+// NOTE: this function is called when creating a new space
+func (k Keeper) incrSpaceSequence(ctx sdk.Context) {
 	store := ctx.KVStore(k.storeKey)
-	currSpaceId := k.getSpaceId(ctx)
-	spaceCountKey := types.SpaceStoreKey(math.MaxUint64)
-	store.Set(spaceCountKey, sdk.Uint64ToBigEndian(currSpaceId+1))
+	key := types.SpaceSequenceStoreKey()
+	sequence := k.GetSpaceSequence(ctx)
+	store.Set(key, sdk.Uint64ToBigEndian(sequence+1))
 }
 
 func (k Keeper) GetSpaces(ctx sdk.Context) []types.Space {

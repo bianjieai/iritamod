@@ -7,13 +7,13 @@ import (
 )
 
 // NewGenesisState creates a new GenesisState object
-func NewGenesisState(startingSpaceId uint64,
+func NewGenesisState(spaceSequence uint64,
 	spaces []Space,
 	blockHeaders []L2BlockHeader,
 	classesForNFT []ClassForNFT,
 	collectionsForNFT []CollectionForNFT) *GenesisState {
 	return &GenesisState{
-		StartingSpaceId:   startingSpaceId,
+		SpaceSequence:   spaceSequence,
 		Spaces:            spaces,
 		L2BlockHeaders:    blockHeaders,
 		ClassesForNft:     classesForNFT,
@@ -29,6 +29,10 @@ func DefaultGenesisState() *GenesisState {
 // ValidateGenesis validates the provided genesis state to ensure the
 // expected invariants holds.
 func ValidateGenesis(data GenesisState) error {
+	if len(data.Spaces) != int(data.SpaceSequence) {
+		return sdkerrors.Wrapf(ErrInvalidSpace, "space counts not match during space validation, want: %d, got: %d", data.SpaceSequence, len(data.Spaces))
+	}
+
 	// validate Spaces
 	seenSpaceIds := make(map[uint64]bool)
 	for _, space := range data.Spaces {
