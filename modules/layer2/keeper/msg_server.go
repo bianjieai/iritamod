@@ -20,7 +20,7 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 var _ types.MsgServer = msgServer{}
 
 // CreateL2Space creates a new space for l2 user
-func (k msgServer) CreateL2Space(goCtx context.Context, msg *types.MsgCreateL2Space) (*types.MsgCreateL2SpaceResponse, error) {
+func (m msgServer) CreateL2Space(goCtx context.Context, msg *types.MsgCreateL2Space) (*types.MsgCreateL2SpaceResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
@@ -28,7 +28,7 @@ func (k msgServer) CreateL2Space(goCtx context.Context, msg *types.MsgCreateL2Sp
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	spaceId, err := k.Keeper.CreateL2Space(ctx, msg.Name, msg.Uri, sender)
+	spaceId, err := m.Keeper.CreateL2Space(ctx, msg.Name, msg.Uri, sender)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (k msgServer) CreateL2Space(goCtx context.Context, msg *types.MsgCreateL2Sp
 }
 
 // TransferL2Space transfers the ownership of a space
-func (k msgServer) TransferL2Space(goCtx context.Context, msg *types.MsgTransferL2Space) (*types.MsgTransferL2SpaceResponse, error) {
+func (m msgServer) TransferL2Space(goCtx context.Context, msg *types.MsgTransferL2Space) (*types.MsgTransferL2SpaceResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func (k msgServer) TransferL2Space(goCtx context.Context, msg *types.MsgTransfer
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	err = k.Keeper.TransferL2Space(ctx, msg.SpaceId, sender, recipient)
+	err = m.Keeper.TransferL2Space(ctx, msg.SpaceId, sender, recipient)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (k msgServer) TransferL2Space(goCtx context.Context, msg *types.MsgTransfer
 }
 
 // CreateL2BlockHeader creates a layer 2 record
-func (k msgServer) CreateL2BlockHeader(goCtx context.Context, msg *types.MsgCreateL2BlockHeader) (*types.MsgCreateL2BlockHeaderResponse, error) {
+func (m msgServer) CreateL2BlockHeader(goCtx context.Context, msg *types.MsgCreateL2BlockHeader) (*types.MsgCreateL2BlockHeaderResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
@@ -83,7 +83,7 @@ func (k msgServer) CreateL2BlockHeader(goCtx context.Context, msg *types.MsgCrea
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	err = k.Keeper.CreateL2BlockHeader(ctx, msg.SpaceId, msg.Height, msg.Header, sender)
+	err = m.Keeper.CreateL2BlockHeader(ctx, msg.SpaceId, msg.Height, msg.Header, sender)
 	if err != nil {
 		return nil, err
 	}

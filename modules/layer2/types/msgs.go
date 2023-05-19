@@ -303,6 +303,7 @@ func (msg MsgDeleteNFTs) GetSigners() []sdk.AccAddress {
 // NewMsgUpdateClassesForNFT is a constructor function for MsgUpdateClassesForNFT
 func NewMsgUpdateClassesForNFT(spaceId uint64, updateClasses []UpdateClassForNFT, sender string) *MsgUpdateClassesForNFT {
 	return &MsgUpdateClassesForNFT{
+		SpaceId: spaceId,
 		ClassUpdatesForNft: updateClasses,
 		Sender:             sender,
 	}

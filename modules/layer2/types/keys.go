@@ -41,10 +41,12 @@ var (
 
 	// BlockHeader storekey prefix
 	KeyPrefixL2BlockHeader = []byte{0x04}
+
 	// NFT storekey prefix
 	KeyPrefixClassForNFT = []byte{0x05}
-	KeyPrefixTokenForNFT = []byte{0x06}
-	KeyPrefixNFTsOfOwner = []byte{0x07}
+	KeyPrefixSpaceOfClassForNFT = []byte{0x06}
+	KeyPrefixTokenForNFT = []byte{0x07}
+	KeyPrefixNFTsOfOwner = []byte{0x08}
 
 	Delimiter   = []byte{0x00}
 	Placeholder = []byte{0x01}
@@ -120,9 +122,19 @@ func ClassForNFTStoreKey(classId string) []byte {
 	return key
 }
 
+// SpaceOfClassForNFTStoreKey returns the byte representation of the space of class key
+// Item are stored with the following key: values
+// <0x06><class_id>
+func SpaceOfClassForNFTStoreKey(classId string) []byte {
+	key := make([]byte, len(KeyPrefixSpaceOfClassForNFT)+len(classId))
+	copy(key, KeyPrefixSpaceOfClassForNFT)
+	copy(key[len(KeyPrefixSpaceOfClassForNFT):], classId)
+	return key
+}
+
 // TokenForNFTStoreKey returns the byte representation of the nft key of nft mappings
 // Items are stored with the following key: values
-// <0x06><space_id><delimiter><class_id><delimiter><token_id>
+// <0x07><space_id><delimiter><class_id><delimiter><token_id>
 func TokenForNFTStoreKey(spaceId uint64, classId, tokenId string) []byte {
 	spaceIdStr := strconv.FormatUint(spaceId, 10)
 
@@ -140,7 +152,7 @@ func TokenForNFTStoreKey(spaceId uint64, classId, tokenId string) []byte {
 	return key
 }
 
-// <0x06><space_id><delimiter><class_id><delimiter>
+// <0x07><space_id><delimiter><class_id><delimiter>
 func TokenForNFTByCollectionStoreKey(spaceId uint64, classId string) []byte {
 	spaceIdStr := strconv.FormatUint(spaceId, 10)
 
@@ -158,7 +170,7 @@ func TokenForNFTByCollectionStoreKey(spaceId uint64, classId string) []byte {
 
 // NFTsOfOwnerStoreKey returns the byte representation of the owner key of nft mappings
 // Items are stored with the following key: values
-// <0x07><owner><delimiter><space_id><delimiter><class_id><delimiter><nft_id>
+// <0x08><owner><delimiter><space_id><delimiter><class_id><delimiter><nft_id>
 func NFTsOfOwnerStoreKey(owner sdk.AccAddress, spaceId uint64, classId, tokenId string) []byte {
 	owner = address.MustLengthPrefix(owner)
 	spaceIdStr := strconv.FormatUint(spaceId, 10)

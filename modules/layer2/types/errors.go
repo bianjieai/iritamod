@@ -25,4 +25,5 @@ var (
 	ErrTokenForNFTNotOwnedByAccount = sdkerrors.Register(ModuleName, 20, "the token for nft is not owned by this address")
 	ErrL1ClassNotFoundForNFT        = sdkerrors.Register(ModuleName, 21, "the class for nft is not found")
 	ErrL1TokenNotFoundForNFT        = sdkerrors.Register(ModuleName, 22, "the token for nft is not found")
+	ErrClassNotOnSpace = sdkerrors.Register(ModuleName, 23, "the class is not on the space")
 )

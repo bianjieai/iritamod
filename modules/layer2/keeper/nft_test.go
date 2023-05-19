@@ -54,7 +54,7 @@ func (s *TestSuite) TestDeleteTokensForNFT() {
 }
 
 // TODO: table driven
-func (s *TestSuite) TestDepositClassForNFT() {
+func (s *TestSuite) TestDepositClassForNFTByAlice() {
 	// alice deposit the class
 	err := s.keeper.DepositClassForNFT(s.ctx, avataSpaceId, badKidsClassId, badKidsClassUri, accAlice, accAlice)
 	s.Require().NoErrorf(err, "failed to deposit class")
@@ -67,7 +67,27 @@ func (s *TestSuite) TestDepositClassForNFT() {
 
 	badKids, err := s.keeper.GetNFTKeeper().GetClass(s.ctx, badKidsClassId)
 	s.Require().NoErrorf(err, "failed to get layer1 class")
-	s.Require().Equal(types.ModuleAccAddress.String(), badKids.GetCreator())
+	s.Require().Equal(types.ModuleAccAddress.String(), badKids.GetOwner())
+}
+
+func (s *TestSuite) TestDepositClassForNFTByL2User() {
+	// alice transfer the class to l2 user first
+	err := s.keeper.GetNFTKeeper().TransferClass(s.ctx, badKidsClassId, accAlice, accAvata)
+	s.Require().NoErrorf(err, "failed to transfer class")
+
+	// alice deposit the class
+	err = s.keeper.DepositClassForNFT(s.ctx, avataSpaceId, badKidsClassId, badKidsClassUri, accAlice, accAvata)
+	s.Require().NoErrorf(err, "failed to deposit class")
+
+	class, err := s.keeper.GetClassForNFT(s.ctx, badKidsClassId)
+	s.Require().NoErrorf(err, "failed to get class mapping")
+	s.Require().Equal(badKidsClassId, class.Id)
+	s.Require().Equal(badKidsClassUri, class.BaseUri)
+	s.Require().Equal(accAlice.String(), class.Owner)
+
+	badKids, err := s.keeper.GetNFTKeeper().GetClass(s.ctx, badKidsClassId)
+	s.Require().NoErrorf(err, "failed to get layer1 class")
+	s.Require().Equal(types.ModuleAccAddress.String(), badKids.GetOwner())
 }
 
 // TODO: table driven
@@ -85,7 +105,7 @@ func (s *TestSuite) TestUpdateClassForNFT() {
 		},
 	}
 
-	err = s.keeper.UpdateClassesForNFT(s.ctx, classUpdates, accAvata)
+	err = s.keeper.UpdateClassesForNFT(s.ctx, avataSpaceId, classUpdates, accAvata)
 	s.Require().NoErrorf(err, "failed to update class")
 
 	class, err := s.keeper.GetClassForNFT(s.ctx, badKidsClassId)
@@ -101,14 +121,14 @@ func (s *TestSuite) TestWithdrawClassForNFT() {
 
 	badKids, err := s.keeper.GetNFTKeeper().GetClass(s.ctx, badKidsClassId)
 	s.Require().NoErrorf(err, "failed to get layer1 class")
-	s.Require().Equal(types.ModuleAccAddress.String(), badKids.GetCreator())
+	s.Require().Equal(types.ModuleAccAddress.String(), badKids.GetOwner())
 
-	err = s.keeper.WithdrawClassForNFT(s.ctx, badKidsClassId, accAlice, accAvata)
+	err = s.keeper.WithdrawClassForNFT(s.ctx, avataSpaceId, badKidsClassId, accAlice, accAvata)
 	s.Require().NoErrorf(err, "failed to withdraw class")
 
 	badKids, err = s.keeper.GetNFTKeeper().GetClass(s.ctx, badKidsClassId)
 	s.Require().NoErrorf(err, "failed to get layer1 class")
-	s.Require().Equal(accAlice.String(), badKids.GetCreator())
+	s.Require().Equal(accAlice.String(), badKids.GetOwner())
 }
 
 func (s *TestSuite) TestDepositTokenForNFT() {

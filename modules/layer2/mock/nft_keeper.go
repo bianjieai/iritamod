@@ -41,7 +41,7 @@ type MockNFT struct {
 type MockClass struct {
 	ClassId        string              `json:"class_id,omitempty"`
 	TokenIds       map[string]*MockNFT `json:"token_ids,omitempty"`
-	Creator        string              `json:"creator,omitempty"`
+	Owner        string              `json:"owner,omitempty"`
 	MintRestricted bool                `json:"mint_restricted,omitempty"`
 }
 
@@ -135,11 +135,11 @@ func (mk *MockNFTKeeper) TransferClass(_ sdk.Context, classID string, srcOwner, 
 		return errors.New("class not found")
 	}
 
-	if class.Creator != srcOwner.String() {
+	if class.Owner != srcOwner.String() {
 		return errors.New("class not owned by this owner")
 	}
 
-	class.Creator = dstOwner.String()
+	class.Owner = dstOwner.String()
 	return nil
 }
 
@@ -149,7 +149,7 @@ func (mk *MockNFTKeeper) UpdateClassMintRestricted(_ sdk.Context, classID string
 		return errors.New("class not found")
 	}
 
-	if class.Creator != owner.String() {
+	if class.Owner != owner.String() {
 		return errors.New("class not owned by this owner")
 	}
 
@@ -184,8 +184,8 @@ func (mc *MockClass) GetID() string {
 	return mc.ClassId
 }
 
-func (mc *MockClass) GetCreator() string {
-	return mc.Creator
+func (mc *MockClass) GetOwner() string {
+	return mc.Owner
 }
 
 func (mc *MockClass) GetMintRestricted() bool {

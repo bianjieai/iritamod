@@ -1,11 +1,10 @@
 package keeper
 
 import (
+	"github.com/bianjieai/iritamod/modules/layer2/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	"github.com/bianjieai/iritamod/modules/layer2/types"
 )
 
 // CreateNFTs batch create token mappings for nft
@@ -107,12 +106,16 @@ func (k Keeper) DeleteNFTs(ctx sdk.Context,
 }
 
 // UpdateClassesForNFT updates class mappings for nft
-// TODO： class id corresponding space id
 func (k Keeper) UpdateClassesForNFT(ctx sdk.Context,
+	spaceId uint64,
 	classUpdates []types.UpdateClassForNFT,
 	sender sdk.AccAddress) error {
 	if !k.HasL2UserRole(ctx, sender) {
 		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", sender)
+	}
+
+	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
+		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "spaceId: %d is not owned by: %s", spaceId, sender)
 	}
 
 	for _, classUpdate := range classUpdates {
@@ -125,6 +128,15 @@ func (k Keeper) UpdateClassesForNFT(ctx sdk.Context,
 		if err != nil {
 			return err
 		}
+
+		currSpaceId, err := k.GetSpaceOfClassForNFT(ctx, classUpdate.Id)
+		if err != nil {
+			return err
+		}
+		if spaceId != currSpaceId {
+			return sdkerrors.Wrapf(types.ErrClassNotOnSpace, "want: %d, got: %d", currSpaceId, spaceId)
+		}
+
 		class.Owner = classUpdate.Owner
 		class.BaseUri = classUpdate.Uri
 
@@ -134,7 +146,6 @@ func (k Keeper) UpdateClassesForNFT(ctx sdk.Context,
 	return nil
 }
 
-// TODO： class id corresponding space id
 func (k Keeper) DepositClassForNFT(ctx sdk.Context,
 	spaceId uint64,
 	classId,
@@ -151,35 +162,29 @@ func (k Keeper) DepositClassForNFT(ctx sdk.Context,
 		return err
 	}
 	// check if the denom owned by sender
-	// TODO： => GetOwner()
-	if class.GetCreator() != sender.String() {
+	if class.GetOwner() != sender.String() {
 		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "class %s is not owned by %s", classId, sender)
 	}
 
-	// TODO: fix this
 	if !k.HasL2UserRole(ctx, sender) && !sender.Equals(recipient) {
 		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "recipient %s must be sender if not l2 user", sender)
 	}
 
-	// TODO: k.HasClassForNFT
-	classForNFT, err := k.GetClassForNFT(ctx, classId)
-	classForNFT.BaseUri = baseUri
-	classForNFT.Owner = recipient.String()
-	if err != nil {
-		// create class mapping for the first time
-		classForNFT.Id = classId
-		classForNFT.Layer1MintRestricted = class.GetMintRestricted()
+	classForNFT := types.ClassForNFT{
+		Id:                   classId,
+		Owner:                recipient.String(),
+		BaseUri:              baseUri,
+		Layer1MintRestricted: class.GetMintRestricted(),
 	}
-	k.setClassForNFT(ctx, classForNFT)
 
-	if err := k.nft.TransferClass(ctx, classId, sender, types.ModuleAccAddress); err != nil {
-		return err
-	}
-	return nil
+	k.setClassForNFT(ctx, classForNFT)
+	k.setSpaceOfClassForNFT(ctx, classId, spaceId)
+
+	return k.nft.TransferClass(ctx, classId, sender, types.ModuleAccAddress)
 }
 
-// TODO: add space id
 func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
+	spaceId uint64,
 	classId string,
 	owner,
 	sender sdk.AccAddress) error {
@@ -188,10 +193,24 @@ func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
 		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", sender)
 	}
 
+	// sender must have this space
+	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
+		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "spaceId: %d is not owned by: %s", spaceId, sender)
+	}
+
 	// check if the class mapping exist
 	classForNFT, err := k.GetClassForNFT(ctx, classId)
 	if err != nil {
 		return err
+	}
+
+	// class must on corresponding space
+	currSpaceId, err := k.GetSpaceOfClassForNFT(ctx, classId)
+	if err != nil {
+		return err
+	}
+	if spaceId != currSpaceId {
+		return sdkerrors.Wrapf(types.ErrClassNotOnSpace, "want: %d, got: %d", currSpaceId, spaceId)
 	}
 
 	// check if the class exists
@@ -201,8 +220,7 @@ func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
 	}
 
 	// check if the class owned by module account
-	// TODO: GetOwner()
-	if class.GetCreator() != types.ModuleAddress.String() {
+	if class.GetOwner() != types.ModuleAddress.String() {
 		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "class %s is not locked by %s", classId, types.ModuleAddress.String())
 	}
 
@@ -211,15 +229,15 @@ func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
 		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "original owner want %s, got %s", classForNFT.Owner, sender)
 	}
 
+	// remove class corresponding space
+	k.deleteSpaceOfClassForNFT(ctx, classId)
+
 	// recover mint_restricted
 	if err := k.nft.UpdateClassMintRestricted(ctx, class.GetID(), classForNFT.Layer1MintRestricted, types.ModuleAccAddress); err != nil {
 		return err
 	}
 
-	if err := k.nft.TransferClass(ctx, classId, types.ModuleAccAddress, owner); err != nil {
-		return err
-	}
-	return nil
+	return k.nft.TransferClass(ctx, classId, types.ModuleAccAddress, owner)
 }
 
 func (k Keeper) DepositTokenForNFT(ctx sdk.Context,
@@ -367,6 +385,34 @@ func (k Keeper) setClassForNFT(ctx sdk.Context, class types.ClassForNFT) {
 	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&class)
 	store.Set(types.ClassForNFTStoreKey(class.Id), bz)
+}
+
+func (k Keeper) HasSpaceOfClassForNFT(ctx sdk.Context, class string) bool {
+	store := ctx.KVStore(k.storeKey)
+	key := types.SpaceOfClassForNFTStoreKey(class)
+	return store.Has(key)
+}
+
+func (k Keeper) GetSpaceOfClassForNFT(ctx sdk.Context, class string) (uint64, error) {
+	store := ctx.KVStore(k.storeKey)
+	key := types.SpaceOfClassForNFTStoreKey(class)
+	bz := store.Get(key)
+	if len(bz) == 0 {
+		return 0, sdkerrors.Wrapf(types.ErrClassNotOnSpace, "class %s not on layer2", class)
+	}
+	return sdk.BigEndianToUint64(bz), nil
+}
+
+func (k Keeper) setSpaceOfClassForNFT(ctx sdk.Context, class string, spaceId uint64) {
+	store := ctx.KVStore(k.storeKey)
+	key := types.SpaceOfClassForNFTStoreKey(class)
+	store.Set(key, sdk.Uint64ToBigEndian(spaceId))
+}
+
+func (k Keeper) deleteSpaceOfClassForNFT(ctx sdk.Context, class string) {
+	store := ctx.KVStore(k.storeKey)
+	key := types.SpaceOfClassForNFTStoreKey(class)
+	store.Delete(key)
 }
 
 func (k Keeper) GetTokenForNFT(ctx sdk.Context, spaceId uint64, classId, tokenId string) (sdk.AccAddress, error) {

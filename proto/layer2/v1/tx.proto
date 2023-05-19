@@ -78,8 +78,9 @@ message MsgDeleteNFTsResponse {}
 
 // MsgUpdateClassesForNFT defines the Msg/UpdateClassesForNFT request type.
 message MsgUpdateClassesForNFT {
-  repeated UpdateClassForNFT class_updates_for_nft = 1 [ (gogoproto.nullable) = false ];
-  string sender = 2;
+  uint64 space_id = 1;
+  repeated UpdateClassForNFT class_updates_for_nft = 2 [ (gogoproto.nullable) = false ];
+  string sender = 3;
 }
 
 // MsgUpdateClassesForNFTResponse defines the Msg/UpdateClassesForNFT response type.
@@ -99,7 +100,7 @@ message MsgDepositClassForNFTResponse {}
 
 // MsgWithdrawClassForNFT defines the Msg/WithdrawClassForNFT request type.
 message MsgWithdrawClassForNFT {
-  string space_id = 1;
+  uint64 space_id = 1;
   string class_id = 2;
   string owner = 3; // class_owner
   string sender = 4; // l2_user

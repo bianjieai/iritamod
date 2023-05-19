@@ -93,7 +93,7 @@ func (m msgServer) UpdateClassesForNFT(goCtx context.Context, msg *types.MsgUpda
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.UpdateClassesForNFT(ctx, msg.ClassUpdatesForNft, sender); err != nil {
+	if err := m.Keeper.UpdateClassesForNFT(ctx, msg.SpaceId, msg.ClassUpdatesForNft, sender); err != nil {
 		return nil, err
 	}
 
@@ -138,7 +138,6 @@ func (m msgServer) DepositClassForNFT(goCtx context.Context, msg *types.MsgDepos
 }
 
 // WithdrawClassForNFT withdraw a class for nft from layer2 to layer1
-// TODO： add space id
 func (m msgServer) WithdrawClassForNFT(goCtx context.Context, msg *types.MsgWithdrawClassForNFT) (*types.MsgWithdrawClassForNFTResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
@@ -152,7 +151,7 @@ func (m msgServer) WithdrawClassForNFT(goCtx context.Context, msg *types.MsgWith
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.WithdrawClassForNFT(ctx, msg.ClassId, owner, sender); err != nil {
+	if err := m.Keeper.WithdrawClassForNFT(ctx, msg.SpaceId, msg.ClassId, owner, sender); err != nil {
 		return nil, err
 	}
 
