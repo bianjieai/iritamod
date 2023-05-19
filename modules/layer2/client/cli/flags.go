@@ -3,58 +3,52 @@ package cli
 import flag "github.com/spf13/pflag"
 
 const (
-	FlagSpaceName = "name"
-	FlagSpaceUri  = "uri"
-	FlagSpaceId   = "space-id"
-
-	FlagNftTokens       = "nfts"
-	FlagNftTokenId      = "token-id"
-	FlagNftTokenIds     = "nft-ids"
-	FlagNftTokenOwner   = "owner"
-	FlagNftTokenName    = "name"
-	FlagNftTokenUri     = "uri"
-	FlagNftTokenUriHash = "uri-hash"
-	FlagNftTokenData    = "data"
-
-	FlagNftClassInfos   = "class-infos"
-	FlagNftClassBaseUri = "base-uri"
-	FlagNftClassOwner   = "owner"
-	FlagNftClassId      = "class-id"
+	FlagId      = "id"
+	FlagIds     = "ids"
+	FlagOwner   = "owner"
+	FlagOwners  = "owners"
+	FlagName    = "name"
+	FlagUri     = "uri"
+	FlagUriHash = "uri-hash"
+	FlagUris    = "uris"
+	FlagData    = "data"
 )
 
 var (
-	FsCreateSpace      = flag.NewFlagSet("", flag.ContinueOnError)
-	FsNftCreateTokens  = flag.NewFlagSet("", flag.ContinueOnError)
-	FsNftUpdateTokens  = flag.NewFlagSet("", flag.ContinueOnError)
-	FsNftDeleteTokens  = flag.NewFlagSet("", flag.ContinueOnError)
-	FsNftUpdateClasses = flag.NewFlagSet("", flag.ContinueOnError)
-	FsNftWithdrawToken = flag.NewFlagSet("", flag.ContinueOnError)
-	FsNftDepositClass  = flag.NewFlagSet("", flag.ContinueOnError)
-	FsNftWithdrawClass = flag.NewFlagSet("", flag.ContinueOnError)
+	FsSpaceCreate      = flag.NewFlagSet("", flag.ContinueOnError)
+	FsNftTokenCreate   = flag.NewFlagSet("", flag.ContinueOnError)
+	FsNftTokenUpdate   = flag.NewFlagSet("", flag.ContinueOnError)
+	FsNftTokenDelete   = flag.NewFlagSet("", flag.ContinueOnError)
+	FsNftTokenWithdraw = flag.NewFlagSet("", flag.ContinueOnError)
+	FsNftClassUpdate   = flag.NewFlagSet("", flag.ContinueOnError)
+	FsNftClassDeposit  = flag.NewFlagSet("", flag.ContinueOnError)
+	FsNftClassWithdraw = flag.NewFlagSet("", flag.ContinueOnError)
 
 	FsQueryNftOwner = flag.NewFlagSet("", flag.ContinueOnError)
-	FsQueryNftUri   = flag.NewFlagSet("", flag.ContinueOnError)
 )
 
 func init() {
-	FsCreateSpace.String(FlagSpaceName, "", "name of the space")
-	FsCreateSpace.String(FlagSpaceUri, "", "uri of the space")
+	FsSpaceCreate.String(FlagName, "", "name of the space")
+	FsSpaceCreate.String(FlagUri, "", "uri of the space")
 
-	FsNftCreateTokens.String(FlagNftTokens, "", "nft mappings to create")
-	FsNftUpdateTokens.String(FlagNftTokens, "", "nft mappings to update")
-	FsNftDeleteTokens.String(FlagNftTokenIds, "", "nft ids to delete")
-	FsNftUpdateClasses.String(FlagNftClassInfos, "", "nft class infos to update")
+	FsNftTokenCreate.String(FlagIds, "", "token ids for nft asset")
+	FsNftTokenCreate.String(FlagOwners, "", "token owners for nft asset")
+	FsNftTokenUpdate.String(FlagIds, "", "token ids for nft asset")
+	FsNftTokenUpdate.String(FlagOwners, "", "token owners for nft asset")
+	FsNftTokenDelete.String(FlagIds, "", "token ids for nft asset")
 
-	FsNftWithdrawToken.String(FlagNftTokenOwner, "", "owner of the nft token")
-	FsNftWithdrawToken.String(FlagNftTokenName, "", "name of the nft token")
-	FsNftWithdrawToken.String(FlagNftTokenUri, "", "uri of the nft token")
-	FsNftWithdrawToken.String(FlagNftTokenUriHash, "", "uri hash of the nft token")
-	FsNftWithdrawToken.String(FlagNftTokenData, "", "data of the nft token")
+	FsNftTokenWithdraw.String(FlagOwner, "", "owner of the nft")
+	FsNftTokenWithdraw.String(FlagName, "", "name of the nft")
+	FsNftTokenWithdraw.String(FlagUri, "", "uri of the nft")
+	FsNftTokenWithdraw.String(FlagUriHash, "", "uri hash of the nft")
+	FsNftTokenWithdraw.String(FlagData, "", "data of the nft")
 
-	FsNftDepositClass.String(FlagNftClassBaseUri, "", "base uri of the nft class")
-	FsNftWithdrawClass.String(FlagNftClassOwner, "", "owner of the nft class")
+	FsNftClassUpdate.String(FlagIds, "", "class ids for nft asset")
+	FsNftClassUpdate.String(FlagUris, "", "class base uris for nft asset")
+	FsNftClassUpdate.String(FlagOwners, "", "class owners for nft asset")
 
-	FsQueryNftOwner.String(FlagNftClassId, "", "class id of the nft")
-	FsQueryNftUri.String(FlagNftTokenId, "", "token id of the nft")
-	FsQueryNftUri.String(FlagSpaceId, "", "space id")
+	FsNftClassDeposit.String(FlagUri, "", "base uri of the class")
+	FsNftClassWithdraw.String(FlagOwner, "", "owner of the class")
+
+	FsQueryNftOwner.String(FlagId, "", "class id of the nft")
 }

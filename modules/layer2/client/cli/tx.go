@@ -23,8 +23,7 @@ func NewTxCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		GetCmdCreateSpace(),
-		GetCmdTransferSpace(),
+		GetCmdSpaceCmd(),
 		GetCmdCreateL2BlockHeader(),
 		GetCmdNftCmd(),
 	)
@@ -32,35 +31,30 @@ func NewTxCmd() *cobra.Command {
 	return cmd
 }
 
-func GetCmdNftCmd() *cobra.Command {
+func GetCmdSpaceCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:                        "nft",
-		Short:                      "Layer2 NFT transaction subcommands",
+		Use:                        "space",
+		Short:                      "Layer2 space transaction subcommands",
 		DisableFlagParsing:         true,
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
 	}
 
 	cmd.AddCommand(
-		GetCmdNftUpdateClasses(),
-		GetCmdNftCreateTokens(),
-		GetCmdNftDeleteTokens(),
-		GetCmdNftUpdateTokens(),
-		GetCmdNftDepositClass(),
-		GetCmdNftWithdrawClass(),
-		GetCmdNftDepositToken(),
-		GetCmdNftWithdrawToken(),
+		GetCmdSpaceCreate(),
+		GetCmdSpaceTransfer(),
 	)
+
 	return cmd
 }
 
-func GetCmdCreateSpace() *cobra.Command {
+func GetCmdSpaceCreate() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "create-space",
+		Use:  "create",
 		Long: "create a new layer2 space",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 create-space" +
-				"--name=<name>" +
+			"$ %s tx layer2 space create " +
+				"--name=<name> " +
 				"--uri=<uri>" +
 				version.AppName),
 		Args: cobra.ExactArgs(0),
@@ -70,12 +64,12 @@ func GetCmdCreateSpace() *cobra.Command {
 				return err
 			}
 
-			spaceName, err := cmd.Flags().GetString(FlagSpaceName)
+			spaceName, err := cmd.Flags().GetString(FlagName)
 			if err != nil {
 				return nil
 			}
 
-			spaceUri, err := cmd.Flags().GetString(FlagSpaceUri)
+			spaceUri, err := cmd.Flags().GetString(FlagUri)
 			if err != nil {
 				return nil
 			}
@@ -85,28 +79,25 @@ func GetCmdCreateSpace() *cobra.Command {
 				spaceUri,
 				clientCtx.GetFromAddress().String(),
 			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
 
-	cmd.Flags().AddFlagSet(FsCreateSpace)
-	_ = cmd.MarkFlagRequired(FlagSpaceName)
-	_ = cmd.MarkFlagRequired(FlagSpaceUri)
+	cmd.Flags().AddFlagSet(FsSpaceCreate)
+	_ = cmd.MarkFlagRequired(FlagName)
+	_ = cmd.MarkFlagRequired(FlagUri)
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }
 
-func GetCmdTransferSpace() *cobra.Command {
+func GetCmdSpaceTransfer() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "transfer-space [space-id] [recipient]",
-		Long: "transfer a space ownership from sender to recipient",
+		Use:  "transfer [space-id] [recipient]",
+		Long: "transfer ownership of space from sender to recipient",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 transfer-space [space-id] [recipient]" +
+			"$ %s tx layer2 space transfer [space-id] [recipient]" +
 				version.AppName),
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -125,9 +116,7 @@ func GetCmdTransferSpace() *cobra.Command {
 				args[1],
 				clientCtx.GetFromAddress().String(),
 			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
+
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
@@ -144,7 +133,7 @@ func GetCmdCreateL2BlockHeader() *cobra.Command {
 		Example: fmt.Sprintf(
 			"$ %s tx layer2 create-blockheader [space-id] [height] [header]" +
 				version.AppName),
-		Args: cobra.ExactArgs(2),
+		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -167,9 +156,7 @@ func GetCmdCreateL2BlockHeader() *cobra.Command {
 				args[2],
 				clientCtx.GetFromAddress().String(),
 			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
+
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}

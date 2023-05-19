@@ -254,7 +254,7 @@ func NewSimApp(
 	app.PermKeeper = permkeeper.NewKeeper(appCodec, keys[permtypes.StoreKey])
 	app.IdentityKeeper = identitykeeper.NewKeeper(appCodec, keys[identitytypes.StoreKey])
 
-	nftKeeper := layer2mock.NewMockNFTKeeper()
+	nftKeeper := layer2mock.NewNFTKeeper()
 	app.Layer2Keeper = layer2keeper.NewKeeper(appCodec, keys[layer2types.StoreKey], app.PermKeeper, nftKeeper)
 
 	/****  Module Options ****/

@@ -30,7 +30,7 @@ var (
 	badKidsClassId  = "badKids"
 	badKidsClassUri = "https://badkids.com"
 	// TODO： build from mock_data/nfts.json
-	badKidsTokensForNFT = []*types.TokenForNFT{
+	badKidsTokensForNFT = []types.TokenForNFT{
 		{
 			Id:    "kid001",
 			Owner: accAlice.String(),
@@ -85,54 +85,7 @@ func (s *TestSuite) prepareRoles() {
 }
 
 func (s *TestSuite) prepareLayer2() {
-	id, err := s.keeper.CreateSpace(s.ctx, avataSpaceName, avataSpaceUri, accAvata)
+	id, err := s.keeper.CreateL2Space(s.ctx, avataSpaceName, avataSpaceUri, accAvata)
 	s.Require().NoError(err)
 	s.Require().Equal(avataSpaceId, id)
 }
-
-//accL2UserStr = "cosmos1l6rgzjskese3dew3vkru3fk3gv8d0e7d63l5fd"
-//accAliceStr  = "cosmos1l4vsfaujy5sy9rcgkggv4vnlwefhwupc8t8362"
-//accBobStr    = "cosmos1y7ud35l6tt50aeycd4xcjmu6z844v9edj90kt0"
-//func (s *TestSuite) setupAddrs() {
-//	accL2User, _ = sdk.AccAddressFromBech32(accL2UserStr)
-//	accAlice, _ = sdk.AccAddressFromBech32(accAliceStr)
-//	accBob, _ = sdk.AccAddressFromBech32(accBobStr)
-//}
-//
-//func (s *TestSuite) setupAddrs(numAddrs int) []sdk.AccAddress {
-//	var addresses []sdk.AccAddress
-//	var buffer bytes.Buffer
-//
-//	for i := 100; i < (numAddrs + 100); i++ {
-//		numString := strconv.Itoa(i)
-//		buffer.WriteString("A58856F0FD53BF058B4909A21AEC019107BA6")
-//		buffer.WriteString(numString)
-//		res, _ := sdk.AccAddressFromHex(buffer.String())
-//		bech := res.String()
-//		addresses = append(addresses, testAddr(buffer.String(), bech))
-//		buffer.Reset()
-//	}
-//
-//	return addresses
-//}
-//
-//func testAddr(addr string, bech string) sdk.AccAddress {
-//	res, err := sdk.AccAddressFromHex(addr)
-//	if err != nil {
-//		panic(err)
-//	}
-//	bechexpected := res.String()
-//	if bech != bechexpected {
-//		panic("Bech encoding doesn't match reference")
-//	}
-//
-//	bechres, err := sdk.AccAddressFromBech32(bech)
-//	if err != nil {
-//		panic(err)
-//	}
-//	if !bytes.Equal(bechres, res) {
-//		panic("Bech decode and hex decode don't match")
-//	}
-//
-//	return res
-//}

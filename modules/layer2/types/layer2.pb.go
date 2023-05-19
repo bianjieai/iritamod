@@ -154,9 +154,9 @@ func (m *L2BlockHeader) GetHeader() string {
 
 // CollectionForNFT defines the collection info of native NFT from layer2.
 type CollectionForNFT struct {
-	SpaceId uint64         `protobuf:"varint,1,opt,name=space_id,json=spaceId,proto3" json:"space_id,omitempty"`
-	ClassId string         `protobuf:"bytes,2,opt,name=class_id,json=classId,proto3" json:"class_id,omitempty"`
-	Tokens  []*TokenForNFT `protobuf:"bytes,3,rep,name=tokens,proto3" json:"tokens,omitempty"`
+	SpaceId uint64        `protobuf:"varint,1,opt,name=space_id,json=spaceId,proto3" json:"space_id,omitempty"`
+	ClassId string        `protobuf:"bytes,2,opt,name=class_id,json=classId,proto3" json:"class_id,omitempty"`
+	Tokens  []TokenForNFT `protobuf:"bytes,3,rep,name=tokens,proto3" json:"tokens"`
 }
 
 func (m *CollectionForNFT) Reset()         { *m = CollectionForNFT{} }
@@ -206,7 +206,7 @@ func (m *CollectionForNFT) GetClassId() string {
 	return ""
 }
 
-func (m *CollectionForNFT) GetTokens() []*TokenForNFT {
+func (m *CollectionForNFT) GetTokens() []TokenForNFT {
 	if m != nil {
 		return m.Tokens
 	}
@@ -282,6 +282,82 @@ func (m *ClassForNFT) GetLayer1MintRestricted() bool {
 	return false
 }
 
+type ClassWithSpaceForNFT struct {
+	Id                   string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Owner                string `protobuf:"bytes,2,opt,name=owner,proto3" json:"owner,omitempty"`
+	BaseUri              string `protobuf:"bytes,3,opt,name=base_uri,json=baseUri,proto3" json:"base_uri,omitempty"`
+	Layer1MintRestricted bool   `protobuf:"varint,4,opt,name=layer1_mint_restricted,json=layer1MintRestricted,proto3" json:"layer1_mint_restricted,omitempty"`
+	ActiveSpace          uint64 `protobuf:"varint,5,opt,name=active_space,json=activeSpace,proto3" json:"active_space,omitempty"`
+}
+
+func (m *ClassWithSpaceForNFT) Reset()         { *m = ClassWithSpaceForNFT{} }
+func (m *ClassWithSpaceForNFT) String() string { return proto.CompactTextString(m) }
+func (*ClassWithSpaceForNFT) ProtoMessage()    {}
+func (*ClassWithSpaceForNFT) Descriptor() ([]byte, []int) {
+	return fileDescriptor_66ea35df121a9edc, []int{4}
+}
+func (m *ClassWithSpaceForNFT) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *ClassWithSpaceForNFT) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_ClassWithSpaceForNFT.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalToSizedBuffer(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *ClassWithSpaceForNFT) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClassWithSpaceForNFT.Merge(m, src)
+}
+func (m *ClassWithSpaceForNFT) XXX_Size() int {
+	return m.Size()
+}
+func (m *ClassWithSpaceForNFT) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClassWithSpaceForNFT.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClassWithSpaceForNFT proto.InternalMessageInfo
+
+func (m *ClassWithSpaceForNFT) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+func (m *ClassWithSpaceForNFT) GetOwner() string {
+	if m != nil {
+		return m.Owner
+	}
+	return ""
+}
+
+func (m *ClassWithSpaceForNFT) GetBaseUri() string {
+	if m != nil {
+		return m.BaseUri
+	}
+	return ""
+}
+
+func (m *ClassWithSpaceForNFT) GetLayer1MintRestricted() bool {
+	if m != nil {
+		return m.Layer1MintRestricted
+	}
+	return false
+}
+
+func (m *ClassWithSpaceForNFT) GetActiveSpace() uint64 {
+	if m != nil {
+		return m.ActiveSpace
+	}
+	return 0
+}
+
 // TokenForNFT defines the token mapping info of native NFT from layer2.
 type TokenForNFT struct {
 	Id    string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -292,7 +368,7 @@ func (m *TokenForNFT) Reset()         { *m = TokenForNFT{} }
 func (m *TokenForNFT) String() string { return proto.CompactTextString(m) }
 func (*TokenForNFT) ProtoMessage()    {}
 func (*TokenForNFT) Descriptor() ([]byte, []int) {
-	return fileDescriptor_66ea35df121a9edc, []int{4}
+	return fileDescriptor_66ea35df121a9edc, []int{5}
 }
 func (m *TokenForNFT) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -346,7 +422,7 @@ func (m *UpdateClassForNFT) Reset()         { *m = UpdateClassForNFT{} }
 func (m *UpdateClassForNFT) String() string { return proto.CompactTextString(m) }
 func (*UpdateClassForNFT) ProtoMessage()    {}
 func (*UpdateClassForNFT) Descriptor() ([]byte, []int) {
-	return fileDescriptor_66ea35df121a9edc, []int{5}
+	return fileDescriptor_66ea35df121a9edc, []int{6}
 }
 func (m *UpdateClassForNFT) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -397,16 +473,16 @@ func (m *UpdateClassForNFT) GetOwner() string {
 }
 
 type TokenForNFTByOwner struct {
-	SpaceId uint64 `protobuf:"varint,1,opt,name=spaceId,proto3" json:"spaceId,omitempty"`
-	ClassId string `protobuf:"bytes,2,opt,name=classId,proto3" json:"classId,omitempty"`
-	TokenId string `protobuf:"bytes,3,opt,name=tokenId,proto3" json:"tokenId,omitempty"`
+	SpaceId uint64 `protobuf:"varint,1,opt,name=space_id,json=spaceId,proto3" json:"space_id,omitempty"`
+	ClassId string `protobuf:"bytes,2,opt,name=class_id,json=classId,proto3" json:"class_id,omitempty"`
+	TokenId string `protobuf:"bytes,3,opt,name=token_id,json=tokenId,proto3" json:"token_id,omitempty"`
 }
 
 func (m *TokenForNFTByOwner) Reset()         { *m = TokenForNFTByOwner{} }
 func (m *TokenForNFTByOwner) String() string { return proto.CompactTextString(m) }
 func (*TokenForNFTByOwner) ProtoMessage()    {}
 func (*TokenForNFTByOwner) Descriptor() ([]byte, []int) {
-	return fileDescriptor_66ea35df121a9edc, []int{6}
+	return fileDescriptor_66ea35df121a9edc, []int{7}
 }
 func (m *TokenForNFTByOwner) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -461,6 +537,7 @@ func init() {
 	proto.RegisterType((*L2BlockHeader)(nil), "iritamod.layer2.v1.L2BlockHeader")
 	proto.RegisterType((*CollectionForNFT)(nil), "iritamod.layer2.v1.CollectionForNFT")
 	proto.RegisterType((*ClassForNFT)(nil), "iritamod.layer2.v1.ClassForNFT")
+	proto.RegisterType((*ClassWithSpaceForNFT)(nil), "iritamod.layer2.v1.ClassWithSpaceForNFT")
 	proto.RegisterType((*TokenForNFT)(nil), "iritamod.layer2.v1.TokenForNFT")
 	proto.RegisterType((*UpdateClassForNFT)(nil), "iritamod.layer2.v1.UpdateClassForNFT")
 	proto.RegisterType((*TokenForNFTByOwner)(nil), "iritamod.layer2.v1.TokenForNFTByOwner")
@@ -469,36 +546,38 @@ func init() {
 func init() { proto.RegisterFile("layer2/v1/layer2.proto", fileDescriptor_66ea35df121a9edc) }
 
 var fileDescriptor_66ea35df121a9edc = []byte{
-	// 456 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x53, 0xc1, 0x6a, 0xdb, 0x40,
-	0x10, 0xb5, 0x24, 0xc7, 0x76, 0xc6, 0xb4, 0xa4, 0x8b, 0x09, 0x4a, 0x0f, 0xaa, 0xd1, 0xc9, 0x27,
-	0x09, 0x3b, 0x85, 0xde, 0x1d, 0x08, 0x35, 0x4d, 0x5b, 0x50, 0x92, 0x4b, 0x2e, 0x66, 0xa5, 0x1d,
-	0xec, 0x6d, 0x24, 0xad, 0x59, 0xad, 0x53, 0x7c, 0x2c, 0xf4, 0x03, 0xfa, 0x59, 0x3d, 0xe6, 0xd8,
-	0x63, 0xb1, 0x7f, 0xa4, 0xec, 0x6a, 0xed, 0x98, 0xb4, 0x98, 0xde, 0xe6, 0xcd, 0x8c, 0xe6, 0xcd,
-	0xbc, 0xa7, 0x85, 0xd3, 0x9c, 0xae, 0x50, 0x8e, 0xe2, 0x87, 0x61, 0x5c, 0x47, 0xd1, 0x42, 0x0a,
-	0x25, 0x08, 0xe1, 0x92, 0x2b, 0x5a, 0x08, 0x16, 0xd9, 0xf4, 0xc3, 0xf0, 0x75, 0x6f, 0x26, 0x66,
-	0xc2, 0x94, 0x63, 0x1d, 0xd5, 0x9d, 0xe1, 0x35, 0x1c, 0x5d, 0x2f, 0x68, 0x86, 0xe4, 0x25, 0xb8,
-	0x9c, 0xf9, 0x4e, 0xdf, 0x19, 0x34, 0x13, 0x97, 0x33, 0x42, 0xa0, 0x59, 0xd2, 0x02, 0x7d, 0xb7,
-	0xef, 0x0c, 0x8e, 0x13, 0x13, 0x93, 0x13, 0xf0, 0x96, 0x92, 0xfb, 0x9e, 0x49, 0xe9, 0x90, 0xf4,
-	0xe0, 0x48, 0x7c, 0x2d, 0x51, 0xfa, 0x4d, 0x93, 0xab, 0x41, 0x78, 0x07, 0x2f, 0xae, 0x46, 0xe3,
-	0x5c, 0x64, 0xf7, 0xef, 0x91, 0x32, 0x94, 0xe4, 0x0c, 0x3a, 0x95, 0x66, 0x99, 0xee, 0x28, 0xda,
-	0x06, 0x4f, 0x18, 0x39, 0x85, 0xd6, 0x1c, 0xf9, 0x6c, 0xae, 0x0c, 0x53, 0x33, 0xb1, 0xa8, 0xce,
-	0xeb, 0x8f, 0x2d, 0x9d, 0x45, 0xe1, 0x37, 0x07, 0x4e, 0x2e, 0x44, 0x9e, 0x63, 0xa6, 0xb8, 0x28,
-	0x2f, 0x85, 0xfc, 0x74, 0x79, 0x73, 0x68, 0xfe, 0x19, 0x74, 0xb2, 0x9c, 0x56, 0x95, 0x2e, 0xd5,
-	0xb7, 0xb4, 0x0d, 0x9e, 0x30, 0xf2, 0x0e, 0x5a, 0x4a, 0xdc, 0x63, 0x59, 0xf9, 0x5e, 0xdf, 0x1b,
-	0x74, 0x47, 0x6f, 0xa2, 0xbf, 0x65, 0x8b, 0x6e, 0x74, 0x47, 0x4d, 0x93, 0xd8, 0xf6, 0xf0, 0xbb,
-	0x03, 0xdd, 0x0b, 0x3d, 0xc4, 0xd2, 0x3f, 0x69, 0x77, 0x6c, 0xb4, 0xdb, 0xa9, 0xe2, 0xee, 0xa9,
-	0xa2, 0x37, 0x49, 0x69, 0x85, 0xd3, 0x27, 0x09, 0xdb, 0x1a, 0xdf, 0x4a, 0x4e, 0xde, 0x5a, 0x27,
-	0x87, 0xd3, 0x82, 0x97, 0x6a, 0x2a, 0xb1, 0x52, 0x92, 0x67, 0x0a, 0x99, 0xd1, 0xb5, 0x93, 0xf4,
-	0xea, 0xea, 0x47, 0x5e, 0xaa, 0x64, 0x57, 0x0b, 0xcf, 0xa1, 0xbb, 0xb7, 0xdd, 0xff, 0x6d, 0x11,
-	0x7e, 0x80, 0x57, 0xb7, 0x0b, 0x46, 0x15, 0x1e, 0x3a, 0xc0, 0x1a, 0xed, 0xfe, 0xc3, 0x68, 0x6f,
-	0x7f, 0x58, 0x0a, 0x64, 0x6f, 0x83, 0xf1, 0xea, 0xb3, 0x39, 0xd4, 0x87, 0xad, 0xfa, 0xcf, 0xcd,
-	0xf0, 0x61, 0x2b, 0xfe, 0x73, 0x2f, 0x7c, 0x68, 0x1b, 0x71, 0x27, 0x6c, 0xab, 0x8d, 0x85, 0xe3,
-	0xab, 0x9f, 0xeb, 0xc0, 0x79, 0x5c, 0x07, 0xce, 0xef, 0x75, 0xe0, 0xfc, 0xd8, 0x04, 0x8d, 0xc7,
-	0x4d, 0xd0, 0xf8, 0xb5, 0x09, 0x1a, 0x77, 0xa3, 0x19, 0x57, 0xf3, 0x65, 0x1a, 0x65, 0xa2, 0x88,
-	0x53, 0x4e, 0xcb, 0x2f, 0x1c, 0x29, 0x8f, 0xb7, 0x1e, 0xc6, 0x85, 0x60, 0xcb, 0x1c, 0x2b, 0xfb,
-	0x32, 0x62, 0xb5, 0x5a, 0x60, 0x95, 0xb6, 0xcc, 0x6f, 0x7f, 0xfe, 0x27, 0x00, 0x00, 0xff, 0xff,
-	0xf9, 0x8f, 0x2b, 0x8b, 0x3a, 0x03, 0x00, 0x00,
+	// 494 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x93, 0xcd, 0x6e, 0xd3, 0x40,
+	0x10, 0xc7, 0xe3, 0x8f, 0x7c, 0x74, 0x02, 0xa8, 0xac, 0xa2, 0xca, 0xe1, 0xe0, 0x06, 0x9f, 0x72,
+	0xb2, 0x95, 0x94, 0x2b, 0x97, 0x54, 0xaa, 0x88, 0x28, 0x20, 0xb9, 0xad, 0x90, 0x7a, 0xb1, 0x36,
+	0xde, 0x55, 0xb2, 0xd4, 0xf6, 0x46, 0xeb, 0x4d, 0x50, 0xee, 0x48, 0x5c, 0x79, 0x14, 0x1e, 0xa3,
+	0xc7, 0x1e, 0x39, 0x21, 0x94, 0xbc, 0x08, 0xda, 0xf5, 0x36, 0x8d, 0x04, 0x8a, 0x10, 0x97, 0xde,
+	0xe6, 0x3f, 0xe3, 0xdd, 0xf9, 0xfb, 0x37, 0xb3, 0x70, 0x94, 0xe1, 0x15, 0x15, 0xc3, 0x68, 0x39,
+	0x88, 0xaa, 0x28, 0x9c, 0x0b, 0x2e, 0x39, 0x42, 0x4c, 0x30, 0x89, 0x73, 0x4e, 0x42, 0x93, 0x5e,
+	0x0e, 0x5e, 0x74, 0xa6, 0x7c, 0xca, 0x75, 0x39, 0x52, 0x51, 0xf5, 0x65, 0x70, 0x01, 0xf5, 0x8b,
+	0x39, 0x4e, 0x29, 0x7a, 0x06, 0x36, 0x23, 0x9e, 0xd5, 0xb3, 0xfa, 0x6e, 0x6c, 0x33, 0x82, 0x10,
+	0xb8, 0x05, 0xce, 0xa9, 0x67, 0xf7, 0xac, 0xfe, 0x41, 0xac, 0x63, 0x74, 0x08, 0xce, 0x42, 0x30,
+	0xcf, 0xd1, 0x29, 0x15, 0xa2, 0x0e, 0xd4, 0xf9, 0xe7, 0x82, 0x0a, 0xcf, 0xd5, 0xb9, 0x4a, 0x04,
+	0xd7, 0xf0, 0xf4, 0x7c, 0x38, 0xca, 0x78, 0x7a, 0xf3, 0x86, 0x62, 0x42, 0x05, 0xea, 0x42, 0xab,
+	0x54, 0x5d, 0x92, 0x6d, 0x8b, 0xa6, 0xd6, 0x63, 0x82, 0x8e, 0xa0, 0x31, 0xa3, 0x6c, 0x3a, 0x93,
+	0xba, 0x93, 0x1b, 0x1b, 0x55, 0xe5, 0xd5, 0x61, 0xd3, 0xce, 0xa8, 0xe0, 0xab, 0x05, 0x87, 0xa7,
+	0x3c, 0xcb, 0x68, 0x2a, 0x19, 0x2f, 0xce, 0xb8, 0x78, 0x7f, 0x76, 0xb9, 0xef, 0xfe, 0x2e, 0xb4,
+	0xd2, 0x0c, 0x97, 0xa5, 0x2a, 0x55, 0xff, 0xd2, 0xd4, 0x7a, 0x4c, 0xd0, 0x6b, 0x68, 0x48, 0x7e,
+	0x43, 0x8b, 0xd2, 0x73, 0x7a, 0x4e, 0xbf, 0x3d, 0x3c, 0x0e, 0xff, 0xc4, 0x16, 0x5e, 0xaa, 0x2f,
+	0xaa, 0x36, 0x23, 0xf7, 0xf6, 0xe7, 0x71, 0x2d, 0x36, 0x87, 0x82, 0x2f, 0x16, 0xb4, 0x4f, 0xd5,
+	0x55, 0xc6, 0xc4, 0x03, 0xc1, 0x03, 0x4d, 0x70, 0xcb, 0xc6, 0xde, 0x61, 0xa3, 0xfc, 0x4c, 0x70,
+	0x49, 0x93, 0x07, 0x90, 0x4d, 0xa5, 0xaf, 0x04, 0x43, 0xaf, 0xcc, 0x3c, 0x07, 0x49, 0xce, 0x0a,
+	0x99, 0x08, 0x5a, 0x4a, 0xc1, 0x52, 0x49, 0x89, 0xa6, 0xdb, 0x8a, 0x3b, 0x55, 0xf5, 0x1d, 0x2b,
+	0x64, 0xbc, 0xad, 0x05, 0xdf, 0x2d, 0xe8, 0x68, 0x1b, 0x1f, 0x99, 0x9c, 0xe9, 0x59, 0x3e, 0xaa,
+	0x1f, 0xf4, 0x12, 0x9e, 0xe0, 0x54, 0xb2, 0x25, 0x4d, 0xf4, 0x08, 0xbc, 0xba, 0x9e, 0x47, 0xbb,
+	0xca, 0x69, 0x7f, 0xc1, 0x09, 0xb4, 0x77, 0xb0, 0xfe, 0x9b, 0xd1, 0xe0, 0x2d, 0x3c, 0xbf, 0x9a,
+	0x13, 0x2c, 0xe9, 0x3e, 0xe6, 0x66, 0x43, 0xed, 0xbf, 0x6c, 0xa8, 0xb3, 0x7b, 0x19, 0x05, 0xb4,
+	0x3b, 0xd8, 0xd5, 0x87, 0x7b, 0x16, 0xff, 0xb1, 0x46, 0x5d, 0x68, 0xe9, 0x8d, 0x50, 0x25, 0x43,
+	0x50, 0xeb, 0x31, 0x19, 0x9d, 0xdf, 0xae, 0x7d, 0xeb, 0x6e, 0xed, 0x5b, 0xbf, 0xd6, 0xbe, 0xf5,
+	0x6d, 0xe3, 0xd7, 0xee, 0x36, 0x7e, 0xed, 0xc7, 0xc6, 0xaf, 0x5d, 0x0f, 0xa7, 0x4c, 0xce, 0x16,
+	0x93, 0x30, 0xe5, 0x79, 0x34, 0x61, 0xb8, 0xf8, 0xc4, 0x28, 0x66, 0xd1, 0xfd, 0xfe, 0x45, 0x39,
+	0x27, 0x8b, 0x8c, 0x96, 0xe6, 0x55, 0x47, 0x72, 0x35, 0xa7, 0xe5, 0xa4, 0xa1, 0x9f, 0xec, 0xc9,
+	0xef, 0x00, 0x00, 0x00, 0xff, 0xff, 0x2e, 0x19, 0xdd, 0x37, 0xf6, 0x03, 0x00, 0x00,
 }
 
 func (m *Space) Marshal() (dAtA []byte, err error) {
@@ -659,6 +738,65 @@ func (m *ClassForNFT) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if m.Layer1MintRestricted {
+		i--
+		if m.Layer1MintRestricted {
+			dAtA[i] = 1
+		} else {
+			dAtA[i] = 0
+		}
+		i--
+		dAtA[i] = 0x20
+	}
+	if len(m.BaseUri) > 0 {
+		i -= len(m.BaseUri)
+		copy(dAtA[i:], m.BaseUri)
+		i = encodeVarintLayer2(dAtA, i, uint64(len(m.BaseUri)))
+		i--
+		dAtA[i] = 0x1a
+	}
+	if len(m.Owner) > 0 {
+		i -= len(m.Owner)
+		copy(dAtA[i:], m.Owner)
+		i = encodeVarintLayer2(dAtA, i, uint64(len(m.Owner)))
+		i--
+		dAtA[i] = 0x12
+	}
+	if len(m.Id) > 0 {
+		i -= len(m.Id)
+		copy(dAtA[i:], m.Id)
+		i = encodeVarintLayer2(dAtA, i, uint64(len(m.Id)))
+		i--
+		dAtA[i] = 0xa
+	}
+	return len(dAtA) - i, nil
+}
+
+func (m *ClassWithSpaceForNFT) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalToSizedBuffer(dAtA[:size])
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *ClassWithSpaceForNFT) MarshalTo(dAtA []byte) (int, error) {
+	size := m.Size()
+	return m.MarshalToSizedBuffer(dAtA[:size])
+}
+
+func (m *ClassWithSpaceForNFT) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+	i := len(dAtA)
+	_ = i
+	var l int
+	_ = l
+	if m.ActiveSpace != 0 {
+		i = encodeVarintLayer2(dAtA, i, uint64(m.ActiveSpace))
+		i--
+		dAtA[i] = 0x28
+	}
 	if m.Layer1MintRestricted {
 		i--
 		if m.Layer1MintRestricted {
@@ -912,6 +1050,33 @@ func (m *ClassForNFT) Size() (n int) {
 	}
 	if m.Layer1MintRestricted {
 		n += 2
+	}
+	return n
+}
+
+func (m *ClassWithSpaceForNFT) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	l = len(m.Id)
+	if l > 0 {
+		n += 1 + l + sovLayer2(uint64(l))
+	}
+	l = len(m.Owner)
+	if l > 0 {
+		n += 1 + l + sovLayer2(uint64(l))
+	}
+	l = len(m.BaseUri)
+	if l > 0 {
+		n += 1 + l + sovLayer2(uint64(l))
+	}
+	if m.Layer1MintRestricted {
+		n += 2
+	}
+	if m.ActiveSpace != 0 {
+		n += 1 + sovLayer2(uint64(m.ActiveSpace))
 	}
 	return n
 }
@@ -1374,7 +1539,7 @@ func (m *CollectionForNFT) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Tokens = append(m.Tokens, &TokenForNFT{})
+			m.Tokens = append(m.Tokens, TokenForNFT{})
 			if err := m.Tokens[len(m.Tokens)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -1545,6 +1710,191 @@ func (m *ClassForNFT) Unmarshal(dAtA []byte) error {
 				}
 			}
 			m.Layer1MintRestricted = bool(v != 0)
+		default:
+			iNdEx = preIndex
+			skippy, err := skipLayer2(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
+				return ErrInvalidLengthLayer2
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *ClassWithSpaceForNFT) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowLayer2
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= uint64(b&0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: ClassWithSpaceForNFT: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: ClassWithSpaceForNFT: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Id", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLayer2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthLayer2
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthLayer2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Id = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Owner", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLayer2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthLayer2
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthLayer2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Owner = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field BaseUri", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLayer2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthLayer2
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex < 0 {
+				return ErrInvalidLengthLayer2
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.BaseUri = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 4:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Layer1MintRestricted", wireType)
+			}
+			var v int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLayer2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				v |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			m.Layer1MintRestricted = bool(v != 0)
+		case 5:
+			if wireType != 0 {
+				return fmt.Errorf("proto: wrong wireType = %d for field ActiveSpace", wireType)
+			}
+			m.ActiveSpace = 0
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowLayer2
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				m.ActiveSpace |= uint64(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
 		default:
 			iNdEx = preIndex
 			skippy, err := skipLayer2(dAtA[iNdEx:])

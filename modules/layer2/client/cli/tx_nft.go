@@ -1,9 +1,9 @@
 package cli
 
 import (
-	"encoding/json"
 	"fmt"
 	"strconv"
+	"strings"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -14,13 +14,66 @@ import (
 	"github.com/bianjieai/iritamod/modules/layer2/types"
 )
 
-func GetCmdNftCreateTokens() *cobra.Command {
+func GetCmdNftCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "create-tokens [space-id] [class-id]",
-		Long: "create token mappings for nft asset",
+		Use:                        "nft",
+		Short:                      "Layer2 NFT transaction subcommands",
+		DisableFlagParsing:         true,
+		SuggestionsMinimumDistance: 2,
+		RunE:                       client.ValidateCmd,
+	}
+
+	cmd.AddCommand(
+		GetCmdNftTokenCmd(),
+		GetCmdNftClassCmd(),
+	)
+	return cmd
+}
+
+func GetCmdNftTokenCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:                        "token",
+		Short:                      "Layer2 NFT token transaction subcommands",
+		DisableFlagParsing:         true,
+		SuggestionsMinimumDistance: 2,
+		RunE:                       client.ValidateCmd,
+	}
+
+	cmd.AddCommand(
+		GetCmdNftTokenCreate(),
+		GetCmdNftTokenUpdate(),
+		GetCmdNftTokenDelete(),
+		GetCmdNftTokenDeposit(),
+		GetCmdNftTokenWithdraw(),
+	)
+	return cmd
+}
+
+func GetCmdNftClassCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:                        "class",
+		Short:                      "Layer2 NFT class transaction subcommands",
+		DisableFlagParsing:         true,
+		SuggestionsMinimumDistance: 2,
+		RunE:                       client.ValidateCmd,
+	}
+
+	cmd.AddCommand(
+		GetCmdNftClassUpdate(),
+		GetCmdNftClassDeposit(),
+		GetCmdNftClassWithdraw(),
+	)
+	return cmd
+}
+
+func GetCmdNftTokenCreate() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:  "create [space-id] [class-id]",
+		Long: "create token mappings for layer2 nft asset",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft create-tokens [space-id] [class-id]" +
-				"--nfts=<nfts.json>" +
+			"$ %s tx layer2 nft token create [space-id] [class-id] " +
+				"--ids=token1,token2,token3 " +
+				"--owners=owner1,owner2,owner3" +
 				version.AppName),
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -34,45 +87,61 @@ func GetCmdNftCreateTokens() *cobra.Command {
 				return err
 			}
 
-			nftsStr, err := cmd.Flags().GetString(FlagNftTokens)
+			ids, err := cmd.Flags().GetString(FlagIds)
 			if err != nil {
 				return err
 			}
 
-			var nfts []*types.TokenForNFT
-			err = json.Unmarshal([]byte(nftsStr), &nfts)
+			owners, err := cmd.Flags().GetString(FlagOwners)
 			if err != nil {
 				return err
+			}
+
+			ids = strings.TrimSpace(ids)
+			idArray := strings.Split(ids, ",")
+
+			owners = strings.TrimSpace(owners)
+			ownerArray := strings.Split(owners, ",")
+
+			if len(idArray) != len(ownerArray) {
+				return fmt.Errorf("ids and owners length not match")
+			}
+
+			var tokens []types.TokenForNFT
+			for i := 0; i < len(idArray); i++ {
+				tokens = append(tokens, types.TokenForNFT{
+					Id:    idArray[i],
+					Owner: ownerArray[i],
+				})
 			}
 
 			msg := types.NewMsgCreateNFTs(
 				spaceId,
 				args[1],
-				nfts,
+				tokens,
 				clientCtx.GetFromAddress().String(),
 			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
 
-	cmd.Flags().AddFlagSet(FsNftCreateTokens)
-	_ = cmd.MarkFlagRequired(FlagNftTokens)
+	cmd.Flags().AddFlagSet(FsNftTokenCreate)
+	_ = cmd.MarkFlagRequired(FlagIds)
+	_ = cmd.MarkFlagRequired(FlagOwners)
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }
 
-func GetCmdNftUpdateTokens() *cobra.Command {
+func GetCmdNftTokenUpdate() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "update-tokens [space-id] [class-id]",
-		Long: "update token mappings for nft asset",
+		Use:  "update [space-id] [class-id]",
+		Long: "update token mappings for layer2 nft asset",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft update-tokens [space-id] [class-id]" +
-				"--nfts=<nfts.json>" +
+			"$ %s tx layer2 nft token update [space-id] [class-id] " +
+				"--ids=token1,token2,token3 " +
+				"--owners=owner1,owner2,owner3" +
 				version.AppName),
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -86,45 +155,60 @@ func GetCmdNftUpdateTokens() *cobra.Command {
 				return err
 			}
 
-			nftsStr, err := cmd.Flags().GetString(FlagNftTokens)
+			ids, err := cmd.Flags().GetString(FlagIds)
 			if err != nil {
 				return err
 			}
 
-			var nfts []*types.TokenForNFT
-			err = json.Unmarshal([]byte(nftsStr), &nfts)
+			owners, err := cmd.Flags().GetString(FlagOwners)
 			if err != nil {
 				return err
+			}
+
+			ids = strings.TrimSpace(ids)
+			idArray := strings.Split(ids, ",")
+
+			owners = strings.TrimSpace(owners)
+			ownerArray := strings.Split(owners, ",")
+
+			if len(idArray) != len(ownerArray) {
+				return fmt.Errorf("ids and owners length not match")
+			}
+
+			var tokens []types.TokenForNFT
+			for i := 0; i < len(idArray); i++ {
+				tokens = append(tokens, types.TokenForNFT{
+					Id:    idArray[i],
+					Owner: ownerArray[i],
+				})
 			}
 
 			msg := types.NewMsgUpdateNFTs(
 				spaceId,
 				args[1],
-				nfts,
+				tokens,
 				clientCtx.GetFromAddress().String(),
 			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
 
-	cmd.Flags().AddFlagSet(FsNftUpdateTokens)
-	_ = cmd.MarkFlagRequired(FlagNftTokens)
+	cmd.Flags().AddFlagSet(FsNftTokenUpdate)
+	_ = cmd.MarkFlagRequired(FlagIds)
+	_ = cmd.MarkFlagRequired(FlagOwners)
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }
 
-func GetCmdNftDeleteTokens() *cobra.Command {
+func GetCmdNftTokenDelete() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "delete-tokens [space-id] [class-id]",
-		Long: "delete token mappings for nft asset",
+		Use:  "delete [space-id] [class-id]",
+		Long: "delete token mappings for layer2 nft asset",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft delete-tokens [space-id] [class-id]" +
-				"--nft-ids=<nft-ids.json>" +
+			"$ %s tx layer2 nft token delete [space-id] [class-id] " +
+				"--ids=token1,token2,token3" +
 				version.AppName),
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -138,86 +222,38 @@ func GetCmdNftDeleteTokens() *cobra.Command {
 				return err
 			}
 
-			nftsStr, err := cmd.Flags().GetString(FlagNftTokenIds)
+			ids, err := cmd.Flags().GetString(FlagIds)
 			if err != nil {
 				return err
 			}
 
-			var nftIds []string
-			err = json.Unmarshal([]byte(nftsStr), &nftIds)
-			if err != nil {
-				return err
-			}
+			ids = strings.TrimSpace(ids)
+			idArray := strings.Split(ids, ",")
 
 			msg := types.NewMsgDeleteNFTs(
 				spaceId,
 				args[1],
-				nftIds,
+				idArray,
 				clientCtx.GetFromAddress().String(),
 			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
 
-	cmd.Flags().AddFlagSet(FsNftDeleteTokens)
-	_ = cmd.MarkFlagRequired(FlagNftTokenIds)
+	cmd.Flags().AddFlagSet(FsNftTokenDelete)
+	_ = cmd.MarkFlagRequired(FlagIds)
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }
 
-func GetCmdNftUpdateClasses() *cobra.Command {
+func GetCmdNftTokenDeposit() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "update-classes",
-		Long: "update class mappings for nft asset",
-		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft update-classes" +
-				"--class-infos=<class-infos.json>" +
-				version.AppName),
-		Args: cobra.ExactArgs(0),
-		RunE: func(cmd *cobra.Command, args []string) error {
-			clientCtx, err := client.GetClientTxContext(cmd)
-			if err != nil {
-				return err
-			}
-
-			classInfosStr, err := cmd.Flags().GetString(FlagNftClassInfos)
-
-			var classUpdates []*types.UpdateClassForNFT
-			err = json.Unmarshal([]byte(classInfosStr), &classUpdates)
-			if err != nil {
-				return err
-			}
-
-			msg := types.NewMsgUpdateClassesForNFT(
-				classUpdates,
-				clientCtx.GetFromAddress().String(),
-			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
-
-			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
-		},
-	}
-
-	cmd.Flags().AddFlagSet(FsNftUpdateClasses)
-	_ = cmd.MarkFlagRequired(FlagNftClassInfos)
-	flags.AddTxFlagsToCmd(cmd)
-
-	return cmd
-}
-
-func GetCmdNftDepositToken() *cobra.Command {
-	cmd := &cobra.Command{
-		Use:  "deposit-token [space-id] [class-id] [token-id]",
+		Use:  "deposit [space-id] [class-id] [token-id]",
 		Long: "deposit an nft from layer1 to layer2",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft deposit-token [space-id] [class-id] [token-id]" +
+			"$ %s tx layer2 nft token deposit [space-id] [class-id] [token-id]" +
 				version.AppName),
 		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -237,9 +273,6 @@ func GetCmdNftDepositToken() *cobra.Command {
 				args[2],
 				clientCtx.GetFromAddress().String(),
 			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
@@ -250,16 +283,16 @@ func GetCmdNftDepositToken() *cobra.Command {
 	return cmd
 }
 
-func GetCmdNftWithdrawToken() *cobra.Command {
+func GetCmdNftTokenWithdraw() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "withdraw token [space-id] [class-id]",
+		Use:  "withdraw [space-id] [class-id] [token-id] ",
 		Long: "withdraw an nft from layer2 to layer1 and update its metadata",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft withdraw-token [space-id] [class-id] [token-id]" +
-				"--owner=<owner>" +
-				"--name=<name>" +
-				"--uri=<uri>" +
-				"--uri-hash=<uri-hash>" +
+			"$ %s tx layer2 nft token withdraw [space-id] [class-id] [token-id] " +
+				"--owner=<owner> " +
+				"--name=<name> " +
+				"--uri=<uri> " +
+				"--uri-hash=<uri-hash> " +
 				"--data=<data>" +
 				version.AppName),
 		Args: cobra.ExactArgs(3),
@@ -273,23 +306,28 @@ func GetCmdNftWithdrawToken() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			owner, err := cmd.Flags().GetString(FlagNftTokenOwner)
+
+			owner, err := cmd.Flags().GetString(FlagOwner)
 			if err != nil {
 				return nil
 			}
-			name, err := cmd.Flags().GetString(FlagNftTokenName)
+
+			name, err := cmd.Flags().GetString(FlagName)
 			if err != nil {
 				return nil
 			}
-			uri, err := cmd.Flags().GetString(FlagNftTokenUri)
+
+			uri, err := cmd.Flags().GetString(FlagUri)
 			if err != nil {
 				return nil
 			}
-			uriHash, err := cmd.Flags().GetString(FlagNftTokenUriHash)
+
+			uriHash, err := cmd.Flags().GetString(FlagUriHash)
 			if err != nil {
 				return nil
 			}
-			data, err := cmd.Flags().GetString(FlagNftTokenData)
+
+			data, err := cmd.Flags().GetString(FlagData)
 			if err != nil {
 				return nil
 			}
@@ -305,34 +343,33 @@ func GetCmdNftWithdrawToken() *cobra.Command {
 				data,
 				clientCtx.GetFromAddress().String(),
 			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
 
-	cmd.Flags().AddFlagSet(FsNftWithdrawToken)
-	_ = cmd.MarkFlagRequired(FlagNftTokenOwner)
-	_ = cmd.MarkFlagRequired(FlagNftTokenName)
-	_ = cmd.MarkFlagRequired(FlagNftTokenUri)
-	_ = cmd.MarkFlagRequired(FlagNftTokenUriHash)
-	_ = cmd.MarkFlagRequired(FlagNftTokenData)
+	cmd.Flags().AddFlagSet(FsNftTokenWithdraw)
+	_ = cmd.MarkFlagRequired(FlagOwner)
+	_ = cmd.MarkFlagRequired(FlagName)
+	_ = cmd.MarkFlagRequired(FlagUri)
+	_ = cmd.MarkFlagRequired(FlagUriHash)
+	_ = cmd.MarkFlagRequired(FlagData)
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }
 
-func GetCmdNftDepositClass() *cobra.Command {
+func GetCmdNftClassUpdate() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "deposit-class [space-id] [class-id] [recipient]",
-		Long: "deposit an nft class from layer1 to layer2",
+		Use:  "update [space-id]",
+		Long: "update class mappings for nft asset",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft deposit-class [space-id] [class-id] [recipient]" +
-				"--base-uri=<base-uri>" +
+			"$ %s tx layer2 nft class update " +
+				"--ids=token1,token2,token3 " +
+				"--uris=uri1,uri2,uri3 " +
+				"--owners=owner1,owner2,owner3" +
 				version.AppName),
-		Args: cobra.ExactArgs(2),
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -344,7 +381,83 @@ func GetCmdNftDepositClass() *cobra.Command {
 				return err
 			}
 
-			baseUri, err := cmd.Flags().GetString(FlagNftClassBaseUri)
+			ids, err := cmd.Flags().GetString(FlagIds)
+			if err != nil {
+				return err
+			}
+
+			uris, err := cmd.Flags().GetString(FlagIds)
+			if err != nil {
+				return err
+			}
+
+			owners, err := cmd.Flags().GetString(FlagOwners)
+			if err != nil {
+				return err
+			}
+
+			ids = strings.TrimSpace(ids)
+			idArray := strings.Split(ids, ",")
+
+			uris = strings.TrimSpace(uris)
+			uriArray := strings.Split(uris, ",")
+
+			owners = strings.TrimSpace(owners)
+			ownerArray := strings.Split(owners, ",")
+
+			if len(idArray) != len(ownerArray) || len(idArray) != len(uriArray) {
+				return fmt.Errorf("ids and owners length not match")
+			}
+
+			var classUpdates []types.UpdateClassForNFT
+			for i := 0; i < len(idArray); i++ {
+				classUpdates = append(classUpdates, types.UpdateClassForNFT{
+					Id:    idArray[i],
+					Uri:   uriArray[i],
+					Owner: ownerArray[i],
+				})
+			}
+
+			msg := types.NewMsgUpdateClassesForNFT(
+				spaceId,
+				classUpdates,
+				clientCtx.GetFromAddress().String(),
+			)
+
+			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
+		},
+	}
+
+	cmd.Flags().AddFlagSet(FsNftClassUpdate)
+	_ = cmd.MarkFlagRequired(FlagIds)
+	_ = cmd.MarkFlagRequired(FlagUris)
+	_ = cmd.MarkFlagRequired(FlagOwners)
+	flags.AddTxFlagsToCmd(cmd)
+
+	return cmd
+}
+
+func GetCmdNftClassDeposit() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:  "deposit [space-id] [class-id] [recipient]",
+		Long: "deposit an nft class from layer1 to layer2",
+		Example: fmt.Sprintf(
+			"$ %s tx layer2 nft class deposit [space-id] [class-id] [recipient] " +
+				"--uri=<uri>" +
+				version.AppName),
+		Args: cobra.ExactArgs(3),
+		RunE: func(cmd *cobra.Command, args []string) error {
+			clientCtx, err := client.GetClientTxContext(cmd)
+			if err != nil {
+				return err
+			}
+
+			spaceId, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			baseUri, err := cmd.Flags().GetString(FlagUri)
 			if err != nil {
 				return nil
 			}
@@ -356,56 +469,55 @@ func GetCmdNftDepositClass() *cobra.Command {
 				baseUri,
 				clientCtx.GetFromAddress().String(),
 			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
 
-	cmd.Flags().AddFlagSet(FsNftDepositClass)
-	_ = cmd.MarkFlagRequired(FlagNftClassBaseUri)
+	cmd.Flags().AddFlagSet(FsNftClassDeposit)
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd
 }
 
-func GetCmdNftWithdrawClass() *cobra.Command {
+func GetCmdNftClassWithdraw() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "withdraw-class [class-id]",
+		Use:  "withdraw [space-id] [class-id]",
 		Long: "withdraw an nft class from layer2 to layer1",
 		Example: fmt.Sprintf(
 			"$ %s tx layer2 nft withdraw-class [class-id]" +
 				"--owner=<owner>" +
 				version.AppName),
-		Args: cobra.ExactArgs(2),
+		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			owner, err := cmd.Flags().GetString(FlagNftClassOwner)
+			spaceId, err := strconv.ParseUint(args[0], 10, 64)
+			if err != nil {
+				return err
+			}
+
+			owner, err := cmd.Flags().GetString(FlagOwner)
 			if err != nil {
 				return nil
 			}
 
 			msg := types.NewMsgWithdrawClassForNFT(
+				spaceId,
 				args[0],
 				owner,
 				clientCtx.GetFromAddress().String(),
 			)
-			if err := msg.ValidateBasic(); err != nil {
-				return err
-			}
 
 			return tx.GenerateOrBroadcastTxCLI(clientCtx, cmd.Flags(), msg)
 		},
 	}
 
-	cmd.Flags().AddFlagSet(FsNftWithdrawClass)
-	_ = cmd.MarkFlagRequired(FlagNftClassOwner)
+	cmd.Flags().AddFlagSet(FsNftClassWithdraw)
+	_ = cmd.MarkFlagRequired(FlagOwner)
 	flags.AddTxFlagsToCmd(cmd)
 
 	return cmd

@@ -10,26 +10,26 @@ import (
 	"github.com/bianjieai/iritamod/modules/layer2/types"
 )
 
-//go:embed mock_data/badKids.json
+//go:embed mock_data.json
 var badKidsRawData []byte //nolint: golint
 
-type MockNFTKeeper struct {
-	store map[string]*MockClass
+type NFTKeeper struct {
+	store map[string]*Class
 }
 
-func NewMockNFTKeeper() *MockNFTKeeper {
-	var badKids MockClass
+func NewNFTKeeper() *NFTKeeper {
+	var badKids Class
 	json.Unmarshal(badKidsRawData, &badKids)
 
-	store := make(map[string]*MockClass)
+	store := make(map[string]*Class)
 	store[badKids.ClassId] = &badKids
 
-	return &MockNFTKeeper{
+	return &NFTKeeper{
 		store: store,
 	}
 }
 
-type MockNFT struct {
+type NFT struct {
 	TokenId      string `json:"token_id,omitempty"`
 	TokenName    string `json:"token_name,omitempty"`
 	TokenUri     string `json:"token_uri,omitempty"`
@@ -38,14 +38,14 @@ type MockNFT struct {
 	Owner        string `json:"owner,omitempty"`
 }
 
-type MockClass struct {
-	ClassId        string              `json:"class_id,omitempty"`
-	TokenIds       map[string]*MockNFT `json:"token_ids,omitempty"`
-	Creator        string              `json:"creator,omitempty"`
-	MintRestricted bool                `json:"mint_restricted,omitempty"`
+type Class struct {
+	ClassId        string          `json:"class_id,omitempty"`
+	TokenIds       map[string]*NFT `json:"token_ids,omitempty"`
+	Owner          string          `json:"owner,omitempty"`
+	MintRestricted bool            `json:"mint_restricted,omitempty"`
 }
 
-func (mk *MockNFTKeeper) SaveNFT(_ sdk.Context, classID, tokenID, tokenNm, tokenURI, tokenUriHash, tokenData string, receiver sdk.AccAddress) error {
+func (mk *NFTKeeper) SaveNFT(_ sdk.Context, classID, tokenID, tokenNm, tokenURI, tokenUriHash, tokenData string, receiver sdk.AccAddress) error {
 	class, ok := mk.store[classID]
 	if !ok {
 		return errors.New("class not found")
@@ -55,7 +55,7 @@ func (mk *MockNFTKeeper) SaveNFT(_ sdk.Context, classID, tokenID, tokenNm, token
 		return errors.New("token already exists")
 	}
 
-	nft := MockNFT{
+	nft := NFT{
 		TokenId:      tokenID,
 		TokenName:    tokenNm,
 		TokenUri:     tokenURI,
@@ -68,7 +68,7 @@ func (mk *MockNFTKeeper) SaveNFT(_ sdk.Context, classID, tokenID, tokenNm, token
 	return nil
 }
 
-func (mk *MockNFTKeeper) UpdateNFT(_ sdk.Context, classID, tokenID, tokenNm, tokenURI, tokenUriHash, tokenData string, owner sdk.AccAddress) error {
+func (mk *NFTKeeper) UpdateNFT(_ sdk.Context, classID, tokenID, tokenNm, tokenURI, tokenUriHash, tokenData string, owner sdk.AccAddress) error {
 	class, ok := mk.store[classID]
 	if !ok {
 		return errors.New("class not found")
@@ -91,7 +91,7 @@ func (mk *MockNFTKeeper) UpdateNFT(_ sdk.Context, classID, tokenID, tokenNm, tok
 	return nil
 }
 
-func (mk *MockNFTKeeper) RemoveNFT(_ sdk.Context, classID, tokenID string, owner sdk.AccAddress) error {
+func (mk *NFTKeeper) RemoveNFT(_ sdk.Context, classID, tokenID string, owner sdk.AccAddress) error {
 	class, ok := mk.store[classID]
 	if !ok {
 		return errors.New("class not found")
@@ -110,7 +110,7 @@ func (mk *MockNFTKeeper) RemoveNFT(_ sdk.Context, classID, tokenID string, owner
 	return nil
 }
 
-func (mk *MockNFTKeeper) TransferNFT(_ sdk.Context, classID, tokenID string, srcOwner, dstOwner sdk.AccAddress) error {
+func (mk *NFTKeeper) TransferNFT(_ sdk.Context, classID, tokenID string, srcOwner, dstOwner sdk.AccAddress) error {
 	class, ok := mk.store[classID]
 	if !ok {
 		return errors.New("class not found")
@@ -129,27 +129,27 @@ func (mk *MockNFTKeeper) TransferNFT(_ sdk.Context, classID, tokenID string, src
 	return nil
 }
 
-func (mk *MockNFTKeeper) TransferClass(_ sdk.Context, classID string, srcOwner, dstOwner sdk.AccAddress) error {
+func (mk *NFTKeeper) TransferClass(_ sdk.Context, classID string, srcOwner, dstOwner sdk.AccAddress) error {
 	class, ok := mk.store[classID]
 	if !ok {
 		return errors.New("class not found")
 	}
 
-	if class.Creator != srcOwner.String() {
+	if class.Owner != srcOwner.String() {
 		return errors.New("class not owned by this owner")
 	}
 
-	class.Creator = dstOwner.String()
+	class.Owner = dstOwner.String()
 	return nil
 }
 
-func (mk *MockNFTKeeper) UpdateClassMintRestricted(_ sdk.Context, classID string, mintRestricted bool, owner sdk.AccAddress) error {
+func (mk *NFTKeeper) UpdateClassMintRestricted(_ sdk.Context, classID string, mintRestricted bool, owner sdk.AccAddress) error {
 	class, ok := mk.store[classID]
 	if !ok {
 		return errors.New("class not found")
 	}
 
-	if class.Creator != owner.String() {
+	if class.Owner != owner.String() {
 		return errors.New("class not owned by this owner")
 	}
 
@@ -157,7 +157,7 @@ func (mk *MockNFTKeeper) UpdateClassMintRestricted(_ sdk.Context, classID string
 	return nil
 }
 
-func (mk *MockNFTKeeper) GetClass(_ sdk.Context, classID string) (types.Class, error) {
+func (mk *NFTKeeper) GetClass(_ sdk.Context, classID string) (types.Class, error) {
 	class, ok := mk.store[classID]
 	if !ok {
 		return nil, errors.New("class not found")
@@ -166,7 +166,7 @@ func (mk *MockNFTKeeper) GetClass(_ sdk.Context, classID string) (types.Class, e
 	return class, nil
 }
 
-func (mk *MockNFTKeeper) GetNFT(_ sdk.Context, classID, tokenID string) (types.NFT, error) {
+func (mk *NFTKeeper) GetNFT(_ sdk.Context, classID, tokenID string) (types.NFT, error) {
 	class, ok := mk.store[classID]
 	if !ok {
 		return nil, errors.New("class not found")
@@ -180,19 +180,19 @@ func (mk *MockNFTKeeper) GetNFT(_ sdk.Context, classID, tokenID string) (types.N
 	return nft, nil
 }
 
-func (mc *MockClass) GetID() string {
+func (mc *Class) GetID() string {
 	return mc.ClassId
 }
 
-func (mc *MockClass) GetCreator() string {
-	return mc.Creator
+func (mc *Class) GetOwner() string {
+	return mc.Owner
 }
 
-func (mc *MockClass) GetMintRestricted() bool {
+func (mc *Class) GetMintRestricted() bool {
 	return mc.MintRestricted
 }
 
-func (mn *MockNFT) GetOwner() sdk.AccAddress {
+func (mn *NFT) GetOwner() sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(mn.Owner)
 	return addr
 }

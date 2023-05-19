@@ -24,7 +24,7 @@ func (k Keeper) ClassForNFT(goCtx context.Context, req *types.QueryClassForNFTRe
 }
 
 func (k Keeper) ClassesForNFT(goCtx context.Context, req *types.QueryClassesForNFTRequest) (*types.QueryClassesForNFTResponse, error) {
-	var classes []*types.ClassForNFT
+	var classes []types.ClassForNFT
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	pageResp, err := query.Paginate(k.getClassStore(ctx), req.Pagination, func(key []byte, value []byte) error {
@@ -33,7 +33,7 @@ func (k Keeper) ClassesForNFT(goCtx context.Context, req *types.QueryClassesForN
 			return err
 		}
 
-		classes = append(classes, &class)
+		classes = append(classes, class)
 		return nil
 	})
 	if err != nil {
@@ -49,7 +49,7 @@ func (k Keeper) ClassesForNFT(goCtx context.Context, req *types.QueryClassesForN
 func (k Keeper) TokenForNFT(goCtx context.Context, req *types.QueryTokenForNFTRequest) (*types.QueryTokenForNFTResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	owner, err := k.GetTokenForNFT(ctx, req.SpaceId, req.ClassId, req.NftId)
+	owner, err := k.GetTokenForNFT(ctx, req.SpaceId, req.ClassId, req.TokenId)
 	if err != nil {
 		return nil, err
 	}
@@ -59,17 +59,17 @@ func (k Keeper) TokenForNFT(goCtx context.Context, req *types.QueryTokenForNFTRe
 }
 
 func (k Keeper) CollectionForNFT(goCtx context.Context, req *types.QueryCollectionForNFTRequest) (*types.QueryCollectionForNFTResponse, error) {
-	var nfts []*types.TokenForNFT
+	var tokens []types.TokenForNFT
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	pageResp, err := query.Paginate(k.getCollectionStore(ctx, req.SpaceId, req.ClassId), req.Pagination, func(key []byte, value []byte) error {
 		tokenId := string(key)
 		owner := sdk.AccAddress(value)
-		nft := types.TokenForNFT{
+		token := types.TokenForNFT{
 			Id:    tokenId,
 			Owner: owner.String(),
 		}
-		nfts = append(nfts, &nft)
+		tokens = append(tokens, token)
 
 		return nil
 	})
@@ -79,7 +79,7 @@ func (k Keeper) CollectionForNFT(goCtx context.Context, req *types.QueryCollecti
 
 	return &types.QueryCollectionForNFTResponse{
 		ClassId:    req.ClassId,
-		Nfts:       nfts,
+		Tokens:     tokens,
 		Pagination: pageResp,
 	}, nil
 }
@@ -90,7 +90,7 @@ func (k Keeper) TokensOfOwnerForNFT(goCtx context.Context, req *types.QueryToken
 		return nil, err
 	}
 
-	var nfts []*types.TokenForNFTByOwner
+	var tokens []types.TokenForNFTByOwner
 	var pageRes *query.PageResponse
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -99,12 +99,12 @@ func (k Keeper) TokensOfOwnerForNFT(goCtx context.Context, req *types.QueryToken
 		if pageRes, err = query.Paginate(k.getNFTsOfOwnerStore(ctx, owner), req.Pagination, func(key []byte, _ []byte) error {
 			spaceId, classId, tokenId := types.ParseNFTsOfOwnerAllStoreKey(key)
 
-			nft := types.TokenForNFTByOwner{
+			token := types.TokenForNFTByOwner{
 				SpaceId: spaceId,
 				ClassId: classId,
 				TokenId: tokenId,
 			}
-			nfts = append(nfts, &nft)
+			tokens = append(tokens, token)
 			return nil
 		}); err != nil {
 			return nil, err
@@ -113,24 +113,24 @@ func (k Keeper) TokensOfOwnerForNFT(goCtx context.Context, req *types.QueryToken
 		if pageRes, err = query.Paginate(k.getNFTsOfOwnerBySpaceStore(ctx, owner, req.SpaceId), req.Pagination, func(key []byte, _ []byte) error {
 			classId, tokenId := types.ParseNFTsOfOwnerBySpaceStoreKey(key)
 
-			nft := types.TokenForNFTByOwner{
+			token := types.TokenForNFTByOwner{
 				SpaceId: req.SpaceId,
 				ClassId: classId,
 				TokenId: tokenId,
 			}
-			nfts = append(nfts, &nft)
+			tokens = append(tokens, token)
 			return nil
 		}); err != nil {
 			return nil, err
 		}
 	case req.SpaceId > 0 && len(req.ClassId) > 0:
 		if pageRes, err = query.Paginate(k.getNFTsOfOwnerBySpaceAndClassStore(ctx, owner, req.SpaceId, req.ClassId), req.Pagination, func(key []byte, _ []byte) error {
-			nft := types.TokenForNFTByOwner{
+			token := types.TokenForNFTByOwner{
 				SpaceId: req.SpaceId,
 				ClassId: req.ClassId,
 				TokenId: string(key),
 			}
-			nfts = append(nfts, &nft)
+			tokens = append(tokens, token)
 			return nil
 		}); err != nil {
 			return nil, err
@@ -138,7 +138,7 @@ func (k Keeper) TokensOfOwnerForNFT(goCtx context.Context, req *types.QueryToken
 	}
 
 	return &types.QueryTokensOfOwnerForNFTResponse{
-		Tokens:     nfts,
+		Tokens:     tokens,
 		Pagination: pageRes,
 	}, nil
 }

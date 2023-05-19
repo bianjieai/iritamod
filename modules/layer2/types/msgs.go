@@ -158,11 +158,11 @@ func (msg MsgCreateL2BlockHeader) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgCreateNFTs is a constructor function for MsgCreateNFTs
-func NewMsgCreateNFTs(spaceId uint64, classId string, nfts []*TokenForNFT, sender string) *MsgCreateNFTs {
+func NewMsgCreateNFTs(spaceId uint64, classId string, tokens []TokenForNFT, sender string) *MsgCreateNFTs {
 	return &MsgCreateNFTs{
 		SpaceId: spaceId,
 		ClassId: classId,
-		Nfts:    nfts,
+		Tokens:  tokens,
 		Sender:  sender,
 	}
 }
@@ -184,7 +184,7 @@ func (msg MsgCreateNFTs) ValidateBasic() error {
 		return err
 	}
 
-	if err := ValidateTokensForNFT(msg.Nfts); err != nil {
+	if err := ValidateTokensForNFT(msg.Tokens); err != nil {
 		return err
 	}
 
@@ -204,11 +204,11 @@ func (msg MsgCreateNFTs) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateNFTs is a constructor function for MsgUpdateNFTs
-func NewMsgUpdateNFTs(spaceId uint64, classId string, nfts []*TokenForNFT, sender string) *MsgUpdateNFTs {
+func NewMsgUpdateNFTs(spaceId uint64, classId string, tokens []TokenForNFT, sender string) *MsgUpdateNFTs {
 	return &MsgUpdateNFTs{
 		SpaceId: spaceId,
 		ClassId: classId,
-		Nfts:    nfts,
+		Tokens:  tokens,
 		Sender:  sender,
 	}
 }
@@ -230,7 +230,7 @@ func (msg MsgUpdateNFTs) ValidateBasic() error {
 		return err
 	}
 
-	if err := ValidateTokensForNFT(msg.Nfts); err != nil {
+	if err := ValidateTokensForNFT(msg.Tokens); err != nil {
 		return err
 	}
 
@@ -250,12 +250,12 @@ func (msg MsgUpdateNFTs) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgDeleteNFTs is a constructor function for MsgDeleteNFTs
-func NewMsgDeleteNFTs(spaceId uint64, classId string, nftIds []string, sender string) *MsgDeleteNFTs {
+func NewMsgDeleteNFTs(spaceId uint64, classId string, tokenIds []string, sender string) *MsgDeleteNFTs {
 	return &MsgDeleteNFTs{
-		SpaceId: spaceId,
-		ClassId: classId,
-		NftIds:  nftIds,
-		Sender:  sender,
+		SpaceId:  spaceId,
+		ClassId:  classId,
+		TokenIds: tokenIds,
+		Sender:   sender,
 	}
 }
 
@@ -278,7 +278,7 @@ func (msg MsgDeleteNFTs) ValidateBasic() error {
 
 	// validate that the tokenId is not duplicated.
 	seenIDs := make(map[string]bool)
-	for _, tokenId := range msg.NftIds {
+	for _, tokenId := range msg.TokenIds {
 		if seenIDs[tokenId] {
 			return sdkerrors.Wrapf(ErrDuplicateTokenIdsForNFT, "token id %s is duplicated", tokenId)
 		}
@@ -301,8 +301,9 @@ func (msg MsgDeleteNFTs) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgUpdateClassesForNFT is a constructor function for MsgUpdateClassesForNFT
-func NewMsgUpdateClassesForNFT(updateClasses []*UpdateClassForNFT, sender string) *MsgUpdateClassesForNFT {
+func NewMsgUpdateClassesForNFT(spaceId uint64, updateClasses []UpdateClassForNFT, sender string) *MsgUpdateClassesForNFT {
 	return &MsgUpdateClassesForNFT{
+		SpaceId:            spaceId,
 		ClassUpdatesForNft: updateClasses,
 		Sender:             sender,
 	}
@@ -376,7 +377,7 @@ func (msg MsgDepositClassForNFT) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgWithdrawClassForNFT is a constructor function for NewMsgWithdrawClassForNFT
-func NewMsgWithdrawClassForNFT(classId, owner, sender string) *MsgWithdrawClassForNFT {
+func NewMsgWithdrawClassForNFT(spaceId uint64, classId, owner, sender string) *MsgWithdrawClassForNFT {
 	return &MsgWithdrawClassForNFT{
 		ClassId: classId,
 		Owner:   owner,
@@ -421,7 +422,7 @@ func NewMsgDepositTokenForNFT(spaceId uint64, classId, tokenId string, sender st
 	return &MsgDepositTokenForNFT{
 		SpaceId: spaceId,
 		ClassId: classId,
-		NftId:   tokenId,
+		TokenId: tokenId,
 		Sender:  sender,
 	}
 }
@@ -443,7 +444,7 @@ func (msg MsgDepositTokenForNFT) ValidateBasic() error {
 		return err
 	}
 
-	if err := ValidateTokenIdForNFT(msg.NftId); err != nil {
+	if err := ValidateTokenIdForNFT(msg.TokenId); err != nil {
 		return err
 	}
 
@@ -466,7 +467,7 @@ func NewMsgWithdrawTokenForNFT(spaceId uint64, classId, tokenId, owner, name, ur
 	return &MsgWithdrawTokenForNFT{
 		SpaceId: spaceId,
 		ClassId: classId,
-		NftId:   tokenId,
+		TokenId: tokenId,
 		Owner:   owner,
 		Name:    name,
 		Uri:     uri,
@@ -497,7 +498,7 @@ func (msg MsgWithdrawTokenForNFT) ValidateBasic() error {
 		return err
 	}
 
-	if err := ValidateTokenIdForNFT(msg.NftId); err != nil {
+	if err := ValidateTokenIdForNFT(msg.TokenId); err != nil {
 		return err
 	}
 	return nil

@@ -10,7 +10,7 @@ type NFT interface {
 
 type Class interface {
 	GetID() string
-	GetCreator() string
+	GetOwner() string
 	GetMintRestricted() bool
 }
 
