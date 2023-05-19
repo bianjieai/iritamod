@@ -3,7 +3,7 @@ package keeper_test
 func (s *TestSuite) TestCreateSpace() {
 	spaceName := "NewSpace"
 	spaceUri := "NewSpaceUri"
-	spaceId, err := s.keeper.CreateSpace(s.ctx, spaceName, spaceUri, accAvata)
+	spaceId, err := s.keeper.CreateL2Space(s.ctx, spaceName, spaceUri, accAvata)
 	s.Require().NoErrorf(err, "failed to create space")
 	s.Require().Equal(spaceId, uint64(2))
 
@@ -20,7 +20,7 @@ func (s *TestSuite) TestTransferSpace() {
 	s.Require().NoErrorf(err, "failed to get space")
 	s.Require().Equal(accAvata.String(), space.Owner)
 
-	err = s.keeper.TransferSpace(s.ctx, avataSpaceId, accAvata, accXvata)
+	err = s.keeper.TransferL2Space(s.ctx, avataSpaceId, accAvata, accXvata)
 	s.Require().NoErrorf(err, "failed to transfer space")
 
 	space, err = s.keeper.GetSpace(s.ctx, avataSpaceId)
@@ -31,7 +31,7 @@ func (s *TestSuite) TestTransferSpace() {
 func (s *TestSuite) TestCreateL2BlockHeader() {
 	height := uint64(1000)
 	header := "block header"
-	err := s.keeper.CreateBlockHeader(s.ctx, avataSpaceId, height, header, accAvata)
+	err := s.keeper.CreateL2BlockHeader(s.ctx, avataSpaceId, height, header, accAvata)
 	s.Require().NoErrorf(err, "failed to create block header")
 
 	resHeader, err := s.keeper.GetL2BlockHeader(s.ctx, avataSpaceId, height)

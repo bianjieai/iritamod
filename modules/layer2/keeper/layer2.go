@@ -13,8 +13,8 @@ import (
 	"github.com/bianjieai/iritamod/modules/perm"
 )
 
-// CreateSpace creates a new space
-func (k Keeper) CreateSpace(ctx sdk.Context, name, uri string, sender sdk.AccAddress) (uint64, error) {
+// CreateL2Space creates a new space
+func (k Keeper) CreateL2Space(ctx sdk.Context, name, uri string, sender sdk.AccAddress) (uint64, error) {
 	if !k.HasL2UserRole(ctx, sender) {
 		return 0, sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", sender)
 	}
@@ -35,8 +35,8 @@ func (k Keeper) CreateSpace(ctx sdk.Context, name, uri string, sender sdk.AccAdd
 	return spaceId, nil
 }
 
-// TransferSpace transfer the space ownership
-func (k Keeper) TransferSpace(ctx sdk.Context, spaceId uint64, from, to sdk.AccAddress) error {
+// TransferL2Space transfer the space ownership
+func (k Keeper) TransferL2Space(ctx sdk.Context, spaceId uint64, from, to sdk.AccAddress) error {
 	if !k.HasL2UserRole(ctx, from) {
 		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", from)
 	}
@@ -62,8 +62,8 @@ func (k Keeper) TransferSpace(ctx sdk.Context, spaceId uint64, from, to sdk.AccA
 	return nil
 }
 
-// CreateBlockHeader creates a layer2 block header record
-func (k Keeper) CreateBlockHeader(ctx sdk.Context, spaceId, height uint64, header string, addr sdk.AccAddress) error {
+// CreateL2BlockHeader creates a layer2 block header record
+func (k Keeper) CreateL2BlockHeader(ctx sdk.Context, spaceId, height uint64, header string, addr sdk.AccAddress) error {
 	if !k.HasL2UserRole(ctx, addr) {
 		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", addr)
 	}

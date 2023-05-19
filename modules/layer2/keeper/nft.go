@@ -8,10 +8,10 @@ import (
 	"github.com/bianjieai/iritamod/modules/layer2/types"
 )
 
-// CreateTokensForNFT batch create token mappings for nft
+// CreateNFTs batch create token mappings for nft
 // NOTE: it's allowed to create nft mappings without class mapping existence; think about a user transfer one nft
 // from layer1 to layer2, then layer2 to layer1. During this process, the class are never deposited.
-func (k Keeper) CreateTokensForNFT(ctx sdk.Context,
+func (k Keeper) CreateNFTs(ctx sdk.Context,
 	spaceId uint64,
 	classId string,
 	nfts []types.TokenForNFT,
@@ -41,7 +41,7 @@ func (k Keeper) CreateTokensForNFT(ctx sdk.Context,
 	return nil
 }
 
-func (k Keeper) UpdateTokensForNFT(ctx sdk.Context,
+func (k Keeper) UpdateNFTs(ctx sdk.Context,
 	spaceId uint64,
 	classId string,
 	nfts []types.TokenForNFT,
@@ -71,8 +71,8 @@ func (k Keeper) UpdateTokensForNFT(ctx sdk.Context,
 	return nil
 }
 
-// DeleteTokensForNFT delete a token mapping for nft
-func (k Keeper) DeleteTokensForNFT(ctx sdk.Context,
+// DeleteNFTs delete a token mapping for nft
+func (k Keeper) DeleteNFTs(ctx sdk.Context,
 	spaceId uint64,
 	classId string,
 	tokenIds []string,
@@ -106,9 +106,9 @@ func (k Keeper) DeleteTokensForNFT(ctx sdk.Context,
 	return nil
 }
 
-// UpdateL2ClassesForNFT updates class mappings for nft
+// UpdateClassesForNFT updates class mappings for nft
 // TODO： class id corresponding space id
-func (k Keeper) UpdateL2ClassesForNFT(ctx sdk.Context,
+func (k Keeper) UpdateClassesForNFT(ctx sdk.Context,
 	classUpdates []types.UpdateClassForNFT,
 	sender sdk.AccAddress) error {
 	if !k.HasL2UserRole(ctx, sender) {
@@ -135,7 +135,7 @@ func (k Keeper) UpdateL2ClassesForNFT(ctx sdk.Context,
 }
 
 // TODO： class id corresponding space id
-func (k Keeper) DepositL1ClassForNFT(ctx sdk.Context,
+func (k Keeper) DepositClassForNFT(ctx sdk.Context,
 	spaceId uint64,
 	classId,
 	baseUri string,
@@ -179,7 +179,7 @@ func (k Keeper) DepositL1ClassForNFT(ctx sdk.Context,
 }
 
 // TODO: add space id
-func (k Keeper) WithdrawL2ClassForNFT(ctx sdk.Context,
+func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
 	classId string,
 	owner,
 	sender sdk.AccAddress) error {
@@ -222,7 +222,7 @@ func (k Keeper) WithdrawL2ClassForNFT(ctx sdk.Context,
 	return nil
 }
 
-func (k Keeper) DepositL1TokenForNFT(ctx sdk.Context,
+func (k Keeper) DepositTokenForNFT(ctx sdk.Context,
 	spaceId uint64,
 	classId,
 	tokenId string,
@@ -247,7 +247,7 @@ func (k Keeper) DepositL1TokenForNFT(ctx sdk.Context,
 	return  k.nft.TransferNFT(ctx, classId, tokenId, sender, types.ModuleAccAddress)
 }
 
-func (k Keeper) WithdrawL2TokenForNFT(ctx sdk.Context,
+func (k Keeper) WithdrawTokenForNFT(ctx sdk.Context,
 	spaceId uint64,
 	classId,
 	tokenId,

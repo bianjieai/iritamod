@@ -85,7 +85,7 @@ func (s *TestSuite) prepareRoles() {
 }
 
 func (s *TestSuite) prepareLayer2() {
-	id, err := s.keeper.CreateSpace(s.ctx, avataSpaceName, avataSpaceUri, accAvata)
+	id, err := s.keeper.CreateL2Space(s.ctx, avataSpaceName, avataSpaceUri, accAvata)
 	s.Require().NoError(err)
 	s.Require().Equal(avataSpaceId, id)
 }
