@@ -18,6 +18,9 @@ service Msg {
   // DeleteNFTs defines a method for deleting NFT mappings on Layer2 module.
   rpc DeleteNFTs(MsgDeleteNFTs) returns (MsgDeleteNFTsResponse);
 
+  // UpdateClassesForNFT defines a method for updating NFT Class mappings on Layer2 module.
+  rpc UpdateClassesForNFT(MsgUpdateClassesForNFT) returns (MsgUpdateClassesForNFTResponse);
+
   // DepositClass defines a method for depositing Native NFT Class from Layer1 to Layer2
   rpc DepositClassForNFT(MsgDepositClassForNFT) returns (MsgDepositClassForNFTResponse);
 
@@ -36,8 +39,8 @@ service Msg {
   // TransferL2Space defines a method for transferring a Layer2 space
   rpc TransferL2Space(MsgTransferL2Space) returns (MsgTransferL2SpaceResponse);
 
-  // CreateL2Record defines a method for creating a Layer2 record
-  rpc CreateL2Record(MsgCreateL2Record) returns (MsgCreateL2RecordResponse);
+  // CreateL2BlockHeader defines a method for creating a Layer2 record
+  rpc CreateL2BlockHeader(MsgCreateL2BlockHeader) returns (MsgCreateL2BlockHeaderResponse);
 }
 
 // MsgCreateNFTs defines the Msg/CreateNFTs request type.
@@ -73,11 +76,22 @@ message MsgDeleteNFTs {
 // MsgDeleteNFTsResponse defines the Msg/DeleteNFTs response type.
 message MsgDeleteNFTsResponse {}
 
+// MsgUpdateClassesForNFT defines the Msg/UpdateClassesForNFT request type.
+message MsgUpdateClassesForNFT {
+  repeated UpdateClassForNFT class_updates_for_nft = 1;
+  string sender = 2;
+}
+
+// MsgUpdateClassesForNFTResponse defines the Msg/UpdateClassesForNFT response type.
+message MsgUpdateClassesForNFTResponse {}
+
 // MsgDepositClassForNFT defines the Msg/DepositClassForNFT request type.
 message MsgDepositClassForNFT {
-  string class_id = 1;
-  string base_uri = 2; // token_uri prefix
-  string sender = 3; // class_owner
+  uint64 space_id = 1;
+  string class_id = 2;
+  string base_uri = 3; // token_uri prefix
+  string recipient = 4; // class recipient
+  string sender = 5; // msg sender
 }
 
 // MsgDepositClassForNFTResponse defines the Msg/DepositClassForNFT response type.
@@ -122,7 +136,9 @@ message MsgWithdrawTokenForNFTResponse {}
 
 // MsgCreateL2Space defines the Msg/CreateL2Space request type.
 message MsgCreateL2Space {
-  string sender = 1;
+  string name = 1;
+  string uri = 2;
+  string sender = 3;
 }
 
 // MsgCreateL2SpaceResponse defines the Msg/CreateL2Space response type.
@@ -141,7 +157,7 @@ message MsgTransferL2Space {
 message MsgTransferL2SpaceResponse {}
 
 // MsgCreateL2Record defines the Msg/CreateL2Record request type.
-message MsgCreateL2Record {
+message MsgCreateL2BlockHeader {
   uint64 space_id = 1;
   uint64 height = 2;
   string header = 3;
@@ -149,4 +165,4 @@ message MsgCreateL2Record {
 }
 
 // MsgCreateL2RecordResponse defines the Msg/CreateL2Record response type.
-message MsgCreateL2RecordResponse {}
+message MsgCreateL2BlockHeaderResponse {}

@@ -8,19 +8,15 @@ option go_package = "github.com/bianjieai/iritamod/modules/layer2/types";
 // Space defines the space info of the layer2 module
 message Space {
   uint64 id = 1;
-  string owner = 2;
+  string name = 2;
+  string uri = 3;
+  string owner = 4;
 }
 
-message Record {
+message L2BlockHeader {
   uint64 space_id = 1;
   uint64 height = 2;
   string header = 3;
-}
-
-// MappingsForNFT defines all the mappings info of native NFT from layer2.
-message MappingsForNFT {
-  repeated ClassForNFT classes = 1  [ (gogoproto.nullable) = false ];
-  repeated CollectionForNFT collections = 2  [ (gogoproto.nullable) = false ];
 }
 
 // CollectionForNFT defines the collection info of native NFT from layer2.
@@ -34,7 +30,7 @@ message CollectionForNFT {
 message ClassForNFT {
   string id = 1;
   string owner = 2;
-  string baseUri = 3;
+  string base_uri = 3;
   bool layer1_mint_restricted = 4;
 }
 
@@ -44,4 +40,15 @@ message TokenForNFT {
   string owner = 2;
 }
 
+// UpdateClassForNFT defines the message for updating class mapping info.
+message UpdateClassForNFT {
+  string id = 1;
+  string uri = 2;
+  string owner = 3;
+}
 
+message TokenForNFTByOwner {
+  uint64 spaceId = 1;
+  string classId = 2;
+  string tokenId = 3;
+}

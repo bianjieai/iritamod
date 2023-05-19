@@ -1,4 +1,4 @@
-package expected_keeper
+package types
 
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -20,7 +20,7 @@ type NFTKeeper interface {
 	RemoveNFT(ctx sdk.Context, classID, tokenID string, owner sdk.AccAddress) error
 	TransferNFT(ctx sdk.Context, classID, tokenID string, srcOwner, dstOwner sdk.AccAddress) error
 	TransferClass(ctx sdk.Context, classID string, srcOwner, dstOwner sdk.AccAddress) error
-	UpdateClassMintRestricted(ctx sdk.Context, classID Class, mintRestricted bool, owner sdk.AccAddress) error
+	UpdateClassMintRestricted(ctx sdk.Context, classID string, mintRestricted bool, owner sdk.AccAddress) error
 
 	GetClass(ctx sdk.Context, classID string) (Class, error)
 	GetNFT(ctx sdk.Context, classID, tokenID string) (NFT, error)

@@ -32,8 +32,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 
 // QueryClassForNFTRequest is the request type for the Query/ClassForNFT RPC
 type QueryClassForNFTRequest struct {
-	ClassId    string             `protobuf:"bytes,1,opt,name=class_id,json=classId,proto3" json:"class_id,omitempty"`
-	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	ClassId string `protobuf:"bytes,1,opt,name=class_id,json=classId,proto3" json:"class_id,omitempty"`
 }
 
 func (m *QueryClassForNFTRequest) Reset()         { *m = QueryClassForNFTRequest{} }
@@ -74,13 +73,6 @@ func (m *QueryClassForNFTRequest) GetClassId() string {
 		return m.ClassId
 	}
 	return ""
-}
-
-func (m *QueryClassForNFTRequest) GetPagination() *query.PageRequest {
-	if m != nil {
-		return m.Pagination
-	}
-	return nil
 }
 
 // QueryClassForNFTResponse is the response type for the Query/ClassForNFT RPC
@@ -525,9 +517,8 @@ func (m *QueryTokensOfOwnerForNFTRequest) GetPagination() *query.PageRequest {
 
 // QueryTokensOfOwnerForNFTResponse is the response type for the Query/TokensOfOwnerForNFT RPC
 type QueryTokensOfOwnerForNFTResponse struct {
-	ClassId    string              `protobuf:"bytes,1,opt,name=class_id,json=classId,proto3" json:"class_id,omitempty"`
-	NftIds     []string            `protobuf:"bytes,2,rep,name=nft_ids,json=nftIds,proto3" json:"nft_ids,omitempty"`
-	Pagination *query.PageResponse `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Tokens     []*TokenForNFTByOwner `protobuf:"bytes,1,rep,name=tokens,proto3" json:"tokens,omitempty"`
+	Pagination *query.PageResponse   `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *QueryTokensOfOwnerForNFTResponse) Reset()         { *m = QueryTokensOfOwnerForNFTResponse{} }
@@ -563,16 +554,9 @@ func (m *QueryTokensOfOwnerForNFTResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QueryTokensOfOwnerForNFTResponse proto.InternalMessageInfo
 
-func (m *QueryTokensOfOwnerForNFTResponse) GetClassId() string {
+func (m *QueryTokensOfOwnerForNFTResponse) GetTokens() []*TokenForNFTByOwner {
 	if m != nil {
-		return m.ClassId
-	}
-	return ""
-}
-
-func (m *QueryTokensOfOwnerForNFTResponse) GetNftIds() []string {
-	if m != nil {
-		return m.NftIds
+		return m.Tokens
 	}
 	return nil
 }
@@ -872,7 +856,8 @@ func (m *QuerySpaceResponse) GetSpace() *Space {
 
 // QuerySpaceOfOwnerRequest is the request type for the Query/SpaceOfOwner RPC
 type QuerySpaceOfOwnerRequest struct {
-	Owner string `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	Owner      string             `protobuf:"bytes,1,opt,name=owner,proto3" json:"owner,omitempty"`
+	Pagination *query.PageRequest `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
 func (m *QuerySpaceOfOwnerRequest) Reset()         { *m = QuerySpaceOfOwnerRequest{} }
@@ -915,9 +900,16 @@ func (m *QuerySpaceOfOwnerRequest) GetOwner() string {
 	return ""
 }
 
+func (m *QuerySpaceOfOwnerRequest) GetPagination() *query.PageRequest {
+	if m != nil {
+		return m.Pagination
+	}
+	return nil
+}
+
 // QuerySpaceOfOwnerResponse is the response type for the Query/SpaceOfOwner RPC
 type QuerySpaceOfOwnerResponse struct {
-	SpaceIds   []uint64            `protobuf:"varint,1,rep,packed,name=space_ids,json=spaceIds,proto3" json:"space_ids,omitempty"`
+	Spaces     []*Space            `protobuf:"bytes,1,rep,name=spaces,proto3" json:"spaces,omitempty"`
 	Pagination *query.PageResponse `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 }
 
@@ -954,9 +946,9 @@ func (m *QuerySpaceOfOwnerResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_QuerySpaceOfOwnerResponse proto.InternalMessageInfo
 
-func (m *QuerySpaceOfOwnerResponse) GetSpaceIds() []uint64 {
+func (m *QuerySpaceOfOwnerResponse) GetSpaces() []*Space {
 	if m != nil {
-		return m.SpaceIds
+		return m.Spaces
 	}
 	return nil
 }
@@ -969,23 +961,23 @@ func (m *QuerySpaceOfOwnerResponse) GetPagination() *query.PageResponse {
 }
 
 // QueryRecordRequest is the request type for the Query/Record RPC
-type QueryRecordRequest struct {
+type QueryL2BlockHeaderRequest struct {
 	SpaceId uint64 `protobuf:"varint,1,opt,name=space_id,json=spaceId,proto3" json:"space_id,omitempty"`
 	Height  uint64 `protobuf:"varint,2,opt,name=height,proto3" json:"height,omitempty"`
 }
 
-func (m *QueryRecordRequest) Reset()         { *m = QueryRecordRequest{} }
-func (m *QueryRecordRequest) String() string { return proto.CompactTextString(m) }
-func (*QueryRecordRequest) ProtoMessage()    {}
-func (*QueryRecordRequest) Descriptor() ([]byte, []int) {
+func (m *QueryL2BlockHeaderRequest) Reset()         { *m = QueryL2BlockHeaderRequest{} }
+func (m *QueryL2BlockHeaderRequest) String() string { return proto.CompactTextString(m) }
+func (*QueryL2BlockHeaderRequest) ProtoMessage()    {}
+func (*QueryL2BlockHeaderRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_253be56ab385642c, []int{18}
 }
-func (m *QueryRecordRequest) XXX_Unmarshal(b []byte) error {
+func (m *QueryL2BlockHeaderRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryRecordRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryL2BlockHeaderRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryRecordRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryL2BlockHeaderRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -995,26 +987,26 @@ func (m *QueryRecordRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, 
 		return b[:n], nil
 	}
 }
-func (m *QueryRecordRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryRecordRequest.Merge(m, src)
+func (m *QueryL2BlockHeaderRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryL2BlockHeaderRequest.Merge(m, src)
 }
-func (m *QueryRecordRequest) XXX_Size() int {
+func (m *QueryL2BlockHeaderRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryRecordRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryRecordRequest.DiscardUnknown(m)
+func (m *QueryL2BlockHeaderRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryL2BlockHeaderRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryRecordRequest proto.InternalMessageInfo
+var xxx_messageInfo_QueryL2BlockHeaderRequest proto.InternalMessageInfo
 
-func (m *QueryRecordRequest) GetSpaceId() uint64 {
+func (m *QueryL2BlockHeaderRequest) GetSpaceId() uint64 {
 	if m != nil {
 		return m.SpaceId
 	}
 	return 0
 }
 
-func (m *QueryRecordRequest) GetHeight() uint64 {
+func (m *QueryL2BlockHeaderRequest) GetHeight() uint64 {
 	if m != nil {
 		return m.Height
 	}
@@ -1022,22 +1014,22 @@ func (m *QueryRecordRequest) GetHeight() uint64 {
 }
 
 // QueryRecordResponse is the response type for the Query/Record RPC
-type QueryRecordResponse struct {
+type QueryL2BlockHeaderResponse struct {
 	Header string `protobuf:"bytes,2,opt,name=header,proto3" json:"header,omitempty"`
 }
 
-func (m *QueryRecordResponse) Reset()         { *m = QueryRecordResponse{} }
-func (m *QueryRecordResponse) String() string { return proto.CompactTextString(m) }
-func (*QueryRecordResponse) ProtoMessage()    {}
-func (*QueryRecordResponse) Descriptor() ([]byte, []int) {
+func (m *QueryL2BlockHeaderResponse) Reset()         { *m = QueryL2BlockHeaderResponse{} }
+func (m *QueryL2BlockHeaderResponse) String() string { return proto.CompactTextString(m) }
+func (*QueryL2BlockHeaderResponse) ProtoMessage()    {}
+func (*QueryL2BlockHeaderResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_253be56ab385642c, []int{19}
 }
-func (m *QueryRecordResponse) XXX_Unmarshal(b []byte) error {
+func (m *QueryL2BlockHeaderResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *QueryRecordResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *QueryL2BlockHeaderResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_QueryRecordResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_QueryL2BlockHeaderResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalToSizedBuffer(b)
@@ -1047,19 +1039,19 @@ func (m *QueryRecordResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte,
 		return b[:n], nil
 	}
 }
-func (m *QueryRecordResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_QueryRecordResponse.Merge(m, src)
+func (m *QueryL2BlockHeaderResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_QueryL2BlockHeaderResponse.Merge(m, src)
 }
-func (m *QueryRecordResponse) XXX_Size() int {
+func (m *QueryL2BlockHeaderResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *QueryRecordResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_QueryRecordResponse.DiscardUnknown(m)
+func (m *QueryL2BlockHeaderResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_QueryL2BlockHeaderResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_QueryRecordResponse proto.InternalMessageInfo
+var xxx_messageInfo_QueryL2BlockHeaderResponse proto.InternalMessageInfo
 
-func (m *QueryRecordResponse) GetHeader() string {
+func (m *QueryL2BlockHeaderResponse) GetHeader() string {
 	if m != nil {
 		return m.Header
 	}
@@ -1085,80 +1077,81 @@ func init() {
 	proto.RegisterType((*QuerySpaceResponse)(nil), "iritamod.layer2.v1.QuerySpaceResponse")
 	proto.RegisterType((*QuerySpaceOfOwnerRequest)(nil), "iritamod.layer2.v1.QuerySpaceOfOwnerRequest")
 	proto.RegisterType((*QuerySpaceOfOwnerResponse)(nil), "iritamod.layer2.v1.QuerySpaceOfOwnerResponse")
-	proto.RegisterType((*QueryRecordRequest)(nil), "iritamod.layer2.v1.QueryRecordRequest")
-	proto.RegisterType((*QueryRecordResponse)(nil), "iritamod.layer2.v1.QueryRecordResponse")
+	proto.RegisterType((*QueryL2BlockHeaderRequest)(nil), "iritamod.layer2.v1.QueryL2BlockHeaderRequest")
+	proto.RegisterType((*QueryL2BlockHeaderResponse)(nil), "iritamod.layer2.v1.QueryL2BlockHeaderResponse")
 }
 
 func init() { proto.RegisterFile("layer2/v1/query.proto", fileDescriptor_253be56ab385642c) }
 
 var fileDescriptor_253be56ab385642c = []byte{
-	// 1046 bytes of a gzipped FileDescriptorProto
+	// 1058 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x97, 0xcf, 0x6f, 0x1b, 0x45,
-	0x14, 0xc7, 0x33, 0xf1, 0x8f, 0x24, 0x2f, 0x2d, 0x82, 0xe9, 0xaf, 0x64, 0xdb, 0x3a, 0x61, 0xd5,
-	0x36, 0xa5, 0x24, 0x3b, 0x8d, 0x03, 0x85, 0xb4, 0x2a, 0x88, 0x56, 0x2d, 0x8a, 0x84, 0x28, 0x35,
-	0x85, 0x03, 0x97, 0x6a, 0xed, 0x1d, 0x6f, 0x16, 0xec, 0x1d, 0x77, 0x67, 0x5d, 0x14, 0x45, 0xbe,
-	0x20, 0x21, 0x8e, 0x20, 0x7a, 0xe0, 0x82, 0xc4, 0x15, 0x09, 0x71, 0x47, 0x9c, 0x38, 0x72, 0xac,
-	0xc4, 0x85, 0x23, 0x4a, 0xf8, 0x27, 0xb8, 0xa1, 0x9d, 0x99, 0xcd, 0xee, 0xda, 0xb3, 0x6b, 0xbb,
-	0xed, 0xad, 0xe3, 0x79, 0x3f, 0x3e, 0xef, 0xfb, 0x66, 0xdf, 0x6b, 0xe0, 0x54, 0xc7, 0xde, 0xa3,
-	0x41, 0x9d, 0x3c, 0xde, 0x24, 0x8f, 0xfa, 0x34, 0xd8, 0xb3, 0x7a, 0x01, 0x0b, 0x19, 0xc6, 0x5e,
-	0xe0, 0x85, 0x76, 0x97, 0x39, 0x96, 0xbc, 0xb7, 0x1e, 0x6f, 0x1a, 0x27, 0x5d, 0xe6, 0x32, 0x71,
-	0x4d, 0xa2, 0x7f, 0x49, 0x4b, 0xe3, 0x9c, 0xcb, 0x98, 0xdb, 0xa1, 0xc4, 0xee, 0x79, 0xc4, 0xf6,
-	0x7d, 0x16, 0xda, 0xa1, 0xc7, 0x7c, 0xae, 0x6e, 0x4f, 0x27, 0xe1, 0x55, 0x20, 0xf9, 0xfb, 0xf9,
-	0x16, 0xe3, 0x5d, 0xc6, 0x65, 0x4e, 0xd2, 0xb3, 0x5d, 0xcf, 0x17, 0x7e, 0xf2, 0xda, 0x64, 0x70,
-	0xe6, 0x7e, 0x74, 0x73, 0xbb, 0x63, 0x73, 0x7e, 0x97, 0x05, 0x1f, 0xde, 0x7d, 0xd0, 0xa0, 0x8f,
-	0xfa, 0x94, 0x87, 0x78, 0x19, 0xe6, 0x5b, 0xd1, 0xaf, 0x0f, 0x3d, 0x67, 0x09, 0xad, 0xa2, 0xcb,
-	0x0b, 0x8d, 0x39, 0x71, 0xde, 0x71, 0xf0, 0x36, 0x40, 0x12, 0x69, 0x69, 0x76, 0x15, 0x5d, 0x5e,
-	0xac, 0x2f, 0x5b, 0x32, 0x93, 0x25, 0xab, 0xfb, 0xc8, 0x76, 0xa9, 0x8a, 0xd4, 0x48, 0x19, 0x9b,
-	0xf7, 0x61, 0x69, 0x34, 0x21, 0xef, 0x31, 0x9f, 0x53, 0xfc, 0x26, 0x54, 0x44, 0x06, 0x91, 0x6e,
-	0xb1, 0xbe, 0x62, 0x8d, 0x6a, 0x63, 0xa5, 0xfd, 0xa4, 0xb5, 0xf9, 0x29, 0x2c, 0x27, 0x21, 0xe9,
-	0x50, 0x15, 0x59, 0x54, 0x34, 0x0d, 0xea, 0x13, 0x04, 0x86, 0x2e, 0xb0, 0xa2, 0xdd, 0x06, 0xa9,
-	0x07, 0x8d, 0x78, 0x4b, 0x93, 0xf0, 0xc6, 0xf6, 0xf8, 0xba, 0x46, 0x3f, 0x43, 0x07, 0x25, 0x53,
-	0x65, 0xa8, 0xda, 0xaa, 0x63, 0x0f, 0xd8, 0x17, 0xd4, 0x1f, 0xe9, 0x18, 0xef, 0xd9, 0x2d, 0x1a,
-	0x77, 0xac, 0xdc, 0x98, 0x13, 0xe7, 0x1d, 0x27, 0xd3, 0xcc, 0xd9, 0x6c, 0x33, 0x4f, 0x41, 0xd5,
-	0x6f, 0x87, 0xd1, 0x45, 0x49, 0x5c, 0x54, 0xfc, 0x76, 0xb8, 0xe3, 0x98, 0x57, 0x55, 0xa3, 0x32,
-	0x79, 0x54, 0xe9, 0x27, 0xa1, 0xc2, 0xbe, 0xf4, 0x69, 0xa0, 0xde, 0x85, 0x3c, 0x98, 0xdf, 0x22,
-	0x38, 0x27, 0xf5, 0x62, 0x9d, 0x0e, 0x6d, 0x45, 0xb4, 0x2f, 0x82, 0x2f, 0xdb, 0xc1, 0xd2, 0x34,
-	0x1d, 0xfc, 0x05, 0xc1, 0xf9, 0x1c, 0x22, 0x55, 0x49, 0xc1, 0x23, 0xdf, 0x82, 0xb2, 0xdf, 0x0e,
-	0xf9, 0xd2, 0x6c, 0x7e, 0x73, 0xd3, 0xda, 0x08, 0xe3, 0xa1, 0xce, 0x96, 0xa6, 0xea, 0xec, 0xcf,
-	0x08, 0x56, 0x12, 0xc9, 0xf9, 0xbd, 0xf6, 0xbd, 0x48, 0xd6, 0x17, 0x21, 0xe1, 0x51, 0xbf, 0x4a,
-	0xa9, 0x7e, 0x0d, 0x09, 0x5b, 0x9e, 0x46, 0xd8, 0xef, 0x11, 0xac, 0xe6, 0xa3, 0x8e, 0xd7, 0xf6,
-	0x0c, 0xcc, 0xc9, 0x37, 0x27, 0xe5, 0x5d, 0x68, 0x54, 0xc5, 0xa3, 0x7b, 0x3e, 0xfd, 0xae, 0xa9,
-	0x39, 0x70, 0xcb, 0xe6, 0xf4, 0x93, 0xc0, 0x9b, 0x74, 0x9a, 0x99, 0x6f, 0xa9, 0xcf, 0x7c, 0xc8,
-	0x2f, 0xa9, 0xa2, 0x69, 0x73, 0xfa, 0xb0, 0x1f, 0x78, 0xb1, 0x63, 0x53, 0x1a, 0x9a, 0x5d, 0xe5,
-	0x28, 0x44, 0xd0, 0x65, 0x7c, 0x86, 0x56, 0x2d, 0xc3, 0x7c, 0x18, 0x85, 0x4b, 0xbe, 0xc7, 0x39,
-	0x71, 0xde, 0x71, 0xcc, 0xeb, 0x70, 0x56, 0x9b, 0x4e, 0x81, 0x9e, 0x85, 0x05, 0xe9, 0x99, 0x90,
-	0xca, 0x50, 0x11, 0xaa, 0x05, 0xaf, 0x08, 0xdf, 0x8f, 0x23, 0x82, 0xf1, 0x84, 0xe6, 0x1d, 0xc0,
-	0x69, 0x7b, 0x95, 0x82, 0x40, 0x45, 0x18, 0x1c, 0xcd, 0x51, 0xcd, 0x37, 0x21, 0x3d, 0xa4, 0xdd,
-	0xd1, 0x10, 0x11, 0x3f, 0xaa, 0x57, 0x12, 0x67, 0xd7, 0x0f, 0x91, 0x50, 0x35, 0x31, 0xeb, 0x91,
-	0x94, 0x18, 0x03, 0xcb, 0xa1, 0x5b, 0x6e, 0xcc, 0x2b, 0xe2, 0xe7, 0x1b, 0xaa, 0xef, 0xab, 0x72,
-	0x1b, 0xb4, 0xc5, 0x02, 0x67, 0x82, 0x0e, 0x9e, 0x86, 0xea, 0x2e, 0xf5, 0xdc, 0xdd, 0x50, 0x24,
-	0x2a, 0x37, 0xd4, 0xc9, 0xdc, 0x80, 0x13, 0x99, 0x40, 0x0a, 0x5c, 0x98, 0xdb, 0x0e, 0x0d, 0x54,
-	0xbb, 0xd5, 0xa9, 0xfe, 0xdf, 0x31, 0xa8, 0x08, 0x7b, 0xfc, 0x23, 0x82, 0xc5, 0xd4, 0xae, 0xc0,
-	0xaf, 0xeb, 0xb4, 0xcd, 0x59, 0xd5, 0xc6, 0xfa, 0x64, 0xc6, 0x12, 0xc6, 0xac, 0x7f, 0xf5, 0xd7,
-	0xbf, 0x4f, 0x66, 0xd7, 0xf1, 0x15, 0x12, 0x7b, 0x91, 0xe4, 0x3f, 0x0f, 0x7e, 0x3b, 0x24, 0x6a,
-	0x4d, 0x91, 0xfd, 0xf8, 0x91, 0x0e, 0xf0, 0x0f, 0x08, 0x8e, 0x67, 0xd6, 0x20, 0xde, 0x28, 0xce,
-	0x39, 0xb4, 0x87, 0x0d, 0x6b, 0x52, 0x73, 0x05, 0xb9, 0x26, 0x20, 0x5f, 0xc5, 0x2b, 0x63, 0x20,
-	0xf1, 0xaf, 0x08, 0x16, 0x53, 0x73, 0xb8, 0x40, 0xb8, 0xd1, 0x8d, 0x59, 0x20, 0x9c, 0x66, 0xed,
-	0x99, 0xb7, 0x05, 0xd3, 0x4d, 0x7c, 0x23, 0x8f, 0x29, 0x5a, 0x01, 0x64, 0x3f, 0x7e, 0x33, 0x83,
-	0x94, 0x80, 0x64, 0x5f, 0xce, 0xbb, 0x01, 0xfe, 0x1d, 0xc1, 0xcb, 0xc3, 0xeb, 0x08, 0x5f, 0xcd,
-	0x57, 0x47, 0xbf, 0x4b, 0x8d, 0xcd, 0x29, 0x3c, 0x14, 0xfe, 0x7b, 0x02, 0xff, 0x06, 0xde, 0xce,
-	0x95, 0xf4, 0xc8, 0x33, 0xa7, 0x0a, 0xfc, 0x07, 0x82, 0x13, 0x9a, 0x91, 0x8f, 0xb7, 0x8a, 0x75,
-	0xd4, 0xee, 0x32, 0xe3, 0x8d, 0xe9, 0x9c, 0x54, 0x15, 0xef, 0x88, 0x2a, 0xde, 0xc6, 0xd7, 0x72,
-	0xaa, 0xc8, 0x6d, 0x80, 0x98, 0x2f, 0x03, 0xfc, 0x13, 0x82, 0xe3, 0x99, 0x49, 0x5f, 0xf0, 0x92,
-	0x75, 0x9b, 0xa4, 0xe0, 0x25, 0x6b, 0x17, 0x88, 0x49, 0x04, 0xf0, 0x6b, 0x78, 0x2d, 0x4f, 0xf6,
-	0x7e, 0xe0, 0x65, 0xbe, 0xb5, 0xdf, 0x10, 0xbc, 0x94, 0x9d, 0xf1, 0xd8, 0x2a, 0x96, 0x6a, 0x84,
-	0x91, 0x4c, 0x6c, 0xaf, 0x20, 0xef, 0x08, 0xc8, 0x77, 0xf1, 0xcd, 0x62, 0x48, 0xbd, 0xb2, 0xf1,
-	0xc2, 0x1a, 0xe0, 0xaf, 0x11, 0x54, 0xc4, 0xe4, 0xc6, 0x17, 0x73, 0x09, 0xd2, 0x2b, 0xc8, 0xb8,
-	0x34, 0xce, 0x4c, 0xf1, 0x6d, 0x08, 0xbe, 0x35, 0x7c, 0x51, 0xc7, 0x27, 0xa8, 0xd2, 0x74, 0xd1,
-	0xb8, 0x3a, 0x96, 0xde, 0x20, 0x78, 0xbd, 0x38, 0x4f, 0x76, 0x35, 0x19, 0x1b, 0x13, 0x5a, 0x2b,
-	0xb8, 0x2b, 0x02, 0xee, 0x02, 0x36, 0x8b, 0xe0, 0xd4, 0xf3, 0xfb, 0x06, 0x41, 0x55, 0x2e, 0x07,
-	0x9c, 0x5f, 0x7b, 0x66, 0x0d, 0x19, 0x6b, 0x63, 0xed, 0x14, 0xc7, 0xba, 0xe0, 0xb8, 0x84, 0x2f,
-	0xe8, 0x38, 0x02, 0x61, 0xcb, 0xc9, 0xbe, 0xdc, 0x54, 0x83, 0x5b, 0x1f, 0xfc, 0x79, 0x50, 0x43,
-	0x4f, 0x0f, 0x6a, 0xe8, 0x9f, 0x83, 0x1a, 0xfa, 0xee, 0xb0, 0x36, 0xf3, 0xf4, 0xb0, 0x36, 0xf3,
-	0xf7, 0x61, 0x6d, 0xe6, 0xb3, 0xba, 0xeb, 0x85, 0xbb, 0xfd, 0xa6, 0xd5, 0x62, 0x5d, 0xd2, 0xf4,
-	0x6c, 0xff, 0x73, 0x8f, 0xda, 0x5e, 0x12, 0xb3, 0xcb, 0x9c, 0x7e, 0x87, 0xf2, 0x38, 0x76, 0xb8,
-	0xd7, 0xa3, 0xbc, 0x59, 0x15, 0x7f, 0x4f, 0x6e, 0xfd, 0x1f, 0x00, 0x00, 0xff, 0xff, 0xc2, 0x9e,
-	0xd6, 0xab, 0xe7, 0x0e, 0x00, 0x00,
+	0x14, 0xc7, 0x33, 0x76, 0xec, 0xb4, 0x2f, 0x04, 0xc1, 0xd0, 0x96, 0x64, 0xdb, 0x3a, 0x65, 0x45,
+	0x1b, 0x28, 0xc9, 0x4e, 0xe3, 0x84, 0x42, 0x5a, 0xb5, 0x88, 0x54, 0xad, 0x88, 0x54, 0xb5, 0xd4,
+	0x14, 0x0e, 0x5c, 0xaa, 0xb5, 0x3d, 0x76, 0x96, 0xd8, 0x3b, 0xee, 0xee, 0xba, 0x28, 0x8a, 0x7c,
+	0x41, 0xe2, 0xc2, 0x05, 0xa4, 0x1e, 0xb8, 0x20, 0xe0, 0x88, 0x84, 0xe0, 0x8c, 0x38, 0x71, 0xe4,
+	0x58, 0x89, 0x0b, 0x47, 0x94, 0xf0, 0x87, 0xa0, 0x9d, 0x79, 0x9b, 0xdd, 0xb5, 0x67, 0x37, 0x36,
+	0xcd, 0x2d, 0xb3, 0xf3, 0xde, 0xbc, 0xcf, 0xfb, 0x31, 0xf3, 0x8d, 0xe1, 0x74, 0xc7, 0xde, 0xe5,
+	0x5e, 0x95, 0x3d, 0x59, 0x65, 0x8f, 0xfb, 0xdc, 0xdb, 0xb5, 0x7a, 0x9e, 0x08, 0x04, 0xa5, 0x8e,
+	0xe7, 0x04, 0x76, 0x57, 0x34, 0x2d, 0xb5, 0x6f, 0x3d, 0x59, 0x35, 0x4e, 0xb5, 0x45, 0x5b, 0xc8,
+	0x6d, 0x16, 0xfe, 0xa5, 0x2c, 0x8d, 0x73, 0x6d, 0x21, 0xda, 0x1d, 0xce, 0xec, 0x9e, 0xc3, 0x6c,
+	0xd7, 0x15, 0x81, 0x1d, 0x38, 0xc2, 0xf5, 0x71, 0xf7, 0x4c, 0x7c, 0x3c, 0x1e, 0xa4, 0xbe, 0x9f,
+	0x6f, 0x08, 0xbf, 0x2b, 0x7c, 0x15, 0x93, 0xf5, 0xec, 0xb6, 0xe3, 0x4a, 0x3f, 0xb5, 0x6d, 0xae,
+	0xc3, 0xab, 0x0f, 0xc2, 0x9d, 0x5b, 0x1d, 0xdb, 0xf7, 0xef, 0x08, 0xef, 0xde, 0x9d, 0x87, 0x35,
+	0xfe, 0xb8, 0xcf, 0xfd, 0x80, 0x2e, 0xc0, 0x89, 0x46, 0xf8, 0xf5, 0x91, 0xd3, 0x9c, 0x27, 0x17,
+	0xc8, 0x1b, 0x27, 0x6b, 0x33, 0x72, 0xbd, 0xd5, 0x34, 0x1f, 0xc0, 0xfc, 0xa8, 0x97, 0xdf, 0x13,
+	0xae, 0xcf, 0xe9, 0xdb, 0x50, 0x92, 0x66, 0xd2, 0x67, 0xb6, 0xba, 0x68, 0x8d, 0x26, 0x68, 0x25,
+	0xfd, 0x94, 0xb5, 0xf9, 0x09, 0x2c, 0xc4, 0x47, 0xf2, 0x21, 0x94, 0x0d, 0x80, 0x98, 0x1c, 0x0f,
+	0x5e, 0xb0, 0x54, 0x66, 0x96, 0xaa, 0xe6, 0x87, 0x76, 0x9b, 0xa3, 0x79, 0x2d, 0x61, 0x6c, 0x3e,
+	0x25, 0x60, 0xe8, 0x0e, 0x46, 0xda, 0x0d, 0x50, 0x49, 0xf1, 0x90, 0xb7, 0x38, 0x0e, 0x6f, 0x64,
+	0x4f, 0xaf, 0xa5, 0xa0, 0x0a, 0x12, 0xca, 0xd0, 0x41, 0xa9, 0x50, 0x29, 0xaa, 0x16, 0x96, 0xfd,
+	0xa1, 0xd8, 0xe1, 0xee, 0x48, 0xd9, 0xfd, 0x9e, 0xdd, 0xe0, 0x51, 0xd9, 0xa7, 0x6b, 0x33, 0x72,
+	0xbd, 0xd5, 0x4c, 0x75, 0xa4, 0x90, 0xea, 0x08, 0x3d, 0x0d, 0x65, 0xb7, 0x15, 0x84, 0x1b, 0x45,
+	0xb9, 0x51, 0x72, 0x5b, 0xc1, 0x56, 0xd3, 0xbc, 0x82, 0x8d, 0x4a, 0xc5, 0xc1, 0xd4, 0x4f, 0x41,
+	0x49, 0x7c, 0xee, 0x72, 0x0f, 0x9b, 0xab, 0x16, 0xe6, 0xd7, 0x04, 0xce, 0xa9, 0x7a, 0x89, 0x4e,
+	0x87, 0x37, 0x42, 0xda, 0xe3, 0xe0, 0x4b, 0x77, 0xb0, 0x38, 0x49, 0x07, 0x7f, 0x26, 0x70, 0x3e,
+	0x83, 0x08, 0x33, 0xc9, 0x9e, 0x54, 0xba, 0x06, 0xd3, 0x6e, 0x2b, 0xf0, 0xe7, 0x0b, 0xd9, 0xcd,
+	0x4d, 0xd6, 0x46, 0x1a, 0x0f, 0x75, 0xb6, 0x38, 0x51, 0x67, 0x7f, 0x22, 0xb0, 0x18, 0x97, 0xdc,
+	0xbf, 0xdf, 0xba, 0x1f, 0x96, 0xf5, 0x38, 0x4a, 0x78, 0xd8, 0xaf, 0x62, 0xa2, 0x5f, 0x43, 0x85,
+	0x9d, 0x9e, 0xa4, 0xb0, 0xdf, 0x13, 0xb8, 0x90, 0x8d, 0x8a, 0xb5, 0xbd, 0x09, 0xe5, 0x40, 0x6e,
+	0xe3, 0xfd, 0xb8, 0x74, 0x44, 0x09, 0x37, 0x77, 0xe5, 0x29, 0x35, 0xf4, 0x7a, 0xae, 0x5b, 0x72,
+	0x15, 0xdf, 0x84, 0x4d, 0xdb, 0xe7, 0x1f, 0x7b, 0xce, 0xd8, 0xcf, 0xd3, 0x3b, 0x78, 0xe5, 0x87,
+	0xfc, 0xe2, 0x69, 0xa9, 0xdb, 0x3e, 0x7f, 0xd4, 0xf7, 0x9c, 0xc8, 0xb1, 0xae, 0x0c, 0xcd, 0x2e,
+	0x3a, 0xca, 0x7c, 0x74, 0x11, 0xff, 0x47, 0xdb, 0x16, 0xe0, 0x84, 0x2c, 0x45, 0x7c, 0x37, 0x67,
+	0xe4, 0x7a, 0xab, 0x69, 0x5e, 0x83, 0xb3, 0xda, 0x70, 0x08, 0x7a, 0x16, 0x4e, 0x2a, 0xcf, 0x98,
+	0x54, 0x1d, 0x15, 0xa2, 0x5a, 0xf0, 0xb2, 0xf4, 0xfd, 0x28, 0x24, 0x38, 0x9a, 0xd0, 0xbc, 0x0d,
+	0x34, 0x69, 0x8f, 0x21, 0x18, 0x94, 0xa4, 0xc1, 0xe1, 0x9b, 0xaa, 0x69, 0xae, 0xf2, 0x50, 0x76,
+	0xe6, 0x0e, 0x3e, 0x28, 0xf2, 0x23, 0x4e, 0x4c, 0x14, 0x5d, 0xfb, 0xa0, 0x0c, 0x0d, 0x68, 0x61,
+	0x92, 0x01, 0xfd, 0x8a, 0xe0, 0x00, 0xa4, 0xa3, 0x21, 0xfb, 0x2a, 0x94, 0x25, 0x53, 0x34, 0x99,
+	0x39, 0xf0, 0x68, 0xf8, 0x5c, 0xc3, 0x78, 0x0f, 0x59, 0xee, 0x56, 0x37, 0x3b, 0xa2, 0xb1, 0xf3,
+	0x01, 0xb7, 0x9b, 0x71, 0xea, 0x39, 0xa3, 0x71, 0x06, 0xca, 0xdb, 0xdc, 0x69, 0x6f, 0x07, 0x32,
+	0xde, 0x74, 0x0d, 0x57, 0xe6, 0x3a, 0xce, 0xda, 0xd0, 0x79, 0x98, 0x9c, 0xf4, 0x0a, 0xbf, 0xe0,
+	0x38, 0xe1, 0xaa, 0xfa, 0xe3, 0x1c, 0x94, 0xa4, 0x1b, 0xfd, 0x8e, 0xc0, 0x6c, 0x42, 0x97, 0xe8,
+	0x5b, 0xba, 0xf4, 0x33, 0xb4, 0xdd, 0x58, 0x1e, 0xcf, 0x58, 0xc1, 0x98, 0xd5, 0x2f, 0xfe, 0xfa,
+	0xf7, 0x69, 0x61, 0x99, 0x5e, 0x66, 0x91, 0x17, 0x8b, 0xff, 0xdb, 0x70, 0x5b, 0x01, 0x43, 0x49,
+	0x64, 0x7b, 0xd1, 0x25, 0x18, 0xd0, 0x6f, 0x09, 0xcc, 0xa5, 0x24, 0x97, 0xae, 0xe4, 0xc7, 0x1c,
+	0xd2, 0x7c, 0xc3, 0x1a, 0xd7, 0x1c, 0x21, 0x97, 0x24, 0xe4, 0x6b, 0x74, 0xf1, 0x08, 0x48, 0xfa,
+	0x0b, 0x81, 0xd9, 0xc4, 0x83, 0x95, 0x53, 0xb8, 0x51, 0x75, 0xce, 0x29, 0x9c, 0x46, 0x62, 0xcd,
+	0x5b, 0x92, 0xe9, 0x06, 0xbd, 0x9e, 0xc5, 0x14, 0xca, 0x0d, 0xdb, 0x8b, 0x46, 0x67, 0x90, 0x28,
+	0x20, 0xdb, 0x53, 0x7a, 0x3e, 0xa0, 0xbf, 0x13, 0x78, 0x69, 0x58, 0xfa, 0xe8, 0x95, 0xec, 0xea,
+	0xe8, 0x75, 0xdb, 0x58, 0x9d, 0xc0, 0x03, 0xf1, 0xdf, 0x97, 0xf8, 0xd7, 0xe9, 0x46, 0x66, 0x49,
+	0x0f, 0x3d, 0x33, 0xb2, 0xa0, 0x7f, 0x10, 0x78, 0x45, 0x23, 0x2f, 0x74, 0x2d, 0xbf, 0x8e, 0x5a,
+	0xdd, 0x34, 0xd6, 0x27, 0x73, 0xc2, 0x2c, 0x6e, 0xca, 0x2c, 0xde, 0xa5, 0x57, 0x33, 0xb2, 0xc8,
+	0x6c, 0x80, 0x7c, 0xbf, 0x06, 0xf4, 0x07, 0x02, 0x73, 0x29, 0x25, 0xc9, 0x99, 0x64, 0x9d, 0x52,
+	0xe5, 0x4c, 0xb2, 0x56, 0xa0, 0x4c, 0x26, 0x81, 0xdf, 0xa4, 0x4b, 0x59, 0x65, 0xef, 0x7b, 0x4e,
+	0xea, 0xae, 0xfd, 0x46, 0xe0, 0xc5, 0xb4, 0x86, 0x50, 0x2b, 0xbf, 0x54, 0x23, 0x8c, 0x6c, 0x6c,
+	0x7b, 0x84, 0xbc, 0x2d, 0x21, 0xdf, 0xa3, 0x37, 0xf2, 0x21, 0xf5, 0x95, 0x8d, 0x04, 0x71, 0x40,
+	0xbf, 0x24, 0x50, 0x92, 0x6f, 0x34, 0xbd, 0x98, 0x49, 0x90, 0x94, 0x38, 0xe3, 0xd2, 0x51, 0x66,
+	0xc8, 0xb7, 0x22, 0xf9, 0x96, 0xe8, 0x45, 0x1d, 0x9f, 0x92, 0x83, 0x04, 0x5d, 0xf8, 0x5c, 0xbd,
+	0x90, 0x54, 0x19, 0xba, 0x9c, 0x1f, 0x27, 0x2d, 0x7d, 0xc6, 0xca, 0x98, 0xd6, 0x08, 0x77, 0x59,
+	0xc2, 0xbd, 0x4e, 0xcd, 0x3c, 0x38, 0x1c, 0xbf, 0x5f, 0x09, 0xcc, 0xa5, 0x34, 0x22, 0x67, 0xfc,
+	0x74, 0xda, 0x94, 0x33, 0x7e, 0x5a, 0xe9, 0xc9, 0xbf, 0x2f, 0x9d, 0x6a, 0x3d, 0x74, 0x51, 0x6a,
+	0x94, 0xee, 0xaf, 0xd2, 0xb5, 0xc1, 0xe6, 0xdd, 0x3f, 0xf7, 0x2b, 0xe4, 0xd9, 0x7e, 0x85, 0xfc,
+	0xb3, 0x5f, 0x21, 0xdf, 0x1c, 0x54, 0xa6, 0x9e, 0x1d, 0x54, 0xa6, 0xfe, 0x3e, 0xa8, 0x4c, 0x7d,
+	0x5a, 0x6d, 0x3b, 0xc1, 0x76, 0xbf, 0x6e, 0x35, 0x44, 0x97, 0xd5, 0x1d, 0xdb, 0xfd, 0xcc, 0xe1,
+	0xb6, 0x13, 0x47, 0xe9, 0x8a, 0x66, 0xbf, 0xc3, 0xfd, 0x28, 0x5a, 0xb0, 0xdb, 0xe3, 0x7e, 0xbd,
+	0x2c, 0x7f, 0xa7, 0xae, 0xfd, 0x17, 0x00, 0x00, 0xff, 0xff, 0xaf, 0xf7, 0x33, 0x74, 0x3f, 0x0f,
+	0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -1191,8 +1184,8 @@ type QueryClient interface {
 	Space(ctx context.Context, in *QuerySpaceRequest, opts ...grpc.CallOption) (*QuerySpaceResponse, error)
 	// SpaceOfOwner queries all spaces owned by an address.
 	SpaceOfOwner(ctx context.Context, in *QuerySpaceOfOwnerRequest, opts ...grpc.CallOption) (*QuerySpaceOfOwnerResponse, error)
-	// Record queries a record.
-	Record(ctx context.Context, in *QueryRecordRequest, opts ...grpc.CallOption) (*QueryRecordResponse, error)
+	// L2BlockHeader queries a layer2 block header.
+	L2BlockHeader(ctx context.Context, in *QueryL2BlockHeaderRequest, opts ...grpc.CallOption) (*QueryL2BlockHeaderResponse, error)
 }
 
 type queryClient struct {
@@ -1284,9 +1277,9 @@ func (c *queryClient) SpaceOfOwner(ctx context.Context, in *QuerySpaceOfOwnerReq
 	return out, nil
 }
 
-func (c *queryClient) Record(ctx context.Context, in *QueryRecordRequest, opts ...grpc.CallOption) (*QueryRecordResponse, error) {
-	out := new(QueryRecordResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.layer2.v1.Query/Record", in, out, opts...)
+func (c *queryClient) L2BlockHeader(ctx context.Context, in *QueryL2BlockHeaderRequest, opts ...grpc.CallOption) (*QueryL2BlockHeaderResponse, error) {
+	out := new(QueryL2BlockHeaderResponse)
+	err := c.cc.Invoke(ctx, "/iritamod.layer2.v1.Query/L2BlockHeader", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1313,8 +1306,8 @@ type QueryServer interface {
 	Space(context.Context, *QuerySpaceRequest) (*QuerySpaceResponse, error)
 	// SpaceOfOwner queries all spaces owned by an address.
 	SpaceOfOwner(context.Context, *QuerySpaceOfOwnerRequest) (*QuerySpaceOfOwnerResponse, error)
-	// Record queries a record.
-	Record(context.Context, *QueryRecordRequest) (*QueryRecordResponse, error)
+	// L2BlockHeader queries a layer2 block header.
+	L2BlockHeader(context.Context, *QueryL2BlockHeaderRequest) (*QueryL2BlockHeaderResponse, error)
 }
 
 // UnimplementedQueryServer can be embedded to have forward compatible implementations.
@@ -1348,8 +1341,8 @@ func (*UnimplementedQueryServer) Space(ctx context.Context, req *QuerySpaceReque
 func (*UnimplementedQueryServer) SpaceOfOwner(ctx context.Context, req *QuerySpaceOfOwnerRequest) (*QuerySpaceOfOwnerResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SpaceOfOwner not implemented")
 }
-func (*UnimplementedQueryServer) Record(ctx context.Context, req *QueryRecordRequest) (*QueryRecordResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Record not implemented")
+func (*UnimplementedQueryServer) L2BlockHeader(ctx context.Context, req *QueryL2BlockHeaderRequest) (*QueryL2BlockHeaderResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method L2BlockHeader not implemented")
 }
 
 func RegisterQueryServer(s grpc1.Server, srv QueryServer) {
@@ -1518,20 +1511,20 @@ func _Query_SpaceOfOwner_Handler(srv interface{}, ctx context.Context, dec func(
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Query_Record_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(QueryRecordRequest)
+func _Query_L2BlockHeader_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(QueryL2BlockHeaderRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(QueryServer).Record(ctx, in)
+		return srv.(QueryServer).L2BlockHeader(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.layer2.v1.Query/Record",
+		FullMethod: "/iritamod.layer2.v1.Query/L2BlockHeader",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(QueryServer).Record(ctx, req.(*QueryRecordRequest))
+		return srv.(QueryServer).L2BlockHeader(ctx, req.(*QueryL2BlockHeaderRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1577,8 +1570,8 @@ var _Query_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Query_SpaceOfOwner_Handler,
 		},
 		{
-			MethodName: "Record",
-			Handler:    _Query_Record_Handler,
+			MethodName: "L2BlockHeader",
+			Handler:    _Query_L2BlockHeader_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
@@ -1605,18 +1598,6 @@ func (m *QueryClassForNFTRequest) MarshalToSizedBuffer(dAtA []byte) (int, error)
 	_ = i
 	var l int
 	_ = l
-	if m.Pagination != nil {
-		{
-			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
-			if err != nil {
-				return 0, err
-			}
-			i -= size
-			i = encodeVarintQuery(dAtA, i, uint64(size))
-		}
-		i--
-		dAtA[i] = 0x12
-	}
 	if len(m.ClassId) > 0 {
 		i -= len(m.ClassId)
 		copy(dAtA[i:], m.ClassId)
@@ -2005,23 +1986,21 @@ func (m *QueryTokensOfOwnerForNFTResponse) MarshalToSizedBuffer(dAtA []byte) (in
 			i = encodeVarintQuery(dAtA, i, uint64(size))
 		}
 		i--
-		dAtA[i] = 0x1a
+		dAtA[i] = 0x12
 	}
-	if len(m.NftIds) > 0 {
-		for iNdEx := len(m.NftIds) - 1; iNdEx >= 0; iNdEx-- {
-			i -= len(m.NftIds[iNdEx])
-			copy(dAtA[i:], m.NftIds[iNdEx])
-			i = encodeVarintQuery(dAtA, i, uint64(len(m.NftIds[iNdEx])))
+	if len(m.Tokens) > 0 {
+		for iNdEx := len(m.Tokens) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Tokens[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
+			}
 			i--
-			dAtA[i] = 0x12
+			dAtA[i] = 0xa
 		}
-	}
-	if len(m.ClassId) > 0 {
-		i -= len(m.ClassId)
-		copy(dAtA[i:], m.ClassId)
-		i = encodeVarintQuery(dAtA, i, uint64(len(m.ClassId)))
-		i--
-		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
@@ -2241,6 +2220,18 @@ func (m *QuerySpaceOfOwnerRequest) MarshalToSizedBuffer(dAtA []byte) (int, error
 	_ = i
 	var l int
 	_ = l
+	if m.Pagination != nil {
+		{
+			size, err := m.Pagination.MarshalToSizedBuffer(dAtA[:i])
+			if err != nil {
+				return 0, err
+			}
+			i -= size
+			i = encodeVarintQuery(dAtA, i, uint64(size))
+		}
+		i--
+		dAtA[i] = 0x12
+	}
 	if len(m.Owner) > 0 {
 		i -= len(m.Owner)
 		copy(dAtA[i:], m.Owner)
@@ -2283,28 +2274,24 @@ func (m *QuerySpaceOfOwnerResponse) MarshalToSizedBuffer(dAtA []byte) (int, erro
 		i--
 		dAtA[i] = 0x12
 	}
-	if len(m.SpaceIds) > 0 {
-		dAtA12 := make([]byte, len(m.SpaceIds)*10)
-		var j11 int
-		for _, num := range m.SpaceIds {
-			for num >= 1<<7 {
-				dAtA12[j11] = uint8(uint64(num)&0x7f | 0x80)
-				num >>= 7
-				j11++
+	if len(m.Spaces) > 0 {
+		for iNdEx := len(m.Spaces) - 1; iNdEx >= 0; iNdEx-- {
+			{
+				size, err := m.Spaces[iNdEx].MarshalToSizedBuffer(dAtA[:i])
+				if err != nil {
+					return 0, err
+				}
+				i -= size
+				i = encodeVarintQuery(dAtA, i, uint64(size))
 			}
-			dAtA12[j11] = uint8(num)
-			j11++
+			i--
+			dAtA[i] = 0xa
 		}
-		i -= j11
-		copy(dAtA[i:], dAtA12[:j11])
-		i = encodeVarintQuery(dAtA, i, uint64(j11))
-		i--
-		dAtA[i] = 0xa
 	}
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryRecordRequest) Marshal() (dAtA []byte, err error) {
+func (m *QueryL2BlockHeaderRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2314,12 +2301,12 @@ func (m *QueryRecordRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryRecordRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryL2BlockHeaderRequest) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryRecordRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryL2BlockHeaderRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2337,7 +2324,7 @@ func (m *QueryRecordRequest) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	return len(dAtA) - i, nil
 }
 
-func (m *QueryRecordResponse) Marshal() (dAtA []byte, err error) {
+func (m *QueryL2BlockHeaderResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalToSizedBuffer(dAtA[:size])
@@ -2347,12 +2334,12 @@ func (m *QueryRecordResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *QueryRecordResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *QueryL2BlockHeaderResponse) MarshalTo(dAtA []byte) (int, error) {
 	size := m.Size()
 	return m.MarshalToSizedBuffer(dAtA[:size])
 }
 
-func (m *QueryRecordResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
+func (m *QueryL2BlockHeaderResponse) MarshalToSizedBuffer(dAtA []byte) (int, error) {
 	i := len(dAtA)
 	_ = i
 	var l int
@@ -2386,10 +2373,6 @@ func (m *QueryClassForNFTRequest) Size() (n int) {
 	_ = l
 	l = len(m.ClassId)
 	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if m.Pagination != nil {
-		l = m.Pagination.Size()
 		n += 1 + l + sovQuery(uint64(l))
 	}
 	return n
@@ -2546,13 +2529,9 @@ func (m *QueryTokensOfOwnerForNFTResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	l = len(m.ClassId)
-	if l > 0 {
-		n += 1 + l + sovQuery(uint64(l))
-	}
-	if len(m.NftIds) > 0 {
-		for _, s := range m.NftIds {
-			l = len(s)
+	if len(m.Tokens) > 0 {
+		for _, e := range m.Tokens {
+			l = e.Size()
 			n += 1 + l + sovQuery(uint64(l))
 		}
 	}
@@ -2657,6 +2636,10 @@ func (m *QuerySpaceOfOwnerRequest) Size() (n int) {
 	if l > 0 {
 		n += 1 + l + sovQuery(uint64(l))
 	}
+	if m.Pagination != nil {
+		l = m.Pagination.Size()
+		n += 1 + l + sovQuery(uint64(l))
+	}
 	return n
 }
 
@@ -2666,12 +2649,11 @@ func (m *QuerySpaceOfOwnerResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.SpaceIds) > 0 {
-		l = 0
-		for _, e := range m.SpaceIds {
-			l += sovQuery(uint64(e))
+	if len(m.Spaces) > 0 {
+		for _, e := range m.Spaces {
+			l = e.Size()
+			n += 1 + l + sovQuery(uint64(l))
 		}
-		n += 1 + sovQuery(uint64(l)) + l
 	}
 	if m.Pagination != nil {
 		l = m.Pagination.Size()
@@ -2680,7 +2662,7 @@ func (m *QuerySpaceOfOwnerResponse) Size() (n int) {
 	return n
 }
 
-func (m *QueryRecordRequest) Size() (n int) {
+func (m *QueryL2BlockHeaderRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2695,7 +2677,7 @@ func (m *QueryRecordRequest) Size() (n int) {
 	return n
 }
 
-func (m *QueryRecordResponse) Size() (n int) {
+func (m *QueryL2BlockHeaderResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2774,42 +2756,6 @@ func (m *QueryClassForNFTRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			m.ClassId = string(dAtA[iNdEx:postIndex])
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= int(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + msglen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Pagination == nil {
-				m.Pagination = &query.PageRequest{}
-			}
-			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
 			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
@@ -3828,9 +3774,9 @@ func (m *QueryTokensOfOwnerForNFTResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ClassId", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Tokens", wireType)
 			}
-			var stringLen uint64
+			var msglen int
 			for shift := uint(0); ; shift += 7 {
 				if shift >= 64 {
 					return ErrIntOverflowQuery
@@ -3840,57 +3786,27 @@ func (m *QueryTokensOfOwnerForNFTResponse) Unmarshal(dAtA []byte) error {
 				}
 				b := dAtA[iNdEx]
 				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
+				msglen |= int(b&0x7F) << shift
 				if b < 0x80 {
 					break
 				}
 			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
+			if msglen < 0 {
 				return ErrInvalidLengthQuery
 			}
-			postIndex := iNdEx + intStringLen
+			postIndex := iNdEx + msglen
 			if postIndex < 0 {
 				return ErrInvalidLengthQuery
 			}
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.ClassId = string(dAtA[iNdEx:postIndex])
+			m.Tokens = append(m.Tokens, &TokenForNFTByOwner{})
+			if err := m.Tokens[len(m.Tokens)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
 			iNdEx = postIndex
 		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field NftIds", wireType)
-			}
-			var stringLen uint64
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowQuery
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				stringLen |= uint64(b&0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			intStringLen := int(stringLen)
-			if intStringLen < 0 {
-				return ErrInvalidLengthQuery
-			}
-			postIndex := iNdEx + intStringLen
-			if postIndex < 0 {
-				return ErrInvalidLengthQuery
-			}
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			m.NftIds = append(m.NftIds, string(dAtA[iNdEx:postIndex]))
-			iNdEx = postIndex
-		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
 			}
@@ -4542,6 +4458,42 @@ func (m *QuerySpaceOfOwnerRequest) Unmarshal(dAtA []byte) error {
 			}
 			m.Owner = string(dAtA[iNdEx:postIndex])
 			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Pagination == nil {
+				m.Pagination = &query.PageRequest{}
+			}
+			if err := m.Pagination.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipQuery(dAtA[iNdEx:])
@@ -4593,81 +4545,39 @@ func (m *QuerySpaceOfOwnerResponse) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
-			if wireType == 0 {
-				var v uint64
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowQuery
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					v |= uint64(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Spaces", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowQuery
 				}
-				m.SpaceIds = append(m.SpaceIds, v)
-			} else if wireType == 2 {
-				var packedLen int
-				for shift := uint(0); ; shift += 7 {
-					if shift >= 64 {
-						return ErrIntOverflowQuery
-					}
-					if iNdEx >= l {
-						return io.ErrUnexpectedEOF
-					}
-					b := dAtA[iNdEx]
-					iNdEx++
-					packedLen |= int(b&0x7F) << shift
-					if b < 0x80 {
-						break
-					}
-				}
-				if packedLen < 0 {
-					return ErrInvalidLengthQuery
-				}
-				postIndex := iNdEx + packedLen
-				if postIndex < 0 {
-					return ErrInvalidLengthQuery
-				}
-				if postIndex > l {
+				if iNdEx >= l {
 					return io.ErrUnexpectedEOF
 				}
-				var elementCount int
-				var count int
-				for _, integer := range dAtA[iNdEx:postIndex] {
-					if integer < 128 {
-						count++
-					}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= int(b&0x7F) << shift
+				if b < 0x80 {
+					break
 				}
-				elementCount = count
-				if elementCount != 0 && len(m.SpaceIds) == 0 {
-					m.SpaceIds = make([]uint64, 0, elementCount)
-				}
-				for iNdEx < postIndex {
-					var v uint64
-					for shift := uint(0); ; shift += 7 {
-						if shift >= 64 {
-							return ErrIntOverflowQuery
-						}
-						if iNdEx >= l {
-							return io.ErrUnexpectedEOF
-						}
-						b := dAtA[iNdEx]
-						iNdEx++
-						v |= uint64(b&0x7F) << shift
-						if b < 0x80 {
-							break
-						}
-					}
-					m.SpaceIds = append(m.SpaceIds, v)
-				}
-			} else {
-				return fmt.Errorf("proto: wrong wireType = %d for field SpaceIds", wireType)
 			}
+			if msglen < 0 {
+				return ErrInvalidLengthQuery
+			}
+			postIndex := iNdEx + msglen
+			if postIndex < 0 {
+				return ErrInvalidLengthQuery
+			}
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Spaces = append(m.Spaces, &Space{})
+			if err := m.Spaces[len(m.Spaces)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Pagination", wireType)
@@ -4725,7 +4635,7 @@ func (m *QuerySpaceOfOwnerResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryRecordRequest) Unmarshal(dAtA []byte) error {
+func (m *QueryL2BlockHeaderRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4748,10 +4658,10 @@ func (m *QueryRecordRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryRecordRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryL2BlockHeaderRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryRecordRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryL2BlockHeaderRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -4813,7 +4723,7 @@ func (m *QueryRecordRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *QueryRecordResponse) Unmarshal(dAtA []byte) error {
+func (m *QueryL2BlockHeaderResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4836,10 +4746,10 @@ func (m *QueryRecordResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: QueryRecordResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: QueryL2BlockHeaderResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: QueryRecordResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: QueryL2BlockHeaderResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 2:

@@ -2,8 +2,9 @@ package keeper
 
 import (
 	"context"
-	sdk "github.com/cosmos/cosmos-sdk/types"
 	"strconv"
+
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/bianjieai/iritamod/modules/layer2/types"
 )
@@ -19,7 +20,7 @@ func (k Keeper) CreateL2Space(goCtx context.Context, msg *types.MsgCreateL2Space
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	spaceId, err := k.CreateSpace(ctx, sender)
+	spaceId, err := k.CreateSpace(ctx, msg.Name, msg.Uri, sender)
 	if err != nil {
 		return nil, err
 	}
@@ -48,7 +49,7 @@ func (k Keeper) TransferL2Space(goCtx context.Context, msg *types.MsgTransferL2S
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	err = k.UpdateSpace(ctx, msg.SpaceId, sender, recipient)
+	err = k.TransferSpace(ctx, msg.SpaceId, sender, recipient)
 	if err != nil {
 		return nil, err
 	}
@@ -65,8 +66,8 @@ func (k Keeper) TransferL2Space(goCtx context.Context, msg *types.MsgTransferL2S
 	return &types.MsgTransferL2SpaceResponse{}, nil
 }
 
-// CreateL2Record creates a layer 2 record
-func (k Keeper) CreateL2Record(goCtx context.Context, msg *types.MsgCreateL2Record) (*types.MsgCreateL2RecordResponse, error) {
+// CreateL2BlockHeader creates a layer 2 record
+func (k Keeper) CreateL2BlockHeader(goCtx context.Context, msg *types.MsgCreateL2BlockHeader) (*types.MsgCreateL2BlockHeaderResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
 		return nil, err
@@ -74,7 +75,7 @@ func (k Keeper) CreateL2Record(goCtx context.Context, msg *types.MsgCreateL2Reco
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	err = k.CreateRecord(ctx, msg.SpaceId, msg.Height, msg.Header, sender)
+	err = k.CreateBlockHeader(ctx, msg.SpaceId, msg.Height, msg.Header, sender)
 	if err != nil {
 		return nil, err
 	}
@@ -87,5 +88,5 @@ func (k Keeper) CreateL2Record(goCtx context.Context, msg *types.MsgCreateL2Reco
 		),
 	})
 
-	return &types.MsgCreateL2RecordResponse{}, nil
+	return &types.MsgCreateL2BlockHeaderResponse{}, nil
 }
