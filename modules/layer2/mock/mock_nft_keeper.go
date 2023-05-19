@@ -10,7 +10,7 @@ import (
 	"github.com/bianjieai/iritamod/modules/layer2/types"
 )
 
-//go:embed mock_data/badKids.json
+//go:embed mock_data.json
 var badKidsRawData []byte //nolint: golint
 
 type MockNFTKeeper struct {
