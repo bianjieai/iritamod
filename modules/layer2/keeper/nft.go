@@ -1,10 +1,11 @@
 package keeper
 
 import (
-	"github.com/bianjieai/iritamod/modules/layer2/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/bianjieai/iritamod/modules/layer2/types"
 )
 
 // CreateNFTs batch create token mappings for nft
@@ -262,7 +263,7 @@ func (k Keeper) DepositTokenForNFT(ctx sdk.Context,
 	k.setTokenForNFT(ctx, spaceId, classId, tokenId, sender)
 	k.setTokenOwnerForNFT(ctx, spaceId, classId, tokenId, sender)
 
-	return  k.nft.TransferNFT(ctx, classId, tokenId, sender, types.ModuleAccAddress)
+	return k.nft.TransferNFT(ctx, classId, tokenId, sender, types.ModuleAccAddress)
 }
 
 func (k Keeper) WithdrawTokenForNFT(ctx sdk.Context,

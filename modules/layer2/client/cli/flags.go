@@ -3,24 +3,24 @@ package cli
 import flag "github.com/spf13/pflag"
 
 const (
-	FlagId = "id"
-	FlagIds = "ids"
-	FlagOwner = "owner"
-	FlagOwners = "owners"
-	FlagName = "name"
-	FlagUri = "uri"
+	FlagId      = "id"
+	FlagIds     = "ids"
+	FlagOwner   = "owner"
+	FlagOwners  = "owners"
+	FlagName    = "name"
+	FlagUri     = "uri"
 	FlagUriHash = "uri-hash"
-	FlagUris = "uris"
-	FlagData = "data"
+	FlagUris    = "uris"
+	FlagData    = "data"
 )
 
 var (
 	FsSpaceCreate      = flag.NewFlagSet("", flag.ContinueOnError)
-	FsNftTokenCreate  = flag.NewFlagSet("", flag.ContinueOnError)
-	FsNftTokenUpdate  = flag.NewFlagSet("", flag.ContinueOnError)
-	FsNftTokenDelete  = flag.NewFlagSet("", flag.ContinueOnError)
+	FsNftTokenCreate   = flag.NewFlagSet("", flag.ContinueOnError)
+	FsNftTokenUpdate   = flag.NewFlagSet("", flag.ContinueOnError)
+	FsNftTokenDelete   = flag.NewFlagSet("", flag.ContinueOnError)
 	FsNftTokenWithdraw = flag.NewFlagSet("", flag.ContinueOnError)
-	FsNftClassUpdate = flag.NewFlagSet("", flag.ContinueOnError)
+	FsNftClassUpdate   = flag.NewFlagSet("", flag.ContinueOnError)
 	FsNftClassDeposit  = flag.NewFlagSet("", flag.ContinueOnError)
 	FsNftClassWithdraw = flag.NewFlagSet("", flag.ContinueOnError)
 

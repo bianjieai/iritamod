@@ -2,6 +2,7 @@ package types
 
 import (
 	"fmt"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -14,11 +15,11 @@ func NewGenesisState(spaceSequence uint64,
 	classesWithSpaceForNFT []ClassWithSpaceForNFT,
 	collectionsForNFT []CollectionForNFT) *GenesisState {
 	return &GenesisState{
-		SpaceSequence:   spaceSequence,
-		Spaces:            spaces,
-		L2BlockHeaders:    blockHeaders,
-		ClassesWithSpaceForNft:     classesWithSpaceForNFT,
-		CollectionsForNft: collectionsForNFT,
+		SpaceSequence:          spaceSequence,
+		Spaces:                 spaces,
+		L2BlockHeaders:         blockHeaders,
+		ClassesWithSpaceForNft: classesWithSpaceForNFT,
+		CollectionsForNft:      collectionsForNFT,
 	}
 }
 

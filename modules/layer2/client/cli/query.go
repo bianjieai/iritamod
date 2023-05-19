@@ -46,8 +46,6 @@ func GetQuerySpaceCmd() *cobra.Command {
 	return cmd
 }
 
-
-
 func GetCmdQuerySpaceInfo() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "space [space-id]",

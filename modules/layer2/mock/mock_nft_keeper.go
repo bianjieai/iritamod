@@ -41,8 +41,8 @@ type NFT struct {
 type Class struct {
 	ClassId        string          `json:"class_id,omitempty"`
 	TokenIds       map[string]*NFT `json:"token_ids,omitempty"`
-	Owner        string            `json:"owner,omitempty"`
-	MintRestricted bool                `json:"mint_restricted,omitempty"`
+	Owner          string          `json:"owner,omitempty"`
+	MintRestricted bool            `json:"mint_restricted,omitempty"`
 }
 
 func (mk *NFTKeeper) SaveNFT(_ sdk.Context, classID, tokenID, tokenNm, tokenURI, tokenUriHash, tokenData string, receiver sdk.AccAddress) error {

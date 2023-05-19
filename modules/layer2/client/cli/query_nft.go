@@ -229,10 +229,10 @@ func GetNftQueryNftOwnerCmd() *cobra.Command {
 
 func GetNftQueryNftUriCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "uri [space-id] [class-id] [token-id]",
-		Long: "query the concatenated token uri of an nft",
+		Use:     "uri [space-id] [class-id] [token-id]",
+		Long:    "query the concatenated token uri of an nft",
 		Example: fmt.Sprintf("$ %s q layer2 nft uri [space-id] [class-id] [token-id]", version.AppName),
-		Args: cobra.ExactArgs(3),
+		Args:    cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -244,7 +244,7 @@ func GetNftQueryNftUriCmd() *cobra.Command {
 				return err
 			}
 
-		queryClient := types.NewQueryClient(clientCtx)
+			queryClient := types.NewQueryClient(clientCtx)
 			resp, err := queryClient.TokenUriForNFT(
 				context.Background(), &types.QueryTokenUriForNFTRequest{
 					SpaceId: spaceId,

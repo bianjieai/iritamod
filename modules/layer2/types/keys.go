@@ -36,17 +36,17 @@ func init() {
 var (
 	// Space storekey prefix
 	KeyPrefixSpaceSequence = []byte{0x01}
-	KeyPrefixSpace        = []byte{0x02}
-	KeyPrefixSpaceOfOwner = []byte{0x03}
+	KeyPrefixSpace         = []byte{0x02}
+	KeyPrefixSpaceOfOwner  = []byte{0x03}
 
 	// BlockHeader storekey prefix
 	KeyPrefixL2BlockHeader = []byte{0x04}
 
 	// NFT storekey prefix
-	KeyPrefixClassForNFT = []byte{0x05}
+	KeyPrefixClassForNFT        = []byte{0x05}
 	KeyPrefixSpaceOfClassForNFT = []byte{0x06}
-	KeyPrefixTokenForNFT = []byte{0x07}
-	KeyPrefixNFTsOfOwner = []byte{0x08}
+	KeyPrefixTokenForNFT        = []byte{0x07}
+	KeyPrefixNFTsOfOwner        = []byte{0x08}
 
 	Delimiter   = []byte{0x00}
 	Placeholder = []byte{0x01}

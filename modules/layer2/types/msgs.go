@@ -162,7 +162,7 @@ func NewMsgCreateNFTs(spaceId uint64, classId string, tokens []TokenForNFT, send
 	return &MsgCreateNFTs{
 		SpaceId: spaceId,
 		ClassId: classId,
-		Tokens:    tokens,
+		Tokens:  tokens,
 		Sender:  sender,
 	}
 }
@@ -252,10 +252,10 @@ func (msg MsgUpdateNFTs) GetSigners() []sdk.AccAddress {
 // NewMsgDeleteNFTs is a constructor function for MsgDeleteNFTs
 func NewMsgDeleteNFTs(spaceId uint64, classId string, tokenIds []string, sender string) *MsgDeleteNFTs {
 	return &MsgDeleteNFTs{
-		SpaceId: spaceId,
-		ClassId: classId,
-		TokenIds:  tokenIds,
-		Sender:  sender,
+		SpaceId:  spaceId,
+		ClassId:  classId,
+		TokenIds: tokenIds,
+		Sender:   sender,
 	}
 }
 
@@ -303,7 +303,7 @@ func (msg MsgDeleteNFTs) GetSigners() []sdk.AccAddress {
 // NewMsgUpdateClassesForNFT is a constructor function for MsgUpdateClassesForNFT
 func NewMsgUpdateClassesForNFT(spaceId uint64, updateClasses []UpdateClassForNFT, sender string) *MsgUpdateClassesForNFT {
 	return &MsgUpdateClassesForNFT{
-		SpaceId: spaceId,
+		SpaceId:            spaceId,
 		ClassUpdatesForNft: updateClasses,
 		Sender:             sender,
 	}
@@ -422,7 +422,7 @@ func NewMsgDepositTokenForNFT(spaceId uint64, classId, tokenId string, sender st
 	return &MsgDepositTokenForNFT{
 		SpaceId: spaceId,
 		ClassId: classId,
-		TokenId:   tokenId,
+		TokenId: tokenId,
 		Sender:  sender,
 	}
 }
@@ -467,7 +467,7 @@ func NewMsgWithdrawTokenForNFT(spaceId uint64, classId, tokenId, owner, name, ur
 	return &MsgWithdrawTokenForNFT{
 		SpaceId: spaceId,
 		ClassId: classId,
-		TokenId:   tokenId,
+		TokenId: tokenId,
 		Owner:   owner,
 		Name:    name,
 		Uri:     uri,

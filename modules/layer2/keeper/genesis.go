@@ -44,11 +44,11 @@ func (k Keeper) InitGenesis(ctx sdk.Context, data types.GenesisState) {
 
 func (k Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 	data := types.GenesisState{
-		SpaceSequence:   0,
-		Spaces:            make([]types.Space, 0),
-		L2BlockHeaders:    make([]types.L2BlockHeader, 0),
-		ClassesWithSpaceForNft:     make([]types.ClassWithSpaceForNFT, 0),
-		CollectionsForNft: make([]types.CollectionForNFT, 0),
+		SpaceSequence:          0,
+		Spaces:                 make([]types.Space, 0),
+		L2BlockHeaders:         make([]types.L2BlockHeader, 0),
+		ClassesWithSpaceForNft: make([]types.ClassWithSpaceForNFT, 0),
+		CollectionsForNft:      make([]types.CollectionForNFT, 0),
 	}
 
 	data.SpaceSequence = k.GetSpaceSequence(ctx)
