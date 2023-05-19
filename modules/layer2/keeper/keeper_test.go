@@ -30,7 +30,7 @@ var (
 	badKidsClassId  = "badKids"
 	badKidsClassUri = "https://badkids.com"
 	// TODO： build from mock_data/nfts.json
-	badKidsTokensForNFT = []*types.TokenForNFT{
+	badKidsTokensForNFT = []types.TokenForNFT{
 		{
 			Id:    "kid001",
 			Owner: accAlice.String(),

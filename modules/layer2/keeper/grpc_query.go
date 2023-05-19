@@ -25,7 +25,7 @@ func (k Keeper) Space(goCtx context.Context, request *types.QuerySpaceRequest) (
 
 func (k Keeper) SpaceOfOwner(goCtx context.Context, req *types.QuerySpaceOfOwnerRequest) (*types.QuerySpaceOfOwnerResponse, error) {
 
-	var spaces []*types.Space
+	var spaces []types.Space
 	var pageResp *query.PageResponse
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
@@ -44,7 +44,7 @@ func (k Keeper) SpaceOfOwner(goCtx context.Context, req *types.QuerySpaceOfOwner
 		if err != nil {
 			return err
 		}
-		spaces = append(spaces, &space)
+		spaces = append(spaces, space)
 		return nil
 	}); err != nil {
 		return nil, err

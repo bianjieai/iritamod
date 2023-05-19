@@ -14,7 +14,7 @@ import (
 func (k Keeper) CreateTokensForNFT(ctx sdk.Context,
 	spaceId uint64,
 	classId string,
-	nfts []*types.TokenForNFT,
+	nfts []types.TokenForNFT,
 	sender sdk.AccAddress) error {
 	ok, err := k.HasL2UserRole(ctx, sender)
 	if !ok {
@@ -45,7 +45,7 @@ func (k Keeper) CreateTokensForNFT(ctx sdk.Context,
 func (k Keeper) UpdateTokensForNFT(ctx sdk.Context,
 	spaceId uint64,
 	classId string,
-	nfts []*types.TokenForNFT,
+	nfts []types.TokenForNFT,
 	sender sdk.AccAddress) error {
 	ok, err := k.HasL2UserRole(ctx, sender)
 	if !ok {
@@ -110,8 +110,9 @@ func (k Keeper) DeleteTokensForNFT(ctx sdk.Context,
 }
 
 // UpdateL2ClassesForNFT updates class mappings for nft
+// TODO： class id corresponding space id
 func (k Keeper) UpdateL2ClassesForNFT(ctx sdk.Context,
-	classUpdates []*types.UpdateClassForNFT,
+	classUpdates []types.UpdateClassForNFT,
 	sender sdk.AccAddress) error {
 	ok, err := k.HasL2UserRole(ctx, sender)
 	if !ok {
@@ -137,6 +138,7 @@ func (k Keeper) UpdateL2ClassesForNFT(ctx sdk.Context,
 	return nil
 }
 
+// TODO： class id corresponding space id
 func (k Keeper) DepositL1ClassForNFT(ctx sdk.Context,
 	spaceId uint64,
 	classId,
@@ -153,14 +155,17 @@ func (k Keeper) DepositL1ClassForNFT(ctx sdk.Context,
 		return err
 	}
 	// check if the denom owned by sender
+	// TODO： => GetOwner()
 	if class.GetCreator() != sender.String() {
 		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "class %s is not owned by %s", classId, sender)
 	}
 
+	// TODO: fix this
 	if ok, _ := k.HasL2UserRole(ctx, sender); !ok && !sender.Equals(recipient) {
 		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "recipient %s must be sender if not l2 user", sender)
 	}
 
+	// TODO: k.HasClassForNFT
 	classForNFT, err := k.GetClassForNFT(ctx, classId)
 	classForNFT.BaseUri = baseUri
 	classForNFT.Owner = recipient.String()
@@ -177,6 +182,7 @@ func (k Keeper) DepositL1ClassForNFT(ctx sdk.Context,
 	return nil
 }
 
+// TODO: add space id
 func (k Keeper) WithdrawL2ClassForNFT(ctx sdk.Context,
 	classId string,
 	owner,
@@ -200,6 +206,7 @@ func (k Keeper) WithdrawL2ClassForNFT(ctx sdk.Context,
 	}
 
 	// check if the class owned by module account
+	// TODO: GetOwner()
 	if class.GetCreator() != types.ModuleAddress.String() {
 		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "class %s is not locked by %s", classId, types.ModuleAddress.String())
 	}
@@ -242,10 +249,7 @@ func (k Keeper) DepositL1TokenForNFT(ctx sdk.Context,
 	k.setTokenForNFT(ctx, spaceId, classId, tokenId, sender)
 	k.setTokenOwnerForNFT(ctx, spaceId, classId, tokenId, sender)
 
-	if err := k.nft.TransferNFT(ctx, classId, tokenId, sender, types.ModuleAccAddress); err == nil {
-		return err
-	}
-	return nil
+	return  k.nft.TransferNFT(ctx, classId, tokenId, sender, types.ModuleAccAddress)
 }
 
 func (k Keeper) WithdrawL2TokenForNFT(ctx sdk.Context,
@@ -307,7 +311,7 @@ func (k Keeper) GetCollectionsForNFT(ctx sdk.Context) []types.CollectionForNFT {
 	for _, space := range spaces {
 		for _, class := range classes {
 			var collection types.CollectionForNFT
-			tokens := make([]*types.TokenForNFT, 0)
+			tokens := make([]types.TokenForNFT, 0)
 
 			iterator := sdk.KVStorePrefixIterator(store, types.TokenForNFTByCollectionStoreKey(space.Id, class.Id))
 			defer iterator.Close()
@@ -317,7 +321,7 @@ func (k Keeper) GetCollectionsForNFT(ctx sdk.Context) []types.CollectionForNFT {
 				tokenForNFT.Id = string(iterator.Key())
 				tokenForNFT.Owner = sdk.AccAddress(iterator.Value()).String()
 
-				tokens = append(tokens, &tokenForNFT)
+				tokens = append(tokens, tokenForNFT)
 			}
 
 			if len(tokens) > 0 {

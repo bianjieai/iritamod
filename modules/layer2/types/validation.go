@@ -31,16 +31,16 @@ func ValidateClassIdForNFT(classId string) error {
 }
 
 func ValidateTokenIdForNFT(tokenId string) error {
-	if !regexpNftClassId(tokenId) {
+	if !regexpNftTokenId(tokenId) {
 		return sdkerrors.Wrapf(ErrInvalidTokenIdForNFT, "token id can only accept characters that match the regular expression: (%s),but got (%s)", nftClassIdString, tokenId)
 	}
 	return nil
 }
 
-func ValidateTokensForNFT(nfts []*TokenForNFT) error {
+func ValidateTokensForNFT(tokens []TokenForNFT) error {
 	seenIDs := make(map[string]bool)
 
-	for _, token := range nfts {
+	for _, token := range tokens {
 		if seenIDs[token.Id] {
 			return sdkerrors.Wrapf(ErrDuplicateTokenIdsForNFT, "token id %s is duplicated", token.Id)
 		}
@@ -58,7 +58,7 @@ func ValidateTokensForNFT(nfts []*TokenForNFT) error {
 	return nil
 }
 
-func ValidateClassUpdatesForNFT(classes []*UpdateClassForNFT) error {
+func ValidateClassUpdatesForNFT(classes []UpdateClassForNFT) error {
 	seenIDs := make(map[string]bool)
 
 	for _, class := range classes {

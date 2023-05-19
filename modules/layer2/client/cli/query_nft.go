@@ -14,6 +14,27 @@ import (
 	"github.com/bianjieai/iritamod/modules/layer2/types"
 )
 
+func GetNftQueryCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:                        "nft",
+		Short:                      "Layer2 NFT query subcommands",
+		DisableFlagParsing:         true,
+		SuggestionsMinimumDistance: 2,
+		RunE:                       client.ValidateCmd,
+	}
+
+	cmd.AddCommand(
+		GetNftQueryNftClassCmd(),
+		GetNftQueryNftClassesCmd(),
+		GetNftQueryNftCollectionCmd(),
+		GetNftQueryNftTokenCmd(),
+		GetNftQueryNftOwnerCmd(),
+		GetNftQueryNftUriCmd(),
+	)
+
+	return cmd
+}
+
 func GetNftQueryNftClassCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "class [class-id]",
@@ -82,7 +103,7 @@ func GetNftQueryNftCollectionCmd() *cobra.Command {
 		Use:     "collection [space-id] [class-id]",
 		Long:    "query the collection mapping info under a space",
 		Example: fmt.Sprintf("$ %s q layer2 nft collection [space-id] [class-id]", version.AppName),
-		Args:    cobra.ExactArgs(0),
+		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -123,7 +144,7 @@ func GetNftQueryNftTokenCmd() *cobra.Command {
 		Use:     "token [space-id] [class-id] [token-id]",
 		Long:    "query the nft token mapping",
 		Example: fmt.Sprintf("$ %s q layer2 nft token [space-id] [class-id] [token-id]", version.AppName),
-		Args:    cobra.ExactArgs(0),
+		Args:    cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -140,7 +161,7 @@ func GetNftQueryNftTokenCmd() *cobra.Command {
 				context.Background(), &types.QueryTokenForNFTRequest{
 					SpaceId: spaceId,
 					ClassId: args[1],
-					NftId:   args[2],
+					TokenId: args[2],
 				})
 			if err != nil {
 				return err
@@ -159,8 +180,8 @@ func GetNftQueryNftOwnerCmd() *cobra.Command {
 		Use:  "owner [owner] [space-id]",
 		Long: "query the nft token mappings of an owner. If space-id is 0, query nft across spaces owned by this owner",
 		Example: fmt.Sprintf("$ %s q layer2 nft owner [owner] [space-id] "+
-			"--class-id=<class-id>", version.AppName),
-		Args: cobra.ExactArgs(0),
+			"--id=<class-id>", version.AppName),
+		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
@@ -175,7 +196,7 @@ func GetNftQueryNftOwnerCmd() *cobra.Command {
 			if err != nil {
 				return err
 			}
-			classId, err := cmd.Flags().GetString(FlagNftClassId)
+			classId, err := cmd.Flags().GetString(FlagId)
 			if err != nil {
 				return err
 			}
@@ -208,54 +229,27 @@ func GetNftQueryNftOwnerCmd() *cobra.Command {
 
 func GetNftQueryNftUriCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:  "uri [class-id]",
-		Long: "query the base uri of a class or token uri of an nft. Must provide space-id and token-id to query token uri",
-		Example: fmt.Sprintf("$ %s q layer2 nft uri [class-id] "+
-			"--space-id=<space-id> "+
-			"--token-id=<token-id> ", version.AppName),
-		Args: cobra.ExactArgs(0),
+		Use:  "uri [space-id] [class-id] [token-id]",
+		Long: "query the concatenated token uri of an nft",
+		Example: fmt.Sprintf("$ %s q layer2 nft uri [space-id] [class-id] [token-id]", version.AppName),
+		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
 			if err != nil {
 				return err
 			}
 
-			if _, err := sdk.AccAddressFromBech32(args[0]); err != nil {
-				return err
-			}
-
-			spaceIdStr, err := cmd.Flags().GetString(FlagSpaceId)
-			if err != nil {
-				return err
-			}
-			tokenId, err := cmd.Flags().GetString(FlagNftTokenId)
+			spaceId, err := strconv.ParseUint(args[0], 10, 64)
 			if err != nil {
 				return err
 			}
 
-			spaceId, err := strconv.ParseUint(spaceIdStr, 10, 64)
-			if err != nil {
-				return err
-			}
-
-			queryClient := types.NewQueryClient(clientCtx)
-			// if spaceId is given
-			if len(spaceIdStr) > 0 {
-				resp, err := queryClient.TokenUriForNFT(
-					context.Background(), &types.QueryTokenUriForNFTRequest{
-						SpaceId: spaceId,
-						ClassId: args[0],
-						TokenId: tokenId,
-					})
-				if err != nil {
-					return err
-				}
-				return clientCtx.PrintProto(resp)
-			}
-
-			resp, err := queryClient.BaseUriForNFT(
-				context.Background(), &types.QueryBaseUriForNFTRequest{
-					ClassId: args[0],
+		queryClient := types.NewQueryClient(clientCtx)
+			resp, err := queryClient.TokenUriForNFT(
+				context.Background(), &types.QueryTokenUriForNFTRequest{
+					SpaceId: spaceId,
+					ClassId: args[1],
+					TokenId: args[2],
 				})
 			if err != nil {
 				return err
@@ -264,7 +258,6 @@ func GetNftQueryNftUriCmd() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().AddFlagSet(FsQueryNftUri)
 	flags.AddQueryFlagsToCmd(cmd)
 
 	return cmd

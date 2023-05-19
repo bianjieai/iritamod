@@ -23,7 +23,7 @@ service Query {
 
   // TokenForNFT queries a native NFT mapping.
   rpc TokenForNFT(QueryTokenForNFTRequest) returns (QueryTokenForNFTResponse) {
-    option (google.api.http).get = "/iritamod/layer2/v1/nft/nfts/{space_id}/{class_id}/{nft_id}";
+    option (google.api.http).get = "/iritamod/layer2/v1/nft/nfts/{space_id}/{class_id}/{token_id}";
   }
 
   // CollectionForNFT queries all native NFT mappings under a class of a space.
@@ -79,7 +79,7 @@ message QueryClassesForNFTRequest {
 
 // QueryClassesForNFTResponse is the response type for the Query/ClassesForNFT RPC
 message QueryClassesForNFTResponse {
-  repeated ClassForNFT classes = 1;
+  repeated ClassForNFT classes = 1 [ (gogoproto.nullable) = false ];
   cosmos.query.PageResponse pagination = 2;
 }
 
@@ -87,7 +87,7 @@ message QueryClassesForNFTResponse {
 message QueryTokenForNFTRequest {
   uint64 space_id = 1;
   string class_id = 2;
-  string nft_id = 3;
+  string token_id = 3;
 }
 
 // QueryTokenForNFTResponse is the response type for the Query/TokenForNFT RPC
@@ -105,7 +105,7 @@ message QueryCollectionForNFTRequest {
 // QueryCollectionForNFTResponse is the response type for the Query/CollectionForNFT RPC
 message QueryCollectionForNFTResponse {
   string class_id = 1;
-  repeated TokenForNFT nfts = 2;
+  repeated TokenForNFT tokens = 2 [ (gogoproto.nullable) = false ];
   cosmos.query.PageResponse pagination = 3;
 }
 
@@ -119,7 +119,7 @@ message QueryTokensOfOwnerForNFTRequest {
 
 // QueryTokensOfOwnerForNFTResponse is the response type for the Query/TokensOfOwnerForNFT RPC
 message QueryTokensOfOwnerForNFTResponse {
-  repeated TokenForNFTByOwner tokens = 1;
+  repeated TokenForNFTByOwner tokens = 1 [ (gogoproto.nullable) = false ];
   cosmos.query.PageResponse pagination = 2;
 }
 
@@ -163,7 +163,7 @@ message QuerySpaceOfOwnerRequest {
 
 // QuerySpaceOfOwnerResponse is the response type for the Query/SpaceOfOwner RPC
 message QuerySpaceOfOwnerResponse {
-  repeated Space spaces = 1;
+  repeated Space spaces = 1 [ (gogoproto.nullable) = false ];
   cosmos.query.PageResponse pagination = 2;
 }
 

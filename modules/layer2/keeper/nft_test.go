@@ -77,7 +77,7 @@ func (s *TestSuite) TestUpdateClassForNFT() {
 	s.Require().NoErrorf(err, "failed to deposit class")
 
 	newUri := badKidsClassUri + "modified"
-	classUpdates := []*types.UpdateClassForNFT{
+	classUpdates := []types.UpdateClassForNFT{
 		{
 			Id:    badKidsClassId,
 			Uri:   newUri,

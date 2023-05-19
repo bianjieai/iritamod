@@ -23,7 +23,7 @@ message L2BlockHeader {
 message CollectionForNFT {
   uint64 space_id = 1;
   string class_id = 2;
-  repeated TokenForNFT tokens = 3;
+  repeated TokenForNFT tokens = 3 [ (gogoproto.nullable) = false ];
 }
 
 // ClassForNFT defines the class mapping info of native NFT from layer2.
@@ -48,7 +48,7 @@ message UpdateClassForNFT {
 }
 
 message TokenForNFTByOwner {
-  uint64 spaceId = 1;
-  string classId = 2;
-  string tokenId = 3;
+  uint64 space_id = 1;
+  string class_id = 2;
+  string token_id = 3;
 }

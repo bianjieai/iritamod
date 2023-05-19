@@ -23,8 +23,7 @@ func GetQueryCmd() *cobra.Command {
 	}
 
 	cmd.AddCommand(
-		GetCmdQuerySpace(),
-		GetCmdQuerySpacesOfOwner(),
+		GetQuerySpaceCmd(),
 		GetCmdQueryL2BlockHeader(),
 		GetNftQueryCmd(),
 	)
@@ -32,32 +31,28 @@ func GetQueryCmd() *cobra.Command {
 	return cmd
 }
 
-func GetNftQueryCmd() *cobra.Command {
+func GetQuerySpaceCmd() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:                        "nft",
-		Short:                      "Layer2 NFT query subcommands",
-		DisableFlagParsing:         true,
-		SuggestionsMinimumDistance: 2,
-		RunE:                       client.ValidateCmd,
+		Use:                "space",
+		Short:              "Layer2 space query subcommands",
+		DisableFlagParsing: true,
 	}
 
 	cmd.AddCommand(
-		GetNftQueryNftClassCmd(),
-		GetNftQueryNftClassesCmd(),
-		GetNftQueryNftCollectionCmd(),
-		GetNftQueryNftTokenCmd(),
-		GetNftQueryNftOwnerCmd(),
-		GetNftQueryNftUriCmd(),
+		GetCmdQuerySpaceInfo(),
+		GetCmdQuerySpacesOfOwner(),
 	)
 
 	return cmd
 }
 
-func GetCmdQuerySpace() *cobra.Command {
+
+
+func GetCmdQuerySpaceInfo() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "space [space-id]",
 		Long:    "query the space info of the given space-id",
-		Example: fmt.Sprintf("$ %s q layer2 space [space-id] ", version.AppName),
+		Example: fmt.Sprintf("$ %s q layer2 space space [space-id] ", version.AppName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -90,9 +85,9 @@ func GetCmdQuerySpace() *cobra.Command {
 
 func GetCmdQuerySpacesOfOwner() *cobra.Command {
 	cmd := &cobra.Command{
-		Use:     "space-owner [owner]",
+		Use:     "owner [owner]",
 		Long:    "query the spaces of the given owner",
-		Example: fmt.Sprintf("$ %s q layer2 space-owner [owner]", version.AppName),
+		Example: fmt.Sprintf("$ %s q layer2 space owner [owner]", version.AppName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)

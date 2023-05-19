@@ -48,7 +48,7 @@ func (k Keeper) TransferSpace(ctx sdk.Context, spaceId uint64, from, to sdk.AccA
 		return err
 	}
 
-	if ok := k.HasSpaceOfOwner(ctx, from, spaceId); !ok {
+	if !k.HasSpaceOfOwner(ctx, from, spaceId) {
 		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "spaceId: %d is not owned by: %s", spaceId, from)
 	}
 
@@ -81,6 +81,7 @@ func (k Keeper) CreateBlockHeader(ctx sdk.Context, spaceId, height uint64, heade
 }
 
 // HasL2UserRole checks if an account has the l2 user role
+// TODO: (bool, err) => error
 func (k Keeper) HasL2UserRole(ctx sdk.Context, address sdk.AccAddress) (bool, error) {
 	if err := k.perm.Access(ctx, address, perm.RoleLayer2User.Auth()); err != nil {
 		return false, err
@@ -91,6 +92,7 @@ func (k Keeper) HasL2UserRole(ctx sdk.Context, address sdk.AccAddress) (bool, er
 // GetSpaceId return the current max id for space
 // we save the current max id into Space Store
 // <0x01><math.maxUint64> -> <currMaxSpaceId>
+// TODO： fix this
 func (k Keeper) getSpaceId(ctx sdk.Context) uint64 {
 	store := ctx.KVStore(k.storeKey)
 	spaceCountKey := types.SpaceStoreKey(math.MaxUint64)

@@ -37,6 +37,7 @@ var (
 	// Space storekey prefix
 	KeyPrefixSpace        = []byte{0x01}
 	KeyPrefixSpaceOfOwner = []byte{0x02}
+	KeyPrefixSpaceSequence = []byte{0x07}
 	// BlockHeader storekey prefix
 	KeyPrefixL2BlockHeader = []byte{0x03}
 	// NFT storekey prefix

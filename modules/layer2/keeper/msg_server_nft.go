@@ -18,7 +18,7 @@ func (k Keeper) CreateNFTs(goCtx context.Context, msg *types.MsgCreateNFTs) (*ty
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := k.CreateTokensForNFT(ctx, msg.SpaceId, msg.ClassId, msg.Nfts, sender); err != nil {
+	if err := k.CreateTokensForNFT(ctx, msg.SpaceId, msg.ClassId, msg.Tokens, sender); err != nil {
 		return nil, err
 	}
 
@@ -27,7 +27,7 @@ func (k Keeper) CreateNFTs(goCtx context.Context, msg *types.MsgCreateNFTs) (*ty
 			types.EventTypeCreateNFTs,
 			sdk.NewAttribute(types.AttributeKeySpaceId, strconv.FormatUint(msg.SpaceId, 10)),
 			sdk.NewAttribute(types.AttributeKeyClassIdForNFT, msg.ClassId),
-			sdk.NewAttribute(types.AttributeKeyTokenAmountForNFT, strconv.Itoa(len(msg.Nfts))),
+			sdk.NewAttribute(types.AttributeKeyTokenAmountForNFT, strconv.Itoa(len(msg.Tokens))),
 		),
 	})
 
@@ -42,7 +42,7 @@ func (k Keeper) UpdateNFTs(goCtx context.Context, msg *types.MsgUpdateNFTs) (*ty
 	}
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := k.UpdateTokensForNFT(ctx, msg.SpaceId, msg.ClassId, msg.Nfts, sender); err != nil {
+	if err := k.UpdateTokensForNFT(ctx, msg.SpaceId, msg.ClassId, msg.Tokens, sender); err != nil {
 		return nil, err
 	}
 
@@ -51,7 +51,7 @@ func (k Keeper) UpdateNFTs(goCtx context.Context, msg *types.MsgUpdateNFTs) (*ty
 			types.EventTypeUpdateNFTs,
 			sdk.NewAttribute(types.AttributeKeySpaceId, strconv.FormatUint(msg.SpaceId, 10)),
 			sdk.NewAttribute(types.AttributeKeyClassIdForNFT, msg.ClassId),
-			sdk.NewAttribute(types.AttributeKeyTokenAmountForNFT, strconv.Itoa(len(msg.Nfts))),
+			sdk.NewAttribute(types.AttributeKeyTokenAmountForNFT, strconv.Itoa(len(msg.Tokens))),
 		),
 	})
 
@@ -68,7 +68,7 @@ func (k Keeper) DeleteNFTs(goCtx context.Context, msg *types.MsgDeleteNFTs) (*ty
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := k.DeleteTokensForNFT(ctx, msg.SpaceId, msg.ClassId, msg.NftIds, sender); err != nil {
+	if err := k.DeleteTokensForNFT(ctx, msg.SpaceId, msg.ClassId, msg.TokenIds, sender); err != nil {
 		return nil, err
 	}
 
@@ -77,7 +77,7 @@ func (k Keeper) DeleteNFTs(goCtx context.Context, msg *types.MsgDeleteNFTs) (*ty
 			types.EventTypeDeleteNFTs,
 			sdk.NewAttribute(types.AttributeKeySpaceId, strconv.FormatUint(msg.SpaceId, 10)),
 			sdk.NewAttribute(types.AttributeKeyClassIdForNFT, msg.ClassId),
-			sdk.NewAttribute(types.AttributeKeyTokenAmountForNFT, strconv.Itoa(len(msg.NftIds))),
+			sdk.NewAttribute(types.AttributeKeyTokenAmountForNFT, strconv.Itoa(len(msg.TokenIds))),
 		),
 	})
 
@@ -138,6 +138,7 @@ func (k Keeper) DepositClassForNFT(goCtx context.Context, msg *types.MsgDepositC
 }
 
 // WithdrawClassForNFT withdraw a class for nft from layer2 to layer1
+// TODO： add space id
 func (k Keeper) WithdrawClassForNFT(goCtx context.Context, msg *types.MsgWithdrawClassForNFT) (*types.MsgWithdrawClassForNFTResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
@@ -176,7 +177,7 @@ func (k Keeper) DepositTokenForNFT(goCtx context.Context, msg *types.MsgDepositT
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := k.DepositL1TokenForNFT(ctx, msg.SpaceId, msg.ClassId, msg.NftId, sender); err != nil {
+	if err := k.DepositL1TokenForNFT(ctx, msg.SpaceId, msg.ClassId, msg.TokenId, sender); err != nil {
 		return nil, err
 	}
 
@@ -185,7 +186,7 @@ func (k Keeper) DepositTokenForNFT(goCtx context.Context, msg *types.MsgDepositT
 			types.EventTypeDepositTokenForNFT,
 			sdk.NewAttribute(types.AttributeKeySpaceId, strconv.FormatUint(msg.SpaceId, 10)),
 			sdk.NewAttribute(types.AttributeKeyClassIdForNFT, msg.ClassId),
-			sdk.NewAttribute(types.AttributeKeyTokenIdForNFT, msg.NftId),
+			sdk.NewAttribute(types.AttributeKeyTokenIdForNFT, msg.TokenId),
 			sdk.NewAttribute(types.AttributeKeySender, msg.Sender),
 		),
 	})
@@ -193,6 +194,7 @@ func (k Keeper) DepositTokenForNFT(goCtx context.Context, msg *types.MsgDepositT
 	return &types.MsgDepositTokenForNFTResponse{}, nil
 }
 
+// TODO： suggestion: token metadata
 func (k Keeper) WithdrawTokenForNFT(goCtx context.Context, msg *types.MsgWithdrawTokenForNFT) (*types.MsgWithdrawTokenForNFTResponse, error) {
 	sender, err := sdk.AccAddressFromBech32(msg.Sender)
 	if err != nil {
@@ -206,7 +208,7 @@ func (k Keeper) WithdrawTokenForNFT(goCtx context.Context, msg *types.MsgWithdra
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := k.WithdrawL2TokenForNFT(ctx, msg.SpaceId, msg.ClassId, msg.NftId, msg.Name, msg.Uri, msg.UriHash, msg.Data, owner, sender); err != nil {
+	if err := k.WithdrawL2TokenForNFT(ctx, msg.SpaceId, msg.ClassId, msg.TokenId, msg.Name, msg.Uri, msg.UriHash, msg.Data, owner, sender); err != nil {
 		return nil, err
 	}
 
@@ -215,7 +217,7 @@ func (k Keeper) WithdrawTokenForNFT(goCtx context.Context, msg *types.MsgWithdra
 			types.EventTypeWithdrawTokenForNFT,
 			sdk.NewAttribute(types.AttributeKeySpaceId, strconv.FormatUint(msg.SpaceId, 10)),
 			sdk.NewAttribute(types.AttributeKeyClassIdForNFT, msg.ClassId),
-			sdk.NewAttribute(types.AttributeKeyTokenIdForNFT, msg.NftId),
+			sdk.NewAttribute(types.AttributeKeyTokenIdForNFT, msg.TokenId),
 			sdk.NewAttribute(types.AttributeKeyRecipient, msg.Owner),
 		),
 	})
