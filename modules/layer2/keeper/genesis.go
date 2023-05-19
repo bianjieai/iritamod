@@ -13,10 +13,7 @@ func (k Keeper) InitGenesis(ctx sdk.Context, data types.GenesisState) {
 
 	k.setSpaceSequence(ctx, data.SpaceSequence)
 	for _, space := range data.Spaces {
-		owner, err := sdk.AccAddressFromBech32(space.Owner)
-		if err != nil {
-			panic(err)
-		}
+		owner, _ := sdk.AccAddressFromBech32(space.Owner)
 		k.setSpace(ctx, space.Id, space)
 		k.setSpaceOfOwner(ctx, space.Id, owner)
 	}
@@ -25,8 +22,15 @@ func (k Keeper) InitGenesis(ctx sdk.Context, data types.GenesisState) {
 		k.setL2BlockHeader(ctx, blockHeader.SpaceId, blockHeader.Height, blockHeader.Header)
 	}
 
-	for _, class := range data.ClassesForNft {
-		k.setClassForNFT(ctx, class)
+	for _, class := range data.ClassesWithSpaceForNft {
+		classForNFT := types.ClassForNFT{
+			Id:                   class.Id,
+			Owner:                class.Owner,
+			BaseUri:              class.BaseUri,
+			Layer1MintRestricted: class.Layer1MintRestricted,
+		}
+		k.setClassForNFT(ctx, classForNFT)
+		k.setSpaceOfClassForNFT(ctx, class.Id, class.ActiveSpace)
 	}
 
 	for _, collection := range data.CollectionsForNft {
@@ -43,14 +47,14 @@ func (k Keeper) ExportGenesis(ctx sdk.Context) *types.GenesisState {
 		SpaceSequence:   0,
 		Spaces:            make([]types.Space, 0),
 		L2BlockHeaders:    make([]types.L2BlockHeader, 0),
-		ClassesForNft:     make([]types.ClassForNFT, 0),
+		ClassesWithSpaceForNft:     make([]types.ClassWithSpaceForNFT, 0),
 		CollectionsForNft: make([]types.CollectionForNFT, 0),
 	}
 
 	data.SpaceSequence = k.GetSpaceSequence(ctx)
 	data.Spaces = k.GetSpaces(ctx)
 	data.L2BlockHeaders = k.GetL2BlockHeaders(ctx)
-	data.ClassesForNft = k.GetClassesForNFT(ctx)
+	data.ClassesWithSpaceForNft = k.GetClassesWithSpaceForNFT(ctx)
 	data.CollectionsForNft = k.GetCollectionsForNFT(ctx)
 	return &data
 }

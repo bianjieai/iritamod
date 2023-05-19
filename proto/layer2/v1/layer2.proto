@@ -34,6 +34,14 @@ message ClassForNFT {
   bool layer1_mint_restricted = 4;
 }
 
+message ClassWithSpaceForNFT {
+  string id = 1;
+  string owner = 2;
+  string base_uri = 3;
+  bool layer1_mint_restricted = 4;
+  uint64 active_space = 5; // zero if on layer 1
+}
+
 // TokenForNFT defines the token mapping info of native NFT from layer2.
 message TokenForNFT {
   string id = 1;

@@ -10,6 +10,6 @@ message GenesisState {
   uint64 space_sequence = 1;
   repeated Space spaces = 2  [ (gogoproto.nullable) = false ];
   repeated L2BlockHeader l2_block_headers = 3  [ (gogoproto.nullable) = false ];
-  repeated ClassForNFT classes_for_nft = 4  [ (gogoproto.nullable) = false ];
+  repeated ClassWithSpaceForNFT classes_with_space_for_nft = 4  [ (gogoproto.nullable) = false ];
   repeated CollectionForNFT collections_for_nft = 5  [ (gogoproto.nullable) = false ];
 }

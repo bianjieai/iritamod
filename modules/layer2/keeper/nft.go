@@ -348,6 +348,28 @@ func (k Keeper) GetCollectionsForNFT(ctx sdk.Context) []types.CollectionForNFT {
 	return collections
 }
 
+func (k Keeper) GetClassesWithSpaceForNFT(ctx sdk.Context) []types.ClassWithSpaceForNFT {
+	classesWithSpaceForNFT := make([]types.ClassWithSpaceForNFT, 0)
+	classesForNFT := k.GetClassesForNFT(ctx)
+	for _, classForNFT := range classesForNFT {
+		classWithSpaceForNFT := types.ClassWithSpaceForNFT{
+			Id:                   classForNFT.Id,
+			Owner:                classForNFT.Owner,
+			BaseUri:              classForNFT.BaseUri,
+			Layer1MintRestricted: classForNFT.Layer1MintRestricted,
+			ActiveSpace:          0,
+		}
+
+		spaceId, err := k.GetSpaceOfClassForNFT(ctx, classForNFT.Id)
+		if err == nil {
+			classWithSpaceForNFT.ActiveSpace = spaceId
+		}
+
+		classesWithSpaceForNFT = append(classesWithSpaceForNFT, classWithSpaceForNFT)
+	}
+	return classesWithSpaceForNFT
+}
+
 func (k Keeper) GetClassesForNFT(ctx sdk.Context) []types.ClassForNFT {
 	classes := make([]types.ClassForNFT, 0)
 	store := ctx.KVStore(k.storeKey)
