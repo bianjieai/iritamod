@@ -33,11 +33,15 @@ func (k Keeper) CreateL2Space(ctx sdk.Context, name, uri string, sender sdk.AccA
 // TransferL2Space transfer the space ownership
 func (k Keeper) TransferL2Space(ctx sdk.Context, spaceId uint64, from, to sdk.AccAddress) error {
 	if !k.GetPermKeeper().HasL2UserRole(ctx, to) {
-		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", to)
+		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "recipient (%s) not l2 user", to)
+	}
+
+	if !k.HasSpace(ctx, spaceId) {
+		return sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
 	}
 
 	if !k.HasSpaceOfOwner(ctx, from, spaceId) {
-		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "spaceId: %d is not owned by: %s", spaceId, from)
+		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) not owned by (%s)", spaceId, from)
 	}
 
 	space, err := k.GetSpace(ctx, spaceId)
@@ -54,9 +58,17 @@ func (k Keeper) TransferL2Space(ctx sdk.Context, spaceId uint64, from, to sdk.Ac
 }
 
 // CreateL2BlockHeader creates a layer2 block header record
-func (k Keeper) CreateL2BlockHeader(ctx sdk.Context, spaceId, height uint64, header string, addr sdk.AccAddress) error {
+func (k Keeper) CreateL2BlockHeader(ctx sdk.Context, spaceId, height uint64, header string, sender sdk.AccAddress) error {
+	if !k.HasSpace(ctx, spaceId) {
+		return sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
+	}
+
+	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
+		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) not owned by (%s)", spaceId, sender)
+	}
+
 	if k.HasL2BlockHeader(ctx, spaceId, height) {
-		return sdkerrors.Wrapf(types.ErrRecordAlreadyExist, "space: %d, height: %d", spaceId, height)
+		return sdkerrors.Wrapf(types.ErrBlockHeader, "block header already exist at height (%d) in space (%d)", height, spaceId)
 	}
 
 	k.setL2BlockHeader(ctx, spaceId, height, header)
@@ -106,7 +118,7 @@ func (k Keeper) GetSpace(ctx sdk.Context, spaceId uint64) (types.Space, error) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.SpaceStoreKey(spaceId))
 	if bz == nil {
-		return types.Space{}, sdkerrors.Wrapf(types.ErrUnknownSpace, "spaceId: %d", spaceId)
+		return types.Space{}, sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
 	}
 
 	var space types.Space
@@ -173,7 +185,7 @@ func (k Keeper) GetL2BlockHeader(ctx sdk.Context, spaceId, height uint64) (strin
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.L2BlockHeaderStoreKey(spaceId, height))
 	if bz == nil {
-		return "", sdkerrors.Wrapf(types.ErrUnknownL2BlockHeader, "spaceId: %d, height: %d", spaceId, height)
+		return "", sdkerrors.Wrapf(types.ErrBlockHeader, "block header not exist at height (%d) in space (%d)", height, spaceId)
 	}
 	return string(bz), nil
 }

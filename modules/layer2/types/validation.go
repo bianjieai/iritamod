@@ -25,14 +25,14 @@ func ValidateSpaceId(spaceId uint64) error {
 
 func ValidateClassIdForNFT(classId string) error {
 	if !regexpNftClassId(classId) {
-		return sdkerrors.Wrapf(ErrInvalidClassIdForNFT, "class id can only accept characters that match the regular expression: (%s),but got (%s)", nftClassIdString, classId)
+		return sdkerrors.Wrapf(ErrInvalidClassId, "class id can only accept characters that match the regular expression: (%s), but got (%s)", nftClassIdString, classId)
 	}
 	return nil
 }
 
 func ValidateTokenIdForNFT(tokenId string) error {
 	if !regexpNftTokenId(tokenId) {
-		return sdkerrors.Wrapf(ErrInvalidTokenIdForNFT, "token id can only accept characters that match the regular expression: (%s),but got (%s)", nftClassIdString, tokenId)
+		return sdkerrors.Wrapf(ErrInvalidTokenId, "token id can only accept characters that match the regular expression: (%s), but got (%s)", nftClassIdString, tokenId)
 	}
 	return nil
 }
@@ -42,7 +42,7 @@ func ValidateTokensForNFT(tokens []TokenForNFT) error {
 
 	for _, token := range tokens {
 		if seenIDs[token.Id] {
-			return sdkerrors.Wrapf(ErrDuplicateTokenIdsForNFT, "token id %s is duplicated", token.Id)
+			return sdkerrors.Wrapf(ErrInvalidTokenId, "duplicate token (%s)", token.Id)
 		}
 		seenIDs[token.Id] = true
 
@@ -63,7 +63,7 @@ func ValidateClassUpdatesForNFT(classes []UpdateClassForNFT) error {
 
 	for _, class := range classes {
 		if seenIDs[class.Id] {
-			return sdkerrors.Wrapf(ErrDuplicateClassIdForNFT, "class id %s is duplicated", class.Id)
+			return sdkerrors.Wrapf(ErrInvalidClassId, "duplicate class (%s)", class.Id)
 		}
 		seenIDs[class.Id] = true
 

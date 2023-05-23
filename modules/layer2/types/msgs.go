@@ -131,11 +131,11 @@ func (msg MsgCreateL2BlockHeader) ValidateBasic() error {
 	}
 
 	if msg.Height == 0 {
-		return sdkerrors.Wrapf(ErrInvalidRecord, "height cannot be zero")
+		return sdkerrors.Wrapf(ErrBlockHeader, "height cannot be zero")
 	}
 
 	if len(msg.Header) == 0 {
-		return sdkerrors.Wrapf(ErrInvalidRecord, "header cannot be empty")
+		return sdkerrors.Wrapf(ErrBlockHeader, "header cannot be empty string")
 	}
 
 	if err := ValidateSpaceId(msg.SpaceId); err != nil {
@@ -280,7 +280,7 @@ func (msg MsgDeleteNFTs) ValidateBasic() error {
 	seenIDs := make(map[string]bool)
 	for _, tokenId := range msg.TokenIds {
 		if seenIDs[tokenId] {
-			return sdkerrors.Wrapf(ErrDuplicateTokenIdsForNFT, "token id %s is duplicated", tokenId)
+			return sdkerrors.Wrapf(ErrInvalidTokenId, "duplicate token (%s)", tokenId)
 		}
 		seenIDs[tokenId] = true
 	}
