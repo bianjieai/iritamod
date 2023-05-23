@@ -34,6 +34,11 @@ func (k Keeper) CreateNFTs(ctx sdk.Context,
 			return sdkerrors.Wrapf(types.ErrInvalidTokenId, "token (%s) already exist", nft.Id)
 		}
 
+		// check if the layer 1 nft exist
+		if _, err := k.GetNFTKeeper().GetNFT(ctx, classId, nft.Id); err == nil {
+			return sdkerrors.Wrapf(types.ErrInvalidTokenId, "token (%s) already exist on layer one", nft.Id)
+		}
+
 		k.setTokenForNFT(ctx, spaceId, classId, nft.Id, owner)
 		k.setTokenOwnerForNFT(ctx, spaceId, classId, nft.Id, owner)
 	}

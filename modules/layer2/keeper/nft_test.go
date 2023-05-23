@@ -3,10 +3,10 @@ package keeper_test
 import "github.com/bianjieai/iritamod/modules/layer2/types"
 
 func (s *TestSuite) TestCreateTokensForNFT() {
-	err := s.keeper.CreateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT, accAvata)
+	err := s.keeper.CreateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT2, accAvata)
 	s.Require().NoErrorf(err, "failed to create tokens")
 
-	for _, token := range badKidsTokensForNFT {
+	for _, token := range badKidsTokensForNFT2 {
 		owner, err := s.keeper.GetTokenOwnerForNFT(s.ctx, avataSpaceId, badKidsClassId, token.Id)
 		s.Require().NoErrorf(err, "failed to get token owner")
 		s.Require().Equal(token.Owner, owner.String())
@@ -14,17 +14,17 @@ func (s *TestSuite) TestCreateTokensForNFT() {
 }
 
 func (s *TestSuite) TestUpdateTokensForNFT() {
-	err := s.keeper.CreateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT, accAvata)
+	err := s.keeper.CreateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT2, accAvata)
 	s.Require().NoErrorf(err, "failed to create tokens")
 
 	// exchange owner
-	badKidsTokensForNFT[0].Owner = accBob.String()
-	badKidsTokensForNFT[1].Owner = accAlice.String()
+	badKidsTokensForNFT2[0].Owner = accBob.String()
+	badKidsTokensForNFT2[1].Owner = accAlice.String()
 
-	err = s.keeper.UpdateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT, accAvata)
+	err = s.keeper.UpdateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT2, accAvata)
 	s.Require().NoErrorf(err, "failed to update tokens")
 
-	for _, token := range badKidsTokensForNFT {
+	for _, token := range badKidsTokensForNFT2 {
 		owner, err := s.keeper.GetTokenOwnerForNFT(s.ctx, avataSpaceId, badKidsClassId, token.Id)
 		s.Require().NoErrorf(err, "failed to get token owner")
 		s.Require().Equal(token.Owner, owner.String())
