@@ -38,6 +38,17 @@ var (
 			Owner: accBob.String(),
 		},
 	}
+
+	badKidsTokensForNFT2 = []types.TokenForNFT{
+		{
+			Id:    "kid003",
+			Owner: accAlice.String(),
+		},
+		{
+			Id:    "kid004",
+			Owner: accBob.String(),
+		},
+	}
 )
 
 type TestSuite struct {

@@ -71,10 +71,10 @@ func GetCmdNftTokenCreate() *cobra.Command {
 		Use:  "create [space-id] [class-id]",
 		Long: "create token mappings for layer2 nft asset",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft token create [space-id] [class-id] " +
-				"--ids=token1,token2,token3 " +
-				"--owners=owner1,owner2,owner3" +
-				version.AppName),
+			"$ %s tx layer2 nft token create [space-id] [class-id] "+
+				"--ids=token1,token2,token3 "+
+				"--owners=owner1,owner2,owner3",
+			version.AppName),
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -139,10 +139,10 @@ func GetCmdNftTokenUpdate() *cobra.Command {
 		Use:  "update [space-id] [class-id]",
 		Long: "update token mappings for layer2 nft asset",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft token update [space-id] [class-id] " +
-				"--ids=token1,token2,token3 " +
-				"--owners=owner1,owner2,owner3" +
-				version.AppName),
+			"$ %s tx layer2 nft token update [space-id] [class-id] "+
+				"--ids=token1,token2,token3 "+
+				"--owners=owner1,owner2,owner3",
+			version.AppName),
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -207,9 +207,9 @@ func GetCmdNftTokenDelete() *cobra.Command {
 		Use:  "delete [space-id] [class-id]",
 		Long: "delete token mappings for layer2 nft asset",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft token delete [space-id] [class-id] " +
-				"--ids=token1,token2,token3" +
-				version.AppName),
+			"$ %s tx layer2 nft token delete [space-id] [class-id] "+
+				"--ids=token1,token2,token3",
+			version.AppName),
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -253,8 +253,8 @@ func GetCmdNftTokenDeposit() *cobra.Command {
 		Use:  "deposit [space-id] [class-id] [token-id]",
 		Long: "deposit an nft from layer1 to layer2",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft token deposit [space-id] [class-id] [token-id]" +
-				version.AppName),
+			"$ %s tx layer2 nft token deposit [space-id] [class-id] [token-id]",
+			version.AppName),
 		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -288,13 +288,13 @@ func GetCmdNftTokenWithdraw() *cobra.Command {
 		Use:  "withdraw [space-id] [class-id] [token-id] ",
 		Long: "withdraw an nft from layer2 to layer1 and update its metadata",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft token withdraw [space-id] [class-id] [token-id] " +
-				"--owner=<owner> " +
-				"--name=<name> " +
-				"--uri=<uri> " +
-				"--uri-hash=<uri-hash> " +
-				"--data=<data>" +
-				version.AppName),
+			"$ %s tx layer2 nft token withdraw [space-id] [class-id] [token-id] "+
+				"--owner=<owner> "+
+				"--name=<name> "+
+				"--uri=<uri> "+
+				"--uri-hash=<uri-hash> "+
+				"--data=<data>",
+			version.AppName),
 		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -364,11 +364,11 @@ func GetCmdNftClassUpdate() *cobra.Command {
 		Use:  "update [space-id]",
 		Long: "update class mappings for nft asset",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft class update " +
-				"--ids=token1,token2,token3 " +
-				"--uris=uri1,uri2,uri3 " +
-				"--owners=owner1,owner2,owner3" +
-				version.AppName),
+			"$ %s tx layer2 nft class update "+
+				"--ids=class1,class2,class3 "+
+				"--uris=uri1,uri2,uri3 "+
+				"--owners=owner1,owner2,owner3",
+			version.AppName),
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -386,7 +386,7 @@ func GetCmdNftClassUpdate() *cobra.Command {
 				return err
 			}
 
-			uris, err := cmd.Flags().GetString(FlagIds)
+			uris, err := cmd.Flags().GetString(FlagUris)
 			if err != nil {
 				return err
 			}
@@ -442,9 +442,9 @@ func GetCmdNftClassDeposit() *cobra.Command {
 		Use:  "deposit [space-id] [class-id] [recipient]",
 		Long: "deposit an nft class from layer1 to layer2",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft class deposit [space-id] [class-id] [recipient] " +
-				"--uri=<uri>" +
-				version.AppName),
+			"$ %s tx layer2 nft class deposit [space-id] [class-id] [recipient] "+
+				"--uri=<uri>",
+			version.AppName),
 		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -465,8 +465,8 @@ func GetCmdNftClassDeposit() *cobra.Command {
 			msg := types.NewMsgDepositClassForNFT(
 				spaceId,
 				args[1],
-				args[2],
 				baseUri,
+				args[2],
 				clientCtx.GetFromAddress().String(),
 			)
 
@@ -485,9 +485,9 @@ func GetCmdNftClassWithdraw() *cobra.Command {
 		Use:  "withdraw [space-id] [class-id]",
 		Long: "withdraw an nft class from layer2 to layer1",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft withdraw-class [class-id]" +
-				"--owner=<owner>" +
-				version.AppName),
+			"$ %s tx layer2 nft withdraw-class [class-id]"+
+				"--owner=<owner>",
+			version.AppName),
 		Args: cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)

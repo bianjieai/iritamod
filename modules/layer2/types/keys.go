@@ -6,7 +6,6 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/address"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 )
 
 const (
@@ -16,22 +15,6 @@ const (
 
 	RouterKey = ModuleName
 )
-
-var (
-	ModuleAddress    sdk.Address
-	ModuleAddressStr string
-	ModuleAccAddress sdk.AccAddress
-)
-
-func init() {
-	ModuleAddress = authtypes.NewModuleAddress(ModuleName)
-	ModuleAddressStr = ModuleAddress.String()
-	acc, err := sdk.AccAddressFromBech32(ModuleAddressStr)
-	if err != nil {
-		panic(err.Error())
-	}
-	ModuleAccAddress = acc
-}
 
 var (
 	// Space storekey prefix

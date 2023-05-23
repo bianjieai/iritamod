@@ -16,8 +16,12 @@ func (k Keeper) CreateNFTs(ctx sdk.Context,
 	classId string,
 	nfts []types.TokenForNFT,
 	sender sdk.AccAddress) error {
+	if !k.HasSpace(ctx, spaceId) {
+		return sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
+	}
+
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
-		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "spaceId: %d is not owned by: %s", spaceId, sender)
+		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) is not owned by (%s)", spaceId, sender)
 	}
 
 	for _, nft := range nfts {
@@ -27,7 +31,12 @@ func (k Keeper) CreateNFTs(ctx sdk.Context,
 		}
 
 		if k.HasTokenForNFT(ctx, spaceId, classId, nft.Id) {
-			return sdkerrors.Wrapf(types.ErrTokenForNFTAlreadyExist, "spaceId: %d, classId: %s, tokenId: %s", spaceId, classId, nft.Id)
+			return sdkerrors.Wrapf(types.ErrInvalidTokenId, "token (%s) already exist", nft.Id)
+		}
+
+		// check if the layer 1 nft exist
+		if _, err := k.GetNFTKeeper().GetNFT(ctx, classId, nft.Id); err == nil {
+			return sdkerrors.Wrapf(types.ErrInvalidTokenId, "token (%s) already exist on layer one", nft.Id)
 		}
 
 		k.setTokenForNFT(ctx, spaceId, classId, nft.Id, owner)
@@ -42,8 +51,12 @@ func (k Keeper) UpdateNFTs(ctx sdk.Context,
 	classId string,
 	nfts []types.TokenForNFT,
 	sender sdk.AccAddress) error {
+	if !k.HasSpace(ctx, spaceId) {
+		return sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
+	}
+
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
-		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "spaceId: %d is not owned by: %s", spaceId, sender)
+		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) is not owned by sender (%s)", spaceId, sender)
 	}
 
 	for _, nft := range nfts {
@@ -53,7 +66,7 @@ func (k Keeper) UpdateNFTs(ctx sdk.Context,
 		}
 
 		if !k.HasTokenForNFT(ctx, spaceId, classId, nft.Id) {
-			return sdkerrors.Wrapf(types.ErrTokenForNFTNotExist, "spaceId: %d, classId: %s, tokenId: %s", spaceId, classId, nft.Id)
+			return sdkerrors.Wrapf(types.ErrTokenNotExist, "token (%s) not exist under class (%s) in space (%d)", nft.Id, classId, spaceId)
 		}
 
 		k.setTokenForNFT(ctx, spaceId, classId, nft.Id, owner)
@@ -69,8 +82,12 @@ func (k Keeper) DeleteNFTs(ctx sdk.Context,
 	classId string,
 	tokenIds []string,
 	sender sdk.AccAddress) error {
+	if !k.HasSpace(ctx, spaceId) {
+		return sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
+	}
+
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
-		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "spaceId: %d is not owned by: %s", spaceId, sender)
+		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) is not owned by (%s)", spaceId, sender)
 	}
 
 	for _, tokenId := range tokenIds {
@@ -86,7 +103,9 @@ func (k Keeper) DeleteNFTs(ctx sdk.Context,
 		if err != nil {
 			continue
 		}
-		if err := k.nft.RemoveNFT(ctx, classId, tokenId, types.ModuleAccAddress); err != nil {
+
+		moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
+		if err := k.nft.RemoveNFT(ctx, classId, tokenId, moduleAddr); err != nil {
 			return err
 		}
 	}
@@ -99,8 +118,12 @@ func (k Keeper) UpdateClassesForNFT(ctx sdk.Context,
 	spaceId uint64,
 	classUpdates []types.UpdateClassForNFT,
 	sender sdk.AccAddress) error {
+	if !k.HasSpace(ctx, spaceId) {
+		return sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
+	}
+
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
-		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "spaceId: %d is not owned by: %s", spaceId, sender)
+		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) is not owned by (%s)", spaceId, sender)
 	}
 
 	for _, classUpdate := range classUpdates {
@@ -119,7 +142,7 @@ func (k Keeper) UpdateClassesForNFT(ctx sdk.Context,
 			return err
 		}
 		if spaceId != currSpaceId {
-			return sdkerrors.Wrapf(types.ErrClassNotOnSpace, "want: %d, got: %d", currSpaceId, spaceId)
+			return sdkerrors.Wrapf(types.ErrNotSpaceOfClass, "class not active on space (%d)", spaceId)
 		}
 
 		class.Owner = classUpdate.Owner
@@ -138,7 +161,7 @@ func (k Keeper) DepositClassForNFT(ctx sdk.Context,
 	recipient,
 	sender sdk.AccAddress) error {
 	if !k.HasSpace(ctx, spaceId) {
-		return sdkerrors.Wrapf(types.ErrUnknownSpace, "space %d not exist", spaceId)
+		return sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
 	}
 
 	// check if the class exists
@@ -148,11 +171,11 @@ func (k Keeper) DepositClassForNFT(ctx sdk.Context,
 	}
 	// check if the denom owned by sender
 	if class.GetOwner() != sender.String() {
-		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "class %s is not owned by %s", classId, sender)
+		return sdkerrors.Wrapf(types.ErrNotClassOwner, "class (%s) is not owned by (%s)", classId, sender)
 	}
 
 	if !k.GetPermKeeper().HasL2UserRole(ctx, sender) && !sender.Equals(recipient) {
-		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "recipient %s must be sender if not l2 user", sender)
+		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "recipient (%s) must be sender if not l2 user", recipient)
 	}
 
 	classForNFT := types.ClassForNFT{
@@ -165,7 +188,8 @@ func (k Keeper) DepositClassForNFT(ctx sdk.Context,
 	k.setClassForNFT(ctx, classForNFT)
 	k.setSpaceOfClassForNFT(ctx, classId, spaceId)
 
-	return k.nft.TransferClass(ctx, classId, sender, types.ModuleAccAddress)
+	moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
+	return k.nft.TransferClass(ctx, classId, sender, moduleAddr)
 }
 
 func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
@@ -173,9 +197,13 @@ func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
 	classId string,
 	owner,
 	sender sdk.AccAddress) error {
+	if !k.HasSpace(ctx, spaceId) {
+		return sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
+	}
+
 	// sender must have this space
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
-		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "spaceId: %d is not owned by: %s", spaceId, sender)
+		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) is not owned by (%s)", spaceId, sender)
 	}
 
 	// check if the class mapping exist
@@ -190,7 +218,7 @@ func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
 		return err
 	}
 	if spaceId != currSpaceId {
-		return sdkerrors.Wrapf(types.ErrClassNotOnSpace, "want: %d, got: %d", currSpaceId, spaceId)
+		return sdkerrors.Wrapf(types.ErrNotSpaceOfClass, "class no active on space (%d)", spaceId)
 	}
 
 	// check if the class exists
@@ -200,24 +228,25 @@ func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
 	}
 
 	// check if the class owned by module account
-	if class.GetOwner() != types.ModuleAddress.String() {
-		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "class %s is not locked by %s", classId, types.ModuleAddress.String())
+	moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
+	if class.GetOwner() != moduleAddr.String() {
+		return sdkerrors.Wrapf(types.ErrNotClassOwner, "class (%s) is not locked by (%s)", classId, moduleAddr.String())
 	}
 
 	// check if the class mapping owner is msg.owner
 	if classForNFT.Owner != owner.String() {
-		return sdkerrors.Wrapf(types.ErrClassNotOwnedByAccount, "original owner want %s, got %s", classForNFT.Owner, sender)
+		return sdkerrors.Wrapf(types.ErrNotClassOwner, "original owner want (%s) but got (%s)", classForNFT.Owner, sender)
 	}
 
 	// remove class corresponding space
 	k.deleteSpaceOfClassForNFT(ctx, classId)
 
 	// recover mint_restricted
-	if err := k.nft.UpdateClassMintRestricted(ctx, class.GetID(), classForNFT.Layer1MintRestricted, types.ModuleAccAddress); err != nil {
+	if err := k.nft.UpdateClassMintRestricted(ctx, class.GetID(), classForNFT.Layer1MintRestricted, moduleAddr); err != nil {
 		return err
 	}
 
-	return k.nft.TransferClass(ctx, classId, types.ModuleAccAddress, owner)
+	return k.nft.TransferClass(ctx, classId, moduleAddr, owner)
 }
 
 func (k Keeper) DepositTokenForNFT(ctx sdk.Context,
@@ -225,6 +254,10 @@ func (k Keeper) DepositTokenForNFT(ctx sdk.Context,
 	classId,
 	tokenId string,
 	sender sdk.AccAddress) error {
+	if !k.HasSpace(ctx, spaceId) {
+		return sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
+	}
+
 	// token must exist
 	nft, err := k.nft.GetNFT(ctx, classId, tokenId)
 	if err != nil {
@@ -232,17 +265,14 @@ func (k Keeper) DepositTokenForNFT(ctx sdk.Context,
 	}
 
 	if !nft.GetOwner().Equals(sender) {
-		return sdkerrors.Wrapf(types.ErrTokenForNFTNotOwnedByAccount, "nft %s is not owned by %s", tokenId, sender)
-	}
-
-	if !k.HasSpace(ctx, spaceId) {
-		return sdkerrors.Wrapf(types.ErrUnknownSpace, "space %d not exist", spaceId)
+		return sdkerrors.Wrapf(types.ErrNotTokenOwner, "nft (%s) is not owned by (%s)", tokenId, sender)
 	}
 
 	k.setTokenForNFT(ctx, spaceId, classId, tokenId, sender)
 	k.setTokenOwnerForNFT(ctx, spaceId, classId, tokenId, sender)
 
-	return k.nft.TransferNFT(ctx, classId, tokenId, sender, types.ModuleAccAddress)
+	moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
+	return k.nft.TransferNFT(ctx, classId, tokenId, sender, moduleAddr)
 }
 
 func (k Keeper) WithdrawTokenForNFT(ctx sdk.Context,
@@ -256,16 +286,20 @@ func (k Keeper) WithdrawTokenForNFT(ctx sdk.Context,
 	owner,
 	sender sdk.AccAddress,
 ) error {
+	if !k.HasSpace(ctx, spaceId) {
+		return sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
+	}
+
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
-		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space %d not owned by %s", spaceId, sender)
+		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) not owned by (%s)", spaceId, sender)
 	}
 
 	tokenOwner, err := k.GetTokenOwnerForNFT(ctx, spaceId, classId, tokenId)
 	if err != nil {
-		return sdkerrors.Wrapf(types.ErrTokenForNFTNotExist, "token %s not exist", tokenId)
+		return sdkerrors.Wrapf(types.ErrTokenNotExist, "token (%s) not exist under class (%s) in space (%d)", tokenId, classId, spaceId)
 	}
 	if !tokenOwner.Equals(owner) {
-		return sdkerrors.Wrapf(types.ErrTokenForNFTNotOwnedByAccount, "nft %s is not owned by %s", tokenId, owner)
+		return sdkerrors.Wrapf(types.ErrNotTokenOwner, "nft (%s) is not owned by (%s)", tokenId, owner)
 	}
 
 	_, err = k.nft.GetNFT(ctx, classId, tokenId)
@@ -276,11 +310,12 @@ func (k Keeper) WithdrawTokenForNFT(ctx sdk.Context,
 		}
 	} else {
 		// nft exist, update and transfer ownership
-		if err := k.nft.UpdateNFT(ctx, classId, tokenId, tokenName, tokenUri, tokenUriHash, tokenData, types.ModuleAccAddress); err != nil {
+		moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
+		if err := k.nft.UpdateNFT(ctx, classId, tokenId, tokenName, tokenUri, tokenUriHash, tokenData, moduleAddr); err != nil {
 			return err
 		}
 
-		if err := k.nft.TransferNFT(ctx, classId, tokenId, types.ModuleAccAddress, owner); err != nil {
+		if err := k.nft.TransferNFT(ctx, classId, tokenId, moduleAddr, owner); err != nil {
 			return err
 		}
 	}
@@ -365,7 +400,7 @@ func (k Keeper) GetClassForNFT(ctx sdk.Context, classId string) (types.ClassForN
 	key := types.ClassForNFTStoreKey(classId)
 	bz := store.Get(key)
 	if len(bz) == 0 {
-		return types.ClassForNFT{}, sdkerrors.Wrapf(types.ErrClassForNFTNotExist, "class mapping %s not exist", classId)
+		return types.ClassForNFT{}, sdkerrors.Wrapf(types.ErrClassNotExist, "unable to get class (%s) mapping ", classId)
 	}
 
 	var classForNFT types.ClassForNFT
@@ -396,7 +431,7 @@ func (k Keeper) GetSpaceOfClassForNFT(ctx sdk.Context, class string) (uint64, er
 	key := types.SpaceOfClassForNFTStoreKey(class)
 	bz := store.Get(key)
 	if len(bz) == 0 {
-		return 0, sdkerrors.Wrapf(types.ErrClassNotOnSpace, "class %s not on layer2", class)
+		return 0, sdkerrors.Wrapf(types.ErrNotSpaceOfClass, "class (%s) not active on layer2", class)
 	}
 	return sdk.BigEndianToUint64(bz), nil
 }
@@ -418,7 +453,7 @@ func (k Keeper) GetTokenForNFT(ctx sdk.Context, spaceId uint64, classId, tokenId
 	key := types.TokenForNFTStoreKey(spaceId, classId, tokenId)
 	bz := store.Get(key)
 	if len(bz) == 0 {
-		return nil, sdkerrors.Wrapf(types.ErrTokenForNFTNotExist, "token %s not exist", tokenId)
+		return nil, sdkerrors.Wrapf(types.ErrTokenNotExist, "unable to get token (%s) mapping", tokenId)
 	}
 	return bz, nil
 }
@@ -453,7 +488,7 @@ func (k Keeper) GetTokenOwnerForNFT(ctx sdk.Context, spaceId uint64, classId, to
 	key := types.TokenForNFTStoreKey(spaceId, classId, tokenId)
 	bz := store.Get(key)
 	if len(bz) == 0 {
-		return nil, sdkerrors.Wrapf(types.ErrTokenForNFTNotExist, "token %s not exist", tokenId)
+		return nil, sdkerrors.Wrapf(types.ErrTokenNotExist, "unable to get token (%s) mapping", tokenId)
 	}
 
 	return bz, nil

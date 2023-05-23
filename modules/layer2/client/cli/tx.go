@@ -53,10 +53,10 @@ func GetCmdSpaceCreate() *cobra.Command {
 		Use:  "create",
 		Long: "create a new layer2 space",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 space create " +
-				"--name=<name> " +
-				"--uri=<uri>" +
-				version.AppName),
+			"$ %s tx layer2 space create "+
+				"--name=<name> "+
+				"--uri=<uri>",
+			version.AppName),
 		Args: cobra.ExactArgs(0),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -97,8 +97,8 @@ func GetCmdSpaceTransfer() *cobra.Command {
 		Use:  "transfer [space-id] [recipient]",
 		Long: "transfer ownership of space from sender to recipient",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 space transfer [space-id] [recipient]" +
-				version.AppName),
+			"$ %s tx layer2 space transfer [space-id] [recipient]",
+			version.AppName),
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
@@ -131,8 +131,8 @@ func GetCmdCreateL2BlockHeader() *cobra.Command {
 		Use:  "create-blockheader [space-id] [height] [header]",
 		Long: "create a layer2 block header record",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 create-blockheader [space-id] [height] [header]" +
-				version.AppName),
+			"$ %s tx layer2 create-blockheader [space-id] [height] [header]",
+			version.AppName),
 		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)

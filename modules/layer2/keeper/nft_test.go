@@ -3,10 +3,10 @@ package keeper_test
 import "github.com/bianjieai/iritamod/modules/layer2/types"
 
 func (s *TestSuite) TestCreateTokensForNFT() {
-	err := s.keeper.CreateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT, accAvata)
+	err := s.keeper.CreateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT2, accAvata)
 	s.Require().NoErrorf(err, "failed to create tokens")
 
-	for _, token := range badKidsTokensForNFT {
+	for _, token := range badKidsTokensForNFT2 {
 		owner, err := s.keeper.GetTokenOwnerForNFT(s.ctx, avataSpaceId, badKidsClassId, token.Id)
 		s.Require().NoErrorf(err, "failed to get token owner")
 		s.Require().Equal(token.Owner, owner.String())
@@ -14,17 +14,17 @@ func (s *TestSuite) TestCreateTokensForNFT() {
 }
 
 func (s *TestSuite) TestUpdateTokensForNFT() {
-	err := s.keeper.CreateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT, accAvata)
+	err := s.keeper.CreateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT2, accAvata)
 	s.Require().NoErrorf(err, "failed to create tokens")
 
 	// exchange owner
-	badKidsTokensForNFT[0].Owner = accBob.String()
-	badKidsTokensForNFT[1].Owner = accAlice.String()
+	badKidsTokensForNFT2[0].Owner = accBob.String()
+	badKidsTokensForNFT2[1].Owner = accAlice.String()
 
-	err = s.keeper.UpdateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT, accAvata)
+	err = s.keeper.UpdateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT2, accAvata)
 	s.Require().NoErrorf(err, "failed to update tokens")
 
-	for _, token := range badKidsTokensForNFT {
+	for _, token := range badKidsTokensForNFT2 {
 		owner, err := s.keeper.GetTokenOwnerForNFT(s.ctx, avataSpaceId, badKidsClassId, token.Id)
 		s.Require().NoErrorf(err, "failed to get token owner")
 		s.Require().Equal(token.Owner, owner.String())
@@ -66,8 +66,9 @@ func (s *TestSuite) TestDepositClassForNFTByAlice() {
 	s.Require().Equal(accAlice.String(), class.Owner)
 
 	badKids, err := s.keeper.GetNFTKeeper().GetClass(s.ctx, badKidsClassId)
+	moduleAddr := s.keeper.GetAccKeeper().GetModuleAddress(types.ModuleName)
 	s.Require().NoErrorf(err, "failed to get layer1 class")
-	s.Require().Equal(types.ModuleAccAddress.String(), badKids.GetOwner())
+	s.Require().Equal(moduleAddr.String(), badKids.GetOwner())
 }
 
 func (s *TestSuite) TestDepositClassForNFTByL2User() {
@@ -86,8 +87,9 @@ func (s *TestSuite) TestDepositClassForNFTByL2User() {
 	s.Require().Equal(accAlice.String(), class.Owner)
 
 	badKids, err := s.keeper.GetNFTKeeper().GetClass(s.ctx, badKidsClassId)
+	moduleAddr := s.keeper.GetAccKeeper().GetModuleAddress(types.ModuleName)
 	s.Require().NoErrorf(err, "failed to get layer1 class")
-	s.Require().Equal(types.ModuleAccAddress.String(), badKids.GetOwner())
+	s.Require().Equal(moduleAddr.String(), badKids.GetOwner())
 }
 
 // TODO: table driven
@@ -120,8 +122,9 @@ func (s *TestSuite) TestWithdrawClassForNFT() {
 	s.Require().NoErrorf(err, "failed to deposit class")
 
 	badKids, err := s.keeper.GetNFTKeeper().GetClass(s.ctx, badKidsClassId)
+	moduleAddr := s.keeper.GetAccKeeper().GetModuleAddress(types.ModuleName)
 	s.Require().NoErrorf(err, "failed to get layer1 class")
-	s.Require().Equal(types.ModuleAccAddress.String(), badKids.GetOwner())
+	s.Require().Equal(moduleAddr.String(), badKids.GetOwner())
 
 	err = s.keeper.WithdrawClassForNFT(s.ctx, avataSpaceId, badKidsClassId, accAlice, accAvata)
 	s.Require().NoErrorf(err, "failed to withdraw class")
@@ -141,8 +144,9 @@ func (s *TestSuite) TestDepositTokenForNFT() {
 	s.Require().Equal(accAlice.String(), owner.String())
 
 	nft, err := s.keeper.GetNFTKeeper().GetNFT(s.ctx, badKidsClassId, tokenId)
+	moduleAddr := s.keeper.GetAccKeeper().GetModuleAddress(types.ModuleName)
 	s.Require().NoErrorf(err, "failed to get layer1 token")
-	s.Require().Equal(types.ModuleAccAddress.String(), nft.GetOwner().String())
+	s.Require().Equal(moduleAddr.String(), nft.GetOwner().String())
 }
 
 func (s *TestSuite) TestWithdrawTokenForNFT() {
@@ -155,8 +159,9 @@ func (s *TestSuite) TestWithdrawTokenForNFT() {
 	s.Require().Equal(accAlice.String(), owner.String())
 
 	nft, err := s.keeper.GetNFTKeeper().GetNFT(s.ctx, badKidsClassId, tokenId)
+	moduleAddr := s.keeper.GetAccKeeper().GetModuleAddress(types.ModuleName)
 	s.Require().NoErrorf(err, "failed to get layer1 token")
-	s.Require().Equal(types.ModuleAccAddress.String(), nft.GetOwner().String())
+	s.Require().Equal(moduleAddr.String(), nft.GetOwner().String())
 
 	newTokenName := "new-name"
 	newTokenUri := "new-uri"

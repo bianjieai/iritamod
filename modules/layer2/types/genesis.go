@@ -32,14 +32,14 @@ func DefaultGenesisState() *GenesisState {
 // expected invariants holds.
 func ValidateGenesis(data GenesisState) error {
 	if uint64(len(data.Spaces)) != data.SpaceSequence {
-		return sdkerrors.Wrapf(ErrInvalidSpace, "space counts not match during space validation, want: %d, got: %d", data.SpaceSequence, len(data.Spaces))
+		return sdkerrors.Wrapf(ErrInvalidSpace, "space counts not match, want (%d) but got (%d)", data.SpaceSequence, len(data.Spaces))
 	}
 
 	// validate Spaces
 	seenSpaceIds := make(map[uint64]bool)
 	for _, space := range data.Spaces {
 		if space.Id == 0 {
-			return sdkerrors.Wrapf(ErrInvalidSpace, "invalid space id: %d during space validation", space.Id)
+			return sdkerrors.Wrapf(ErrInvalidSpace, "invalid space (%d) during validation", space.Id)
 		}
 
 		if _, err := sdk.AccAddressFromBech32(space.Owner); err != nil {
@@ -47,7 +47,7 @@ func ValidateGenesis(data GenesisState) error {
 		}
 
 		if seenSpaceIds[space.Id] {
-			return sdkerrors.Wrapf(ErrDuplicateSpace, "duplicate space id: %d during space validation", space.Id)
+			return sdkerrors.Wrapf(ErrInvalidSpace, "duplicate space (%d) during validation", space.Id)
 		}
 		seenSpaceIds[space.Id] = true
 	}
@@ -56,13 +56,13 @@ func ValidateGenesis(data GenesisState) error {
 	seenBlockHeaderMap := make(map[string]bool)
 	for _, header := range data.L2BlockHeaders {
 		if !seenSpaceIds[header.SpaceId] {
-			return sdkerrors.Wrapf(ErrInvalidSpace, "unknown space id: %d during record validation", header.SpaceId)
+			return sdkerrors.Wrapf(ErrInvalidSpace, "unknown space (%d) during validation", header.SpaceId)
 		}
 
 		// space_id/height is unique
 		seenBlockHeader := fmt.Sprintf("%d-%d", header.SpaceId, header.Height)
 		if seenBlockHeaderMap[seenBlockHeader] {
-			return sdkerrors.Wrapf(ErrDuplicateRecord, "duplicate record: %s during record validation", seenBlockHeader)
+			return sdkerrors.Wrapf(ErrBlockHeader, "duplicate block header (%s) during validation", seenBlockHeader)
 		}
 		seenBlockHeaderMap[seenBlockHeader] = true
 	}
@@ -79,18 +79,18 @@ func ValidateGenesis(data GenesisState) error {
 		}
 
 		if seenClassesForNFT[class.Id] {
-			return sdkerrors.Wrapf(ErrDuplicateClassIdForNFT, "duplicate class id: %s during class validation", class.Id)
+			return sdkerrors.Wrapf(ErrInvalidClassId, "duplicate class (%s) during validation", class.Id)
 		}
 		seenClassesForNFT[class.Id] = true
 	}
 
 	for _, collection := range data.CollectionsForNft {
 		if !seenSpaceIds[collection.SpaceId] {
-			return sdkerrors.Wrapf(ErrInvalidSpace, "unknown space id: %d during collection validation", collection.SpaceId)
+			return sdkerrors.Wrapf(ErrInvalidSpace, "unknown space (%d) during validation", collection.SpaceId)
 		}
 
 		if !seenClassesForNFT[collection.ClassId] {
-			return sdkerrors.Wrapf(ErrUnknownClassIdForNFT, "unknown class id: %s during collection validation", collection.ClassId)
+			return sdkerrors.Wrapf(ErrClassNotExist, "unknown class (%s) during validation", collection.ClassId)
 		}
 
 		if err := ValidateClassIdForNFT(collection.ClassId); err != nil {
