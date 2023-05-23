@@ -365,7 +365,7 @@ func GetCmdNftClassUpdate() *cobra.Command {
 		Long: "update class mappings for nft asset",
 		Example: fmt.Sprintf(
 			"$ %s tx layer2 nft class update "+
-				"--ids=token1,token2,token3 "+
+				"--ids=class1,class2,class3 "+
 				"--uris=uri1,uri2,uri3 "+
 				"--owners=owner1,owner2,owner3",
 			version.AppName),
