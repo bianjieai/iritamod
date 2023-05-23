@@ -465,8 +465,8 @@ func GetCmdNftClassDeposit() *cobra.Command {
 			msg := types.NewMsgDepositClassForNFT(
 				spaceId,
 				args[1],
-				args[2],
 				baseUri,
+				args[2],
 				clientCtx.GetFromAddress().String(),
 			)
 
