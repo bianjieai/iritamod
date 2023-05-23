@@ -25,3 +25,7 @@ type NFTKeeper interface {
 	GetClass(ctx sdk.Context, classID string) (Class, error)
 	GetNFT(ctx sdk.Context, classID, tokenID string) (NFT, error)
 }
+
+type PermKeeper interface {
+	HasL2UserRole(ctx sdk.Context, signer sdk.AccAddress) bool
+}

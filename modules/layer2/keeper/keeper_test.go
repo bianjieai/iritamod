@@ -11,8 +11,6 @@ import (
 
 	"github.com/bianjieai/iritamod/modules/layer2/keeper"
 	"github.com/bianjieai/iritamod/modules/layer2/types"
-	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
-	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	"github.com/bianjieai/iritamod/simapp"
 )
 
@@ -45,11 +43,10 @@ var (
 type TestSuite struct {
 	suite.Suite
 
-	ctx        sdk.Context
-	cdc        *codec.LegacyAmino
-	permKeeper permkeeper.Keeper
-	keeper     keeper.Keeper
-	app        *simapp.SimApp
+	ctx    sdk.Context
+	cdc    *codec.LegacyAmino
+	keeper keeper.Keeper
+	app    *simapp.SimApp
 }
 
 func TestTestSuite(t *testing.T) {
@@ -66,22 +63,9 @@ func (s *TestSuite) SetupTest() {
 	s.cdc = app.LegacyAmino()
 	s.ctx = app.BaseApp.NewContext(false, tmproto.Header{})
 	s.app = app
-	s.permKeeper = app.PermKeeper
 	s.keeper = app.Layer2Keeper
 
-	s.prepareRoles()
 	s.prepareLayer2()
-}
-
-func (s *TestSuite) prepareRoles() {
-	err := s.permKeeper.Authorize(s.ctx, accAvata, rootAdmin, permtypes.RoleLayer2User)
-	if err != nil {
-		panic("failed to authorize role")
-	}
-	err = s.permKeeper.Authorize(s.ctx, accXvata, rootAdmin, permtypes.RoleLayer2User)
-	if err != nil {
-		panic("failed to authorize role")
-	}
 }
 
 func (s *TestSuite) prepareLayer2() {
