@@ -1,10 +1,11 @@
 package keeper
 
 import (
-	"github.com/bianjieai/iritamod/modules/layer2/types"
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/bianjieai/iritamod/modules/layer2/types"
 )
 
 // CreateNFTs batch create token mappings for nft
@@ -97,7 +98,9 @@ func (k Keeper) DeleteNFTs(ctx sdk.Context,
 		if err != nil {
 			continue
 		}
-		if err := k.nft.RemoveNFT(ctx, classId, tokenId, types.ModuleAccAddress); err != nil {
+
+		moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
+		if err := k.nft.RemoveNFT(ctx, classId, tokenId, moduleAddr); err != nil {
 			return err
 		}
 	}
@@ -180,7 +183,8 @@ func (k Keeper) DepositClassForNFT(ctx sdk.Context,
 	k.setClassForNFT(ctx, classForNFT)
 	k.setSpaceOfClassForNFT(ctx, classId, spaceId)
 
-	return k.nft.TransferClass(ctx, classId, sender, types.ModuleAccAddress)
+	moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
+	return k.nft.TransferClass(ctx, classId, sender, moduleAddr)
 }
 
 func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
@@ -219,8 +223,9 @@ func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
 	}
 
 	// check if the class owned by module account
-	if class.GetOwner() != types.ModuleAddress.String() {
-		return sdkerrors.Wrapf(types.ErrNotClassOwner, "class (%s) is not locked by (%s)", classId, types.ModuleAddress.String())
+	moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
+	if class.GetOwner() != moduleAddr.String() {
+		return sdkerrors.Wrapf(types.ErrNotClassOwner, "class (%s) is not locked by (%s)", classId, moduleAddr.String())
 	}
 
 	// check if the class mapping owner is msg.owner
@@ -232,11 +237,11 @@ func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
 	k.deleteSpaceOfClassForNFT(ctx, classId)
 
 	// recover mint_restricted
-	if err := k.nft.UpdateClassMintRestricted(ctx, class.GetID(), classForNFT.Layer1MintRestricted, types.ModuleAccAddress); err != nil {
+	if err := k.nft.UpdateClassMintRestricted(ctx, class.GetID(), classForNFT.Layer1MintRestricted, moduleAddr); err != nil {
 		return err
 	}
 
-	return k.nft.TransferClass(ctx, classId, types.ModuleAccAddress, owner)
+	return k.nft.TransferClass(ctx, classId, moduleAddr, owner)
 }
 
 func (k Keeper) DepositTokenForNFT(ctx sdk.Context,
@@ -261,7 +266,8 @@ func (k Keeper) DepositTokenForNFT(ctx sdk.Context,
 	k.setTokenForNFT(ctx, spaceId, classId, tokenId, sender)
 	k.setTokenOwnerForNFT(ctx, spaceId, classId, tokenId, sender)
 
-	return k.nft.TransferNFT(ctx, classId, tokenId, sender, types.ModuleAccAddress)
+	moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
+	return k.nft.TransferNFT(ctx, classId, tokenId, sender, moduleAddr)
 }
 
 func (k Keeper) WithdrawTokenForNFT(ctx sdk.Context,
@@ -299,11 +305,12 @@ func (k Keeper) WithdrawTokenForNFT(ctx sdk.Context,
 		}
 	} else {
 		// nft exist, update and transfer ownership
-		if err := k.nft.UpdateNFT(ctx, classId, tokenId, tokenName, tokenUri, tokenUriHash, tokenData, types.ModuleAccAddress); err != nil {
+		moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
+		if err := k.nft.UpdateNFT(ctx, classId, tokenId, tokenName, tokenUri, tokenUriHash, tokenData, moduleAddr); err != nil {
 			return err
 		}
 
-		if err := k.nft.TransferNFT(ctx, classId, tokenId, types.ModuleAccAddress, owner); err != nil {
+		if err := k.nft.TransferNFT(ctx, classId, tokenId, moduleAddr, owner); err != nil {
 			return err
 		}
 	}
