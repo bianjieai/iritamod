@@ -10,15 +10,10 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/bianjieai/iritamod/modules/layer2/types"
-	"github.com/bianjieai/iritamod/modules/perm"
 )
 
 // CreateL2Space creates a new space
 func (k Keeper) CreateL2Space(ctx sdk.Context, name, uri string, sender sdk.AccAddress) (uint64, error) {
-	if !k.HasL2UserRole(ctx, sender) {
-		return 0, sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", sender)
-	}
-
 	// increment the max space id and save it
 	k.incrSpaceSequence(ctx)
 	spaceId := k.GetSpaceSequence(ctx)
@@ -37,11 +32,7 @@ func (k Keeper) CreateL2Space(ctx sdk.Context, name, uri string, sender sdk.AccA
 
 // TransferL2Space transfer the space ownership
 func (k Keeper) TransferL2Space(ctx sdk.Context, spaceId uint64, from, to sdk.AccAddress) error {
-	if !k.HasL2UserRole(ctx, from) {
-		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", from)
-	}
-
-	if !k.HasL2UserRole(ctx, to) {
+	if !k.GetPermKeeper().HasL2UserRole(ctx, to) {
 		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", to)
 	}
 
@@ -64,24 +55,12 @@ func (k Keeper) TransferL2Space(ctx sdk.Context, spaceId uint64, from, to sdk.Ac
 
 // CreateL2BlockHeader creates a layer2 block header record
 func (k Keeper) CreateL2BlockHeader(ctx sdk.Context, spaceId, height uint64, header string, addr sdk.AccAddress) error {
-	if !k.HasL2UserRole(ctx, addr) {
-		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "address: %s", addr)
-	}
-
 	if k.HasL2BlockHeader(ctx, spaceId, height) {
 		return sdkerrors.Wrapf(types.ErrRecordAlreadyExist, "space: %d, height: %d", spaceId, height)
 	}
 
 	k.setL2BlockHeader(ctx, spaceId, height, header)
 	return nil
-}
-
-// HasL2UserRole checks if an account has the l2 user role
-func (k Keeper) HasL2UserRole(ctx sdk.Context, address sdk.AccAddress) bool {
-	if err := k.perm.Access(ctx, address, perm.RoleLayer2User.Auth()); err != nil {
-		return false
-	}
-	return true
 }
 
 // GetSpaceSequence return the current sequence for space
