@@ -24,6 +24,10 @@ func (k Keeper) CreateNFTs(ctx sdk.Context,
 		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) is not owned by (%s)", spaceId, sender)
 	}
 
+	if _, err := k.nft.GetClass(ctx, classId); err != nil {
+		return sdkerrors.Wrapf(types.ErrClassNotExist, "class (%s) not exist on layer one", classId)
+	}
+
 	for _, nft := range nfts {
 		owner, err := sdk.AccAddressFromBech32(nft.Owner)
 		if err != nil {
@@ -35,7 +39,7 @@ func (k Keeper) CreateNFTs(ctx sdk.Context,
 		}
 
 		// check if the layer 1 nft exist
-		if _, err := k.GetNFTKeeper().GetNFT(ctx, classId, nft.Id); err == nil {
+		if _, err := k.nft.GetNFT(ctx, classId, nft.Id); err == nil {
 			return sdkerrors.Wrapf(types.ErrInvalidTokenId, "token (%s) already exist on layer one", nft.Id)
 		}
 
@@ -57,6 +61,10 @@ func (k Keeper) UpdateNFTs(ctx sdk.Context,
 
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
 		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) is not owned by sender (%s)", spaceId, sender)
+	}
+
+	if _, err := k.nft.GetClass(ctx, classId); err != nil {
+		return sdkerrors.Wrapf(types.ErrClassNotExist, "class (%s) not exist on layer one", classId)
 	}
 
 	for _, nft := range nfts {
@@ -88,6 +96,10 @@ func (k Keeper) DeleteNFTs(ctx sdk.Context,
 
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
 		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) is not owned by (%s)", spaceId, sender)
+	}
+
+	if _, err := k.nft.GetClass(ctx, classId); err != nil {
+		return sdkerrors.Wrapf(types.ErrClassNotExist, "class (%s) not exist on layer one", classId)
 	}
 
 	for _, tokenId := range tokenIds {
@@ -292,6 +304,10 @@ func (k Keeper) WithdrawTokenForNFT(ctx sdk.Context,
 
 	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
 		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) not owned by (%s)", spaceId, sender)
+	}
+
+	if _, err := k.nft.GetClass(ctx, classId); err != nil {
+		return sdkerrors.Wrapf(types.ErrClassNotExist, "class (%s) not exist", classId)
 	}
 
 	tokenOwner, err := k.GetTokenOwnerForNFT(ctx, spaceId, classId, tokenId)
