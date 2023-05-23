@@ -386,7 +386,7 @@ func GetCmdNftClassUpdate() *cobra.Command {
 				return err
 			}
 
-			uris, err := cmd.Flags().GetString(FlagIds)
+			uris, err := cmd.Flags().GetString(FlagUris)
 			if err != nil {
 				return err
 			}

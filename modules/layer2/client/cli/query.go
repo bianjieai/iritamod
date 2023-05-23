@@ -50,7 +50,7 @@ func GetCmdQuerySpaceInfo() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "space [space-id]",
 		Long:    "query the space info of the given space-id",
-		Example: fmt.Sprintf("$ %s q layer2 space space [space-id] ", version.AppName),
+		Example: fmt.Sprintf("$ %s q layer2 space space [space-id]", version.AppName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
