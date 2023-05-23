@@ -318,6 +318,10 @@ func (msg MsgUpdateClassesForNFT) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
 	}
 
+	if err := ValidateSpaceId(msg.SpaceId); err != nil {
+		return err
+	}
+
 	if err := ValidateClassUpdatesForNFT(msg.ClassUpdatesForNft); err != nil {
 		return err
 	}
@@ -357,6 +361,14 @@ func (msg MsgDepositClassForNFT) ValidateBasic() error {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid sender address (%s)", err)
 	}
 
+	if _, err := sdk.AccAddressFromBech32(msg.Recipient); err != nil {
+		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid recipient address (%s)", err)
+	}
+
+	if err := ValidateSpaceId(msg.SpaceId); err != nil {
+		return err
+	}
+
 	if err := ValidateClassIdForNFT(msg.ClassId); err != nil {
 		return err
 	}
@@ -379,6 +391,7 @@ func (msg MsgDepositClassForNFT) GetSigners() []sdk.AccAddress {
 // NewMsgWithdrawClassForNFT is a constructor function for NewMsgWithdrawClassForNFT
 func NewMsgWithdrawClassForNFT(spaceId uint64, classId, owner, sender string) *MsgWithdrawClassForNFT {
 	return &MsgWithdrawClassForNFT{
+		SpaceId: spaceId,
 		ClassId: classId,
 		Owner:   owner,
 		Sender:  sender,
@@ -396,6 +409,10 @@ func (msg MsgWithdrawClassForNFT) ValidateBasic() error {
 
 	if _, err := sdk.AccAddressFromBech32(msg.Owner); err != nil {
 		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid owner address (%s)", err)
+	}
+
+	if err := ValidateSpaceId(msg.SpaceId); err != nil {
+		return err
 	}
 
 	if err := ValidateClassIdForNFT(msg.ClassId); err != nil {
