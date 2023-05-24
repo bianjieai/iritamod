@@ -31,7 +31,7 @@ func (k Keeper) CreateNFTs(ctx sdk.Context,
 	for _, nft := range nfts {
 		owner, err := sdk.AccAddressFromBech32(nft.Owner)
 		if err != nil {
-			return err
+			return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, err.Error())
 		}
 
 		if k.HasTokenForNFT(ctx, spaceId, classId, nft.Id) {
@@ -70,7 +70,7 @@ func (k Keeper) UpdateNFTs(ctx sdk.Context,
 	for _, nft := range nfts {
 		owner, err := sdk.AccAddressFromBech32(nft.Owner)
 		if err != nil {
-			return err
+			return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, err.Error())
 		}
 
 		if !k.HasTokenForNFT(ctx, spaceId, classId, nft.Id) {
@@ -118,7 +118,7 @@ func (k Keeper) DeleteNFTs(ctx sdk.Context,
 
 		moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
 		if err := k.nft.RemoveNFT(ctx, classId, tokenId, moduleAddr); err != nil {
-			return err
+			return sdkerrors.Wrapf(types.ErrFromNftModule, "failed to burn token (%s), error (%s)", tokenId, err.Error())
 		}
 	}
 
@@ -141,7 +141,7 @@ func (k Keeper) UpdateClassesForNFT(ctx sdk.Context,
 	for _, classUpdate := range classUpdates {
 		_, err := sdk.AccAddressFromBech32(classUpdate.Owner)
 		if err != nil {
-			return err
+			return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, err.Error())
 		}
 
 		class, err := k.GetClassForNFT(ctx, classUpdate.Id)
@@ -179,7 +179,7 @@ func (k Keeper) DepositClassForNFT(ctx sdk.Context,
 	// check if the class exists
 	class, err := k.nft.GetClass(ctx, classId)
 	if err != nil {
-		return err
+		return sdkerrors.Wrapf(types.ErrClassNotExist, "class (%s) not exist on layer one", classId)
 	}
 	// check if the denom owned by sender
 	if class.GetOwner() != sender.String() {
@@ -236,7 +236,7 @@ func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
 	// check if the class exists
 	class, err := k.nft.GetClass(ctx, classId)
 	if err != nil {
-		return err
+		return sdkerrors.Wrapf(types.ErrClassNotExist, "class (%s) not exist on layer one", classId)
 	}
 
 	// check if the class owned by module account
@@ -273,7 +273,7 @@ func (k Keeper) DepositTokenForNFT(ctx sdk.Context,
 	// token must exist
 	nft, err := k.nft.GetNFT(ctx, classId, tokenId)
 	if err != nil {
-		return err
+		return sdkerrors.Wrapf(types.ErrInvalidTokenId, "token (%s) already exist on layer one", tokenId)
 	}
 
 	if !nft.GetOwner().Equals(sender) {
@@ -322,17 +322,17 @@ func (k Keeper) WithdrawTokenForNFT(ctx sdk.Context,
 	if err != nil {
 		// no such nft, mint it
 		if err := k.nft.SaveNFT(ctx, classId, tokenId, tokenName, tokenUri, tokenUriHash, tokenData, owner); err != nil {
-			return err
+			return sdkerrors.Wrapf(types.ErrFromNftModule, "failed to mint token (%s), error (%s)", tokenId, err.Error())
 		}
 	} else {
 		// nft exist, update and transfer ownership
 		moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
 		if err := k.nft.UpdateNFT(ctx, classId, tokenId, tokenName, tokenUri, tokenUriHash, tokenData, moduleAddr); err != nil {
-			return err
+			return sdkerrors.Wrapf(types.ErrFromNftModule, "failed to edit token (%s), error (%s)", tokenId, err.Error())
 		}
 
 		if err := k.nft.TransferNFT(ctx, classId, tokenId, moduleAddr, owner); err != nil {
-			return err
+			return sdkerrors.Wrapf(types.ErrFromNftModule, "failed to transfer token (%s), error (%s)", tokenId, err.Error())
 		}
 	}
 
@@ -342,6 +342,7 @@ func (k Keeper) WithdrawTokenForNFT(ctx sdk.Context,
 	return nil
 }
 
+// TODO: fix this
 func (k Keeper) GetCollectionsForNFT(ctx sdk.Context) []types.CollectionForNFT {
 	collections := make([]types.CollectionForNFT, 0)
 	store := ctx.KVStore(k.storeKey)
