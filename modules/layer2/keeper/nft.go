@@ -342,28 +342,15 @@ func (k Keeper) WithdrawTokenForNFT(ctx sdk.Context,
 	return nil
 }
 
-// TODO: fix this
 func (k Keeper) GetCollectionsForNFT(ctx sdk.Context) []types.CollectionForNFT {
 	collections := make([]types.CollectionForNFT, 0)
-	store := ctx.KVStore(k.storeKey)
 	spaces := k.GetSpaces(ctx)
 	classes := k.GetClassesForNFT(ctx)
 
 	for _, space := range spaces {
 		for _, class := range classes {
 			var collection types.CollectionForNFT
-			tokens := make([]types.TokenForNFT, 0)
-
-			iterator := sdk.KVStorePrefixIterator(store, types.TokenForNFTByCollectionStoreKey(space.Id, class.Id))
-			defer iterator.Close()
-
-			for ; iterator.Valid(); iterator.Next() {
-				var tokenForNFT types.TokenForNFT
-				tokenForNFT.Id = string(iterator.Key())
-				tokenForNFT.Owner = sdk.AccAddress(iterator.Value()).String()
-
-				tokens = append(tokens, tokenForNFT)
-			}
+			tokens := k.GetTokensForNFT(ctx, space.Id, class.Id)
 
 			if len(tokens) > 0 {
 				collection.SpaceId = space.Id
@@ -463,6 +450,24 @@ func (k Keeper) deleteSpaceOfClassForNFT(ctx sdk.Context, class string) {
 	store := ctx.KVStore(k.storeKey)
 	key := types.SpaceOfClassForNFTStoreKey(class)
 	store.Delete(key)
+}
+
+func (k Keeper) GetTokensForNFT(ctx sdk.Context, spaceId uint64, classId string) []types.TokenForNFT {
+	store := ctx.KVStore(k.storeKey)
+	tokens := make([]types.TokenForNFT, 0)
+
+	iterator := sdk.KVStorePrefixIterator(store, types.TokenForNFTByCollectionStoreKey(spaceId, classId))
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		var tokenForNFT types.TokenForNFT
+		tokenForNFT.Id = string(iterator.Key())
+		tokenForNFT.Owner = sdk.AccAddress(iterator.Value()).String()
+
+		tokens = append(tokens, tokenForNFT)
+	}
+
+	return tokens
 }
 
 func (k Keeper) GetTokenForNFT(ctx sdk.Context, spaceId uint64, classId, tokenId string) (sdk.AccAddress, error) {
