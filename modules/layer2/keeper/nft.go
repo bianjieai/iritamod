@@ -453,10 +453,10 @@ func (k Keeper) deleteSpaceOfClassForNFT(ctx sdk.Context, class string) {
 }
 
 func (k Keeper) GetTokensForNFT(ctx sdk.Context, spaceId uint64, classId string) []types.TokenForNFT {
-	store := ctx.KVStore(k.storeKey)
+	store := k.getCollectionStore(ctx, spaceId, classId)
 	tokens := make([]types.TokenForNFT, 0)
 
-	iterator := sdk.KVStorePrefixIterator(store, types.TokenForNFTByCollectionStoreKey(spaceId, classId))
+	iterator := store.Iterator(nil, nil)
 	defer iterator.Close()
 
 	for ; iterator.Valid(); iterator.Next() {
@@ -542,7 +542,7 @@ func (k Keeper) getClassStore(ctx sdk.Context) prefix.Store {
 	return prefix.NewStore(store, types.KeyPrefixClassForNFT)
 }
 
-// prefix store of  <0x06><space_id><delimiter><class_id><delimiter>
+// prefix store of  <0x07><space_id><delimiter><class_id><delimiter>
 func (k Keeper) getCollectionStore(ctx sdk.Context, spaceId uint64, classId string) prefix.Store {
 	store := ctx.KVStore(k.storeKey)
 	return prefix.NewStore(store, types.TokenForNFTByCollectionStoreKey(spaceId, classId))

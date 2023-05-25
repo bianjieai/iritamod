@@ -364,7 +364,7 @@ func GetCmdNftClassUpdate() *cobra.Command {
 		Use:  "update [space-id]",
 		Long: "update class mappings for nft asset",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft class update "+
+			"$ %s tx layer2 nft class update [space-id] "+
 				"--ids=class1,class2,class3 "+
 				"--uris=uri1,uri2,uri3 "+
 				"--owners=owner1,owner2,owner3",
@@ -485,10 +485,10 @@ func GetCmdNftClassWithdraw() *cobra.Command {
 		Use:  "withdraw [space-id] [class-id]",
 		Long: "withdraw an nft class from layer2 to layer1",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 nft withdraw-class [class-id]"+
+			"$ %s tx layer2 nft class withdraw [space-id] [class-id]"+
 				"--owner=<owner>",
 			version.AppName),
-		Args: cobra.ExactArgs(1),
+		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientTxContext(cmd)
 			if err != nil {
@@ -507,7 +507,7 @@ func GetCmdNftClassWithdraw() *cobra.Command {
 
 			msg := types.NewMsgWithdrawClassForNFT(
 				spaceId,
-				args[0],
+				args[1],
 				owner,
 				clientCtx.GetFromAddress().String(),
 			)
