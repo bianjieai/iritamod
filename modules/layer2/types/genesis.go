@@ -90,7 +90,7 @@ func ValidateGenesis(data GenesisState) error {
 		}
 
 		if !seenClassesForNFT[collection.ClassId] {
-			return sdkerrors.Wrapf(ErrClassNotExist, "unknown class (%s) during validation", collection.ClassId)
+			return sdkerrors.Wrapf(ErrInvalidClassId, "unknown class (%s) during validation", collection.ClassId)
 		}
 
 		if err := ValidateClassIdForNFT(collection.ClassId); err != nil {
