@@ -201,6 +201,10 @@ func (k Keeper) DepositClassForNFT(ctx sdk.Context,
 	k.setSpaceOfClassForNFT(ctx, classId, spaceId)
 
 	moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
+	if err := k.nft.UpdateClassMintRestricted(ctx, classId, true, sender); err != nil {
+		return sdkerrors.Wrapf(types.ErrFromNftModule, "failed to update class (%s) mint restricted, error (%s)", classId, err.Error())
+	}
+
 	return k.nft.TransferClass(ctx, classId, sender, moduleAddr)
 }
 
@@ -255,7 +259,7 @@ func (k Keeper) WithdrawClassForNFT(ctx sdk.Context,
 
 	// recover mint_restricted
 	if err := k.nft.UpdateClassMintRestricted(ctx, class.GetID(), classForNFT.Layer1MintRestricted, moduleAddr); err != nil {
-		return err
+		return sdkerrors.Wrapf(types.ErrFromNftModule, "failed to update class (%s) mint restricted, error (%s)", classId, err.Error())
 	}
 
 	return k.nft.TransferClass(ctx, classId, moduleAddr, owner)
