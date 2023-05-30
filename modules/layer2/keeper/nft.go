@@ -24,8 +24,18 @@ func (k Keeper) CreateNFTs(ctx sdk.Context,
 		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) is not owned by (%s)", spaceId, sender)
 	}
 
-	if _, err := k.nft.GetClass(ctx, classId); err != nil {
+	class, err := k.nft.GetClass(ctx, classId)
+	if err != nil {
 		return sdkerrors.Wrapf(types.ErrInvalidClassId, "class (%s) not exist on layer one", classId)
+	}
+
+	moduleAddr := k.acc.GetModuleAddress(types.ModuleName)
+	if class.GetOwner() != moduleAddr.String() {
+		return sdkerrors.Wrapf(types.ErrInvalidClassId, "class (%s) is not locked on layer one", classId)
+	}
+
+	if _, err := k.GetClassForNFT(ctx, classId); err != nil {
+		return sdkerrors.Wrapf(types.ErrInvalidClassId, "class mapping (%s) not exist", classId)
 	}
 
 	for _, nft := range nfts {

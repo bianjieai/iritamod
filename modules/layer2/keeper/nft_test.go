@@ -3,7 +3,10 @@ package keeper_test
 import "github.com/bianjieai/iritamod/modules/layer2/types"
 
 func (s *TestSuite) TestCreateTokensForNFT() {
-	err := s.keeper.CreateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT2, accAvata)
+	err := s.keeper.DepositClassForNFT(s.ctx, avataSpaceId, badKidsClassId, badKidsClassUri, accAlice, accAlice)
+	s.Require().NoErrorf(err, "failed to deposit class")
+
+	err = s.keeper.CreateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT2, accAvata)
 	s.Require().NoErrorf(err, "failed to create tokens")
 
 	for _, token := range badKidsTokensForNFT2 {
@@ -14,7 +17,10 @@ func (s *TestSuite) TestCreateTokensForNFT() {
 }
 
 func (s *TestSuite) TestUpdateTokensForNFT() {
-	err := s.keeper.CreateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT2, accAvata)
+	err := s.keeper.DepositClassForNFT(s.ctx, avataSpaceId, badKidsClassId, badKidsClassUri, accAlice, accAlice)
+	s.Require().NoErrorf(err, "failed to deposit class")
+
+	err = s.keeper.CreateNFTs(s.ctx, avataSpaceId, badKidsClassId, badKidsTokensForNFT2, accAvata)
 	s.Require().NoErrorf(err, "failed to create tokens")
 
 	// exchange owner
