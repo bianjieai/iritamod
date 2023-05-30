@@ -405,8 +405,12 @@ func GetCmdNftClassUpdate() *cobra.Command {
 			owners = strings.TrimSpace(owners)
 			ownerArray := strings.Split(owners, ",")
 
-			if len(idArray) != len(ownerArray) || len(idArray) != len(uriArray) {
+			if len(idArray) != len(ownerArray) {
 				return fmt.Errorf("ids and owners length not match")
+			}
+
+			if len(idArray) != len(uriArray) {
+				return fmt.Errorf("ids and uris length not match")
 			}
 
 			var classUpdates []types.UpdateClassForNFT
