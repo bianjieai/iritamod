@@ -32,18 +32,6 @@ func (k Keeper) CreateL2Space(ctx sdk.Context, name, uri string, sender sdk.AccA
 
 // TransferL2Space transfer the space ownership
 func (k Keeper) TransferL2Space(ctx sdk.Context, spaceId uint64, from, to sdk.AccAddress) error {
-	if !k.GetPermKeeper().HasL2UserRole(ctx, to) {
-		return sdkerrors.Wrapf(types.ErrNotL2UserRole, "recipient (%s) not l2 user", to)
-	}
-
-	if !k.HasSpace(ctx, spaceId) {
-		return sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
-	}
-
-	if !k.HasSpaceOfOwner(ctx, from, spaceId) {
-		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) not owned by (%s)", spaceId, from)
-	}
-
 	space, err := k.GetSpace(ctx, spaceId)
 	if err != nil {
 		return err
@@ -59,14 +47,6 @@ func (k Keeper) TransferL2Space(ctx sdk.Context, spaceId uint64, from, to sdk.Ac
 
 // CreateL2BlockHeader creates a layer2 block header record
 func (k Keeper) CreateL2BlockHeader(ctx sdk.Context, spaceId, height uint64, header string, sender sdk.AccAddress) error {
-	if !k.HasSpace(ctx, spaceId) {
-		return sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
-	}
-
-	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
-		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) not owned by (%s)", spaceId, sender)
-	}
-
 	if k.HasL2BlockHeader(ctx, spaceId, height) {
 		return sdkerrors.Wrapf(types.ErrBlockHeader, "block header already exist at height (%d) in space (%d)", height, spaceId)
 	}
@@ -118,7 +98,7 @@ func (k Keeper) GetSpace(ctx sdk.Context, spaceId uint64) (types.Space, error) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.SpaceStoreKey(spaceId))
 	if bz == nil {
-		return types.Space{}, sdkerrors.Wrapf(types.ErrSpaceNotExist, "space (%d) not exist", spaceId)
+		return types.Space{}, sdkerrors.Wrapf(types.ErrInvalidSpace, "space (%d) not exist", spaceId)
 	}
 
 	var space types.Space
