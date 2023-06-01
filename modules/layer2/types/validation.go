@@ -18,7 +18,7 @@ var (
 
 func ValidateSpaceId(spaceId uint64) error {
 	if spaceId == 0 {
-		return sdkerrors.Wrapf(ErrInvalidSpace, "space id cannot be zero")
+		return sdkerrors.Wrapf(ErrInvalidSpaceId, "space id cannot be zero")
 	}
 	return nil
 }
@@ -32,7 +32,7 @@ func ValidateClassIdForNFT(classId string) error {
 
 func ValidateTokenIdForNFT(tokenId string) error {
 	if !regexpNftTokenId(tokenId) {
-		return sdkerrors.Wrapf(ErrInvalidTokenId, "token id can only accept characters that match the regular expression: (%s), but got (%s)", nftClassIdString, tokenId)
+		return sdkerrors.Wrapf(ErrInvalidTokenId, "token id can only accept characters that match the regular expression: (%s), but got (%s)", nftTokenIdString, tokenId)
 	}
 	return nil
 }
