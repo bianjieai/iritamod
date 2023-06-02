@@ -78,7 +78,7 @@ func (dlt ValidateLayer2Decorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simula
 			if msg.Sender != msg.Recipient {
 				if err := dlt.validateSpaceOwnership(ctx, msg.Sender, msg.SpaceId); err != nil {
 					return ctx, sdkerrors.Wrapf(types.ErrInvalidL2User,
-						"recipient (%s) must be the same as sender if it is not l2 user", msg.Recipient)
+						"recipient (%s) must be the same as sender if sender (%s) is not l2 user", msg.Recipient, msg.Sender)
 				}
 			}
 		case *types.MsgWithdrawClassForNFT:
@@ -107,7 +107,7 @@ func (dlt ValidateLayer2Decorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simula
 
 func (dlt ValidateLayer2Decorator) validateOnlySpace(ctx sdk.Context, spaceId uint64) error {
 	if !dlt.keeper.HasSpace(ctx, spaceId) {
-		return sdkerrors.Wrapf(types.ErrInvalidSpace, "space (%d) not exist", spaceId)
+		return sdkerrors.Wrapf(types.ErrInvalidSpaceId, "space (%d) does not exist", spaceId)
 	}
 	return nil
 }
@@ -115,11 +115,11 @@ func (dlt ValidateLayer2Decorator) validateOnlySpace(ctx sdk.Context, spaceId ui
 func (dlt ValidateLayer2Decorator) validateSpaceOwnership(ctx sdk.Context, addr string, spaceId uint64) error {
 	accAddr, _ := sdk.AccAddressFromBech32(addr)
 	if !dlt.keeper.HasSpace(ctx, spaceId) {
-		return sdkerrors.Wrapf(types.ErrInvalidSpace, "space (%d) not exist", spaceId)
+		return sdkerrors.Wrapf(types.ErrInvalidSpaceId, "space (%d) does not exist", spaceId)
 	}
 
 	if !dlt.keeper.HasSpaceOfOwner(ctx, accAddr, spaceId) {
-		return sdkerrors.Wrapf(types.ErrNotOwnerOfSpace, "space (%d) is not owned by (%s)", spaceId, accAddr)
+		return sdkerrors.Wrapf(types.ErrInvalidSpaceOwner, "space (%d) is not owned by (%s)", spaceId, addr)
 	}
 	return nil
 }
@@ -127,7 +127,7 @@ func (dlt ValidateLayer2Decorator) validateSpaceOwnership(ctx sdk.Context, addr 
 func (dlt ValidateLayer2Decorator) validateL2UserRole(ctx sdk.Context, addr string) error {
 	accAddr, _ := sdk.AccAddressFromBech32(addr)
 	if !dlt.permKeeper.HasL2UserRole(ctx, accAddr) {
-		return sdkerrors.Wrapf(types.ErrInvalidL2User, "addr (%s) does not have l2 user role", accAddr)
+		return sdkerrors.Wrapf(types.ErrInvalidL2User, "account (%s) does not have l2 user role", addr)
 	}
 	return nil
 }
