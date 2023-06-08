@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/tendermint/tendermint/crypto/tmhash"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	"github.com/cometbft/cometbft/crypto/tmhash"
+	ctmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -47,7 +47,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	app := simapp.Setup(false)
 
 	suite.cdc = app.LegacyAmino()
-	suite.ctx = app.BaseApp.NewContext(false, tmproto.Header{})
+	suite.ctx = app.BaseApp.NewContext(false, ctmproto.Header{})
 	suite.app = app
 
 	rootAdmin = sdk.AccAddress(tmhash.SumTruncated([]byte("rootAdmin")))

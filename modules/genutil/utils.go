@@ -5,16 +5,16 @@ import (
 	"path/filepath"
 	"time"
 
-	cfg "github.com/tendermint/tendermint/config"
-	tmos "github.com/tendermint/tendermint/libs/os"
-	"github.com/tendermint/tendermint/p2p"
-	"github.com/tendermint/tendermint/privval"
-	tmtypes "github.com/tendermint/tendermint/types"
+	cfg "github.com/cometbft/cometbft/config"
+	tmos "github.com/cometbft/cometbft/libs/os"
+	"github.com/cometbft/cometbft/p2p"
+	"github.com/cometbft/cometbft/privval"
+	ctmtypes "github.com/cometbft/cometbft/types"
 )
 
 // ExportGenesisFile creates and writes the genesis configuration to disk. An
 // error is returned if building or writing the configuration to file fails.
-func ExportGenesisFile(genDoc *tmtypes.GenesisDoc, genFile string) error {
+func ExportGenesisFile(genDoc *ctmtypes.GenesisDoc, genFile string) error {
 	if err := genDoc.ValidateAndComplete(); err != nil {
 		return err
 	}
@@ -25,10 +25,10 @@ func ExportGenesisFile(genDoc *tmtypes.GenesisDoc, genFile string) error {
 // ExportGenesisFileWithTime creates and writes the genesis configuration to disk.
 // An error is returned if building or writing the configuration to file fails.
 func ExportGenesisFileWithTime(
-	genFile, chainID string, validators []tmtypes.GenesisValidator,
+	genFile, chainID string, validators []ctmtypes.GenesisValidator,
 	appState json.RawMessage, genTime time.Time,
 ) error {
-	genDoc := tmtypes.GenesisDoc{
+	genDoc := ctmtypes.GenesisDoc{
 		GenesisTime: genTime,
 		ChainID:     chainID,
 		Validators:  validators,

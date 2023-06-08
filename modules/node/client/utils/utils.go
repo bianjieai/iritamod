@@ -6,7 +6,7 @@ import (
 
 	gogotypes "github.com/gogo/protobuf/types"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	"github.com/cosmos/cosmos-sdk/client"
 
@@ -14,7 +14,7 @@ import (
 )
 
 func QueryValidator(clientCtx client.Context, param string) (validator types.Validator, height int64, err error) {
-	queryValidator := func(id tmbytes.HexBytes) (validator types.Validator, height int64, err error) {
+	queryValidator := func(id ctmbytes.HexBytes) (validator types.Validator, height int64, err error) {
 		res, height, err := clientCtx.QueryStore(types.GetValidatorIDKey(id), types.StoreKey)
 		if err != nil {
 			return

@@ -1,7 +1,7 @@
 package types
 
 import (
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -13,7 +13,7 @@ var (
 )
 
 // NewMsgUnjailValidator creates a new MsgUnjailValidator instance.
-func NewMsgUnjailValidator(id tmbytes.HexBytes, operator sdk.AccAddress) *MsgUnjailValidator {
+func NewMsgUnjailValidator(id ctmbytes.HexBytes, operator sdk.AccAddress) *MsgUnjailValidator {
 	return &MsgUnjailValidator{
 		Id:       id.String(),
 		Operator: operator.String(),

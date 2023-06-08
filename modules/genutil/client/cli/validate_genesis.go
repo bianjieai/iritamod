@@ -7,7 +7,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	tmtypes "github.com/tendermint/tendermint/types"
+	ctmtypes "github.com/cometbft/cometbft/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/server"
@@ -36,8 +36,8 @@ func ValidateGenesisCmd(mbm module.BasicManager) *cobra.Command {
 
 			fmt.Fprintf(os.Stderr, "validating genesis file at %s\n", genesis)
 
-			var genDoc *tmtypes.GenesisDoc
-			if genDoc, err = tmtypes.GenesisDocFromFile(genesis); err != nil {
+			var genDoc *ctmtypes.GenesisDoc
+			if genDoc, err = ctmtypes.GenesisDocFromFile(genesis); err != nil {
 				return fmt.Errorf("error loading genesis doc from %s: %s", genesis, err.Error())
 			}
 

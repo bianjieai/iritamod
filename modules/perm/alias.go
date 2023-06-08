@@ -32,7 +32,6 @@ const (
 var (
 	NewGenesisState             = types.NewGenesisState
 	DefaultGenesisState         = types.DefaultGenesisState
-	NewQuerier                  = keeper.NewQuerier
 	NewKeeper                   = keeper.NewKeeper
 	NewAuthDecorator            = keeper.NewAuthDecorator
 	GetGenesisStateFromAppState = types.GetGenesisStateFromAppState

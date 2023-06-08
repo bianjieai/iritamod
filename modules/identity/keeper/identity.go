@@ -6,8 +6,8 @@ import (
 	"encoding/hex"
 	"strings"
 
-	"github.com/tendermint/tendermint/crypto/tmhash"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	"github.com/cometbft/cometbft/crypto/tmhash"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -18,7 +18,7 @@ import (
 // CreateIdentity creates an identity
 func (k Keeper) CreateIdentity(
 	ctx sdk.Context,
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	pubKey *types.PubKeyInfo,
 	certificate,
 	credentials string,
@@ -58,7 +58,7 @@ func (k Keeper) CreateIdentity(
 // and certificate or modifying the credentials
 func (k Keeper) UpdateIdentity(
 	ctx sdk.Context,
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	pubKey *types.PubKeyInfo,
 	certificate string,
 	credentials string,
@@ -97,7 +97,7 @@ func (k Keeper) UpdateIdentity(
 }
 
 // AddPubKey adds the given public key for the identity
-func (k Keeper) AddPubKey(ctx sdk.Context, identityID tmbytes.HexBytes, pubKey *types.PubKeyInfo) error {
+func (k Keeper) AddPubKey(ctx sdk.Context, identityID ctmbytes.HexBytes, pubKey *types.PubKeyInfo) error {
 	pubKeyIdentityID, found := k.GetPubKeyIdentity(ctx, pubKey)
 	if found {
 		if !bytes.Equal(pubKeyIdentityID, identityID) {
@@ -111,7 +111,7 @@ func (k Keeper) AddPubKey(ctx sdk.Context, identityID tmbytes.HexBytes, pubKey *
 }
 
 // AddCertificate adds the given certificate for the identity
-func (k Keeper) AddCertificate(ctx sdk.Context, identityID tmbytes.HexBytes, certificate string) error {
+func (k Keeper) AddCertificate(ctx sdk.Context, identityID ctmbytes.HexBytes, certificate string) error {
 	cert := strings.TrimSpace(certificate)
 	certHash := tmhash.Sum([]byte(cert))
 
@@ -126,13 +126,13 @@ func (k Keeper) AddCertificate(ctx sdk.Context, identityID tmbytes.HexBytes, cer
 }
 
 // SetOwner sets the owner of the given identity
-func (k Keeper) SetOwner(ctx sdk.Context, identityID tmbytes.HexBytes, owner sdk.AccAddress) {
+func (k Keeper) SetOwner(ctx sdk.Context, identityID ctmbytes.HexBytes, owner sdk.AccAddress) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.GetOwnerKey(identityID), owner.Bytes())
 }
 
 // GetOwner gets the owner of the specified identity
-func (k Keeper) GetOwner(ctx sdk.Context, identityID tmbytes.HexBytes) (sdk.AccAddress, bool) {
+func (k Keeper) GetOwner(ctx sdk.Context, identityID ctmbytes.HexBytes) (sdk.AccAddress, bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.GetOwnerKey(identityID))
@@ -144,7 +144,7 @@ func (k Keeper) GetOwner(ctx sdk.Context, identityID tmbytes.HexBytes) (sdk.AccA
 }
 
 // SetPubKey sets the given public key
-func (k Keeper) SetPubKey(ctx sdk.Context, identityID tmbytes.HexBytes, pubKey *types.PubKeyInfo) {
+func (k Keeper) SetPubKey(ctx sdk.Context, identityID ctmbytes.HexBytes, pubKey *types.PubKeyInfo) {
 	store := ctx.KVStore(k.storeKey)
 
 	store.Set(types.GetPubKeyInfoKey(identityID, pubKey), []byte{})
@@ -152,7 +152,7 @@ func (k Keeper) SetPubKey(ctx sdk.Context, identityID tmbytes.HexBytes, pubKey *
 }
 
 // GetPubKeyIdentity gets the identity ID of the specified public key
-func (k Keeper) GetPubKeyIdentity(ctx sdk.Context, pubKey *types.PubKeyInfo) (tmbytes.HexBytes, bool) {
+func (k Keeper) GetPubKeyIdentity(ctx sdk.Context, pubKey *types.PubKeyInfo) (ctmbytes.HexBytes, bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.GetPubKeyIdentityKey(pubKey))
@@ -160,13 +160,13 @@ func (k Keeper) GetPubKeyIdentity(ctx sdk.Context, pubKey *types.PubKeyInfo) (tm
 		return nil, false
 	}
 
-	return tmbytes.HexBytes(bz), true
+	return ctmbytes.HexBytes(bz), true
 }
 
 // SetCertificate sets the given certificate
 func (k Keeper) SetCertificate(
 	ctx sdk.Context,
-	identityID tmbytes.HexBytes,
+	identityID ctmbytes.HexBytes,
 	certHash []byte,
 	certificate string,
 ) {
@@ -175,13 +175,13 @@ func (k Keeper) SetCertificate(
 }
 
 // SetCredentials sets the given credentials
-func (k Keeper) SetCredentials(ctx sdk.Context, identityID tmbytes.HexBytes, credentials string) {
+func (k Keeper) SetCredentials(ctx sdk.Context, identityID ctmbytes.HexBytes, credentials string) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.GetCredentialsKey(identityID), []byte(credentials))
 }
 
 // GetCredentials retrieves the credentials of the specified identity
-func (k Keeper) GetCredentials(ctx sdk.Context, identityID tmbytes.HexBytes) (string, bool) {
+func (k Keeper) GetCredentials(ctx sdk.Context, identityID ctmbytes.HexBytes) (string, bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.GetCredentialsKey(identityID))
@@ -193,13 +193,13 @@ func (k Keeper) GetCredentials(ctx sdk.Context, identityID tmbytes.HexBytes) (st
 }
 
 // SetData sets the given credentials
-func (k Keeper) SetData(ctx sdk.Context, identityID tmbytes.HexBytes, data string) {
+func (k Keeper) SetData(ctx sdk.Context, identityID ctmbytes.HexBytes, data string) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.GetDataKey(identityID), []byte(data))
 }
 
 // GetData retrieves the credentials of the specified identity
-func (k Keeper) GetData(ctx sdk.Context, identityID tmbytes.HexBytes) (string, bool) {
+func (k Keeper) GetData(ctx sdk.Context, identityID ctmbytes.HexBytes) (string, bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.GetDataKey(identityID))
@@ -211,13 +211,13 @@ func (k Keeper) GetData(ctx sdk.Context, identityID tmbytes.HexBytes) (string, b
 }
 
 // HasIdentity returns true if the specified identity exists, false otherwise
-func (k Keeper) HasIdentity(ctx sdk.Context, id tmbytes.HexBytes) bool {
+func (k Keeper) HasIdentity(ctx sdk.Context, id ctmbytes.HexBytes) bool {
 	store := ctx.KVStore(k.storeKey)
 	return store.Has(types.GetOwnerKey(id))
 }
 
 // HasCertificate returns true if the specified certificate exists for the identity, false otherwise
-func (k Keeper) HasCertificate(ctx sdk.Context, id tmbytes.HexBytes, certHash []byte) bool {
+func (k Keeper) HasCertificate(ctx sdk.Context, id ctmbytes.HexBytes, certHash []byte) bool {
 	store := ctx.KVStore(k.storeKey)
 	return store.Has(types.GetCertificateKey(id, certHash))
 }
@@ -260,7 +260,7 @@ func (k Keeper) SetIdentity(ctx sdk.Context, identity types.Identity) error {
 }
 
 // GetIdentity retrieves the identity of the specified ID
-func (k Keeper) GetIdentity(ctx sdk.Context, id tmbytes.HexBytes) (identity types.Identity, found bool) {
+func (k Keeper) GetIdentity(ctx sdk.Context, id ctmbytes.HexBytes) (identity types.Identity, found bool) {
 	owner, found := k.GetOwner(ctx, id)
 	if !found {
 		return identity, false
@@ -301,7 +301,7 @@ func (k Keeper) GetIdentity(ctx sdk.Context, id tmbytes.HexBytes) (identity type
 // IteratePubKeys iterates through all public keys with the specified identity
 func (k Keeper) IteratePubKeys(
 	ctx sdk.Context,
-	identityID tmbytes.HexBytes,
+	identityID ctmbytes.HexBytes,
 	op func(pubKey types.PubKeyInfo) (stop bool),
 ) {
 	store := ctx.KVStore(k.storeKey)
@@ -317,7 +317,7 @@ func (k Keeper) IteratePubKeys(
 		pubKeyAlgo := types.PubKeyAlgorithm(binary.BigEndian.Uint32(pubKeyInfoKey[0:4]))
 		pubKey := pubKeyInfoKey[4:]
 
-		pubKeyInfo := types.PubKeyInfo{PubKey: tmbytes.HexBytes(pubKey).String(), Algorithm: pubKeyAlgo}
+		pubKeyInfo := types.PubKeyInfo{PubKey: ctmbytes.HexBytes(pubKey).String(), Algorithm: pubKeyAlgo}
 
 		if stop := op(pubKeyInfo); stop {
 			break
@@ -328,7 +328,7 @@ func (k Keeper) IteratePubKeys(
 // IterateCertificates iterates through all certificates with the specified identity
 func (k Keeper) IterateCertificates(
 	ctx sdk.Context,
-	identityID tmbytes.HexBytes,
+	identityID ctmbytes.HexBytes,
 	op func(cert string) (stop bool),
 ) {
 	store := ctx.KVStore(k.storeKey)

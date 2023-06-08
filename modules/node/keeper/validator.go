@@ -9,7 +9,7 @@ import (
 
 	gogotypes "github.com/gogo/protobuf/types"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
@@ -34,7 +34,7 @@ func (k *Keeper) SetHooks(sh staking.StakingHooks) *Keeper {
 
 // CreateValidator create a new validator
 func (k Keeper) CreateValidator(ctx sdk.Context,
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	name string,
 	certificate string,
 	pubKey cryptotypes.PubKey,
@@ -100,7 +100,7 @@ func (k Keeper) CreateValidator(ctx sdk.Context,
 
 // UpdateValidator updates an existing validator record
 func (k Keeper) UpdateValidator(ctx sdk.Context,
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	name string,
 	certificate string,
 	power int64,
@@ -170,7 +170,7 @@ func (k Keeper) UpdateValidator(ctx sdk.Context,
 
 // RemoveValidator deletes an existing validator record
 func (k Keeper) RemoveValidator(ctx sdk.Context,
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	operator string,
 ) error {
 	validator, found := k.GetValidator(ctx, id)
@@ -204,7 +204,7 @@ func (k Keeper) SetValidator(ctx sdk.Context, validator types.Validator) {
 }
 
 // GetValidator returns validator with id
-func (k Keeper) GetValidator(ctx sdk.Context, id tmbytes.HexBytes) (validator types.Validator, found bool) {
+func (k Keeper) GetValidator(ctx sdk.Context, id ctmbytes.HexBytes) (validator types.Validator, found bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	value := store.Get(types.GetValidatorIDKey(id))
@@ -231,7 +231,7 @@ func (k Keeper) DeleteValidator(ctx sdk.Context, validator types.Validator) {
 }
 
 // SetValidatorConsAddrIndex sets the validator index by pubkey
-func (k Keeper) SetValidatorConsAddrIndex(ctx sdk.Context, id tmbytes.HexBytes, addr sdk.ConsAddress) {
+func (k Keeper) SetValidatorConsAddrIndex(ctx sdk.Context, id ctmbytes.HexBytes, addr sdk.ConsAddress) {
 	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&gogotypes.BytesValue{Value: id})
 	store.Set(types.GetValidatorConsAddrKey(addr), bz)
@@ -333,7 +333,7 @@ func (k Keeper) GetAllValidators(ctx sdk.Context) (validators []types.Validator)
 }
 
 // ValidatorByID return the validator imformation by id
-func (k Keeper) ValidatorByID(ctx sdk.Context, id tmbytes.HexBytes) staking.ValidatorI {
+func (k Keeper) ValidatorByID(ctx sdk.Context, id ctmbytes.HexBytes) staking.ValidatorI {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.GetValidatorIDKey(id))
 

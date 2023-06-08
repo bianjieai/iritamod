@@ -8,9 +8,9 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/tendermint/tendermint/crypto/tmhash"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	"github.com/cometbft/cometbft/crypto/tmhash"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
+	ctmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
@@ -51,7 +51,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	app := simapp.Setup(false)
 
 	suite.cdc = app.AppCodec()
-	suite.ctx = app.BaseApp.NewContext(false, tmproto.Header{})
+	suite.ctx = app.BaseApp.NewContext(false, ctmproto.Header{})
 	suite.app = app
 	suite.keeper = &app.NodeKeeper
 }
@@ -63,7 +63,7 @@ func (suite *KeeperTestSuite) setNode() {
 
 func (suite *KeeperTestSuite) TestCreateValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
-	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+	id := ctmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	err := suite.keeper.CreateValidator(suite.ctx,
 		id,
 		msg.Name,
@@ -108,7 +108,7 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 
 func (suite *KeeperTestSuite) TestUpdateValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
-	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+	id := ctmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	err := suite.keeper.CreateValidator(suite.ctx,
 		id,
 		msg.Name,
@@ -187,7 +187,7 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 
 func (suite *KeeperTestSuite) TestRemoveValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
-	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+	id := ctmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	err := suite.keeper.CreateValidator(suite.ctx,
 		id,
 		msg.Name,

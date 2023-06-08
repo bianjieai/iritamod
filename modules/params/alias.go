@@ -21,9 +21,6 @@ var (
 	ErrUnknownSubspace  = types.ErrUnknownSubspace
 	ErrSettingParameter = types.ErrSettingParameter
 	ErrUnknownKey       = types.ErrUnknownKey
-
-	// NewQuerier alias cosmos-sdk/x/params/keeper.NewQuerier
-	NewQuerier = paramskeeper.NewQuerier
 )
 
 type (

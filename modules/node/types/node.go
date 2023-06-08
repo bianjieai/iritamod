@@ -4,7 +4,7 @@ import (
 	"encoding/hex"
 	"strings"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -14,7 +14,7 @@ import (
 
 // NewNode contructs a new Node instance
 func NewNode(
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	name string,
 	cert string,
 ) Node {

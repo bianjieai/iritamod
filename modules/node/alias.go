@@ -25,7 +25,6 @@ const (
 var (
 	NewGenesisState             = types.NewGenesisState
 	DefaultGenesisState         = types.DefaultGenesisState
-	NewQuerier                  = keeper.NewQuerier
 	NewKeeper                   = keeper.NewKeeper
 	NewMsgCreateValidator       = types.NewMsgCreateValidator
 	NewMsgUpdateValidator       = types.NewMsgUpdateValidator

@@ -3,7 +3,7 @@ package types
 import (
 	"strconv"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
@@ -34,7 +34,7 @@ var (
 )
 
 // GetValidatorIDKey gets the key for the validator with id
-func GetValidatorIDKey(id tmbytes.HexBytes) []byte {
+func GetValidatorIDKey(id ctmbytes.HexBytes) []byte {
 	return append(ValidatorsKey, id.Bytes()...)
 }
 
@@ -60,6 +60,6 @@ func GetHistoricalInfoKey(height int64) []byte {
 
 // GetNodeKey gets the key for the node of the specified id
 // VALUE: Node
-func GetNodeKey(id tmbytes.HexBytes) []byte {
+func GetNodeKey(id ctmbytes.HexBytes) []byte {
 	return append(NodeKey, id...)
 }

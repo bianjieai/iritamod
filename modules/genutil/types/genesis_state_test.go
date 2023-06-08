@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	simappparams "cosmossdk.io/simapp/params"
 	"github.com/cosmos/cosmos-sdk/crypto/keys/ed25519"
-	"github.com/cosmos/cosmos-sdk/simapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/genutil/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
@@ -42,15 +42,14 @@ func TestValidateGenesisMultipleMessages(t *testing.T) {
 		desc, comm, sdk.OneInt(),
 	)
 	require.NoError(t, err)
-
-	txGen := simapp.MakeTestEncodingConfig().TxConfig
+	txGen := simappparams.MakeTestEncodingConfig().TxConfig
 	txBuilder := txGen.NewTxBuilder()
 	require.NoError(t, txBuilder.SetMsgs(msg1, msg2))
 
 	tx := txBuilder.GetTx()
 	genesisState := types.NewGenesisStateFromTx(txGen.TxJSONEncoder(), []sdk.Tx{tx})
 
-	err = types.ValidateGenesis(genesisState, simapp.MakeTestEncodingConfig().TxConfig.TxJSONDecoder())
+	err = types.ValidateGenesis(genesisState, txGen.TxJSONDecoder(), types.DefaultMessageValidator)
 	require.Error(t, err)
 }
 
@@ -59,7 +58,7 @@ func TestValidateGenesisBadMessage(t *testing.T) {
 
 	msg1 := stakingtypes.NewMsgEditValidator(sdk.ValAddress(pk1.Address()), desc, nil, nil)
 
-	txGen := simapp.MakeTestEncodingConfig().TxConfig
+	txGen := simappparams.MakeTestEncodingConfig().TxConfig
 	txBuilder := txGen.NewTxBuilder()
 	err := txBuilder.SetMsgs(msg1)
 	require.NoError(t, err)
@@ -67,6 +66,6 @@ func TestValidateGenesisBadMessage(t *testing.T) {
 	tx := txBuilder.GetTx()
 	genesisState := types.NewGenesisStateFromTx(txGen.TxJSONEncoder(), []sdk.Tx{tx})
 
-	err = types.ValidateGenesis(genesisState, simapp.MakeTestEncodingConfig().TxConfig.TxJSONDecoder())
+	err = types.ValidateGenesis(genesisState, txGen.TxJSONDecoder(), types.DefaultMessageValidator)
 	require.Error(t, err)
 }

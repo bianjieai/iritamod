@@ -4,9 +4,9 @@ import (
 	"context"
 	"encoding/hex"
 
+	"github.com/cometbft/cometbft/crypto/tmhash"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/tendermint/tendermint/crypto/tmhash"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	"github.com/bianjieai/iritamod/modules/node/types"
 )
@@ -25,7 +25,7 @@ var _ types.MsgServer = msgServer{}
 
 func (m msgServer) CreateValidator(goCtx context.Context, msg *types.MsgCreateValidator) (*types.MsgCreateValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+	id := ctmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	if err := m.Keeper.CreateValidator(ctx,
 		id,
 		msg.Name,

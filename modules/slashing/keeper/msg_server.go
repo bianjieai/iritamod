@@ -3,10 +3,9 @@ package keeper
 import (
 	"context"
 
+	"github.com/bianjieai/iritamod/modules/slashing/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
-
-	"github.com/bianjieai/iritamod/modules/slashing/types"
 )
 
 type msgServer struct {
@@ -21,7 +20,7 @@ func (m msgServer) UnjailValidator(goCtx context.Context, msg *types.MsgUnjailVa
 	ctx.EventManager().EmitEvent(
 		sdk.NewEvent(
 			sdk.EventTypeMessage,
-			sdk.NewAttribute(sdk.AttributeKeyModule, slashingtypes.AttributeValueCategory),
+			sdk.NewAttribute(sdk.AttributeKeyModule, slashingtypes.ModuleName),
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
 		),
 	)

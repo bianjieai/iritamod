@@ -3,7 +3,7 @@ package types
 import (
 	"strings"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -90,7 +90,7 @@ func (m MsgCreateValidator) GetSigners() []sdk.AccAddress {
 
 // NewMsgUpdateValidator creates a new MsgUpdateValidator instance.
 func NewMsgUpdateValidator(
-	id tmbytes.HexBytes, name, description string, cert string, power int64, operator sdk.AccAddress,
+	id ctmbytes.HexBytes, name, description string, cert string, power int64, operator sdk.AccAddress,
 ) *MsgUpdateValidator {
 	return &MsgUpdateValidator{
 		Id:          id.String(),
@@ -148,7 +148,7 @@ func (m MsgUpdateValidator) GetSigners() []sdk.AccAddress {
 }
 
 // NewMsgRemoveValidator creates a new MsgRemoveValidator instance.
-func NewMsgRemoveValidator(id tmbytes.HexBytes, operator sdk.AccAddress) *MsgRemoveValidator {
+func NewMsgRemoveValidator(id ctmbytes.HexBytes, operator sdk.AccAddress) *MsgRemoveValidator {
 	return &MsgRemoveValidator{
 		Id:       id.String(),
 		Operator: operator.String(),
@@ -246,7 +246,7 @@ func (msg MsgGrantNode) GetSigners() []sdk.AccAddress {
 
 // NewMsgRevokeNode creates a new MsgRevokeNode instance
 func NewMsgRevokeNode(
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	operator sdk.AccAddress,
 ) *MsgRevokeNode {
 	return &MsgRevokeNode{

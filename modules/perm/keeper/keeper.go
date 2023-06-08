@@ -2,11 +2,12 @@ package keeper
 
 import (
 	"fmt"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	gogotypes "github.com/gogo/protobuf/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
-	sdk "github.com/cosmos/cosmos-sdk/types"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/bianjieai/iritamod/modules/perm/types"
@@ -15,12 +16,12 @@ import (
 // keeper of the perm store
 type Keeper struct {
 	cdc      codec.Codec
-	storeKey sdk.StoreKey
+	storeKey storetypes.StoreKey
 
 	AuthMap map[string]types.Auth
 }
 
-func NewKeeper(cdc codec.Codec, storeKey sdk.StoreKey) Keeper {
+func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey) Keeper {
 	return Keeper{
 		cdc:      cdc,
 		storeKey: storeKey,

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os/exec"
 
-	"github.com/tendermint/tendermint/crypto/algo"
+	"github.com/cometbft/cometbft/crypto/algo"
 )
 
 func GenRootCert(keyPath, certPath, subj string) {
