@@ -1,12 +1,11 @@
 syntax = "proto3";
-package iritamod.params;
+package params;
 
 import "params/params.proto";
 import "gogoproto/gogo.proto";
 
 option go_package = "github.com/bianjieai/iritamod/modules/params/types";
 option (gogoproto.goproto_getters_all) = false;
-
 
 // Msg defines the bank Msg service.
 service Msg {
@@ -18,9 +17,9 @@ service Msg {
 message MsgUpdateParams {
   option (gogoproto.equal) = true;
 
-  repeated ParamChange changes = 1 [(gogoproto.nullable) = false];
-  string operator              = 2;
+  repeated ParamChange changes = 1 [ (gogoproto.nullable) = false ];
+  string operator = 2;
 }
 
 // MsgUpdateParamsResponse defines the Msg/UpdateParams response type.
-message MsgUpdateParamsResponse { }
+message MsgUpdateParamsResponse {}

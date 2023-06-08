@@ -1,5 +1,5 @@
 syntax = "proto3";
-package iritamod.opb;
+package opb;
 
 import "gogoproto/gogo.proto";
 
@@ -8,10 +8,10 @@ option (gogoproto.goproto_getters_all) = false;
 
 // Params defines the parameters for the OPB module.
 message Params {
-    option (gogoproto.equal) = true;
+  option (gogoproto.equal) = true;
 
-    string base_token_denom = 1;
-    string point_token_denom = 2;
-    string base_token_manager = 3;
-    bool unrestricted_token_transfer = 4;
+  string base_token_denom = 1;
+  string point_token_denom = 2;
+  string base_token_manager = 3;
+  bool unrestricted_token_transfer = 4;
 }

@@ -1,5 +1,5 @@
 syntax = "proto3";
-package iritamod.perm;
+package perm;
 
 import "gogoproto/gogo.proto";
 
@@ -9,30 +9,32 @@ option (gogoproto.goproto_registration) = true;
 
 // Role represents a role
 enum Role {
-    option (gogoproto.enum_stringer) = true;
-    option (gogoproto.goproto_enum_stringer) = false;
-    option (gogoproto.goproto_enum_prefix) = false;
+  option (gogoproto.enum_stringer) = true;
+  option (gogoproto.goproto_enum_stringer) = false;
+  option (gogoproto.goproto_enum_prefix) = false;
 
-    // ROOT_ADMIN defines the root admin role index.
-    ROOT_ADMIN = 0 [(gogoproto.enumvalue_customname) = "RoleRootAdmin"];
-    // PERM_ADMIN defines the permission admin role index.
-    PERM_ADMIN = 1 [(gogoproto.enumvalue_customname) = "RolePermAdmin"];
-    // BLACKLIST_ADMIN defines the blacklist admin role index.
-    BLACKLIST_ADMIN = 2 [(gogoproto.enumvalue_customname) = "RoleBlacklistAdmin"];
-    // NODE_ADMIN defines the node admin role index.
-    NODE_ADMIN = 3 [(gogoproto.enumvalue_customname) = "RoleNodeAdmin"];
-    // PARAM_ADMIN defines the param admin role index.
-    PARAM_ADMIN = 4 [(gogoproto.enumvalue_customname) = "RoleParamAdmin"];
-    // POWER_USER defines the power user role index.
-    POWER_USER = 5 [(gogoproto.enumvalue_customname) = "RolePowerUser"];
-    // RELAYER_USER defines the relayer user role index.
-    RELAYER_USER = 6 [(gogoproto.enumvalue_customname) = "RoleRelayerUser"];
-    // ID_ADMIN defines the identity admin role index.
-    ID_ADMIN = 7 [(gogoproto.enumvalue_customname) = "RoleIDAdmin"];
-    // BASE_M1_ADMIN defines the base M1 admin role index.
-    BASE_M1_ADMIN = 8 [(gogoproto.enumvalue_customname) = "RoleBaseM1Admin"];
-    // Chain_Account_Role defines the platform admin role index.
-    PLATFORM_USER = 9 [(gogoproto.enumvalue_customname) = "RolePlatformUser"];
-    // POWER_USER_ADMIN defines the power admin role index.
-    POWER_USER_ADMIN = 10 [(gogoproto.enumvalue_customname) = "RolePowerUserAdmin"];
+  // ROOT_ADMIN defines the root admin role index.
+  ROOT_ADMIN = 0 [ (gogoproto.enumvalue_customname) = "RoleRootAdmin" ];
+  // PERM_ADMIN defines the permission admin role index.
+  PERM_ADMIN = 1 [ (gogoproto.enumvalue_customname) = "RolePermAdmin" ];
+  // BLACKLIST_ADMIN defines the blacklist admin role index.
+  BLACKLIST_ADMIN = 2
+      [ (gogoproto.enumvalue_customname) = "RoleBlacklistAdmin" ];
+  // NODE_ADMIN defines the node admin role index.
+  NODE_ADMIN = 3 [ (gogoproto.enumvalue_customname) = "RoleNodeAdmin" ];
+  // PARAM_ADMIN defines the param admin role index.
+  PARAM_ADMIN = 4 [ (gogoproto.enumvalue_customname) = "RoleParamAdmin" ];
+  // POWER_USER defines the power user role index.
+  POWER_USER = 5 [ (gogoproto.enumvalue_customname) = "RolePowerUser" ];
+  // RELAYER_USER defines the relayer user role index.
+  RELAYER_USER = 6 [ (gogoproto.enumvalue_customname) = "RoleRelayerUser" ];
+  // ID_ADMIN defines the identity admin role index.
+  ID_ADMIN = 7 [ (gogoproto.enumvalue_customname) = "RoleIDAdmin" ];
+  // BASE_M1_ADMIN defines the base M1 admin role index.
+  BASE_M1_ADMIN = 8 [ (gogoproto.enumvalue_customname) = "RoleBaseM1Admin" ];
+  // Chain_Account_Role defines the platform admin role index.
+  PLATFORM_USER = 9 [ (gogoproto.enumvalue_customname) = "RolePlatformUser" ];
+  // POWER_USER_ADMIN defines the power admin role index.
+  POWER_USER_ADMIN = 10
+      [ (gogoproto.enumvalue_customname) = "RolePowerUserAdmin" ];
 }

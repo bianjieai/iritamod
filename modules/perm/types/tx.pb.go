@@ -6,9 +6,9 @@ package types
 import (
 	context "context"
 	fmt "fmt"
-	_ "github.com/gogo/protobuf/gogoproto"
-	grpc1 "github.com/gogo/protobuf/grpc"
-	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/cosmos/gogoproto/gogoproto"
+	grpc1 "github.com/cosmos/gogoproto/grpc"
+	proto "github.com/cosmos/gogoproto/proto"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -31,7 +31,7 @@ const _ = proto.GoGoProtoPackageIsVersion3 // please upgrade the proto package
 // MsgAssignRoles defines an SDK message for assigning roles to an address.
 type MsgAssignRoles struct {
 	Address  string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	Roles    []Role `protobuf:"varint,2,rep,packed,name=roles,proto3,enum=iritamod.perm.Role" json:"roles,omitempty"`
+	Roles    []Role `protobuf:"varint,2,rep,packed,name=roles,proto3,enum=perm.Role" json:"roles,omitempty"`
 	Operator string `protobuf:"bytes,3,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
@@ -105,10 +105,11 @@ func (m *MsgAssignRolesResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_MsgAssignRolesResponse proto.InternalMessageInfo
 
-// MsgUnassignRoles defines an SDK message for unassigning roles from an address.
+// MsgUnassignRoles defines an SDK message for unassigning roles from an
+// address.
 type MsgUnassignRoles struct {
 	Address  string `protobuf:"bytes,1,opt,name=address,proto3" json:"address,omitempty"`
-	Roles    []Role `protobuf:"varint,2,rep,packed,name=roles,proto3,enum=iritamod.perm.Role" json:"roles,omitempty"`
+	Roles    []Role `protobuf:"varint,2,rep,packed,name=roles,proto3,enum=perm.Role" json:"roles,omitempty"`
 	Operator string `protobuf:"bytes,3,opt,name=operator,proto3" json:"operator,omitempty"`
 }
 
@@ -487,54 +488,54 @@ func (m *MsgUnblockContractResponse) XXX_DiscardUnknown() {
 var xxx_messageInfo_MsgUnblockContractResponse proto.InternalMessageInfo
 
 func init() {
-	proto.RegisterType((*MsgAssignRoles)(nil), "iritamod.perm.MsgAssignRoles")
-	proto.RegisterType((*MsgAssignRolesResponse)(nil), "iritamod.perm.MsgAssignRolesResponse")
-	proto.RegisterType((*MsgUnassignRoles)(nil), "iritamod.perm.MsgUnassignRoles")
-	proto.RegisterType((*MsgUnassignRolesResponse)(nil), "iritamod.perm.MsgUnassignRolesResponse")
-	proto.RegisterType((*MsgBlockAccount)(nil), "iritamod.perm.MsgBlockAccount")
-	proto.RegisterType((*MsgBlockAccountResponse)(nil), "iritamod.perm.MsgBlockAccountResponse")
-	proto.RegisterType((*MsgUnblockAccount)(nil), "iritamod.perm.MsgUnblockAccount")
-	proto.RegisterType((*MsgUnblockAccountResponse)(nil), "iritamod.perm.MsgUnblockAccountResponse")
-	proto.RegisterType((*MsgBlockContract)(nil), "iritamod.perm.MsgBlockContract")
-	proto.RegisterType((*MsgBlockContractResponse)(nil), "iritamod.perm.MsgBlockContractResponse")
-	proto.RegisterType((*MsgUnblockContract)(nil), "iritamod.perm.MsgUnblockContract")
-	proto.RegisterType((*MsgUnblockContractResponse)(nil), "iritamod.perm.MsgUnblockContractResponse")
+	proto.RegisterType((*MsgAssignRoles)(nil), "perm.MsgAssignRoles")
+	proto.RegisterType((*MsgAssignRolesResponse)(nil), "perm.MsgAssignRolesResponse")
+	proto.RegisterType((*MsgUnassignRoles)(nil), "perm.MsgUnassignRoles")
+	proto.RegisterType((*MsgUnassignRolesResponse)(nil), "perm.MsgUnassignRolesResponse")
+	proto.RegisterType((*MsgBlockAccount)(nil), "perm.MsgBlockAccount")
+	proto.RegisterType((*MsgBlockAccountResponse)(nil), "perm.MsgBlockAccountResponse")
+	proto.RegisterType((*MsgUnblockAccount)(nil), "perm.MsgUnblockAccount")
+	proto.RegisterType((*MsgUnblockAccountResponse)(nil), "perm.MsgUnblockAccountResponse")
+	proto.RegisterType((*MsgBlockContract)(nil), "perm.MsgBlockContract")
+	proto.RegisterType((*MsgBlockContractResponse)(nil), "perm.MsgBlockContractResponse")
+	proto.RegisterType((*MsgUnblockContract)(nil), "perm.MsgUnblockContract")
+	proto.RegisterType((*MsgUnblockContractResponse)(nil), "perm.MsgUnblockContractResponse")
 }
 
 func init() { proto.RegisterFile("perm/tx.proto", fileDescriptor_ad797c02944c52e5) }
 
 var fileDescriptor_ad797c02944c52e5 = []byte{
-	// 474 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x94, 0xcb, 0x8e, 0xd3, 0x30,
-	0x18, 0x85, 0x9b, 0xe9, 0x70, 0xfb, 0xa1, 0xed, 0x60, 0x10, 0x64, 0x0c, 0xb8, 0xa5, 0x12, 0xd0,
-	0x6e, 0x12, 0x34, 0xec, 0xd8, 0x75, 0x58, 0x07, 0xa4, 0x22, 0x90, 0x40, 0x48, 0x95, 0x9b, 0x5a,
-	0x26, 0xd0, 0xc6, 0x91, 0xed, 0x0a, 0xe6, 0x2d, 0x78, 0x04, 0x76, 0xbc, 0xca, 0x2c, 0x67, 0xc9,
-	0x12, 0xda, 0x0d, 0x8f, 0x81, 0x92, 0x10, 0x13, 0xa7, 0x37, 0x16, 0xc0, 0xa6, 0x72, 0xfc, 0x1f,
-	0x9f, 0xef, 0xc8, 0x3a, 0x35, 0x34, 0x12, 0x26, 0x67, 0xbe, 0xfe, 0xe8, 0x25, 0x52, 0x68, 0x81,
-	0x1a, 0x91, 0x8c, 0x34, 0x9d, 0x89, 0x89, 0x97, 0xee, 0xe3, 0x56, 0x36, 0x4d, 0x7f, 0xf2, 0x39,
-	0xbe, 0xce, 0x05, 0x17, 0xd9, 0xd2, 0x4f, 0x57, 0xf9, 0x6e, 0xf7, 0x03, 0x34, 0x03, 0xc5, 0x07,
-	0x4a, 0x45, 0x3c, 0x1e, 0x8a, 0x29, 0x53, 0xc8, 0x85, 0x0b, 0x74, 0x32, 0x91, 0x4c, 0x29, 0xd7,
-	0xe9, 0x38, 0xbd, 0x4b, 0xc3, 0xe2, 0x13, 0xf5, 0xe1, 0x9c, 0x4c, 0x25, 0xee, 0x5e, 0xa7, 0xde,
-	0x6b, 0x1e, 0x5d, 0xf3, 0x2c, 0xa2, 0x97, 0x1e, 0x1f, 0xe6, 0x0a, 0x84, 0xe1, 0xa2, 0x48, 0x98,
-	0xa4, 0x5a, 0x48, 0xb7, 0x9e, 0xb9, 0x98, 0xef, 0xc7, 0xfb, 0x3f, 0x3e, 0xb7, 0x9d, 0xae, 0x0b,
-	0x37, 0x6c, 0xf0, 0x90, 0xa9, 0x44, 0xc4, 0x8a, 0x75, 0x4f, 0xe0, 0x20, 0x50, 0xfc, 0x45, 0x4c,
-	0xff, 0x7f, 0x28, 0x0c, 0x6e, 0x15, 0x6d, 0x62, 0x05, 0xd0, 0x0a, 0x14, 0x3f, 0x9e, 0x8a, 0xf0,
-	0xfd, 0x20, 0x0c, 0xc5, 0x3c, 0xd6, 0x5b, 0x52, 0x95, 0x51, 0x7b, 0x6b, 0x51, 0x87, 0x70, 0xb3,
-	0x62, 0x67, 0x48, 0xcf, 0xe0, 0x6a, 0x96, 0x62, 0xfc, 0xb7, 0x58, 0xb7, 0xe0, 0x70, 0xc5, 0xd0,
-	0xd0, 0x46, 0xd9, 0x75, 0x67, 0x41, 0x9e, 0x88, 0x58, 0x4b, 0x1a, 0x6a, 0xd4, 0x87, 0x83, 0xf0,
-	0xd7, 0x7a, 0x64, 0x53, 0x5b, 0xc5, 0xfe, 0xe0, 0x8f, 0xe9, 0xf9, 0xa5, 0x5a, 0x00, 0x03, 0xa7,
-	0x80, 0x7e, 0x27, 0xfb, 0x37, 0xf8, 0xdb, 0x80, 0x57, 0x11, 0x45, 0x80, 0xa3, 0x2f, 0xfb, 0x50,
-	0x0f, 0x14, 0x47, 0xcf, 0xe1, 0x72, 0xf9, 0x4f, 0x70, 0xa7, 0x52, 0x23, 0xbb, 0xaa, 0xf8, 0xde,
-	0xd6, 0x71, 0x61, 0x8e, 0x5e, 0x41, 0xc3, 0xae, 0x71, 0x7b, 0xf5, 0x9c, 0x25, 0xc0, 0x0f, 0x76,
-	0x08, 0x8c, 0xf5, 0x4b, 0xb8, 0x62, 0x55, 0x91, 0xac, 0x1e, 0x2c, 0xcf, 0xf1, 0xfd, 0xed, 0x73,
-	0xe3, 0xfb, 0x06, 0x9a, 0x95, 0xe2, 0x75, 0xd6, 0x45, 0x2a, 0x2b, 0x70, 0x6f, 0x97, 0xa2, 0x7c,
-	0x21, 0x76, 0xd1, 0xda, 0x1b, 0x62, 0x15, 0x82, 0x75, 0x17, 0xb2, 0xb6, 0x49, 0x68, 0x04, 0xad,
-	0x6a, 0x8d, 0xee, 0x6e, 0xcc, 0x65, 0xec, 0xfb, 0x3b, 0x25, 0x05, 0xe0, 0xf8, 0xe9, 0xe9, 0x77,
-	0x52, 0x3b, 0x5d, 0x10, 0xe7, 0x6c, 0x41, 0x9c, 0x6f, 0x0b, 0xe2, 0x7c, 0x5a, 0x92, 0xda, 0xd9,
-	0x92, 0xd4, 0xbe, 0x2e, 0x49, 0xed, 0xf5, 0x43, 0x1e, 0xe9, 0xb7, 0xf3, 0xb1, 0x17, 0x8a, 0x99,
-	0x3f, 0x8e, 0x68, 0xfc, 0x2e, 0x62, 0x34, 0xf2, 0x0b, 0x73, 0x7f, 0x26, 0x26, 0xf3, 0x29, 0x53,
-	0x7e, 0xfe, 0x64, 0x9f, 0x24, 0x4c, 0x8d, 0xcf, 0x67, 0x0f, 0xf0, 0xa3, 0x9f, 0x01, 0x00, 0x00,
-	0xff, 0xff, 0xcb, 0x69, 0xa6, 0xed, 0xc7, 0x05, 0x00, 0x00,
+	// 466 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x94, 0x4f, 0x6f, 0xd3, 0x30,
+	0x18, 0xc6, 0x9b, 0x75, 0xfc, 0x7b, 0x61, 0xed, 0xb0, 0x46, 0x97, 0x99, 0xe1, 0x55, 0x3d, 0x8d,
+	0x4b, 0x83, 0xc6, 0x8d, 0x5b, 0x07, 0x12, 0x12, 0x52, 0x40, 0xaa, 0xc4, 0x85, 0xcb, 0xe4, 0x24,
+	0x96, 0x09, 0x34, 0x71, 0x64, 0xbb, 0x12, 0x7c, 0x0b, 0x3e, 0x02, 0xdf, 0x83, 0x2f, 0xb0, 0xe3,
+	0x8e, 0x1c, 0xa1, 0xbd, 0xf0, 0x31, 0x50, 0x1c, 0x62, 0xe2, 0x2c, 0x45, 0x1c, 0x60, 0x97, 0xc8,
+	0x7e, 0x5e, 0xe7, 0xf9, 0xbd, 0xb6, 0x1f, 0x19, 0x76, 0x0a, 0x26, 0xb3, 0x40, 0x7f, 0x98, 0x16,
+	0x52, 0x68, 0x81, 0xb6, 0xcb, 0x29, 0x1e, 0x1a, 0xb1, 0xfc, 0x54, 0x32, 0xde, 0xe3, 0x82, 0x0b,
+	0x33, 0x0c, 0xca, 0x51, 0xa5, 0x4e, 0x72, 0x18, 0x84, 0x8a, 0xcf, 0x94, 0x4a, 0x79, 0x3e, 0x17,
+	0x0b, 0xa6, 0x90, 0x0f, 0x37, 0x68, 0x92, 0x48, 0xa6, 0x94, 0xef, 0x8d, 0xbd, 0xe3, 0x5b, 0xf3,
+	0x7a, 0x8a, 0xc6, 0x70, 0x4d, 0x96, 0x4b, 0xfc, 0xad, 0x71, 0xff, 0x78, 0x70, 0x02, 0x53, 0xe3,
+	0x5e, 0xfe, 0x35, 0xaf, 0x0a, 0x08, 0xc3, 0x4d, 0x51, 0x30, 0x49, 0xb5, 0x90, 0x7e, 0xdf, 0xfc,
+	0x6c, 0xe7, 0x4f, 0xb6, 0x7f, 0x7c, 0x3e, 0xf2, 0x26, 0x3e, 0x8c, 0x5c, 0xde, 0x9c, 0xa9, 0x42,
+	0xe4, 0x8a, 0x4d, 0x0a, 0xd8, 0x0d, 0x15, 0x7f, 0x9d, 0xd3, 0x2b, 0xeb, 0x05, 0x83, 0xdf, 0x26,
+	0xda, 0x6e, 0x42, 0x18, 0x86, 0x8a, 0x9f, 0x2e, 0x44, 0xfc, 0x7e, 0x16, 0xc7, 0x62, 0x99, 0xeb,
+	0x3f, 0x34, 0xd3, 0x44, 0x6d, 0x75, 0xa2, 0x0e, 0x60, 0xbf, 0x65, 0x67, 0x49, 0xaf, 0xe0, 0xae,
+	0xe9, 0x22, 0xfa, 0x57, 0xac, 0xfb, 0x70, 0x70, 0xc9, 0xd0, 0xd2, 0xce, 0xcc, 0x29, 0x9b, 0x46,
+	0x9e, 0x8a, 0x5c, 0x4b, 0x1a, 0x6b, 0xf4, 0x10, 0x76, 0xe3, 0x5f, 0xe3, 0x33, 0x97, 0x3a, 0xac,
+	0xf5, 0xd9, 0x5f, 0xd3, 0xab, 0x43, 0x75, 0x00, 0x16, 0x4e, 0x01, 0xfd, 0xee, 0xec, 0xff, 0xe0,
+	0x0f, 0x01, 0x5f, 0x46, 0xd4, 0x0d, 0x9c, 0x7c, 0xe9, 0x43, 0x3f, 0x54, 0x1c, 0xcd, 0xe0, 0x76,
+	0x33, 0xf2, 0x7b, 0x55, 0x7a, 0xdc, 0x60, 0xe2, 0xc3, 0x2e, 0xb5, 0xb6, 0x42, 0xcf, 0x61, 0xc7,
+	0xcd, 0xea, 0xc8, 0x2e, 0x77, 0x74, 0x4c, 0xba, 0x75, 0x6b, 0xf4, 0x0c, 0xee, 0x38, 0x31, 0xbb,
+	0x67, 0xd7, 0x37, 0x65, 0xfc, 0xa0, 0x53, 0xb6, 0x2e, 0x2f, 0x60, 0xd0, 0x8a, 0xd0, 0x7e, 0x83,
+	0xdb, 0x2c, 0xe0, 0xa3, 0x0d, 0x85, 0xe6, 0xd6, 0xdc, 0x80, 0x8c, 0x5c, 0x76, 0xad, 0x37, 0xb6,
+	0xd6, 0x79, 0xdf, 0x28, 0x84, 0x61, 0xfb, 0xb2, 0xfd, 0x36, 0xdc, 0x9a, 0x8d, 0x37, 0x55, 0x6a,
+	0xbb, 0xd3, 0x97, 0xe7, 0xdf, 0x49, 0xef, 0x7c, 0x45, 0xbc, 0x8b, 0x15, 0xf1, 0xbe, 0xad, 0x88,
+	0xf7, 0x69, 0x4d, 0x7a, 0x17, 0x6b, 0xd2, 0xfb, 0xba, 0x26, 0xbd, 0x37, 0x8f, 0x78, 0xaa, 0xdf,
+	0x2e, 0xa3, 0x69, 0x2c, 0xb2, 0x20, 0x4a, 0x69, 0xfe, 0x2e, 0x65, 0x34, 0x0d, 0x52, 0x99, 0x6a,
+	0x9a, 0x89, 0x24, 0xc8, 0x44, 0xb2, 0x5c, 0x30, 0x15, 0x54, 0x6f, 0xe5, 0xc7, 0x82, 0xa9, 0xe8,
+	0xba, 0x79, 0x02, 0x1f, 0xff, 0x0c, 0x00, 0x00, 0xff, 0xff, 0x4b, 0xed, 0xf4, 0xbc, 0x40, 0x05,
+	0x00, 0x00,
 }
 
 func (this *MsgAssignRoles) Equal(that interface{}) bool {
@@ -752,7 +753,7 @@ func NewMsgClient(cc grpc1.ClientConn) MsgClient {
 
 func (c *msgClient) AssignRoles(ctx context.Context, in *MsgAssignRoles, opts ...grpc.CallOption) (*MsgAssignRolesResponse, error) {
 	out := new(MsgAssignRolesResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.perm.Msg/AssignRoles", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/perm.Msg/AssignRoles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -761,7 +762,7 @@ func (c *msgClient) AssignRoles(ctx context.Context, in *MsgAssignRoles, opts ..
 
 func (c *msgClient) UnassignRoles(ctx context.Context, in *MsgUnassignRoles, opts ...grpc.CallOption) (*MsgUnassignRolesResponse, error) {
 	out := new(MsgUnassignRolesResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.perm.Msg/UnassignRoles", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/perm.Msg/UnassignRoles", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -770,7 +771,7 @@ func (c *msgClient) UnassignRoles(ctx context.Context, in *MsgUnassignRoles, opt
 
 func (c *msgClient) BlockAccount(ctx context.Context, in *MsgBlockAccount, opts ...grpc.CallOption) (*MsgBlockAccountResponse, error) {
 	out := new(MsgBlockAccountResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.perm.Msg/BlockAccount", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/perm.Msg/BlockAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -779,7 +780,7 @@ func (c *msgClient) BlockAccount(ctx context.Context, in *MsgBlockAccount, opts 
 
 func (c *msgClient) UnblockAccount(ctx context.Context, in *MsgUnblockAccount, opts ...grpc.CallOption) (*MsgUnblockAccountResponse, error) {
 	out := new(MsgUnblockAccountResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.perm.Msg/UnblockAccount", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/perm.Msg/UnblockAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -788,7 +789,7 @@ func (c *msgClient) UnblockAccount(ctx context.Context, in *MsgUnblockAccount, o
 
 func (c *msgClient) BlockContract(ctx context.Context, in *MsgBlockContract, opts ...grpc.CallOption) (*MsgBlockContractResponse, error) {
 	out := new(MsgBlockContractResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.perm.Msg/BlockContract", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/perm.Msg/BlockContract", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -797,7 +798,7 @@ func (c *msgClient) BlockContract(ctx context.Context, in *MsgBlockContract, opt
 
 func (c *msgClient) UnblockContract(ctx context.Context, in *MsgUnblockContract, opts ...grpc.CallOption) (*MsgUnblockContractResponse, error) {
 	out := new(MsgUnblockContractResponse)
-	err := c.cc.Invoke(ctx, "/iritamod.perm.Msg/UnblockContract", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/perm.Msg/UnblockContract", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -857,7 +858,7 @@ func _Msg_AssignRoles_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.perm.Msg/AssignRoles",
+		FullMethod: "/perm.Msg/AssignRoles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).AssignRoles(ctx, req.(*MsgAssignRoles))
@@ -875,7 +876,7 @@ func _Msg_UnassignRoles_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.perm.Msg/UnassignRoles",
+		FullMethod: "/perm.Msg/UnassignRoles",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).UnassignRoles(ctx, req.(*MsgUnassignRoles))
@@ -893,7 +894,7 @@ func _Msg_BlockAccount_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.perm.Msg/BlockAccount",
+		FullMethod: "/perm.Msg/BlockAccount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).BlockAccount(ctx, req.(*MsgBlockAccount))
@@ -911,7 +912,7 @@ func _Msg_UnblockAccount_Handler(srv interface{}, ctx context.Context, dec func(
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.perm.Msg/UnblockAccount",
+		FullMethod: "/perm.Msg/UnblockAccount",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).UnblockAccount(ctx, req.(*MsgUnblockAccount))
@@ -929,7 +930,7 @@ func _Msg_BlockContract_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.perm.Msg/BlockContract",
+		FullMethod: "/perm.Msg/BlockContract",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).BlockContract(ctx, req.(*MsgBlockContract))
@@ -947,7 +948,7 @@ func _Msg_UnblockContract_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/iritamod.perm.Msg/UnblockContract",
+		FullMethod: "/perm.Msg/UnblockContract",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(MsgServer).UnblockContract(ctx, req.(*MsgUnblockContract))
@@ -956,7 +957,7 @@ func _Msg_UnblockContract_Handler(srv interface{}, ctx context.Context, dec func
 }
 
 var _Msg_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "iritamod.perm.Msg",
+	ServiceName: "perm.Msg",
 	HandlerType: (*MsgServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -1739,10 +1740,7 @@ func (m *MsgAssignRoles) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -1792,10 +1790,7 @@ func (m *MsgAssignRolesResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -1978,10 +1973,7 @@ func (m *MsgUnassignRoles) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2031,10 +2023,7 @@ func (m *MsgUnassignRolesResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2148,10 +2137,7 @@ func (m *MsgBlockAccount) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2201,10 +2187,7 @@ func (m *MsgBlockAccountResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2318,10 +2301,7 @@ func (m *MsgUnblockAccount) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2371,10 +2351,7 @@ func (m *MsgUnblockAccountResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2488,10 +2465,7 @@ func (m *MsgBlockContract) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2541,10 +2515,7 @@ func (m *MsgBlockContractResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2658,10 +2629,7 @@ func (m *MsgUnblockContract) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
@@ -2711,10 +2679,7 @@ func (m *MsgUnblockContractResponse) Unmarshal(dAtA []byte) error {
 			if err != nil {
 				return err
 			}
-			if skippy < 0 {
-				return ErrInvalidLengthTx
-			}
-			if (iNdEx + skippy) < 0 {
+			if (skippy < 0) || (iNdEx+skippy) < 0 {
 				return ErrInvalidLengthTx
 			}
 			if (iNdEx + skippy) > l {
