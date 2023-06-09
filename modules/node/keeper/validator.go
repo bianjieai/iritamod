@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"cosmossdk.io/math"
 	"encoding/hex"
 	"fmt"
 
@@ -317,7 +318,16 @@ func (k Keeper) IterateValidators(ctx sdk.Context, fn func(index int64, validato
 }
 
 // GetAllValidators gets the set of all validators with no limits, used during genesis dump
-func (k Keeper) GetAllValidators(ctx sdk.Context) (validators []types.Validator) {
+//
+// NOTE： add this to impl x/staking keeper interface; never use it.
+func (k Keeper) GetAllValidators(ctx sdk.Context) (validators []staking.Validator) {
+	return nil
+}
+
+// GetAllValidatorsLegacy gets the set of all validators with no limits, used during genesis dump
+//
+// NOTE： renamed from GetAllValidators since cosmos-sdk v0.47
+func (k Keeper) GetAllValidatorsLegacy(ctx sdk.Context) (validators []types.Validator) {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := sdk.KVStorePrefixIterator(store, types.ValidatorsKey)
@@ -357,7 +367,14 @@ func (k Keeper) ValidatorByConsAddr(ctx sdk.Context, consAddr sdk.ConsAddress) s
 }
 
 // Slash not implement
-func (k Keeper) Slash(ctx sdk.Context, consAddr sdk.ConsAddress, i int64, i2 int64, dec sdk.Dec) {}
+func (k Keeper) Slash(ctx sdk.Context, consAddr sdk.ConsAddress, i int64, i2 int64, dec sdk.Dec) math.Int {
+	return sdk.NewInt(0)
+}
+
+// SlashWithInfractionReason not implement
+func (k *Keeper) SlashWithInfractionReason(ctx sdk.Context, consAddr sdk.ConsAddress, i int64, i2 int64, dec sdk.Dec, _ staking.Infraction) math.Int {
+	return k.Slash(ctx, consAddr, i, i2, dec)
+}
 
 // Jail disable the validator
 func (k Keeper) Jail(ctx sdk.Context, consAddr sdk.ConsAddress) {
@@ -469,4 +486,14 @@ func (k *Keeper) VerifyCert(ctx sdk.Context, certStr string) (cert cautil.Cert, 
 	}
 
 	return cert, nil
+}
+
+// IsValidatorJailed returns if the validator is jailed.
+func (k *Keeper) IsValidatorJailed(ctx sdk.Context, addr sdk.ConsAddress) bool {
+	v, ok := k.GetValidatorByConsAddr(ctx, addr)
+	if !ok {
+		return false
+	}
+
+	return v.Jailed
 }

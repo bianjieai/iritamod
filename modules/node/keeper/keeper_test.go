@@ -48,7 +48,7 @@ func TestKeeperTestSuite(t *testing.T) {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	app := simapp.Setup(false)
+	app := simapp.Setup(suite.T(), false)
 
 	suite.cdc = app.AppCodec()
 	suite.ctx = app.BaseApp.NewContext(false, ctmproto.Header{})
@@ -89,7 +89,7 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 	suite.True(found)
 	suite.Equal(validator, validator1)
 
-	validators := suite.keeper.GetAllValidators(suite.ctx)
+	validators := suite.keeper.GetAllValidatorsLegacy(suite.ctx)
 	suite.Equal(1, len(validators))
 	suite.Equal(validator, validators[0])
 
@@ -159,7 +159,7 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	suite.True(found)
 	suite.Equal(validator, validator1)
 
-	validators := suite.keeper.GetAllValidators(suite.ctx)
+	validators := suite.keeper.GetAllValidatorsLegacy(suite.ctx)
 	suite.Equal(1, len(validators))
 	suite.Equal(validator, validators[0])
 
@@ -211,7 +211,7 @@ func (suite *KeeperTestSuite) TestRemoveValidator() {
 	_, found = suite.keeper.GetValidatorByConsAddr(suite.ctx, sdk.GetConsAddress(cospk))
 	suite.False(found)
 
-	validators := suite.keeper.GetAllValidators(suite.ctx)
+	validators := suite.keeper.GetAllValidatorsLegacy(suite.ctx)
 	suite.Equal(0, len(validators))
 
 	suite.keeper.IterateUpdateValidators(

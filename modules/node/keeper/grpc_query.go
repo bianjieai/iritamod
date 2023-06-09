@@ -83,7 +83,7 @@ func (q Querier) Params(c context.Context, req *types.QueryParamsRequest) (*type
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
-	params := q.GetParams(ctx)
+	params := q.GetParamsLegacy(ctx)
 
 	return &types.QueryParamsResponse{Params: params}, nil
 }
