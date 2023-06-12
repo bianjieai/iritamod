@@ -3,8 +3,9 @@ package keeper
 import (
 	"context"
 
-	"github.com/bianjieai/iritamod/modules/slashing/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+
+	"github.com/bianjieai/iritamod/modules/slashing/types"
 )
 
 type msgServer struct {

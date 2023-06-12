@@ -2,12 +2,13 @@ package simapp
 
 import (
 	"encoding/json"
-	"github.com/cometbft/cometbft/crypto/tmhash"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/store/streaming"
 	"io"
 	"os"
 	"path/filepath"
+
+	"github.com/cometbft/cometbft/crypto/tmhash"
+	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/store/streaming"
 
 	"github.com/spf13/cast"
 
@@ -68,6 +69,8 @@ import (
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+
 	"github.com/bianjieai/iritamod/modules/identity"
 	identitykeeper "github.com/bianjieai/iritamod/modules/identity/keeper"
 	identitytypes "github.com/bianjieai/iritamod/modules/identity/types"
@@ -79,7 +82,6 @@ import (
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
 	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	cslashing "github.com/bianjieai/iritamod/modules/slashing"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 )
 
 const appName = "SimApp"

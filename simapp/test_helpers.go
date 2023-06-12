@@ -5,7 +5,11 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
+	"math/rand"
+	"strconv"
+	"testing"
+	"time"
+
 	"github.com/cometbft/cometbft/crypto/tmhash"
 	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -15,10 +19,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/testutil/mock"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 	"github.com/stretchr/testify/require"
-	"math/rand"
-	"strconv"
-	"testing"
-	"time"
+
+	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
 
 	dbm "github.com/cometbft/cometbft-db"
 	abci "github.com/cometbft/cometbft/abci/types"
@@ -26,8 +28,6 @@ import (
 	ctmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	ctmtypes "github.com/cometbft/cometbft/types"
 
-	"github.com/bianjieai/iritamod/modules/node"
-	"github.com/bianjieai/iritamod/modules/perm"
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -39,6 +39,9 @@ import (
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
+
+	"github.com/bianjieai/iritamod/modules/node"
+	"github.com/bianjieai/iritamod/modules/perm"
 )
 
 func setup(withGenesis bool, invCheckPeriod uint) (*SimApp, GenesisState) {

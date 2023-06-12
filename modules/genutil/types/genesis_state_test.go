@@ -2,8 +2,9 @@ package types_test
 
 import (
 	"encoding/json"
-	"github.com/cosmos/cosmos-sdk/std"
 	"testing"
+
+	"github.com/cosmos/cosmos-sdk/std"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
