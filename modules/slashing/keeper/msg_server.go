@@ -3,18 +3,29 @@ package keeper
 import (
 	"context"
 
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	"github.com/bianjieai/iritamod/modules/slashing/types"
 )
 
+var _ types.MsgServer = msgServer{}
+
 type msgServer struct {
-	Keeper
+	k Keeper
+}
+
+// NewMsgServerImpl returns an implementation of the bank MsgServer interface
+// for the provided Keeper.
+func NewMsgServerImpl(keeper Keeper) types.MsgServer {
+	return &msgServer{k: keeper}
 }
 
 func (m msgServer) UnjailValidator(goCtx context.Context, msg *types.MsgUnjailValidator) (*types.MsgUnjailValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := m.Keeper.HandleUnjail(ctx, *msg); err != nil {
+	if err := m.k.HandleUnjail(ctx, *msg); err != nil {
 		return nil, err
 	}
 	// NOTE: comment this because these event will be emitted directly at message execution.
@@ -29,10 +40,29 @@ func (m msgServer) UnjailValidator(goCtx context.Context, msg *types.MsgUnjailVa
 	return &types.MsgUnjailValidatorResponse{}, nil
 }
 
-// NewMsgServerImpl returns an implementation of the bank MsgServer interface
-// for the provided Keeper.
-func NewMsgServerImpl(keeper Keeper) types.MsgServer {
-	return &msgServer{Keeper: keeper}
-}
+// UpdateParams updates the slashing params.
+func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+	if m.k.GetAuthority() != msg.Authority {
+		return nil, sdkerrors.Wrapf(
+			sdkerrors.ErrUnauthorized,
+			"invalid authority; expected %s, got %s",
+			m.k.GetAuthority(),
+			msg.Authority,
+		)
+	}
 
-var _ types.MsgServer = msgServer{}
+	ctx := sdk.UnwrapSDKContext(goCtx)
+
+	params := slashingtypes.Params{
+		SignedBlocksWindow:      msg.Params.SignedBlocksWindow,
+		MinSignedPerWindow:      msg.Params.MinSignedPerWindow,
+		DowntimeJailDuration:    msg.Params.DowntimeJailDuration,
+		SlashFractionDoubleSign: msg.Params.SlashFractionDoubleSign,
+		SlashFractionDowntime:   msg.Params.SlashFractionDowntime,
+	}
+
+	if err := m.k.SetParams(ctx, params); err != nil {
+		return nil, err
+	}
+	return &types.MsgUpdateParamsResponse{}, nil
+}

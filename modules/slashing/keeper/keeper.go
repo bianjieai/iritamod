@@ -22,8 +22,8 @@ type Keeper struct {
 // NewKeeper creates a slashing keeper
 func NewKeeper(slashingKeeper slashingkeeper.Keeper, nodeKeeper types.NodeKeeper) Keeper {
 	return Keeper{
-		slashingKeeper,
-		nodeKeeper,
+		Keeper:     slashingKeeper,
+		nodeKeeper: nodeKeeper,
 	}
 }
 
