@@ -5,8 +5,15 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
+	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
+	"github.com/cometbft/cometbft/crypto/tmhash"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 	"github.com/cosmos/cosmos-sdk/client/flags"
+	"github.com/cosmos/cosmos-sdk/codec/legacy"
+	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	"github.com/cosmos/cosmos-sdk/server"
+	"github.com/cosmos/cosmos-sdk/testutil/mock"
+	"github.com/cosmos/cosmos-sdk/types/bech32"
 	"github.com/stretchr/testify/require"
 	"math/rand"
 	"strconv"
@@ -53,45 +60,78 @@ func setup(withGenesis bool, invCheckPeriod uint) (*SimApp, GenesisState) {
 func Setup(t *testing.T, isCheckTx bool) *SimApp {
 	t.Helper()
 
-	app := SetUpWithConsortiumValSet(t, isCheckTx)
+	privVal := mock.NewPV()
+	pubKey, err := privVal.GetPubKey()
+	require.NoError(t, err)
+
+	// create validator set with single validator
+	validator := ctmtypes.NewValidator(pubKey, 1)
+	valSet := ctmtypes.NewValidatorSet([]*ctmtypes.Validator{validator})
+
+	app := SetupWithConsortiumGenesisValSet(t, valSet)
 
 	return app
 }
 
-func SetUpWithConsortiumValSet(t *testing.T, isCheckTx bool) *SimApp {
+func SetupWithConsortiumGenesisValSet(t *testing.T, valSet *ctmtypes.ValidatorSet) *SimApp {
+	t.Helper()
 	app, genesisState := setup(true, 5)
 
-	if !isCheckTx {
-		// add root admin
-		permGenState := perm.GetGenesisStateFromAppState(app.appCodec, genesisState)
-		permGenState.RoleAccounts = append(
-			permGenState.RoleAccounts,
-			perm.RoleAccount{
-				Address: rootAdmin,
-				Roles:   []perm.Role{perm.RoleRootAdmin},
-			},
-		)
-		permGenStateBz := app.legacyAmino.MustMarshalJSON(permGenState)
-		genesisState[perm.ModuleName] = permGenStateBz
+	// add root admin
+	permGenState := perm.GetGenesisStateFromAppState(app.appCodec, genesisState)
+	permGenState.RoleAccounts = append(
+		permGenState.RoleAccounts,
+		perm.RoleAccount{
+			Address: rootAdmin,
+			Roles:   []perm.Role{perm.RoleRootAdmin},
+		},
+	)
+	permGenStateBz := app.legacyAmino.MustMarshalJSON(permGenState)
+	genesisState[perm.ModuleName] = permGenStateBz
 
-		// add root cert
-		validatorGenState := node.GetGenesisStateFromAppState(app.appCodec, genesisState)
-		validatorGenState.RootCert = rootCert
-		validatorGenStateBz := app.legacyAmino.MustMarshalJSON(validatorGenState)
-		genesisState[node.ModuleName] = validatorGenStateBz
-
-		stateBytes, err := codec.MarshalJSONIndent(app.legacyAmino, genesisState)
+	// create validator
+	validators := make([]nodetypes.Validator, 0, len(valSet.Validators))
+	for _, val := range valSet.Validators {
+		pk, err := cryptocodec.FromTmPubKeyInterface(val.PubKey)
 		if err != nil {
-			panic(err)
+			panic("failed to convert pubkey")
 		}
 
-		// Initialize the chain
-		app.InitChain(abci.RequestInitChain{
-			Validators:      []abci.ValidatorUpdate{},
-			ConsensusParams: simtestutil.DefaultConsensusParams,
-			AppStateBytes:   stateBytes,
-		})
+		pkStr, err := bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(pk))
+		if err != nil {
+			panic("failed to convert pubkey string")
+		}
+
+		validator := nodetypes.Validator{
+			Id:          ctmbytes.HexBytes(tmhash.Sum([]byte("root"))).String(),
+			Name:        "genesisName",
+			Pubkey:      pkStr,
+			Certificate: rootCert,
+			Power:       val.VotingPower,
+			Description: "initial validator",
+			Jailed:      false,
+			Operator:    sdk.ValAddress(val.Address).String(),
+		}
+		validators = append(validators, validator)
 	}
+
+	// add root cert
+	validatorGenState := node.GetGenesisStateFromAppState(app.appCodec, genesisState)
+	validatorGenState.RootCert = rootCert
+	validatorGenState.Validators = validators
+
+	validatorGenStateBz := app.legacyAmino.MustMarshalJSON(validatorGenState)
+	genesisState[node.ModuleName] = validatorGenStateBz
+
+	stateBytes, err := codec.MarshalJSONIndent(app.legacyAmino, genesisState)
+	require.NoError(t, err)
+
+	// Initialize the chain
+	app.InitChain(abci.RequestInitChain{
+		Validators:      []abci.ValidatorUpdate{},
+		ConsensusParams: simtestutil.DefaultConsensusParams,
+		AppStateBytes:   stateBytes,
+	})
 
 	return app
 }

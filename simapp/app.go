@@ -14,7 +14,6 @@ import (
 	dbm "github.com/cometbft/cometbft-db"
 	abci "github.com/cometbft/cometbft/abci/types"
 	"github.com/cometbft/cometbft/libs/log"
-	tmos "github.com/cometbft/cometbft/libs/os"
 
 	simappparams "cosmossdk.io/simapp/params"
 
@@ -204,6 +203,7 @@ func NewSimApp(
 	keys := sdk.NewKVStoreKeys(
 		authtypes.StoreKey,
 		banktypes.StoreKey,
+		crisistypes.StoreKey,
 		slashingtypes.StoreKey,
 		paramstypes.StoreKey,
 		upgradetypes.StoreKey,
@@ -228,6 +228,7 @@ func NewSimApp(
 		BaseApp:           bApp,
 		legacyAmino:       legacyAmino,
 		appCodec:          appCodec,
+		txConfig:          txConfig,
 		interfaceRegistry: interfaceRegistry,
 		keys:              keys,
 		tkeys:             tkeys,
@@ -324,6 +325,7 @@ func NewSimApp(
 		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
+		consensus.NewAppModule(appCodec, app.ConsensusKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -343,6 +345,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
+		consensustypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderEndBlockers(
@@ -358,6 +361,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
+		consensustypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -378,6 +382,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
+		consensustypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderMigrations(
@@ -393,6 +398,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
+		consensustypes.ModuleName,
 	)
 
 	app.ModuleManager.RegisterInvariants(app.CrisisKeeper)
@@ -446,7 +452,8 @@ func NewSimApp(
 
 	if loadLatest {
 		if err := app.LoadLatestVersion(); err != nil {
-			tmos.Exit(err.Error())
+			logger.Error("error on loading last version", "err", err)
+			os.Exit(1)
 		}
 	}
 

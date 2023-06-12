@@ -61,6 +61,7 @@ func (suite *KeeperTestSuite) setNode() {
 	suite.keeper.SetNode(suite.ctx, nodeID, node)
 }
 
+// NOTE： we have set a validator during genesis
 func (suite *KeeperTestSuite) TestCreateValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
 	id := ctmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
@@ -90,8 +91,8 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 	suite.Equal(validator, validator1)
 
 	validators := suite.keeper.GetAllValidatorsLegacy(suite.ctx)
-	suite.Equal(1, len(validators))
-	suite.Equal(validator, validators[0])
+	suite.Equal(2, len(validators))
+	suite.Equal(validator, validators[1])
 
 	suite.keeper.IterateUpdateValidators(
 		suite.ctx,
@@ -160,8 +161,8 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	suite.Equal(validator, validator1)
 
 	validators := suite.keeper.GetAllValidatorsLegacy(suite.ctx)
-	suite.Equal(1, len(validators))
-	suite.Equal(validator, validators[0])
+	suite.Equal(2, len(validators))
+	suite.Equal(validator, validators[1])
 
 	updatesTotal := 0
 	suite.keeper.IterateUpdateValidators(suite.ctx, func(index int64, pubkey string, power int64) bool {
@@ -212,7 +213,7 @@ func (suite *KeeperTestSuite) TestRemoveValidator() {
 	suite.False(found)
 
 	validators := suite.keeper.GetAllValidatorsLegacy(suite.ctx)
-	suite.Equal(0, len(validators))
+	suite.Equal(1, len(validators))
 
 	suite.keeper.IterateUpdateValidators(
 		suite.ctx,
