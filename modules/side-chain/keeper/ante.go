@@ -12,7 +12,7 @@ type ValidateSideChainDecorator struct {
 	permKeeper types.PermKeeper
 }
 
-func NewValidateLayer2Decorator(keeper Keeper, permKeeper types.PermKeeper) ValidateSideChainDecorator {
+func NewValidateSideChainDecorator(keeper Keeper, permKeeper types.PermKeeper) ValidateSideChainDecorator {
 	return ValidateSideChainDecorator{
 		keeper:     keeper,
 		permKeeper: permKeeper,
@@ -70,7 +70,7 @@ func (dlt ValidateSideChainDecorator) validateSpaceOwnership(ctx sdk.Context, ad
 
 func (dlt ValidateSideChainDecorator) validateSideChainUserRole(ctx sdk.Context, addr string) error {
 	accAddr, _ := sdk.AccAddressFromBech32(addr)
-	if !dlt.permKeeper.HasL2UserRole(ctx, accAddr) {
+	if !dlt.permKeeper.HasSideChainUserRole(ctx, accAddr) {
 		return sdkerrors.Wrapf(types.ErrInvalidSideChainUser, "account (%s) does not have l2 user role", addr)
 	}
 	return nil

@@ -6,7 +6,7 @@ import (
 )
 
 type PermKeeper interface {
-	HasL2UserRole(ctx sdk.Context, signer sdk.AccAddress) bool
+	HasSideChainUserRole(ctx sdk.Context, signer sdk.AccAddress) bool
 }
 
 type AccountKeeper interface {

@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	ModuleName = "side-chain"
+	ModuleName = "sidechain"
 
 	StoreKey = ModuleName
 

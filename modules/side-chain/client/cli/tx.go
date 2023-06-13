@@ -16,7 +16,7 @@ import (
 func NewTxCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                        types.ModuleName,
-		Short:                      "Side-chain transaction subcommands",
+		Short:                      "side chain transaction subcommands",
 		DisableFlagParsing:         true,
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
@@ -24,7 +24,6 @@ func NewTxCmd() *cobra.Command {
 
 	cmd.AddCommand(
 		GetCmdSpaceCmd(),
-		GetCmdSpaceTransfer(),
 		GetCmdCreateBlockHeader(),
 	)
 
@@ -34,7 +33,7 @@ func NewTxCmd() *cobra.Command {
 func GetCmdSpaceCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                        "space",
-		Short:                      "Layer2 space transaction subcommands",
+		Short:                      "side chain space transaction subcommands",
 		DisableFlagParsing:         true,
 		SuggestionsMinimumDistance: 2,
 		RunE:                       client.ValidateCmd,
@@ -51,9 +50,9 @@ func GetCmdSpaceCmd() *cobra.Command {
 func GetCmdSpaceCreate() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:  "create",
-		Long: "create a new layer2 space",
+		Long: "create a new side chain space",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 space create "+
+			"$ %s tx side-chain space create "+
 				"--name=<name> "+
 				"--uri=<uri>",
 			version.AppName),
@@ -129,7 +128,7 @@ func GetCmdSpaceTransfer() *cobra.Command {
 func GetCmdCreateBlockHeader() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:  "create-blockheader [space-id] [height] [header]",
-		Long: "create a layer2 block header record",
+		Long: "create a side chain block header record",
 		Example: fmt.Sprintf(
 			"$ %s tx layer2 create-blockheader [space-id] [height] [header]",
 			version.AppName),

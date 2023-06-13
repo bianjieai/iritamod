@@ -18,7 +18,7 @@ import (
 func GetQueryCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                types.ModuleName,
-		Short:              "Querying commands for the Layer2 module",
+		Short:              "Querying commands for the side-chain module",
 		DisableFlagParsing: true,
 	}
 
@@ -33,7 +33,7 @@ func GetQueryCmd() *cobra.Command {
 func GetQuerySpaceCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:                "space",
-		Short:              "Layer2 space query subcommands",
+		Short:              "Side chain space query subcommands",
 		DisableFlagParsing: true,
 	}
 
@@ -123,7 +123,7 @@ func GetCmdQuerySpacesOfOwner() *cobra.Command {
 func GetCmdQueryBlockHeader() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "blockheader [space-id] [height]",
-		Long:    "query the layer2 block header",
+		Long:    "query the side chain block header",
 		Example: fmt.Sprintf("$ %s q layer2 blockheader [space-id] [height]", version.AppName),
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
