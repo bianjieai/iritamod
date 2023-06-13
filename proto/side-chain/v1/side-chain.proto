@@ -1,0 +1,20 @@
+syntax = "proto3";
+package iritamod.side_chain.v1;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/side-chain/types";
+
+// Space defines the space info of the side-chain module
+message Space {
+  uint64 id = 1;
+  string name = 2;
+  string uri = 3;
+  string owner = 4;
+}
+
+message BlockHeader {
+  uint64 space_id = 1;
+  uint64 height = 2;
+  string header = 3;
+}

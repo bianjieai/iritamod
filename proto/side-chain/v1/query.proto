@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package iritamod.side_chain.v1;
+
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "side-chain/v1/side-chain.proto";
+import "cosmos/query/pagination.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/side-chain/types";
+
+// Query defines the gRPC querier service for side-chain module.
+service Query {
+  // Space queries a space.
+  rpc Space(QuerySpaceRequest) returns (QuerySpaceResponse) {
+    option (google.api.http).get = "/iritamod/side-chain/v1/spaces/{space_id}";
+  }
+
+  // SpaceOfOwner queries all spaces owned by an address.
+  rpc SpaceOfOwner(QuerySpaceOfOwnerRequest) returns (QuerySpaceOfOwnerResponse) {
+    option (google.api.http).get = "/iritamod/side-chain/v1/spaces/{owner}";
+  }
+
+  // BlockHeader queries a side chain block header.
+  rpc BlockHeader(QueryBlockHeaderRequest) returns (QueryBlockHeaderResponse) {
+    option (google.api.http).get = "/iritamod/side-chain/v1/blockheaders/{space_id}/{height}";
+  }
+}
+
+// QuerySpaceRequest is the request type for the Query/Space RPC
+message QuerySpaceRequest {
+  uint64 space_id = 1;
+}
+
+// QuerySpaceResponse is the response type for the Query/Space RPC
+message QuerySpaceResponse {
+  Space space = 1;
+}
+
+// QuerySpaceOfOwnerRequest is the request type for the Query/SpaceOfOwner RPC
+message QuerySpaceOfOwnerRequest {
+  string owner = 1;
+  cosmos.query.PageRequest pagination = 2;
+}
+
+// QuerySpaceOfOwnerResponse is the response type for the Query/SpaceOfOwner RPC
+message QuerySpaceOfOwnerResponse {
+  repeated Space spaces = 1 [ (gogoproto.nullable) = false ];
+  cosmos.query.PageResponse pagination = 2;
+}
+
+// QueryBlockHeaderRequest is the request type for the Query/Record RPC
+message QueryBlockHeaderRequest {
+  uint64 space_id = 1;
+  uint64 height = 2;
+}
+
+// QueryBlockHeaderResponse is the response type for the Query/Record RPC
+message QueryBlockHeaderResponse {
+  string header = 2;
+}

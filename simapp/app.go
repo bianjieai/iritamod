@@ -1,6 +1,7 @@
 package simapp
 
 import (
+	sidechain "github.com/bianjieai/iritamod/modules/side-chain"
 	"io"
 	"net/http"
 	"os"
@@ -75,10 +76,8 @@ import (
 	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	cslashing "github.com/bianjieai/iritamod/modules/slashing"
 
-	"github.com/bianjieai/iritamod/modules/layer2"
-	layer2keeper "github.com/bianjieai/iritamod/modules/layer2/keeper"
-	layer2mock "github.com/bianjieai/iritamod/modules/layer2/mock"
-	layer2types "github.com/bianjieai/iritamod/modules/layer2/types"
+	sidechainkeeper "github.com/bianjieai/iritamod/modules/side-chain/keeper"
+	sidechaintypes "github.com/bianjieai/iritamod/modules/side-chain/types"
 )
 
 const appName = "SimApp"
@@ -108,14 +107,14 @@ var (
 		perm.AppModuleBasic{},
 		identity.AppModuleBasic{},
 		node.AppModuleBasic{},
-		layer2.AppModuleBasic{},
+		sidechain.AppModuleBasic{},
 	)
 
 	// module account permissions
 	maccPerms = map[string][]string{
 		authtypes.FeeCollectorName: nil,
 		//gov.ModuleName:                  {authtypes.Burner},
-		layer2types.ModuleName: nil,
+		sidechaintypes.ModuleName: nil,
 	}
 
 	// module accounts that are allowed to receive tokens
@@ -153,7 +152,7 @@ type SimApp struct {
 	IdentityKeeper identitykeeper.Keeper
 	NodeKeeper     nodekeeper.Keeper
 	FeeGrantKeeper feegrantkeeper.Keeper
-	Layer2Keeper   layer2keeper.Keeper
+	Layer2Keeper   sidechainkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -203,7 +202,7 @@ func NewSimApp(
 		permtypes.StoreKey,
 		identitytypes.StoreKey,
 		nodetypes.StoreKey,
-		layer2types.StoreKey,
+		sidechaintypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -254,8 +253,7 @@ func NewSimApp(
 	app.PermKeeper = permkeeper.NewKeeper(appCodec, keys[permtypes.StoreKey])
 	app.IdentityKeeper = identitykeeper.NewKeeper(appCodec, keys[identitytypes.StoreKey])
 
-	mockNftKeeper := layer2mock.NewNFTKeeper()
-	app.Layer2Keeper = layer2keeper.NewKeeper(appCodec, keys[layer2types.StoreKey], app.AccountKeeper, mockNftKeeper)
+	app.Layer2Keeper = sidechainkeeper.NewKeeper(appCodec, keys[sidechaintypes.StoreKey], app.AccountKeeper)
 
 	/****  Module Options ****/
 
@@ -279,7 +277,7 @@ func NewSimApp(
 		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
-		layer2.NewAppModule(appCodec, app.Layer2Keeper),
+		sidechain.NewAppModule(appCodec, app.Layer2Keeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -299,7 +297,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
-		layer2types.ModuleName,
+		sidechaintypes.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -315,7 +313,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
-		layer2types.ModuleName,
+		sidechaintypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -336,7 +334,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
-		layer2types.ModuleName,
+		sidechaintypes.ModuleName,
 	)
 
 	app.mm.SetOrderMigrations(
@@ -352,7 +350,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
-		layer2types.ModuleName,
+		sidechaintypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
