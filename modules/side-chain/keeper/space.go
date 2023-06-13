@@ -144,6 +144,7 @@ func (k Keeper) GetBlockHeaders(ctx sdk.Context) []types.BlockHeader {
 			panic("fail to split layer2 block header key")
 		}
 		var BlockHeader types.BlockHeader
+		ret[0] = bytes.TrimPrefix(ret[0], types.KeyPrefixBlockHeader)
 		spaceId, err := strconv.ParseUint(string(ret[0]), 10, 64)
 		if err != nil {
 			panic("fail to convert spaceId to uint64")
