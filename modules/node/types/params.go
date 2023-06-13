@@ -3,7 +3,8 @@ package types
 import (
 	"fmt"
 
-	"github.com/cosmos/cosmos-sdk/codec"
+	"sigs.k8s.io/yaml"
+
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
 
@@ -15,10 +16,6 @@ const (
 	DefaultHistoricalEntries uint32 = 100
 )
 
-var (
-	KeyHistoricalEntries = []byte("HistoricalEntries")
-)
-
 var _ paramtypes.ParamSet = (*Params)(nil)
 
 // NewParams creates a new Params instance
@@ -26,31 +23,18 @@ func NewParams(historicalEntries uint32) Params {
 	return Params{HistoricalEntries: historicalEntries}
 }
 
-// Implements params.ParamSet
-func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
-	return paramtypes.ParamSetPairs{
-		paramtypes.NewParamSetPair(KeyHistoricalEntries, &p.HistoricalEntries, validateHistoricalEntries),
-	}
-}
-
 // DefaultParams returns a default set of parameters.
 func DefaultParams() Params {
 	return NewParams(DefaultHistoricalEntries)
 }
 
-// unmarshal the current staking params value from store key or panic
-func MustUnmarshalParams(cdc *codec.LegacyAmino, value []byte) Params {
-	params, err := UnmarshalParams(cdc, value)
-	if err != nil {
-		panic(err)
-	}
-	return params
+func (p Params) String() string {
+	out, _ := yaml.Marshal(p)
+	return string(out)
 }
 
-// unmarshal the current staking params value from store key
-func UnmarshalParams(cdc *codec.LegacyAmino, value []byte) (params Params, err error) {
-	err = cdc.Unmarshal(value, &params)
-	return
+func (p Params) Validate() error {
+	return validateHistoricalEntries(p.HistoricalEntries)
 }
 
 func validateHistoricalEntries(i interface{}) error {

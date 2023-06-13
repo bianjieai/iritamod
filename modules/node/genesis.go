@@ -69,7 +69,7 @@ func InitGenesis(ctx sdk.Context, cdc codec.Codec, k Keeper, data GenesisState) 
 // ExportGenesis - output genesis valiadtor set
 func ExportGenesis(ctx sdk.Context, k Keeper) *GenesisState {
 	rootCert, _ := k.GetRootCert(ctx)
-	return NewGenesisState(rootCert, k.GetParamsLegacy(ctx), k.GetAllValidatorsLegacy(ctx), k.GetNodes(ctx))
+	return NewGenesisState(rootCert, k.GetModuleParams(ctx), k.GetAllValidatorsLegacy(ctx), k.GetNodes(ctx))
 }
 
 // WriteValidators returns a slice of bonded genesis validators.

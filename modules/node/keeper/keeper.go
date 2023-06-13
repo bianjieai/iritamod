@@ -9,7 +9,6 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/bianjieai/iritamod/modules/node/types"
@@ -17,23 +16,18 @@ import (
 
 // keeper of the node store
 type Keeper struct {
-	cdc      codec.Codec
-	storeKey storetypes.StoreKey
+	cdc       codec.Codec
+	storeKey  storetypes.StoreKey
+	authority string
 
-	paramstore paramtypes.Subspace
-	hooks      staking.StakingHooks
+	hooks staking.StakingHooks
 }
 
-func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey, ps paramtypes.Subspace) Keeper {
-	// set KeyTable if it has not already been set
-	if !ps.HasKeyTable() {
-		ps = ps.WithKeyTable(ParamKeyTable())
-	}
-
+func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey, authority string) Keeper {
 	return Keeper{
-		cdc:        cdc,
-		storeKey:   storeKey,
-		paramstore: ps,
+		cdc:       cdc,
+		storeKey:  storeKey,
+		authority: authority,
 	}
 }
 
