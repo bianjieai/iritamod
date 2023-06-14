@@ -5,8 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/bianjieai/iritamod/modules/slashing/exported"
-
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
@@ -22,6 +20,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	"github.com/bianjieai/iritamod/modules/slashing/client/cli"
+	"github.com/bianjieai/iritamod/modules/slashing/exported"
 	"github.com/bianjieai/iritamod/modules/slashing/keeper"
 	slashingtypes "github.com/bianjieai/iritamod/modules/slashing/types"
 )
