@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/bianjieai/iritamod/modules/node/exported"
-	"github.com/bianjieai/iritamod/modules/node/migration/v2"
+	v2 "github.com/bianjieai/iritamod/modules/node/migration/v2"
 )
 
 type Migrator struct {

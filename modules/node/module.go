@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/bianjieai/iritamod/modules/node/exported"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
@@ -22,6 +21,7 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
 	"github.com/bianjieai/iritamod/modules/node/client/cli"
+	"github.com/bianjieai/iritamod/modules/node/exported"
 	"github.com/bianjieai/iritamod/modules/node/keeper"
 	"github.com/bianjieai/iritamod/modules/node/types"
 )
