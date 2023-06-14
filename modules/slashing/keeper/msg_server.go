@@ -28,15 +28,6 @@ func (m msgServer) UnjailValidator(goCtx context.Context, msg *types.MsgUnjailVa
 	if err := m.k.HandleUnjail(ctx, *msg); err != nil {
 		return nil, err
 	}
-	// NOTE: comment this because these event will be emitted directly at message execution.
-	// TODO: remove this snippet.
-	//ctx.EventManager().EmitEvent(
-	//	sdk.NewEvent(
-	//		sdk.EventTypeMessage,
-	//		sdk.NewAttribute(sdk.AttributeKeyModule, slashingtypes.ModuleName),
-	//		sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
-	//	),
-	//)
 	return &types.MsgUnjailValidatorResponse{}, nil
 }
 

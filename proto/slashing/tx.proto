@@ -9,8 +9,10 @@ import "gogoproto/gogo.proto";
 option go_package = "github.com/bianjieai/iritamod/modules/slashing/types";
 option (gogoproto.goproto_getters_all) = false;
 
-// Msg defines the bank Msg service.
+// Msg defines the slashing Msg service.
 service Msg {
+  option (cosmos.msg.v1.service) = true;
+
   // Unjail defines a method for unjail a validator.
   rpc UnjailValidator(MsgUnjailValidator) returns (MsgUnjailValidatorResponse);
 
@@ -26,7 +28,7 @@ message MsgUnjailValidator {
   option (cosmos.msg.v1.signer) = "operator";
 
   string id = 1;
-  string operator = 2;
+  string operator = 2 [ (cosmos_proto.scalar) = "cosmos.AddressString" ];
 }
 
 // MsgUnjailValidatorResponse defines the Msg/Unjail response type.
