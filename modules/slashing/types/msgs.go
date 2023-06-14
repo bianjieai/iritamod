@@ -10,6 +10,7 @@ import (
 
 var (
 	_ sdk.Msg = &MsgUnjailValidator{}
+	_ sdk.Msg = &MsgUpdateParams{}
 )
 
 // NewMsgUnjailValidator creates a new MsgUnjailValidator instance.
@@ -54,4 +55,32 @@ func (m MsgUnjailValidator) GetSigners() []sdk.AccAddress {
 		panic(err)
 	}
 	return []sdk.AccAddress{singer}
+}
+
+// GetSignBytes implements the LegacyMsg interface.
+func (m MsgUpdateParams) GetSignBytes() []byte {
+	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
+}
+
+// ValidateBasic executes sanity validation on the provided data
+func (m *MsgUpdateParams) ValidateBasic() error {
+	if _, err := sdk.AccAddressFromBech32(m.Authority); err != nil {
+		return sdkerrors.Wrap(err, "invalid authority address")
+	}
+
+	params := slashingtypes.Params{
+		SignedBlocksWindow:      m.Params.SignedBlocksWindow,
+		MinSignedPerWindow:      m.Params.MinSignedPerWindow,
+		DowntimeJailDuration:    m.Params.DowntimeJailDuration,
+		SlashFractionDoubleSign: m.Params.SlashFractionDoubleSign,
+		SlashFractionDowntime:   m.Params.SlashFractionDowntime,
+	}
+
+	return params.Validate()
+}
+
+// GetSigners returns the expected signers for a MsgUpdateParams message
+func (m *MsgUpdateParams) GetSigners() []sdk.AccAddress {
+	addr, _ := sdk.AccAddressFromBech32(m.Authority)
+	return []sdk.AccAddress{addr}
 }
