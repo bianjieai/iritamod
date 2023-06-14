@@ -6,14 +6,12 @@ import (
 
 	"github.com/cometbft/cometbft/libs/log"
 
+	"github.com/bianjieai/iritamod/modules/opb/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
-
-	"github.com/bianjieai/iritamod/modules/opb/types"
 )
 
 // Keeper defines the OPB keeper
@@ -25,8 +23,7 @@ type Keeper struct {
 	bankKeeper    types.BankKeeper
 	tokenKeeper   types.TokenKeeper
 	permKeeper    types.PermKeeper
-
-	paramSpace paramstypes.Subspace
+	authority     string
 }
 
 // NewKeeper creates a new Keeper instance
@@ -37,15 +34,11 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	tokenKeeper types.TokenKeeper,
 	permKeeper types.PermKeeper,
-	paramSpace paramstypes.Subspace,
+	authority string,
 ) Keeper {
 	// ensure the OPB module account is set
 	if addr := accountKeeper.GetModuleAddress(types.PointTokenFeeCollectorName); addr == nil {
 		panic(fmt.Sprintf("%s module account has not been set", types.PointTokenFeeCollectorName))
-	}
-
-	if !paramSpace.HasKeyTable() {
-		paramSpace = paramSpace.WithKeyTable(ParamKeyTable())
 	}
 
 	return Keeper{
@@ -55,7 +48,7 @@ func NewKeeper(
 		bankKeeper:    bankKeeper,
 		tokenKeeper:   tokenKeeper,
 		permKeeper:    permKeeper,
-		paramSpace:    paramSpace,
+		authority:     authority,
 	}
 }
 
