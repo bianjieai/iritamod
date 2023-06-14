@@ -7,18 +7,19 @@ import (
 	"github.com/cometbft/cometbft/crypto/tmhash"
 	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/bianjieai/iritamod/modules/node/types"
 )
 
 type msgServer struct {
-	Keeper
+	k Keeper
 }
 
 // NewMsgServerImpl returns an implementation of the node MsgServer interface
 // for the provided Keeper.
 func NewMsgServerImpl(keeper Keeper) types.MsgServer {
-	return &msgServer{Keeper: keeper}
+	return &msgServer{k: keeper}
 }
 
 var _ types.MsgServer = msgServer{}
@@ -26,7 +27,7 @@ var _ types.MsgServer = msgServer{}
 func (m msgServer) CreateValidator(goCtx context.Context, msg *types.MsgCreateValidator) (*types.MsgCreateValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	id := ctmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
-	if err := m.Keeper.CreateValidator(ctx,
+	if err := m.k.CreateValidator(ctx,
 		id,
 		msg.Name,
 		msg.Certificate,
@@ -62,7 +63,7 @@ func (m msgServer) UpdateValidator(goCtx context.Context, msg *types.MsgUpdateVa
 		return &types.MsgUpdateValidatorResponse{}, types.ErrInvalidValidatorID
 	}
 
-	if err := m.Keeper.UpdateValidator(ctx,
+	if err := m.k.UpdateValidator(ctx,
 		id,
 		msg.Name,
 		msg.Certificate,
@@ -94,7 +95,7 @@ func (m msgServer) RemoveValidator(goCtx context.Context, msg *types.MsgRemoveVa
 		return &types.MsgRemoveValidatorResponse{}, types.ErrInvalidValidatorID
 	}
 
-	if err := m.Keeper.RemoveValidator(ctx, id, msg.Operator); err != nil {
+	if err := m.k.RemoveValidator(ctx, id, msg.Operator); err != nil {
 		return nil, err
 	}
 
@@ -115,7 +116,7 @@ func (m msgServer) RemoveValidator(goCtx context.Context, msg *types.MsgRemoveVa
 func (m msgServer) GrantNode(goCtx context.Context, msg *types.MsgGrantNode) (*types.MsgGrantNodeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	id, err := m.Keeper.AddNode(ctx, msg.Name, msg.Certificate)
+	id, err := m.k.AddNode(ctx, msg.Name, msg.Certificate)
 	if err != nil {
 		return nil, err
 	}
@@ -139,7 +140,7 @@ func (m msgServer) RevokeNode(goCtx context.Context, msg *types.MsgRevokeNode) (
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	id, _ := hex.DecodeString(msg.Id)
-	if err := m.Keeper.RemoveNode(ctx, id); err != nil {
+	if err := m.k.RemoveNode(ctx, id); err != nil {
 		return nil, err
 	}
 
@@ -156,4 +157,21 @@ func (m msgServer) RevokeNode(goCtx context.Context, msg *types.MsgRevokeNode) (
 	})
 
 	return &types.MsgRevokeNodeResponse{}, nil
+}
+
+func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+	if m.k.authority != msg.Authority {
+		return nil, sdkerrors.Wrapf(
+			sdkerrors.ErrUnauthorized,
+			"invalid authority; expected %s, got %s",
+			m.k.authority,
+			msg.Authority,
+		)
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	if err := m.k.SetParams(ctx, msg.Params); err != nil {
+		return nil, err
+	}
+	return &types.MsgUpdateParamsResponse{}, nil
 }

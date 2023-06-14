@@ -31,6 +31,7 @@ var (
 	ValidatorsUpdateQueueKey = []byte{0x05} // prefix for each key of a validator to be updated
 	HistoricalInfoKey        = []byte{0x06} // prefix for each key of a validator to be updated
 	NodeKey                  = []byte{0x07} // prefix for node
+	ParamsKey                = []byte{0x08}
 )
 
 // GetValidatorIDKey gets the key for the validator with id

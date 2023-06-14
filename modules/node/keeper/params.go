@@ -4,7 +4,6 @@ import (
 	"time"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/bianjieai/iritamod/modules/node/types"
@@ -15,37 +14,49 @@ const (
 	DefaultParamspace = types.ModuleName
 )
 
-// ParamTable for node module
-func ParamKeyTable() paramtypes.KeyTable {
-	return paramtypes.NewKeyTable().RegisterParamSet(&types.Params{})
-}
-
 // HistoricalEntries = number of historical info entries
 // to persist in store
 func (k Keeper) HistoricalEntries(ctx sdk.Context) (res uint32) {
-	k.paramstore.Get(ctx, types.KeyHistoricalEntries, &res)
-	return
+	return k.GetModuleParams(ctx).HistoricalEntries
 }
 
-// GetParamsLegacy Get all parameteras as types.Params
-func (k Keeper) GetParamsLegacy(ctx sdk.Context) types.Params {
-	return types.NewParams(
-		k.HistoricalEntries(ctx),
-	)
+// GetModuleParams Get all parameteras as types.Params
+func (k Keeper) GetModuleParams(ctx sdk.Context) (params types.Params) {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.ParamsKey)
+	if bz == nil {
+		return params
+	}
+
+	k.cdc.MustUnmarshal(bz, &params)
+	return params
 }
 
-// NOTE: implement expected staking keeper for evidence module
+// NOTE: as evidence module expect staking keeper to implement GetParams method
+// which returns x/staking stakingtypes.Params, we convert node Params to
+// staking Params and name the real node GetParmas as GetModuleParams.
 func (k Keeper) GetParams(ctx sdk.Context) (params stakingtypes.Params) {
-	param := k.GetParamsLegacy(ctx)
+	param := k.GetModuleParams(ctx)
 	return stakingtypes.Params{HistoricalEntries: param.HistoricalEntries}
 }
 
-// set the params
-func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
-	k.paramstore.SetParamSet(ctx, &params)
+// SetParams sets the node module parameters
+func (k Keeper) SetParams(ctx sdk.Context, params types.Params) error {
+	if err := params.Validate(); err != nil {
+		return err
+	}
+
+	store := ctx.KVStore(k.storeKey)
+	bz, err := k.cdc.Marshal(&params)
+	if err != nil {
+		return err
+	}
+	store.Set(types.ParamsKey, bz)
+
+	return nil
 }
 
-// UnbondingTime
+// UnbondingTime returns the unbonding time
 func (k Keeper) UnbondingTime(ctx sdk.Context) (res time.Duration) {
 	return
 }

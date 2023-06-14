@@ -261,7 +261,7 @@ func NewSimApp(
 	app.NodeKeeper = nodekeeper.NewKeeper(
 		appCodec,
 		keys[nodetypes.StoreKey],
-		app.GetSubspace(nodetypes.ModuleName))
+		rootAdmin)
 
 	app.SlashingKeeper = slashingkeeper.NewKeeper(
 		appCodec,
@@ -326,7 +326,7 @@ func NewSimApp(
 		params.NewAppModule(app.ParamsKeeper),
 		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
-		node.NewAppModule(appCodec, app.NodeKeeper),
+		node.NewAppModule(appCodec, app.NodeKeeper, app.GetSubspace(nodetypes.ModuleName)),
 		consensus.NewAppModule(appCodec, app.ConsensusKeeper),
 	)
 
@@ -424,7 +424,7 @@ func NewSimApp(
 		cparams.NewAppModule(appCodec, app.ParamsKeeper),
 		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
-		node.NewAppModule(appCodec, app.NodeKeeper),
+		node.NewAppModule(appCodec, app.NodeKeeper, app.GetSubspace(nodetypes.ModuleName)),
 	)
 
 	app.sm.RegisterStoreDecoders()
@@ -634,7 +634,7 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 
 	ParamsKeeper.Subspace(authtypes.ModuleName)
 	ParamsKeeper.Subspace(banktypes.ModuleName)
-	ParamsKeeper.Subspace(nodetypes.ModuleName)
+	ParamsKeeper.Subspace(nodetypes.ModuleName).WithKeyTable(nodetypes.ParamKeyTable())
 	ParamsKeeper.Subspace(slashingtypes.ModuleName).WithKeyTable(slashingtypes.ParamKeyTable())
 	ParamsKeeper.Subspace(crisistypes.ModuleName)
 

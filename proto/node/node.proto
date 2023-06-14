@@ -42,7 +42,7 @@ message Node {
 // Params defines the parameters for the node module.
 message Params {
   option (gogoproto.equal) = true;
+  option (gogoproto.goproto_stringer) = false;
 
-  uint32 historical_entries = 1
-      [ (gogoproto.moretags) = "yaml:\"historical_entries\"" ];
+  uint32 historical_entries = 1;
 }
