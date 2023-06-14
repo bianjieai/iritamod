@@ -1,4 +1,4 @@
-package v1_test
+package v2_test
 
 import (
 	"testing"
@@ -9,7 +9,7 @@ import (
 
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
-	v1 "github.com/bianjieai/iritamod/modules/slashing/migration/v1"
+	v2 "github.com/bianjieai/iritamod/modules/slashing/migration/v2"
 	"github.com/bianjieai/iritamod/simapp"
 )
 
@@ -22,7 +22,7 @@ func TestMigrate(t *testing.T) {
 	params := slashingtypes.DefaultParams()
 	legacySubspace.SetParamSet(ctx, &params)
 
-	err := v1.Migrate(
+	err := v2.Migrate(
 		ctx,
 		app.SlashingKeeper,
 		legacySubspace,
