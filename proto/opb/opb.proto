@@ -9,6 +9,7 @@ option (gogoproto.goproto_getters_all) = false;
 // Params defines the parameters for the OPB module.
 message Params {
   option (gogoproto.equal) = true;
+  option (gogoproto.goproto_stringer) = false;
 
   string base_token_denom = 1;
   string point_token_denom = 2;

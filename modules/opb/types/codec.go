@@ -24,12 +24,14 @@ func init() {
 func RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	cdc.RegisterConcrete(&MsgMint{}, "irita/opb/MsgMint", nil)
 	cdc.RegisterConcrete(&MsgReclaim{}, "irita/opb/MsgReclaim", nil)
+	cdc.RegisterConcrete(&MsgUpdateParams{}, "irita/opb/MsgUpdateParams", nil)
 }
 
 func RegisterInterfaces(registry types.InterfaceRegistry) {
 	registry.RegisterImplementations((*sdk.Msg)(nil),
 		&MsgMint{},
 		&MsgReclaim{},
+		&MsgUpdateParams{},
 	)
 
 	msgservice.RegisterMsgServiceDesc(registry, &_Msg_serviceDesc)
