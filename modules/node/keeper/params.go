@@ -5,6 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	"github.com/bianjieai/iritamod/modules/node/types"
 )
@@ -26,11 +27,17 @@ func (k Keeper) HistoricalEntries(ctx sdk.Context) (res uint32) {
 	return
 }
 
-// Get all parameteras as types.Params
-func (k Keeper) GetParams(ctx sdk.Context) types.Params {
+// GetParamsLegacy Get all parameteras as types.Params
+func (k Keeper) GetParamsLegacy(ctx sdk.Context) types.Params {
 	return types.NewParams(
 		k.HistoricalEntries(ctx),
 	)
+}
+
+// NOTE: implement expected staking keeper for evidence module
+func (k Keeper) GetParams(ctx sdk.Context) (params stakingtypes.Params) {
+	param := k.GetParamsLegacy(ctx)
+	return stakingtypes.Params{HistoricalEntries: param.HistoricalEntries}
 }
 
 // set the params

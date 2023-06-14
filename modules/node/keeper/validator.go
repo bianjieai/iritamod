@@ -4,12 +4,14 @@ import (
 	"encoding/hex"
 	"fmt"
 
+	"cosmossdk.io/math"
+
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 
 	gogotypes "github.com/gogo/protobuf/types"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
@@ -34,7 +36,7 @@ func (k *Keeper) SetHooks(sh staking.StakingHooks) *Keeper {
 
 // CreateValidator create a new validator
 func (k Keeper) CreateValidator(ctx sdk.Context,
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	name string,
 	certificate string,
 	pubKey cryptotypes.PubKey,
@@ -100,7 +102,7 @@ func (k Keeper) CreateValidator(ctx sdk.Context,
 
 // UpdateValidator updates an existing validator record
 func (k Keeper) UpdateValidator(ctx sdk.Context,
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	name string,
 	certificate string,
 	power int64,
@@ -170,7 +172,7 @@ func (k Keeper) UpdateValidator(ctx sdk.Context,
 
 // RemoveValidator deletes an existing validator record
 func (k Keeper) RemoveValidator(ctx sdk.Context,
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	operator string,
 ) error {
 	validator, found := k.GetValidator(ctx, id)
@@ -204,7 +206,7 @@ func (k Keeper) SetValidator(ctx sdk.Context, validator types.Validator) {
 }
 
 // GetValidator returns validator with id
-func (k Keeper) GetValidator(ctx sdk.Context, id tmbytes.HexBytes) (validator types.Validator, found bool) {
+func (k Keeper) GetValidator(ctx sdk.Context, id ctmbytes.HexBytes) (validator types.Validator, found bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	value := store.Get(types.GetValidatorIDKey(id))
@@ -231,7 +233,7 @@ func (k Keeper) DeleteValidator(ctx sdk.Context, validator types.Validator) {
 }
 
 // SetValidatorConsAddrIndex sets the validator index by pubkey
-func (k Keeper) SetValidatorConsAddrIndex(ctx sdk.Context, id tmbytes.HexBytes, addr sdk.ConsAddress) {
+func (k Keeper) SetValidatorConsAddrIndex(ctx sdk.Context, id ctmbytes.HexBytes, addr sdk.ConsAddress) {
 	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&gogotypes.BytesValue{Value: id})
 	store.Set(types.GetValidatorConsAddrKey(addr), bz)
@@ -317,7 +319,16 @@ func (k Keeper) IterateValidators(ctx sdk.Context, fn func(index int64, validato
 }
 
 // GetAllValidators gets the set of all validators with no limits, used during genesis dump
-func (k Keeper) GetAllValidators(ctx sdk.Context) (validators []types.Validator) {
+//
+// NOTE： add this to impl x/staking keeper interface; never use it.
+func (k Keeper) GetAllValidators(ctx sdk.Context) (validators []staking.Validator) {
+	return nil
+}
+
+// GetAllValidatorsLegacy gets the set of all validators with no limits, used during genesis dump
+//
+// NOTE： renamed from GetAllValidators since cosmos-sdk v0.47
+func (k Keeper) GetAllValidatorsLegacy(ctx sdk.Context) (validators []types.Validator) {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := sdk.KVStorePrefixIterator(store, types.ValidatorsKey)
@@ -333,7 +344,7 @@ func (k Keeper) GetAllValidators(ctx sdk.Context) (validators []types.Validator)
 }
 
 // ValidatorByID return the validator imformation by id
-func (k Keeper) ValidatorByID(ctx sdk.Context, id tmbytes.HexBytes) staking.ValidatorI {
+func (k Keeper) ValidatorByID(ctx sdk.Context, id ctmbytes.HexBytes) staking.ValidatorI {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.GetValidatorIDKey(id))
 
@@ -357,7 +368,14 @@ func (k Keeper) ValidatorByConsAddr(ctx sdk.Context, consAddr sdk.ConsAddress) s
 }
 
 // Slash not implement
-func (k Keeper) Slash(ctx sdk.Context, consAddr sdk.ConsAddress, i int64, i2 int64, dec sdk.Dec) {}
+func (k Keeper) Slash(ctx sdk.Context, consAddr sdk.ConsAddress, i int64, i2 int64, dec sdk.Dec) math.Int {
+	return sdk.NewInt(0)
+}
+
+// SlashWithInfractionReason not implement
+func (k *Keeper) SlashWithInfractionReason(ctx sdk.Context, consAddr sdk.ConsAddress, i int64, i2 int64, dec sdk.Dec, _ staking.Infraction) math.Int {
+	return k.Slash(ctx, consAddr, i, i2, dec)
+}
 
 // Jail disable the validator
 func (k Keeper) Jail(ctx sdk.Context, consAddr sdk.ConsAddress) {
@@ -469,4 +487,14 @@ func (k *Keeper) VerifyCert(ctx sdk.Context, certStr string) (cert cautil.Cert, 
 	}
 
 	return cert, nil
+}
+
+// IsValidatorJailed returns if the validator is jailed.
+func (k *Keeper) IsValidatorJailed(ctx sdk.Context, addr sdk.ConsAddress) bool {
+	v, ok := k.GetValidatorByConsAddr(ctx, addr)
+	if !ok {
+		return false
+	}
+
+	return v.Jailed
 }

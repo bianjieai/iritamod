@@ -19,8 +19,6 @@ var (
 	RouterKey = slashingtypes.RouterKey
 	// ModuleName alias cosmos-sdk/x/slashing ModuleName
 	ModuleName = slashingtypes.ModuleName
-	// QuerierRoute alias cosmos-sdk/x/slashing QuerierRoute
-	QuerierRoute = slashingtypes.QuerierRoute
 	// DefaultGenesisState alias cosmos-sdk/x/slashing DefaultGenesisState
 	DefaultGenesisState = slashingtypes.DefaultGenesisState
 	// ValidateGenesis alias cosmos-sdk/x/slashing ValidateGenesis

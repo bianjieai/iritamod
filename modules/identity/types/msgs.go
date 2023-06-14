@@ -3,7 +3,7 @@ package types
 import (
 	"encoding/hex"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -29,7 +29,7 @@ var (
 
 // NewMsgCreateIdentity creates a new MsgCreateIdentity instance
 func NewMsgCreateIdentity(
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	pubKey *PubKeyInfo,
 	certificate string,
 	credentials string,
@@ -81,7 +81,7 @@ func (msg MsgCreateIdentity) GetSigners() []sdk.AccAddress {
 
 // NewMsgUpdateIdentity creates a new MsgUpdateIdentity instance
 func NewMsgUpdateIdentity(
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	pubKey *PubKeyInfo,
 	certificate string,
 	credentials string,

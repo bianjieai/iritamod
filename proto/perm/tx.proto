@@ -1,5 +1,5 @@
 syntax = "proto3";
-package iritamod.perm;
+package perm;
 
 import "perm/perm.proto";
 import "gogoproto/gogo.proto";
@@ -9,90 +9,90 @@ option (gogoproto.goproto_getters_all) = false;
 
 // Msg defines the perm Msg service.
 service Msg {
-    // AssignRoles defines a method for assigning roles for the operator.
-    rpc AssignRoles(MsgAssignRoles) returns (MsgAssignRolesResponse);
+  // AssignRoles defines a method for assigning roles for the operator.
+  rpc AssignRoles(MsgAssignRoles) returns (MsgAssignRolesResponse);
 
-    // UnassignRoles defines a method for unassigning roles from the operator.
-    rpc UnassignRoles(MsgUnassignRoles) returns (MsgUnassignRolesResponse);
+  // UnassignRoles defines a method for unassigning roles from the operator.
+  rpc UnassignRoles(MsgUnassignRoles) returns (MsgUnassignRolesResponse);
 
-    // BlockAccount defines a method for blocking an account
-    rpc BlockAccount(MsgBlockAccount) returns (MsgBlockAccountResponse);
+  // BlockAccount defines a method for blocking an account
+  rpc BlockAccount(MsgBlockAccount) returns (MsgBlockAccountResponse);
 
-    // UnblockAccount defines a method for unblocking a blocked account
-    rpc UnblockAccount(MsgUnblockAccount) returns (MsgUnblockAccountResponse);
+  // UnblockAccount defines a method for unblocking a blocked account
+  rpc UnblockAccount(MsgUnblockAccount) returns (MsgUnblockAccountResponse);
 
-    // BlockContract defines a method for blocking an contract
-    rpc BlockContract(MsgBlockContract) returns (MsgBlockContractResponse);
+  // BlockContract defines a method for blocking an contract
+  rpc BlockContract(MsgBlockContract) returns (MsgBlockContractResponse);
 
-    // UnblockContract defines a method for unblocking a blocked contract
-    rpc UnblockContract(MsgUnblockContract) returns (MsgUnblockContractResponse);
+  // UnblockContract defines a method for unblocking a blocked contract
+  rpc UnblockContract(MsgUnblockContract) returns (MsgUnblockContractResponse);
 }
 
 // MsgAssignRoles defines an SDK message for assigning roles to an address.
 message MsgAssignRoles {
-    option (gogoproto.equal) = true;
+  option (gogoproto.equal) = true;
 
-    string address = 1;
-    repeated Role roles = 2;
-    string operator = 3;
+  string address = 1;
+  repeated Role roles = 2;
+  string operator = 3;
 }
 
 // MsgAssignRolesResponse defines the Msg/AssignRoles response type.
-message MsgAssignRolesResponse { }
+message MsgAssignRolesResponse {}
 
-// MsgUnassignRoles defines an SDK message for unassigning roles from an address.
+// MsgUnassignRoles defines an SDK message for unassigning roles from an
+// address.
 message MsgUnassignRoles {
-    option (gogoproto.equal) = true;
+  option (gogoproto.equal) = true;
 
-    string address = 1;
-    repeated Role roles = 2;
-    string operator = 3;
+  string address = 1;
+  repeated Role roles = 2;
+  string operator = 3;
 }
 
 // MsgUnassignRolesResponse defines the Msg/UnassignRoles response type.
-message MsgUnassignRolesResponse { }
+message MsgUnassignRolesResponse {}
 
 // MsgBlockAccount defines an SDK message for blocking an account.
 message MsgBlockAccount {
-    option (gogoproto.equal) = true;
+  option (gogoproto.equal) = true;
 
-    string address = 1;
-    string operator = 2;
+  string address = 1;
+  string operator = 2;
 }
 
 // MsgBlockAccountResponse defines the Msg/BlockAccount response type.
-message MsgBlockAccountResponse { }
+message MsgBlockAccountResponse {}
 
 // MsgUnblockAccount defines an SDK message for unblocking an account.
 message MsgUnblockAccount {
-    option (gogoproto.equal) = true;
+  option (gogoproto.equal) = true;
 
-    string address = 1;
-    string operator = 2;
+  string address = 1;
+  string operator = 2;
 }
 
 // MsgUnblockAccountResponse defines the Msg/UnblockAccount response type.
-message MsgUnblockAccountResponse { }
-
+message MsgUnblockAccountResponse {}
 
 // MsgBlockContract defines an SDK message for blocking an contract.
 message MsgBlockContract {
-    option (gogoproto.equal) = true;
+  option (gogoproto.equal) = true;
 
-    string contract_address = 1;
-    string operator = 2;
+  string contract_address = 1;
+  string operator = 2;
 }
 
 // MsgBlockContractResponse defines the Msg/MsgBlockContract response type.
-message MsgBlockContractResponse { }
+message MsgBlockContractResponse {}
 
 // MsgUnblockContract defines an SDK message for unblocking an contract.
 message MsgUnblockContract {
-    option (gogoproto.equal) = true;
+  option (gogoproto.equal) = true;
 
-    string contract_address = 1;
-    string operator = 2;
+  string contract_address = 1;
+  string operator = 2;
 }
 
 // MsgUnblockAccountResponse defines the Msg/MsgUnblockContract response type.
-message MsgUnblockContractResponse { }
+message MsgUnblockContractResponse {}

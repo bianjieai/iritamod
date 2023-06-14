@@ -13,7 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/tjfoc/gmsm/sm2"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/simulation"
@@ -21,11 +21,11 @@ import (
 
 var (
 	testID    = uuid.NewV4().Bytes()
-	testIDStr = tmbytes.HexBytes(testID).String()
+	testIDStr = ctmbytes.HexBytes(testID).String()
 
 	testPrivKeySM2, _ = sm2.GenerateKey(rand.Reader)
 	testPubKeySM2     = sm2.Compress(&testPrivKeySM2.PublicKey)
-	testPubKeySM2Str  = tmbytes.HexBytes(testPubKeySM2).String()
+	testPubKeySM2Str  = ctmbytes.HexBytes(testPubKeySM2).String()
 	testPubKeySM2Info = PubKeyInfo{PubKey: testPubKeySM2Str, Algorithm: SM2}
 
 	testCredentials = "https://kyc.com/user/10001"

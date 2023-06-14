@@ -4,9 +4,9 @@ import (
 	"crypto/ed25519"
 	"errors"
 
-	"github.com/tendermint/tendermint/crypto"
-	ed25519util "github.com/tendermint/tendermint/crypto/ed25519"
-	"github.com/tendermint/tendermint/crypto/sm2"
+	"github.com/cometbft/cometbft/crypto"
+	ed25519util "github.com/cometbft/cometbft/crypto/ed25519"
+	"github.com/cometbft/cometbft/crypto/sm2"
 
 	cautil "github.com/bianjieai/iritamod/utils/ca"
 )

@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	store "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
@@ -65,7 +64,7 @@ func (k *Keeper) SetUpgradeHandler(name string, upgradeHandler upgradetypes.Upgr
 // which is written to disk by the old binary when panic'ing
 // if there's an error in reading the info,
 // it assumes that the upgrade info is not available
-func (k Keeper) ReadUpgradeInfoFromDisk() (store.UpgradeInfo, error) {
+func (k Keeper) ReadUpgradeInfoFromDisk() (upgradetypes.Plan, error) {
 	return k.uk.ReadUpgradeInfoFromDisk()
 }
 

@@ -4,7 +4,6 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	"github.com/bianjieai/iritamod/modules/slashing/types"
 )
@@ -18,13 +17,15 @@ func (m msgServer) UnjailValidator(goCtx context.Context, msg *types.MsgUnjailVa
 	if err := m.Keeper.HandleUnjail(ctx, *msg); err != nil {
 		return nil, err
 	}
-	ctx.EventManager().EmitEvent(
-		sdk.NewEvent(
-			sdk.EventTypeMessage,
-			sdk.NewAttribute(sdk.AttributeKeyModule, slashingtypes.AttributeValueCategory),
-			sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
-		),
-	)
+	// NOTE: comment this because these event will be emitted directly at message execution.
+	// TODO: remove this snippet.
+	//ctx.EventManager().EmitEvent(
+	//	sdk.NewEvent(
+	//		sdk.EventTypeMessage,
+	//		sdk.NewAttribute(sdk.AttributeKeyModule, slashingtypes.ModuleName),
+	//		sdk.NewAttribute(sdk.AttributeKeySender, msg.Operator),
+	//	),
+	//)
 	return &types.MsgUnjailValidatorResponse{}, nil
 }
 

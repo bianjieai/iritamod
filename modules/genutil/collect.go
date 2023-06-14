@@ -12,8 +12,8 @@ import (
 	"sort"
 	"strings"
 
-	cfg "github.com/tendermint/tendermint/config"
-	tmtypes "github.com/tendermint/tendermint/types"
+	cfg "github.com/cometbft/cometbft/config"
+	ctmtypes "github.com/cometbft/cometbft/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -26,7 +26,7 @@ import (
 // GenAppStateFromConfig gets the genesis app state from the config
 func GenAppStateFromConfig(
 	cdc codec.JSONCodec, txEncodingConfig client.TxEncodingConfig,
-	config *cfg.Config, initCfg InitConfig, genDoc tmtypes.GenesisDoc,
+	config *cfg.Config, initCfg InitConfig, genDoc ctmtypes.GenesisDoc,
 ) (appState json.RawMessage, err error) {
 
 	// process genesis transactions, else create default genesis.json
@@ -71,7 +71,7 @@ func GenAppStateFromConfig(
 // the list of appGenTxs, and persistent peers required to generate genesis.json.
 func CollectTxs(
 	cdc codec.JSONCodec, txJSONDecoder sdk.TxDecoder,
-	moniker, genTxsDir string, genDoc tmtypes.GenesisDoc,
+	moniker, genTxsDir string, genDoc ctmtypes.GenesisDoc,
 ) (
 	appGenTxs []sdk.Tx, persistentPeers string, err error,
 ) {

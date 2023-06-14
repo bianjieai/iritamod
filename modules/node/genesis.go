@@ -7,8 +7,8 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmtypes "github.com/tendermint/tendermint/types"
+	abci "github.com/cometbft/cometbft/abci/types"
+	ctmtypes "github.com/cometbft/cometbft/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
@@ -69,11 +69,11 @@ func InitGenesis(ctx sdk.Context, cdc codec.Codec, k Keeper, data GenesisState) 
 // ExportGenesis - output genesis valiadtor set
 func ExportGenesis(ctx sdk.Context, k Keeper) *GenesisState {
 	rootCert, _ := k.GetRootCert(ctx)
-	return NewGenesisState(rootCert, k.GetParams(ctx), k.GetAllValidators(ctx), k.GetNodes(ctx))
+	return NewGenesisState(rootCert, k.GetParamsLegacy(ctx), k.GetAllValidatorsLegacy(ctx), k.GetNodes(ctx))
 }
 
 // WriteValidators returns a slice of bonded genesis validators.
-func WriteValidators(ctx sdk.Context, keeper Keeper) (vals []tmtypes.GenesisValidator) {
+func WriteValidators(ctx sdk.Context, keeper Keeper) (vals []ctmtypes.GenesisValidator) {
 	for _, v := range keeper.GetLastValidators(ctx) {
 		consPk, err := v.ConsPubKey()
 		if err != nil {
@@ -83,7 +83,7 @@ func WriteValidators(ctx sdk.Context, keeper Keeper) (vals []tmtypes.GenesisVali
 		if err != nil {
 			continue
 		}
-		vals = append(vals, tmtypes.GenesisValidator{
+		vals = append(vals, ctmtypes.GenesisValidator{
 			PubKey: tmPubkey,
 			Power:  v.GetConsensusPower(sdk.DefaultPowerReduction),
 			Name:   v.GetMoniker(),

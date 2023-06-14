@@ -7,8 +7,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	tmprotocrypto "github.com/tendermint/tendermint/proto/tendermint/crypto"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
+	ctmprotocrypto "github.com/cometbft/cometbft/proto/tendermint/crypto"
 
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
@@ -23,7 +23,7 @@ const DoNotModifyDesc = "[do-not-modify]"
 
 // NewValidator creates a new MsgCreateValidator instance.
 func NewValidator(
-	id tmbytes.HexBytes,
+	id ctmbytes.HexBytes,
 	name string,
 	description string,
 	pubKey cryptotypes.PubKey,
@@ -99,16 +99,16 @@ func (v Validator) ConsPubKey() (pk cryptotypes.PubKey, err error) {
 	return legacy.PubKeyFromBytes(bz)
 }
 
-// TmConsPublicKey casts Validator.ConsensusPubkey to tmprotocrypto.PubKey.
-func (v Validator) TmConsPublicKey() (tmprotocrypto.PublicKey, error) {
+// TmConsPublicKey casts Validator.ConsensusPubkey to ctmprotocrypto.PubKey.
+func (v Validator) TmConsPublicKey() (ctmprotocrypto.PublicKey, error) {
 	pk, err := v.ConsPubKey()
 	if err != nil {
-		return tmprotocrypto.PublicKey{}, err
+		return ctmprotocrypto.PublicKey{}, err
 	}
 
 	tmPk, err := cryptocodec.ToTmProtoPublicKey(pk)
 	if err != nil {
-		return tmprotocrypto.PublicKey{}, err
+		return ctmprotocrypto.PublicKey{}, err
 	}
 
 	return tmPk, nil

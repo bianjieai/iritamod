@@ -3,6 +3,8 @@
 PACKAGES_SIMTEST=$(shell go list ./... | grep '/simulation')
 PACKAGES_UNITTEST=$(shell go list ./... | grep -v '/simulation' | grep -v '/cli_test')
 
+DOCKER := $(shell which docker)
+
 all: tools lint
 
 # The below include contains the tools.
@@ -30,13 +32,33 @@ clean:
 distclean: clean
 	rm -rf vendor/
 
-proto-all: proto-tools proto-gen
+###############################################################################
+###                                Protobuf                                 ###
+###############################################################################
+
+protoVer=0.11.6
+protoImageName=ghcr.io/cosmos/proto-builder:$(protoVer)
+protoImage=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(protoImageName)
+
+proto-all: proto-format proto-lint proto-gen
 
 proto-gen:
-	@./scripts/protocgen.sh
+	@echo "Generating protobuf files"
+	@$(protoImage) sh ./scripts/protocgen.sh
 
-########################################
-### Testing
+proto-format:
+	@$(protoImage) find ./ -name "*.proto" -exec clang-format -i {} \;
+
+proto-lint:
+	@$(protoImage) buf lint --error-format=json
+
+proto-update-deps:
+	@echo "Updating Protobuf dependencies"
+	$(DOCKER) run --rm -v $(CURDIR)/proto:/workspace --workdir /workspace $(protoImageName) buf mod update
+
+###############################################################################
+###                           Tests & Simulation                            ###
+###############################################################################
 
 test: test-unit
 

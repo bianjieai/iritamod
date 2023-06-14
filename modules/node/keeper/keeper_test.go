@@ -8,9 +8,9 @@ import (
 
 	"github.com/stretchr/testify/suite"
 
-	"github.com/tendermint/tendermint/crypto/tmhash"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	"github.com/cometbft/cometbft/crypto/tmhash"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
+	ctmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
@@ -48,10 +48,10 @@ func TestKeeperTestSuite(t *testing.T) {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	app := simapp.Setup(false)
+	app := simapp.Setup(suite.T(), false)
 
 	suite.cdc = app.AppCodec()
-	suite.ctx = app.BaseApp.NewContext(false, tmproto.Header{})
+	suite.ctx = app.BaseApp.NewContext(false, ctmproto.Header{})
 	suite.app = app
 	suite.keeper = &app.NodeKeeper
 }
@@ -61,9 +61,10 @@ func (suite *KeeperTestSuite) setNode() {
 	suite.keeper.SetNode(suite.ctx, nodeID, node)
 }
 
+// NOTE： we have set a validator during genesis
 func (suite *KeeperTestSuite) TestCreateValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
-	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+	id := ctmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	err := suite.keeper.CreateValidator(suite.ctx,
 		id,
 		msg.Name,
@@ -89,9 +90,9 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 	suite.True(found)
 	suite.Equal(validator, validator1)
 
-	validators := suite.keeper.GetAllValidators(suite.ctx)
-	suite.Equal(1, len(validators))
-	suite.Equal(validator, validators[0])
+	validators := suite.keeper.GetAllValidatorsLegacy(suite.ctx)
+	suite.Equal(2, len(validators))
+	suite.Equal(validator, validators[1])
 
 	suite.keeper.IterateUpdateValidators(
 		suite.ctx,
@@ -108,7 +109,7 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 
 func (suite *KeeperTestSuite) TestUpdateValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
-	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+	id := ctmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	err := suite.keeper.CreateValidator(suite.ctx,
 		id,
 		msg.Name,
@@ -159,9 +160,9 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	suite.True(found)
 	suite.Equal(validator, validator1)
 
-	validators := suite.keeper.GetAllValidators(suite.ctx)
-	suite.Equal(1, len(validators))
-	suite.Equal(validator, validators[0])
+	validators := suite.keeper.GetAllValidatorsLegacy(suite.ctx)
+	suite.Equal(2, len(validators))
+	suite.Equal(validator, validators[1])
 
 	updatesTotal := 0
 	suite.keeper.IterateUpdateValidators(suite.ctx, func(index int64, pubkey string, power int64) bool {
@@ -187,7 +188,7 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 
 func (suite *KeeperTestSuite) TestRemoveValidator() {
 	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
-	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+	id := ctmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	err := suite.keeper.CreateValidator(suite.ctx,
 		id,
 		msg.Name,
@@ -211,8 +212,8 @@ func (suite *KeeperTestSuite) TestRemoveValidator() {
 	_, found = suite.keeper.GetValidatorByConsAddr(suite.ctx, sdk.GetConsAddress(cospk))
 	suite.False(found)
 
-	validators := suite.keeper.GetAllValidators(suite.ctx)
-	suite.Equal(0, len(validators))
+	validators := suite.keeper.GetAllValidatorsLegacy(suite.ctx)
+	suite.Equal(1, len(validators))
 
 	suite.keeper.IterateUpdateValidators(
 		suite.ctx,

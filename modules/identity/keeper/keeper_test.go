@@ -9,9 +9,9 @@ import (
 	uuid "github.com/satori/go.uuid"
 	"github.com/stretchr/testify/suite"
 
-	"github.com/tendermint/tendermint/crypto/sm2"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	"github.com/cometbft/cometbft/crypto/sm2"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
+	ctmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -21,14 +21,14 @@ import (
 )
 
 var (
-	testID = tmbytes.HexBytes(uuid.NewV4().Bytes())
+	testID = ctmbytes.HexBytes(uuid.NewV4().Bytes())
 
 	testPubKeySM2     = sm2.GenPrivKey().PubKey().Bytes()
-	testPubKeySM2Info = types.PubKeyInfo{PubKey: tmbytes.HexBytes(testPubKeySM2).String(), Algorithm: types.SM2}
+	testPubKeySM2Info = types.PubKeyInfo{PubKey: ctmbytes.HexBytes(testPubKeySM2).String(), Algorithm: types.SM2}
 
 	testPrivKeyECDSA, _ = ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
 	testPubKeyECDSA     = elliptic.Marshal(testPrivKeyECDSA.PublicKey.Curve, testPrivKeyECDSA.X, testPrivKeyECDSA.Y)
-	testPubKeyECDSAInfo = types.PubKeyInfo{PubKey: tmbytes.HexBytes(testPubKeyECDSA).String(), Algorithm: types.ECDSA}
+	testPubKeyECDSAInfo = types.PubKeyInfo{PubKey: ctmbytes.HexBytes(testPubKeyECDSA).String(), Algorithm: types.ECDSA}
 
 	testCredentials = "https://kyc.com/user/10001"
 	testOwner       = sdk.AccAddress([]byte("test-ownertest-owner"))
@@ -47,9 +47,9 @@ func TestKeeperTestSuite(t *testing.T) {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	app := simapp.Setup(false)
+	app := simapp.Setup(suite.T(), false)
 
-	suite.ctx = app.BaseApp.NewContext(false, tmproto.Header{})
+	suite.ctx = app.BaseApp.NewContext(false, ctmproto.Header{})
 	suite.keeper = &app.IdentityKeeper
 }
 

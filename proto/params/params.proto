@@ -1,5 +1,5 @@
 syntax = "proto3";
-package iritamod.params;
+package params;
 
 import "gogoproto/gogo.proto";
 
@@ -11,6 +11,6 @@ message ParamChange {
   option (gogoproto.equal) = true;
 
   string subspace = 1;
-  string key      = 2;
-  string value    = 3;
+  string key = 2;
+  string value = 3;
 }

@@ -1,8 +1,8 @@
 package keeper
 
 import (
-	"github.com/tendermint/tendermint/crypto"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	"github.com/cometbft/cometbft/crypto"
+	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -12,7 +12,7 @@ import (
 )
 
 // AddNode adds a node
-func (k Keeper) AddNode(ctx sdk.Context, name string, cert string) (id tmbytes.HexBytes, err error) {
+func (k Keeper) AddNode(ctx sdk.Context, name string, cert string) (id ctmbytes.HexBytes, err error) {
 	pubKey, err := k.VerifyCertificate(ctx, cert)
 	if err != nil {
 		return nil, err
@@ -31,7 +31,7 @@ func (k Keeper) AddNode(ctx sdk.Context, name string, cert string) (id tmbytes.H
 }
 
 // RemoveNode removes the specified node
-func (k Keeper) RemoveNode(ctx sdk.Context, id tmbytes.HexBytes) error {
+func (k Keeper) RemoveNode(ctx sdk.Context, id ctmbytes.HexBytes) error {
 	if !k.HasNode(ctx, id) {
 		return sdkerrors.Wrap(types.ErrUnknownNode, id.String())
 	}
@@ -42,7 +42,7 @@ func (k Keeper) RemoveNode(ctx sdk.Context, id tmbytes.HexBytes) error {
 }
 
 // SetNode sets the given node
-func (k Keeper) SetNode(ctx sdk.Context, id tmbytes.HexBytes, node types.Node) {
+func (k Keeper) SetNode(ctx sdk.Context, id ctmbytes.HexBytes, node types.Node) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := k.cdc.MustMarshal(&node)
@@ -50,19 +50,19 @@ func (k Keeper) SetNode(ctx sdk.Context, id tmbytes.HexBytes, node types.Node) {
 }
 
 // DeleteNode deletes the given node
-func (k Keeper) DeleteNode(ctx sdk.Context, id tmbytes.HexBytes) {
+func (k Keeper) DeleteNode(ctx sdk.Context, id ctmbytes.HexBytes) {
 	store := ctx.KVStore(k.storeKey)
 	store.Delete(types.GetNodeKey(id))
 }
 
 // HasNode returns true if the specified node exists, false otherwise
-func (k Keeper) HasNode(ctx sdk.Context, id tmbytes.HexBytes) bool {
+func (k Keeper) HasNode(ctx sdk.Context, id ctmbytes.HexBytes) bool {
 	store := ctx.KVStore(k.storeKey)
 	return store.Has(types.GetNodeKey(id))
 }
 
 // GetNode retrieves the node of the specified ID
-func (k Keeper) GetNode(ctx sdk.Context, id tmbytes.HexBytes) (node types.Node, found bool) {
+func (k Keeper) GetNode(ctx sdk.Context, id ctmbytes.HexBytes) (node types.Node, found bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.GetNodeKey(id))
