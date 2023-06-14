@@ -4,7 +4,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
 	"github.com/bianjieai/iritamod/modules/node/exported"
-	"github.com/bianjieai/iritamod/modules/node/migration/v1"
+	"github.com/bianjieai/iritamod/modules/node/migration/v2"
 )
 
 type Migrator struct {
@@ -17,5 +17,5 @@ func NewMigrator(keeper Keeper, legacySubspace exported.Subspace) Migrator {
 }
 
 func (m Migrator) Migrate1to2(ctx sdk.Context) error {
-	return v1.Migrate(ctx, m.keeper, m.legacySubspace)
+	return v2.Migrate(ctx, m.keeper, m.legacySubspace)
 }

@@ -1,4 +1,4 @@
-package v1_test
+package v2_test
 
 import (
 	"github.com/stretchr/testify/require"
@@ -6,7 +6,7 @@ import (
 
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 
-	v1 "github.com/bianjieai/iritamod/modules/node/migration/v1"
+	v2 "github.com/bianjieai/iritamod/modules/node/migration/v2"
 	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
 	"github.com/bianjieai/iritamod/simapp"
 )
@@ -19,7 +19,7 @@ func TestMigrate(t *testing.T) {
 	params := nodetypes.DefaultParams()
 	legacySubSpace.SetParamSet(ctx, &params)
 
-	err := v1.Migrate(ctx, app.NodeKeeper, legacySubSpace)
+	err := v2.Migrate(ctx, app.NodeKeeper, legacySubSpace)
 	require.NoError(t, err)
 
 	expParams := app.NodeKeeper.GetModuleParams(ctx)
