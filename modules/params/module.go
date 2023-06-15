@@ -22,6 +22,9 @@ import (
 	"github.com/bianjieai/iritamod/modules/params/types"
 )
 
+// ConsensusVersion defines the current iritamod/params module consensus version.
+const ConsensusVersion = 1
+
 var (
 	_ module.AppModule           = AppModule{}
 	_ module.AppModuleBasic      = AppModuleBasic{}
