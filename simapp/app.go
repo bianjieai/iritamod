@@ -171,7 +171,8 @@ func init() {
 		panic(err)
 	}
 
-	// NOTE： root admin has the authority to send updateParams msg.
+	// TODO： replace this with params account; it will has the authority to
+	// update params for sdk or irismod module.
 	rootAdmin = sdk.AccAddress(tmhash.SumTruncated([]byte("rootAdmin"))).String()
 
 	DefaultNodeHome = filepath.Join(userHomeDir, ".simapp")
@@ -258,8 +259,7 @@ func NewSimApp(
 
 	app.NodeKeeper = nodekeeper.NewKeeper(
 		appCodec,
-		keys[nodetypes.StoreKey],
-		rootAdmin)
+		keys[nodetypes.StoreKey])
 
 	app.SlashingKeeper = slashingkeeper.NewKeeper(
 		appCodec,

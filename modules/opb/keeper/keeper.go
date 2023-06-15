@@ -24,7 +24,6 @@ type Keeper struct {
 	bankKeeper    types.BankKeeper
 	tokenKeeper   types.TokenKeeper
 	permKeeper    types.PermKeeper
-	authority     string
 }
 
 // NewKeeper creates a new Keeper instance
@@ -35,7 +34,6 @@ func NewKeeper(
 	bankKeeper types.BankKeeper,
 	tokenKeeper types.TokenKeeper,
 	permKeeper types.PermKeeper,
-	authority string,
 ) Keeper {
 	// ensure the OPB module account is set
 	if addr := accountKeeper.GetModuleAddress(types.PointTokenFeeCollectorName); addr == nil {
@@ -49,7 +47,6 @@ func NewKeeper(
 		bankKeeper:    bankKeeper,
 		tokenKeeper:   tokenKeeper,
 		permKeeper:    permKeeper,
-		authority:     authority,
 	}
 }
 

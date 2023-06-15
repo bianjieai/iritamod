@@ -16,18 +16,16 @@ import (
 
 // keeper of the node store
 type Keeper struct {
-	cdc       codec.Codec
-	storeKey  storetypes.StoreKey
-	authority string
+	cdc      codec.Codec
+	storeKey storetypes.StoreKey
 
 	hooks staking.StakingHooks
 }
 
-func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey, authority string) Keeper {
+func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey) Keeper {
 	return Keeper{
-		cdc:       cdc,
-		storeKey:  storeKey,
-		authority: authority,
+		cdc:      cdc,
+		storeKey: storeKey,
 	}
 }
 
