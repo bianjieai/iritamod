@@ -2,13 +2,10 @@ package simapp
 
 import (
 	"encoding/json"
+	"github.com/cometbft/cometbft/crypto/tmhash"
 	"io"
 	"os"
 	"path/filepath"
-
-	"github.com/cometbft/cometbft/crypto/tmhash"
-	"github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/cosmos/cosmos-sdk/store/streaming"
 
 	"github.com/spf13/cast"
 
@@ -17,9 +14,9 @@ import (
 	"github.com/cometbft/cometbft/libs/log"
 
 	simappparams "cosmossdk.io/simapp/params"
-
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	nodeservice "github.com/cosmos/cosmos-sdk/client/grpc/node"
 	"github.com/cosmos/cosmos-sdk/client/grpc/tmservice"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -30,11 +27,13 @@ import (
 	"github.com/cosmos/cosmos-sdk/server/config"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/std"
+	"github.com/cosmos/cosmos-sdk/store/streaming"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/version"
+
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
@@ -59,6 +58,7 @@ import (
 	feegrantkeeper "github.com/cosmos/cosmos-sdk/x/feegrant/keeper"
 	feegrantmodule "github.com/cosmos/cosmos-sdk/x/feegrant/module"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
@@ -69,8 +69,6 @@ import (
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
-
 	"github.com/bianjieai/iritamod/modules/identity"
 	identitykeeper "github.com/bianjieai/iritamod/modules/identity/keeper"
 	identitytypes "github.com/bianjieai/iritamod/modules/identity/types"
@@ -78,6 +76,8 @@ import (
 	nodekeeper "github.com/bianjieai/iritamod/modules/node/keeper"
 	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
 	cparams "github.com/bianjieai/iritamod/modules/params"
+	cparamskeeper "github.com/bianjieai/iritamod/modules/params/keeper"
+	cparamstypes "github.com/bianjieai/iritamod/modules/params/types"
 	"github.com/bianjieai/iritamod/modules/perm"
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
 	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
@@ -114,6 +114,7 @@ var (
 	// module account permissions
 	maccPerms = map[string][]string{
 		authtypes.FeeCollectorName: nil,
+		cparams.ModuleName:         nil,
 	}
 
 	// module accounts that are allowed to receive tokens
@@ -156,6 +157,7 @@ type SimApp struct {
 	NodeKeeper      nodekeeper.Keeper
 	FeeGrantKeeper  feegrantkeeper.Keeper
 	ConsensusKeeper consensuskeeper.Keeper
+	CParamsKeeper   cparamskeeper.Keeper
 
 	// the module manager
 	ModuleManager *module.Manager
@@ -173,7 +175,6 @@ func init() {
 		panic(err)
 	}
 
-	// NOTE： root admin has the authority to send updateParams msg.
 	rootAdmin = sdk.AccAddress(tmhash.SumTruncated([]byte("rootAdmin"))).String()
 
 	DefaultNodeHome = filepath.Join(userHomeDir, ".simapp")
@@ -240,7 +241,10 @@ func NewSimApp(
 	app.ParamsKeeper = initParamsKeeper(appCodec, legacyAmino, keys[paramstypes.StoreKey], tkeys[paramstypes.TStoreKey])
 
 	// set the BaseApp's consensus parameter store
-	app.ConsensusKeeper = consensuskeeper.NewKeeper(appCodec, keys[consensustypes.StoreKey], rootAdmin)
+	app.ConsensusKeeper = consensuskeeper.NewKeeper(
+		appCodec,
+		keys[consensustypes.StoreKey],
+		authtypes.NewModuleAddress(cparamstypes.ModuleName).String())
 	bApp.SetParamStore(&app.ConsensusKeeper)
 
 	app.AccountKeeper = authkeeper.NewAccountKeeper(
@@ -249,26 +253,25 @@ func NewSimApp(
 		authtypes.ProtoBaseAccount,
 		maccPerms,
 		sdk.Bech32MainPrefix,
-		rootAdmin)
+		authtypes.NewModuleAddress(cparamstypes.ModuleName).String())
 
 	app.BankKeeper = bankkeeper.NewBaseKeeper(
 		appCodec,
 		keys[banktypes.StoreKey],
 		app.AccountKeeper,
 		BlockedAddresses(),
-		rootAdmin)
+		authtypes.NewModuleAddress(cparamstypes.ModuleName).String())
 
 	app.NodeKeeper = nodekeeper.NewKeeper(
 		appCodec,
-		keys[nodetypes.StoreKey],
-		rootAdmin)
+		keys[nodetypes.StoreKey])
 
 	app.SlashingKeeper = slashingkeeper.NewKeeper(
 		appCodec,
 		legacyAmino,
 		keys[slashingtypes.StoreKey],
 		&app.NodeKeeper,
-		rootAdmin)
+		authtypes.NewModuleAddress(cparamstypes.ModuleName).String())
 
 	invCheckPeriod := cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod))
 	app.CrisisKeeper = crisiskeeper.NewKeeper(
@@ -277,7 +280,7 @@ func NewSimApp(
 		invCheckPeriod,
 		app.BankKeeper,
 		authtypes.FeeCollectorName,
-		rootAdmin)
+		authtypes.NewModuleAddress(cparamstypes.ModuleName).String())
 
 	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(
 		appCodec,
@@ -291,7 +294,7 @@ func NewSimApp(
 		appCodec,
 		homePath,
 		app.BaseApp,
-		rootAdmin)
+		authtypes.NewModuleAddress(cparamstypes.ModuleName).String())
 
 	evidenceKeeper := evidencekeeper.NewKeeper(
 		appCodec,
@@ -303,8 +306,19 @@ func NewSimApp(
 	app.NodeKeeper = *app.NodeKeeper.SetHooks(
 		stakingtypes.NewMultiStakingHooks(app.SlashingKeeper.Hooks()),
 	)
-	app.PermKeeper = permkeeper.NewKeeper(appCodec, keys[permtypes.StoreKey])
-	app.IdentityKeeper = identitykeeper.NewKeeper(appCodec, keys[identitytypes.StoreKey])
+
+	app.PermKeeper = permkeeper.NewKeeper(
+		appCodec,
+		keys[permtypes.StoreKey])
+
+	app.IdentityKeeper = identitykeeper.NewKeeper(
+		appCodec,
+		keys[identitytypes.StoreKey])
+
+	// iritamod/params is now decoupled with x/params
+	app.CParamsKeeper = cparamskeeper.NewKeeper(
+		app.AccountKeeper,
+		app.MsgServiceRouter())
 
 	/****  Module Options ****/
 
@@ -328,6 +342,7 @@ func NewSimApp(
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper, app.GetSubspace(nodetypes.ModuleName)),
 		consensus.NewAppModule(appCodec, app.ConsensusKeeper),
+		cparams.NewAppModule(appCodec, app.CParamsKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -348,6 +363,7 @@ func NewSimApp(
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
 		consensustypes.ModuleName,
+		cparamstypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderEndBlockers(
@@ -364,6 +380,7 @@ func NewSimApp(
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
 		consensustypes.ModuleName,
+		cparamstypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -385,6 +402,7 @@ func NewSimApp(
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
 		consensustypes.ModuleName,
+		cparamstypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderMigrations(
@@ -401,6 +419,7 @@ func NewSimApp(
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
 		consensustypes.ModuleName,
+		cparamstypes.ModuleName,
 	)
 
 	app.ModuleManager.RegisterInvariants(app.CrisisKeeper)
@@ -421,7 +440,7 @@ func NewSimApp(
 		//gov.NewAppModule(appCodec, app.govKeeper, app.AccountKeeper, app.BankKeeper),
 		cslashing.NewAppModule(appCodec, cslashing.NewKeeper(app.SlashingKeeper, app.NodeKeeper), app.AccountKeeper, app.BankKeeper, &app.NodeKeeper, app.GetSubspace(slashingtypes.ModuleName)),
 		params.NewAppModule(app.ParamsKeeper),
-		cparams.NewAppModule(appCodec, app.ParamsKeeper),
+		cparams.NewAppModule(appCodec, app.CParamsKeeper),
 		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper, app.GetSubspace(nodetypes.ModuleName)),

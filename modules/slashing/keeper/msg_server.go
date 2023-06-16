@@ -4,7 +4,6 @@ import (
 	"context"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	"github.com/bianjieai/iritamod/modules/slashing/types"
@@ -31,16 +30,8 @@ func (m msgServer) UnjailValidator(goCtx context.Context, msg *types.MsgUnjailVa
 }
 
 // UpdateParams updates the slashing params.
+// WARN： must register perm access control for this method.
 func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
-	if m.k.GetAuthority() != msg.Authority {
-		return nil, sdkerrors.Wrapf(
-			sdkerrors.ErrUnauthorized,
-			"invalid authority; expected %s, got %s",
-			m.k.GetAuthority(),
-			msg.Authority,
-		)
-	}
-
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	params := slashingtypes.Params{

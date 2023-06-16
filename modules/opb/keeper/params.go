@@ -14,37 +14,48 @@ func ParamKeyTable() paramstypes.KeyTable {
 
 // BaseTokenDenom returns the base token denom
 func (k Keeper) BaseTokenDenom(ctx sdk.Context) (res string) {
-	k.paramSpace.Get(ctx, types.KeyBaseTokenDenom, &res)
-	return
+	return k.GetParams(ctx).BaseTokenDenom
 }
 
 // PointTokenDenom returns the point token denom
 func (k Keeper) PointTokenDenom(ctx sdk.Context) (res string) {
-	k.paramSpace.Get(ctx, types.KeyPointTokenDenom, &res)
-	return
+	return k.GetParams(ctx).PointTokenDenom
 }
 
 // BaseTokenManager returns the base token manager
 func (k Keeper) BaseTokenManager(ctx sdk.Context) (res string) {
-	k.paramSpace.Get(ctx, types.KeyBaseTokenManager, &res)
-	return
+	return k.GetParams(ctx).BaseTokenManager
 }
 
 // UnrestrictedTokenTransfer returns the boolean value which indicates if the token transfer is restricted
 func (k Keeper) UnrestrictedTokenTransfer(ctx sdk.Context) (res bool) {
-	k.paramSpace.Get(ctx, types.KeyUnrestrictedTokenTransfer, &res)
-	return
+	return k.GetParams(ctx).UnrestrictedTokenTransfer
 }
 
 // GetParams gets all parameters
-func (k Keeper) GetParams(ctx sdk.Context) types.Params {
-	var p types.Params
-	k.paramSpace.GetParamSet(ctx, &p)
+func (k Keeper) GetParams(ctx sdk.Context) (params types.Params) {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.ParamsKey)
+	if bz == nil {
+		return
+	}
 
-	return p
+	k.cdc.MustUnmarshal(bz, &params)
+	return params
 }
 
 // SetParams sets the params to the store
-func (k Keeper) SetParams(ctx sdk.Context, params types.Params) {
-	k.paramSpace.SetParamSet(ctx, &params)
+func (k Keeper) SetParams(ctx sdk.Context, params types.Params) error {
+	if err := params.Validate(); err != nil {
+		return err
+	}
+
+	store := ctx.KVStore(k.storeKey)
+	bz, err := k.cdc.Marshal(&params)
+	if err != nil {
+		return err
+	}
+
+	store.Set(types.ParamsKey, bz)
+	return nil
 }

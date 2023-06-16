@@ -18,6 +18,9 @@ import (
 	"github.com/bianjieai/iritamod/modules/genutil/types"
 )
 
+// ConsensusVersion defines the current iritamod/genutil module consensus version.
+const ConsensusVersion = 1
+
 var (
 	_ module.AppModuleGenesis = AppModule{}
 	_ module.AppModuleBasic   = AppModuleBasic{}
@@ -105,4 +108,4 @@ func (am AppModule) ExportGenesis(_ sdk.Context, cdc codec.JSONCodec) json.RawMe
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (am AppModule) ConsensusVersion() uint64 { return 1 }
+func (am AppModule) ConsensusVersion() uint64 { return ConsensusVersion }

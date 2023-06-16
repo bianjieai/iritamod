@@ -1,7 +1,6 @@
 package params
 
 import (
-	"context"
 	"encoding/json"
 
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
@@ -9,30 +8,34 @@ import (
 
 	abci "github.com/cometbft/cometbft/abci/types"
 
+	"github.com/bianjieai/iritamod/modules/params/keeper"
+	"github.com/bianjieai/iritamod/modules/params/types"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/cosmos/cosmos-sdk/x/params/types/proposal"
-
-	"github.com/bianjieai/iritamod/modules/params/client/cli"
-	"github.com/bianjieai/iritamod/modules/params/keeper"
-	"github.com/bianjieai/iritamod/modules/params/types"
 )
+
+// ConsensusVersion defines the current iritamod/params module consensus version.
+const ConsensusVersion = 1
 
 var (
 	_ module.AppModule           = AppModule{}
 	_ module.AppModuleBasic      = AppModuleBasic{}
+	_ module.HasServices         = AppModule{}
+	_ module.HasConsensusVersion = AppModule{}
 	_ module.AppModuleSimulation = AppModule{}
 )
 
 // AppModuleBasic defines the basic application module used by the params module.
 type AppModuleBasic struct {
-	BaseAppModuleBasic
-
 	cdc codec.Codec
+}
+
+func (b AppModuleBasic) Name() string {
+	return types.ModuleName
 }
 
 // RegisterLegacyAminoCodec registers the params module's types for the given codec.
@@ -40,28 +43,31 @@ func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 	types.RegisterLegacyAminoCodec(cdc)
 }
 
-// RegisterGRPCRoutes registers the gRPC Gateway routes for the params module.
-func (AppModuleBasic) RegisterGRPCRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	_ = proposal.RegisterQueryHandlerClient(context.Background(), mux, proposal.NewQueryClient(clientCtx))
-}
-
-// GetTxCmd returns the root tx command for the params module.
-func (AppModuleBasic) GetTxCmd() *cobra.Command {
-	return cli.NewTxCmd()
-}
-
 // RegisterInterfaces registers interfaces and implementations of the params module.
 func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) {
 	types.RegisterInterfaces(registry)
 }
 
-// TODO
+// RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the params module.
+func (b AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {}
+
+// GetTxCmd returns the root tx command for the params module.
+func (AppModuleBasic) GetTxCmd() *cobra.Command {
+	// TODO: fix this
+	return nil
+}
+
+func (b AppModuleBasic) GetQueryCmd() *cobra.Command {
+	return nil
+}
+
+// DefaultGenesis returns default genesis state as raw bytes for the params
 func (AppModuleBasic) DefaultGenesis(codec.JSONCodec) json.RawMessage {
 	return nil
 
 }
 
-// TODO
+// ValidateGenesis performs genesis state validation for the params module.
 func (AppModuleBasic) ValidateGenesis(codec.JSONCodec, client.TxEncodingConfig, json.RawMessage) error {
 	return nil
 }
@@ -72,11 +78,11 @@ func (AppModuleBasic) ValidateGenesis(codec.JSONCodec, client.TxEncodingConfig, 
 type AppModule struct {
 	AppModuleBasic
 
-	keeper Keeper
+	keeper keeper.Keeper
 }
 
 // NewAppModule creates a new AppModule object
-func NewAppModule(cdc codec.Codec, k Keeper) AppModule {
+func NewAppModule(cdc codec.Codec, k keeper.Keeper) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{cdc: cdc},
 		keeper:         k,
@@ -85,12 +91,12 @@ func NewAppModule(cdc codec.Codec, k Keeper) AppModule {
 
 // Name returns the params module's name.
 func (AppModule) Name() string {
-	return ModuleName
+	return types.ModuleName
 }
 
 // RegisterServices registers module services.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
-	proposal.RegisterQueryServer(cfg.QueryServer(), am.keeper)
+	// proposal.RegisterQueryServer(cfg.QueryServer(), am.keeper)
 	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
 }
 
@@ -109,7 +115,7 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 1 }
+func (AppModule) ConsensusVersion() uint64 { return ConsensusVersion }
 
 // BeginBlock returns the begin blocker for the params module.
 func (am AppModule) BeginBlock(ctx sdk.Context, _ abci.RequestBeginBlock) {}

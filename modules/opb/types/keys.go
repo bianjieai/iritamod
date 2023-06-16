@@ -1,5 +1,9 @@
 package types
 
+var (
+	ParamsKey = []byte{0x01}
+)
+
 const (
 	// ModuleName is the name of the OPB module
 	ModuleName = "opb"
