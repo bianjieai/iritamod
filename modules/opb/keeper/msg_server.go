@@ -5,18 +5,19 @@ import (
 	"fmt"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/bianjieai/iritamod/modules/opb/types"
 )
 
 type msgServer struct {
-	Keeper
+	k Keeper
 }
 
 // NewMsgServerImpl returns an implementation of the OPB MsgServer interface
 // for the provided Keeper.
 func NewMsgServerImpl(keeper Keeper) types.MsgServer {
-	return &msgServer{Keeper: keeper}
+	return &msgServer{k: keeper}
 }
 
 var _ types.MsgServer = msgServer{}
@@ -34,7 +35,7 @@ func (m msgServer) Mint(goCtx context.Context, msg *types.MsgMint) (*types.MsgMi
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.Mint(ctx, msg.Amount, recipient, operator); err != nil {
+	if err := m.k.Mint(ctx, msg.Amount, recipient, operator); err != nil {
 		return nil, err
 	}
 
@@ -67,7 +68,7 @@ func (m msgServer) Reclaim(goCtx context.Context, msg *types.MsgReclaim) (*types
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.Keeper.Reclaim(ctx, msg.Denom, recipient, operator); err != nil {
+	if err := m.k.Reclaim(ctx, msg.Denom, recipient, operator); err != nil {
 		return nil, err
 	}
 
@@ -85,4 +86,21 @@ func (m msgServer) Reclaim(goCtx context.Context, msg *types.MsgReclaim) (*types
 	})
 
 	return &types.MsgReclaimResponse{}, nil
+}
+
+func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+	if m.k.authority != msg.Authority {
+		return nil, sdkerrors.Wrapf(
+			sdkerrors.ErrUnauthorized,
+			"invalid authority; expected %s, got %s",
+			m.k.authority,
+			msg.Authority,
+		)
+	}
+
+	ctx := sdk.UnwrapSDKContext(goCtx)
+	if err := m.k.SetParams(ctx, msg.Params); err != nil {
+		return nil, err
+	}
+	return &types.MsgUpdateParamsResponse{}, nil
 }
