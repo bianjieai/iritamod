@@ -1,5 +1,5 @@
 syntax = "proto3";
-package upgrade;
+package iritamod.upgrade;
 
 option go_package = "github.com/bianjieai/iritamod/modules/upgrade/types";
 

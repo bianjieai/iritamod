@@ -1,7 +1,7 @@
 syntax = "proto3";
-package perm;
+package iritamod.perm;
 
-import "perm/perm.proto";
+import "iritamod/perm/perm.proto";
 
 option go_package = "github.com/bianjieai/iritamod/modules/perm/types";
 
