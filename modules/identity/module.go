@@ -28,9 +28,6 @@ var (
 	_ module.AppModuleSimulation = AppModule{}
 )
 
-// ConsensusVersion defines the current iritamod/identity module consensus version.
-const ConsensusVersion = 1
-
 // AppModuleBasic defines the basic application module used by the identity module.
 type AppModuleBasic struct{}
 
@@ -131,7 +128,7 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return ConsensusVersion }
+func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock returns the begin blocker for the identity module.
 func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {}

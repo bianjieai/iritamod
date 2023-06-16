@@ -5,9 +5,8 @@ import (
 	"fmt"
 	"strings"
 
-	"sigs.k8s.io/yaml"
-
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
 
 const (
@@ -20,6 +19,14 @@ const (
 	// DefaultUnrestrictedTokenTransfer is set to false, which
 	// means that the token transfer is under certain constraint
 	DefaultUnrestrictedTokenTransfer = true
+)
+
+// Parameter store keys
+var (
+	KeyBaseTokenDenom            = []byte("BaseTokenDenom")
+	KeyPointTokenDenom           = []byte("PointTokenDenom")
+	KeyBaseTokenManager          = []byte("BaseTokenManager")
+	KeyUnrestrictedTokenTransfer = []byte("UnrestrictedTokenTransfer")
 )
 
 // NewParams creates a new Params instance
@@ -47,11 +54,6 @@ func DefaultParams() Params {
 	)
 }
 
-func (p Params) String() string {
-	out, _ := yaml.Marshal(p)
-	return string(out)
-}
-
 // Validate validates the params
 func (p Params) Validate() error {
 	if err := validateBaseTokenDenom(p.BaseTokenDenom); err != nil {
@@ -71,6 +73,16 @@ func (p Params) Validate() error {
 	}
 
 	return nil
+}
+
+// ParamSetPairs implements params.ParamSet
+func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
+	return paramtypes.ParamSetPairs{
+		paramtypes.NewParamSetPair(KeyBaseTokenDenom, &p.BaseTokenDenom, validateBaseTokenDenom),
+		paramtypes.NewParamSetPair(KeyPointTokenDenom, &p.PointTokenDenom, validatePointTokenDenom),
+		paramtypes.NewParamSetPair(KeyBaseTokenManager, &p.BaseTokenManager, validateBaseTokenManager),
+		paramtypes.NewParamSetPair(KeyUnrestrictedTokenTransfer, &p.UnrestrictedTokenTransfer, validateUnrestrictedTokenTransfer),
+	}
 }
 
 func validateBaseTokenDenom(i interface{}) error {

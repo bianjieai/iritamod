@@ -7,6 +7,7 @@ import (
 	"github.com/cometbft/cometbft/crypto/tmhash"
 	ctmbytes "github.com/cometbft/cometbft/libs/bytes"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/bianjieai/iritamod/modules/node/types"
 )
@@ -158,9 +159,16 @@ func (m msgServer) RevokeNode(goCtx context.Context, msg *types.MsgRevokeNode) (
 	return &types.MsgRevokeNodeResponse{}, nil
 }
 
-// UpdateParams updates the slashing params.
-// WARN: must register perm access control for this method
 func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+	if m.k.authority != msg.Authority {
+		return nil, sdkerrors.Wrapf(
+			sdkerrors.ErrUnauthorized,
+			"invalid authority; expected %s, got %s",
+			m.k.authority,
+			msg.Authority,
+		)
+	}
+
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	if err := m.k.SetParams(ctx, msg.Params); err != nil {
 		return nil, err
