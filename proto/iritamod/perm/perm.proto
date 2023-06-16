@@ -1,5 +1,5 @@
 syntax = "proto3";
-package perm;
+package iritamod.perm;
 
 import "gogoproto/gogo.proto";
 

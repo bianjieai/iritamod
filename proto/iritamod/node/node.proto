@@ -1,5 +1,5 @@
 syntax = "proto3";
-package node;
+package iritamod.node;
 
 import "gogoproto/gogo.proto";
 import "tendermint/types/types.proto";

@@ -1,5 +1,5 @@
 syntax = "proto3";
-package identity;
+package iritamod.identity;
 
 import "gogoproto/gogo.proto";
 
