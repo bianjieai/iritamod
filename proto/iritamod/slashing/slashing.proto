@@ -1,5 +1,5 @@
 syntax = "proto3";
-package slashing;
+package iritamod.slashing;
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";

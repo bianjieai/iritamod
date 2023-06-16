@@ -1,7 +1,7 @@
 syntax = "proto3";
-package node;
+package iritamod.node;
 
-import "node/node.proto";
+import "iritamod/node/node.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";

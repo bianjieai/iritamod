@@ -1,5 +1,5 @@
 syntax = "proto3";
-package opb;
+package iritamod.opb;
 
 import "gogoproto/gogo.proto";
 

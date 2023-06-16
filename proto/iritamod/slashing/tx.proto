@@ -1,7 +1,7 @@
 syntax = "proto3";
-package slashing;
+package iritamod.slashing;
 
-import "slashing/slashing.proto";
+import "iritamod/slashing/slashing.proto";
 import "cosmos/msg/v1/msg.proto";
 import "cosmos_proto/cosmos.proto";
 import "gogoproto/gogo.proto";
