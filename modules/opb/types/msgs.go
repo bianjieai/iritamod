@@ -13,7 +13,6 @@ const (
 var (
 	_ sdk.Msg = &MsgMint{}
 	_ sdk.Msg = &MsgReclaim{}
-	_ sdk.Msg = &MsgUpdateParams{}
 )
 
 // NewMsgMint creates a new MsgMint instance.
@@ -114,23 +113,4 @@ func (m MsgReclaim) GetSignBytes() []byte {
 func (m MsgReclaim) GetSigners() []sdk.AccAddress {
 	addr, _ := sdk.AccAddressFromBech32(m.Operator)
 	return []sdk.AccAddress{addr}
-}
-
-// GetSignBytes implements the LegacyMsg interface.
-func (m MsgUpdateParams) GetSignBytes() []byte {
-	return sdk.MustSortJSON(ModuleCdc.MustMarshalJSON(&m))
-}
-
-// GetSigners returns the expected signers for a MsgUpdateParams message.
-func (m *MsgUpdateParams) GetSigners() []sdk.AccAddress {
-	addr, _ := sdk.AccAddressFromBech32(m.Authority)
-	return []sdk.AccAddress{addr}
-}
-
-// ValidateBasic does a sanity check on the provided data.
-func (m *MsgUpdateParams) ValidateBasic() error {
-	if _, err := sdk.AccAddressFromBech32(m.Authority); err != nil {
-		return sdkerrors.Wrap(err, "invalid authority address")
-	}
-	return m.Params.Validate()
 }

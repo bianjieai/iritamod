@@ -3,20 +3,14 @@ package types
 import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-	sdktx "github.com/cosmos/cosmos-sdk/types/tx"
 )
 
 // NewMsgUpdateParams creates a new MsgUpdateParams instance.
-func NewMsgUpdateParams(messages []sdk.Msg, authority string) (*MsgUpdateParams, error) {
-	anys, err := sdktx.SetMsgs(messages)
-	if err != nil {
-		return nil, err
-	}
-
+func NewMsgUpdateParams(changes []ParamChange, operator sdk.AccAddress) *MsgUpdateParams {
 	return &MsgUpdateParams{
-		Messages:  anys,
-		Authority: authority,
-	}, nil
+		Changes:  changes,
+		Operator: operator.String(),
+	}
 }
 
 // Route implements Msg
@@ -31,16 +25,13 @@ func (m MsgUpdateParams) Type() string {
 
 // ValidateBasic implements Msg
 func (m MsgUpdateParams) ValidateBasic() error {
-	if _, err := sdk.AccAddressFromBech32(m.Authority); err != nil {
-		return sdkerrors.ErrInvalidAddress.Wrapf("invalid authority address: %s", err)
+	if len(m.Operator) == 0 {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "operator missing")
 	}
-
-	msgs, err := m.GetMsgs()
-	if err != nil {
-		return err
+	if _, err := sdk.AccAddressFromBech32(m.Operator); err != nil {
+		return sdkerrors.Wrap(sdkerrors.ErrInvalidAddress, "invalid operator")
 	}
-
-	return validateMsgType(msgs)
+	return ValidateChanges(m.Changes)
 }
 
 // GetSignBytes implements Msg
@@ -51,14 +42,31 @@ func (m MsgUpdateParams) GetSignBytes() []byte {
 
 // GetSigners implements Msg
 func (m MsgUpdateParams) GetSigners() []sdk.AccAddress {
-	singer, err := sdk.AccAddressFromBech32(m.Authority)
+	singer, err := sdk.AccAddressFromBech32(m.Operator)
 	if err != nil {
 		panic(err)
 	}
 	return []sdk.AccAddress{singer}
 }
 
-// GetMsgs unpacks m.Messages Any's into sdk.Msg's
-func (m MsgUpdateParams) GetMsgs() ([]sdk.Msg, error) {
-	return sdktx.GetMsgs(m.Messages, "iritamod.MsgUpdateParams")
+// ValidateChanges performs basic validation checks over a set of ParamChange. It
+// returns an error if any ParamChange is invalid.
+func ValidateChanges(changes []ParamChange) error {
+	if len(changes) == 0 {
+		return ErrEmptyChanges
+	}
+
+	for _, pc := range changes {
+		if len(pc.Subspace) == 0 {
+			return ErrEmptySubspace
+		}
+		if len(pc.Key) == 0 {
+			return ErrEmptyKey
+		}
+		if len(pc.Value) == 0 {
+			return ErrEmptyValue
+		}
+	}
+
+	return nil
 }

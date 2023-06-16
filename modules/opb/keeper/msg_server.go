@@ -10,13 +10,13 @@ import (
 )
 
 type msgServer struct {
-	k Keeper
+	Keeper
 }
 
 // NewMsgServerImpl returns an implementation of the OPB MsgServer interface
 // for the provided Keeper.
 func NewMsgServerImpl(keeper Keeper) types.MsgServer {
-	return &msgServer{k: keeper}
+	return &msgServer{Keeper: keeper}
 }
 
 var _ types.MsgServer = msgServer{}
@@ -34,7 +34,7 @@ func (m msgServer) Mint(goCtx context.Context, msg *types.MsgMint) (*types.MsgMi
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.k.Mint(ctx, msg.Amount, recipient, operator); err != nil {
+	if err := m.Keeper.Mint(ctx, msg.Amount, recipient, operator); err != nil {
 		return nil, err
 	}
 
@@ -67,7 +67,7 @@ func (m msgServer) Reclaim(goCtx context.Context, msg *types.MsgReclaim) (*types
 
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
-	if err := m.k.Reclaim(ctx, msg.Denom, recipient, operator); err != nil {
+	if err := m.Keeper.Reclaim(ctx, msg.Denom, recipient, operator); err != nil {
 		return nil, err
 	}
 
@@ -85,14 +85,4 @@ func (m msgServer) Reclaim(goCtx context.Context, msg *types.MsgReclaim) (*types
 	})
 
 	return &types.MsgReclaimResponse{}, nil
-}
-
-// UpdateParams updates the slashing params.
-// WARN： must register perm access control for this method.
-func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
-	ctx := sdk.UnwrapSDKContext(goCtx)
-	if err := m.k.SetParams(ctx, msg.Params); err != nil {
-		return nil, err
-	}
-	return &types.MsgUpdateParamsResponse{}, nil
 }

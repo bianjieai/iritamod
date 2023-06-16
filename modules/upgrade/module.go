@@ -27,9 +27,6 @@ var (
 	_ module.AppModuleBasic = AppModuleBasic{}
 )
 
-// ConsensusVersion defines the current iritamod/upgrade module consensus version.
-const ConsensusVersion = 1
-
 // AppModuleBasic implements the sdk.AppModuleBasic interface
 type AppModuleBasic struct{}
 
@@ -110,7 +107,7 @@ func (am AppModule) ExportGenesis(_ sdk.Context, cdc codec.JSONCodec) json.RawMe
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return ConsensusVersion }
+func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock calls the upgrade module hooks
 //
