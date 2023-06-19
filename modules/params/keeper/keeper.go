@@ -1,10 +1,11 @@
 package keeper
 
 import (
-	"github.com/bianjieai/iritamod/modules/params/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+
+	"github.com/bianjieai/iritamod/modules/params/types"
 )
 
 // Keeper define a slashing keeper

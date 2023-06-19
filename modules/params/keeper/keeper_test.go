@@ -72,7 +72,7 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 					},
 				}
 			},
-			expErr: true,
+			expErr: false,
 		},
 		"update node": {
 			preRun: func() []sdk.Msg {
@@ -83,7 +83,7 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 					},
 				}
 			},
-			expErr: true,
+			expErr: false,
 		},
 		"update opb": {
 			preRun: func() []sdk.Msg {
@@ -114,11 +114,11 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 			msgs := tc.preRun()
 			updateMsg, err := types.NewMsgUpdateParams(msgs, authority)
 			suite.Require().NoError(err)
-			err = updateMsg.ValidateBasic()
+			_, err = suite.msgsrv.UpdateParams(suite.ctx, updateMsg)
 			if tc.expErr {
-				suite.Require().NoError(err)
-			} else {
 				suite.Require().Error(err)
+			} else {
+				suite.Require().NoError(err)
 			}
 		})
 	}
