@@ -1,7 +1,6 @@
 package keeper
 
 import (
-	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
@@ -12,11 +11,11 @@ import (
 type Keeper struct {
 	authKeeper types.AccountKeeper
 
-	router *baseapp.MsgServiceRouter
+	router types.ParamsRouter
 }
 
 // NewKeeper creates a slashing keeper
-func NewKeeper(ak types.AccountKeeper, router *baseapp.MsgServiceRouter) Keeper {
+func NewKeeper(ak types.AccountKeeper, router types.ParamsRouter) Keeper {
 	return Keeper{
 		authKeeper: ak,
 		router:     router,
@@ -32,7 +31,10 @@ func (k Keeper) UpdateParams(ctx sdk.Context, messages []sdk.Msg) error {
 
 	cacheCtx, writeCache := ctx.CacheContext()
 	for _, msg := range messages {
-		handler := k.router.Handler(msg)
+		handler, isParamsType := k.router.Handler(msg)
+		if !isParamsType {
+			return sdkerrors.Wrapf(types.ErrInvalidMsgType, "%s is not update params message type", sdk.MsgTypeURL(msg))
+		}
 		if handler == nil {
 			return sdkerrors.Wrap(types.ErrUnroutableUpdateParamsMsg, sdk.MsgTypeURL(msg))
 		}

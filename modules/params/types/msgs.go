@@ -40,7 +40,12 @@ func (m MsgUpdateParams) ValidateBasic() error {
 		return err
 	}
 
-	return validateMsgType(msgs)
+	for _, msg := range msgs {
+		if err := msg.ValidateBasic(); err != nil {
+			return err
+		}
+	}
+	return nil
 }
 
 // GetSignBytes implements Msg

@@ -107,31 +107,6 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 			},
 			expErr: true,
 		},
-	}
-
-	for name, tc := range cases {
-		suite.Run(name, func() {
-			msgs := tc.preRun()
-			updateMsg, err := types.NewMsgUpdateParams(msgs, authority)
-			suite.Require().NoError(err)
-			_, err = suite.msgsrv.UpdateParams(suite.ctx, updateMsg)
-			if tc.expErr {
-				suite.Require().Error(err)
-			} else {
-				suite.Require().NoError(err)
-			}
-		})
-	}
-}
-
-func (suite *KeeperTestSuite) TestValidateUpdateParamsMsgs() {
-	suite.reset()
-
-	authority := suite.app.AccountKeeper.GetModuleAddress(types.ModuleName).String()
-	cases := map[string]struct {
-		preRun func() []sdk.Msg
-		expErr bool
-	}{
 		"all messages are invalid": {
 			preRun: func() []sdk.Msg {
 				return []sdk.Msg{
@@ -179,27 +154,26 @@ func (suite *KeeperTestSuite) TestValidateUpdateParamsMsgs() {
 			},
 			expErr: false,
 		},
-		// 	TODO: uncomment this when proto package is renamed.
-		//"containing cparam update param message": {
-		//	preRun: func() []sdk.Msg {
-		//		return []sdk.Msg{
-		//			&nodetypes.MsgUpdateParams{
-		//				Authority: authority,
-		//				Params:    nodetypes.Params{HistoricalEntries: 110},
-		//			},
-		//
-		//			&types.MsgUpdateParams{
-		//				Authority: authority,
-		//				Messages:  nil,
-		//			},
-		//			&minttypes.MsgUpdateParams{
-		//				Authority: authority,
-		//				Params:    minttypes.DefaultParams(),
-		//			},
-		//		}
-		//	},
-		//	expErr: true,
-		//},
+		"containing cparam update param message": {
+			preRun: func() []sdk.Msg {
+				return []sdk.Msg{
+					&nodetypes.MsgUpdateParams{
+						Authority: authority,
+						Params:    nodetypes.Params{HistoricalEntries: 110},
+					},
+
+					&types.MsgUpdateParams{
+						Authority: authority,
+						Messages:  nil,
+					},
+					&minttypes.MsgUpdateParams{
+						Authority: authority,
+						Params:    minttypes.DefaultParams(),
+					},
+				}
+			},
+			expErr: true,
+		},
 	}
 
 	for name, tc := range cases {
@@ -207,7 +181,7 @@ func (suite *KeeperTestSuite) TestValidateUpdateParamsMsgs() {
 			msgs := tc.preRun()
 			updateMsg, err := types.NewMsgUpdateParams(msgs, authority)
 			suite.Require().NoError(err)
-			err = updateMsg.ValidateBasic()
+			_, err = suite.msgsrv.UpdateParams(suite.ctx, updateMsg)
 			if tc.expErr {
 				suite.Require().Error(err)
 			} else {

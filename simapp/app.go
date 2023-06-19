@@ -77,6 +77,7 @@ import (
 	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
 	cparams "github.com/bianjieai/iritamod/modules/params"
 	cparamskeeper "github.com/bianjieai/iritamod/modules/params/keeper"
+	cparamsmock "github.com/bianjieai/iritamod/modules/params/mock"
 	cparamstypes "github.com/bianjieai/iritamod/modules/params/types"
 	"github.com/bianjieai/iritamod/modules/perm"
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
@@ -316,9 +317,9 @@ func NewSimApp(
 		keys[identitytypes.StoreKey])
 
 	// iritamod/params is now decoupled with x/params
+	cpr := cparamsmock.NewParamsRouter(app.MsgServiceRouter())
 	app.CParamsKeeper = cparamskeeper.NewKeeper(
-		app.AccountKeeper,
-		app.MsgServiceRouter())
+		app.AccountKeeper, cpr)
 
 	/****  Module Options ****/
 
