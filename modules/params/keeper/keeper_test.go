@@ -86,7 +86,7 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 			},
 			expErr: false,
 		},
-		"update opb": {
+		"update opb, but we didn't register it": {
 			preRun: func() []sdk.Msg {
 				return []sdk.Msg{
 					&opbtypes.MsgUpdateParams{
@@ -97,7 +97,7 @@ func (suite *KeeperTestSuite) TestUpdateParams() {
 			},
 			expErr: true,
 		},
-		"update mint": {
+		"update mint, but we didn't register it": {
 			preRun: func() []sdk.Msg {
 				return []sdk.Msg{
 					&minttypes.MsgUpdateParams{

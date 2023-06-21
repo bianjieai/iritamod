@@ -1,16 +1,48 @@
 package types
 
 import (
+	"fmt"
+
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 )
 
 // ParamsRouter is a wrapper for MsgServiceRouter
-type ParamsRouter interface {
-	// IsParamsType returns true if the msg type is an update params type.
-	IsParamsType(msg sdk.Msg) bool
+type ParamsRouter struct {
+	allowed map[string]struct{}
+	*baseapp.MsgServiceRouter
+}
 
-	// Handler returns true if the router supports a given msg type. Handler
-	// must use isParamsType to check if the msg type is an update params type.
-	Handler(msg sdk.Msg) (baseapp.MsgServiceHandler, bool)
+func NewParamsRouter(msr *baseapp.MsgServiceRouter, msgTypeURLs []string) *ParamsRouter {
+	if msr == nil {
+		panic("msg service router is nil")
+	}
+
+	if len(msgTypeURLs) == 0 {
+		panic("no allowed update params")
+	}
+
+	allowed := make(map[string]struct{}, len(msgTypeURLs))
+	for _, msgTypeURL := range msgTypeURLs {
+		if _, ok := allowed[msgTypeURL]; ok {
+			panic(fmt.Sprintf("duplicate message type (%s)", msgTypeURL))
+		}
+		allowed[msgTypeURL] = struct{}{}
+	}
+
+	return &ParamsRouter{
+		allowed:          allowed,
+		MsgServiceRouter: msr,
+	}
+}
+
+// Execute executes a params message.
+func (pr *ParamsRouter) Execute(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, error) {
+	msgType := sdk.MsgTypeURL(msg)
+	if _, ok := pr.allowed[msgType]; !ok {
+		return nil, sdkerrors.Wrapf(ErrInvalidMsgType, "%s is not allowed", sdk.MsgTypeURL(msg))
+	}
+	handler := pr.Handler(msg)
+	return handler(ctx, msg)
 }

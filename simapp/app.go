@@ -2,7 +2,6 @@ package simapp
 
 import (
 	"encoding/json"
-	"github.com/cometbft/cometbft/crypto/tmhash"
 	"io"
 	"os"
 	"path/filepath"
@@ -11,6 +10,7 @@ import (
 
 	dbm "github.com/cometbft/cometbft-db"
 	abci "github.com/cometbft/cometbft/abci/types"
+	"github.com/cometbft/cometbft/crypto/tmhash"
 	"github.com/cometbft/cometbft/libs/log"
 
 	simappparams "cosmossdk.io/simapp/params"
@@ -77,7 +77,6 @@ import (
 	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
 	cparams "github.com/bianjieai/iritamod/modules/params"
 	cparamskeeper "github.com/bianjieai/iritamod/modules/params/keeper"
-	cparamsmock "github.com/bianjieai/iritamod/modules/params/mock"
 	cparamstypes "github.com/bianjieai/iritamod/modules/params/types"
 	"github.com/bianjieai/iritamod/modules/perm"
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
@@ -123,6 +122,15 @@ var (
 
 	// root admin address in consortium chain
 	rootAdmin string
+
+	msgTypeURLs = []string{
+		"/cosmos.auth.v1beta1.MsgUpdateParams",
+		"/cosmos.bank.v1beta1.MsgUpdateParams",
+		"/cosmos.consensus.v1.MsgUpdateParams",
+		"/cosmos.crisis.v1beta1.MsgUpdateParams",
+		"/slashing.MsgUpdateParams",
+		"/node.MsgUpdateParams",
+	}
 )
 
 var (
@@ -316,10 +324,8 @@ func NewSimApp(
 		appCodec,
 		keys[identitytypes.StoreKey])
 
-	// iritamod/params is now decoupled with x/params
-	cpr := cparamsmock.NewParamsRouter(app.MsgServiceRouter())
 	app.CParamsKeeper = cparamskeeper.NewKeeper(
-		app.AccountKeeper, cpr)
+		app.AccountKeeper, app.MsgServiceRouter(), msgTypeURLs)
 
 	/****  Module Options ****/
 

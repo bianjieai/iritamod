@@ -1,24 +1,24 @@
 package keeper
 
 import (
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/bianjieai/iritamod/modules/params/types"
 )
 
-// Keeper define a slashing keeper
+// Keeper define a params keeper
 type Keeper struct {
 	authKeeper types.AccountKeeper
 
-	router types.ParamsRouter
+	router *types.ParamsRouter
 }
 
-// NewKeeper creates a slashing keeper
-func NewKeeper(ak types.AccountKeeper, router types.ParamsRouter) Keeper {
+// NewKeeper creates a params keeper
+func NewKeeper(ak types.AccountKeeper, msr *baseapp.MsgServiceRouter, msgTypeURLs []string) Keeper {
 	return Keeper{
 		authKeeper: ak,
-		router:     router,
+		router:     types.NewParamsRouter(msr, msgTypeURLs),
 	}
 }
 
@@ -31,17 +31,8 @@ func (k Keeper) UpdateParams(ctx sdk.Context, messages []sdk.Msg) error {
 
 	cacheCtx, writeCache := ctx.CacheContext()
 	for _, msg := range messages {
-		handler, isParamsType := k.router.Handler(msg)
-		if !isParamsType {
-			return sdkerrors.Wrapf(types.ErrInvalidMsgType, "%s is not update params message type", sdk.MsgTypeURL(msg))
-		}
-		if handler == nil {
-			return sdkerrors.Wrap(types.ErrUnroutableUpdateParamsMsg, sdk.MsgTypeURL(msg))
-		}
-
 		var res *sdk.Result
-
-		res, err = handler(cacheCtx, msg)
+		res, err = k.router.Execute(cacheCtx, msg)
 		if err != nil {
 			break
 		}
