@@ -43,6 +43,11 @@ func (pr *ParamsRouter) Execute(ctx sdk.Context, msg sdk.Msg) (*sdk.Result, erro
 	if _, ok := pr.allowed[msgType]; !ok {
 		return nil, sdkerrors.Wrapf(ErrInvalidMsgType, "%s is not allowed", sdk.MsgTypeURL(msg))
 	}
+
 	handler := pr.Handler(msg)
+	if handler == nil {
+		return nil, sdkerrors.Wrapf(ErrUnroutableUpdateParamsMsg, "%s is not registered", sdk.MsgTypeURL(msg))
+	}
+
 	return handler(ctx, msg)
 }
