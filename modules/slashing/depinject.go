@@ -1,15 +1,16 @@
-package node
+package slashing
 
 import (
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/depinject"
-
 	"github.com/cosmos/cosmos-sdk/codec"
-	store "github.com/cosmos/cosmos-sdk/store/types"
 
-	modulev1 "github.com/bianjieai/iritamod/api/iritamod/node/module/v1"
-	"github.com/bianjieai/iritamod/modules/node/exported"
-	"github.com/bianjieai/iritamod/modules/node/keeper"
+	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
+
+	modulev1 "github.com/bianjieai/iritamod/api/iritamod/slashing/module/v1"
+	"github.com/bianjieai/iritamod/modules/slashing/exported"
+	"github.com/bianjieai/iritamod/modules/slashing/keeper"
+	"github.com/bianjieai/iritamod/modules/slashing/types"
 )
 
 //
@@ -31,37 +32,43 @@ func (am AppModule) IsOnePerModuleType() {}
 // IsAppModule implements the appmodule.AppModule interface.
 func (am AppModule) IsAppModule() {}
 
-type NodeInputs struct {
+type SlashingInputs struct {
 	depinject.In
 
 	Config *modulev1.Module
-	Key    *store.KVStoreKey
 	Cdc    codec.Codec
+
+	AccountKeeper AccountKeeper
+	BankKeeper    BankKeeper
+	SlashKeeper   slashingkeeper.Keeper
+	NodeKeeper    types.NodeKeeper
+	StakingKeeper StakingKeeper
 
 	// LegacySubspace is used solely for migration of x/params managed parameters
 	LegacySubspace exported.Subspace
 }
 
-type NodeOutputs struct {
+type SlashingOutputs struct {
 	depinject.Out
 
 	Keeper keeper.Keeper
 	Module appmodule.AppModule
 }
 
-func ProvideModule(in NodeInputs) NodeOutputs {
+func ProvideModule(in SlashingInputs) SlashingOutputs {
 	k := keeper.NewKeeper(
-		in.Cdc,
-		in.Key,
-	)
+		in.SlashKeeper,
+		in.NodeKeeper)
 
 	m := NewAppModule(
 		in.Cdc,
 		k,
-		in.LegacySubspace,
-	)
+		in.AccountKeeper,
+		in.BankKeeper,
+		in.StakingKeeper,
+		in.LegacySubspace)
 
-	return NodeOutputs{
+	return SlashingOutputs{
 		Keeper: k,
 		Module: m,
 	}
