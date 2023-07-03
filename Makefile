@@ -2,7 +2,6 @@
 
 PACKAGES_SIMTEST=$(shell go list ./... | grep '/simulation')
 PACKAGES_UNITTEST=$(shell go list ./... | grep -v '/simulation' | grep -v '/cli_test')
-
 DOCKER := $(shell which docker)
 
 all: tools lint
@@ -43,7 +42,7 @@ protoImage=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(pro
 proto-all: proto-format proto-lint proto-gen
 
 proto-gen:
-	@echo "Generating protobuf files"
+	@echo "Generating Protobuf files"
 	@$(protoImage) sh ./scripts/protocgen.sh
 
 proto-format:
