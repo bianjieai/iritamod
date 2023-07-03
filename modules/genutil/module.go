@@ -84,7 +84,7 @@ func NewAppModule(
 	nodeKeeper types.NodeKeeper,
 	deliverTx deliverTxfn,
 	txEncodingConfig client.TxEncodingConfig,
-) module.AppModule {
+) module.GenesisOnlyAppModule {
 	return module.NewGenesisOnlyAppModule(AppModule{
 		AppModuleBasic:   AppModuleBasic{},
 		accountKeeper:    accountKeeper,
