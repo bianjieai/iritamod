@@ -1,14 +1,17 @@
-package node
+package params
 
 import (
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/depinject"
-	modulev1 "github.com/bianjieai/iritamod/api/iritamod/node/module/v1"
-	"github.com/bianjieai/iritamod/modules/node/exported"
-	"github.com/bianjieai/iritamod/modules/node/keeper"
+	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/codec"
-	store "github.com/cosmos/cosmos-sdk/store/types"
+
+	modulev1 "github.com/bianjieai/iritamod/api/iritamod/params/module/v1"
+	"github.com/bianjieai/iritamod/modules/params/keeper"
+	"github.com/bianjieai/iritamod/modules/params/types"
 )
+
+var _ appmodule.AppModule = AppModule{}
 
 //
 // App Wiring Setup
@@ -21,45 +24,42 @@ func init() {
 	)
 }
 
-var _ appmodule.AppModule = AppModule{}
-
 // IsOnePerModuleType implements the depinject.OnePerModuleType interface.
 func (am AppModule) IsOnePerModuleType() {}
 
 // IsAppModule implements the appmodule.AppModule interface.
 func (am AppModule) IsAppModule() {}
 
-type NodeInputs struct {
+type ParamsInputs struct {
 	depinject.In
 
 	Config *modulev1.Module
-	Key    *store.KVStoreKey
 	Cdc    codec.Codec
 
-	// LegacySubspace is used solely for migration of x/params managed parameters
-	LegacySubspace exported.Subspace
+	AuthKeeper types.AccountKeeper
+
+	Router      *baseapp.MsgServiceRouter
+	MsgTypeURLs []string
 }
 
-type NodeOutputs struct {
+type ParamsOutputs struct {
 	depinject.Out
 
 	Keeper keeper.Keeper
 	Module appmodule.AppModule
 }
 
-func ProvideModule(in NodeInputs) NodeOutputs {
+func ProvideModule(in ParamsInputs) ParamsOutputs {
 	k := keeper.NewKeeper(
-		in.Cdc,
-		in.Key,
-	)
+		in.AuthKeeper,
+		in.Router,
+		in.MsgTypeURLs)
 
 	m := NewAppModule(
 		in.Cdc,
-		k,
-		in.LegacySubspace,
-	)
+		k)
 
-	return NodeOutputs{
+	return ParamsOutputs{
 		Keeper: k,
 		Module: m,
 	}
