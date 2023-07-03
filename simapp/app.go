@@ -1,3 +1,5 @@
+//go:build app_v1
+
 package simapp
 
 import (
@@ -128,8 +130,8 @@ var (
 		"/cosmos.bank.v1beta1.MsgUpdateParams",
 		"/cosmos.consensus.v1.MsgUpdateParams",
 		"/cosmos.crisis.v1beta1.MsgUpdateParams",
-		"/slashing.MsgUpdateParams",
-		"/node.MsgUpdateParams",
+		"/irita.slashing.MsgUpdateParams",
+		"/irita.node.MsgUpdateParams",
 	}
 )
 
