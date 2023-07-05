@@ -92,10 +92,6 @@ modules:
     config:
       "@type": cosmos.bank.module.v1.Module
 
-  - name: authz
-    config:
-      "@type": cosmos.authz.module.v1.Module
-
   - name: capability
     config:
       "@type": cosmos.capability.module.v1.Module
@@ -105,17 +101,9 @@ modules:
     config:
       "@type": cosmos.crisis.module.v1.Module
 
-  - name: slashing
-    config:
-      "@type": cosmos.slashing.module.v1.Module
-
   - name: evidence
     config:
       "@type": cosmos.evidence.module.v1.Module
-
-  - name: upgrade
-    config:
-      "@type": cosmos.upgrade.module.v1.Module
 
   - name: consensus
     config:
@@ -123,7 +111,19 @@ modules:
 
   - name: cparams
     config:
-      "@type": iritamod.cparams.module.v1.Module
+      "@type": iritamod.params.module.v1.Module
+      msg_urls: [
+        /cosmos.auth.v1beta1.MsgUpdateParams,
+        /cosmos.bank.v1beta1.MsgUpdateParams,
+        /cosmos.consensus.v1.MsgUpdateParams,
+        /cosmos.crisis.v1beta1.MsgUpdateParams,
+        /irita.slashing.MsgUpdateParams,
+        /irita.node.MsgUpdateParams,
+      ]
+
+  - name: slashing
+    config:
+      "@type": iritamod.slashing.module.v1.Module
 
   - name: perm
     config:
@@ -136,3 +136,7 @@ modules:
   - name: node
     config:
       "@type": iritamod.node.module.v1.Module
+
+  - name: upgrade
+    config:
+      "@type": iritamod.upgrade.module.v1.Module

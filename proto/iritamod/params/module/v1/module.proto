@@ -9,4 +9,6 @@ message Module {
   option (cosmos.app.v1alpha1.module) = {
     go_import: "github.com/bianjieai/iritamod/modules/params"
   };
+
+  repeated string msg_urls = 1;
 }

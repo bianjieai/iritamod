@@ -39,8 +39,7 @@ type ParamsInputs struct {
 
 	AuthKeeper types.AccountKeeper
 
-	Router      *baseapp.MsgServiceRouter
-	MsgTypeURLs []string
+	Router *baseapp.MsgServiceRouter
 }
 
 type ParamsOutputs struct {
@@ -54,7 +53,7 @@ func ProvideModule(in ParamsInputs) ParamsOutputs {
 	k := keeper.NewKeeper(
 		in.AuthKeeper,
 		in.Router,
-		in.MsgTypeURLs)
+		in.Config.MsgUrls)
 
 	m := NewAppModule(
 		in.Cdc,
