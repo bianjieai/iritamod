@@ -8,13 +8,11 @@ import (
 	"os"
 	"path/filepath"
 
+	"cosmossdk.io/core/appconfig"
+	"cosmossdk.io/depinject"
 	dbm "github.com/cometbft/cometbft-db"
 	"github.com/cometbft/cometbft/crypto/tmhash"
 	"github.com/cometbft/cometbft/libs/log"
-
-	"cosmossdk.io/core/appconfig"
-	"cosmossdk.io/depinject"
-
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -29,30 +27,12 @@ import (
 	"github.com/cosmos/cosmos-sdk/testutil/testdata_pulsar"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/cosmos/cosmos-sdk/x/auth"
-	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
-	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
-	_ "github.com/cosmos/cosmos-sdk/x/auth/tx/config" // import for side-effects
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"github.com/cosmos/cosmos-sdk/x/bank"
-	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
-	"github.com/cosmos/cosmos-sdk/x/capability"
-	consensus "github.com/cosmos/cosmos-sdk/x/consensus"
-	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
-	"github.com/cosmos/cosmos-sdk/x/crisis"
-	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
-	"github.com/cosmos/cosmos-sdk/x/evidence"
-	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
-	feegrantkeeper "github.com/cosmos/cosmos-sdk/x/feegrant/keeper"
-	feegrant "github.com/cosmos/cosmos-sdk/x/feegrant/module"
-	"github.com/cosmos/cosmos-sdk/x/genutil"
-	"github.com/cosmos/cosmos-sdk/x/params"
-	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
-	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	"github.com/cosmos/cosmos-sdk/x/slashing"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 	"github.com/cosmos/cosmos-sdk/x/upgrade"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 
+	"github.com/bianjieai/iritamod/modules/genutil"
 	"github.com/bianjieai/iritamod/modules/identity"
 	identitykeeper "github.com/bianjieai/iritamod/modules/identity/keeper"
 	"github.com/bianjieai/iritamod/modules/node"
@@ -62,6 +42,26 @@ import (
 	"github.com/bianjieai/iritamod/modules/perm"
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
 	cslashing "github.com/bianjieai/iritamod/modules/slashing"
+	cupgrade "github.com/bianjieai/iritamod/modules/upgrade"
+	"github.com/cosmos/cosmos-sdk/x/auth"
+	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
+	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
+	_ "github.com/cosmos/cosmos-sdk/x/auth/tx/config" // import for side-effects
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	"github.com/cosmos/cosmos-sdk/x/bank"
+	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
+	"github.com/cosmos/cosmos-sdk/x/capability"
+	"github.com/cosmos/cosmos-sdk/x/consensus"
+	consensuskeeper "github.com/cosmos/cosmos-sdk/x/consensus/keeper"
+	"github.com/cosmos/cosmos-sdk/x/crisis"
+	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
+	"github.com/cosmos/cosmos-sdk/x/evidence"
+	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
+	feegrantkeeper "github.com/cosmos/cosmos-sdk/x/feegrant/keeper"
+	feegrant "github.com/cosmos/cosmos-sdk/x/feegrant/module"
+	"github.com/cosmos/cosmos-sdk/x/params"
+	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
+	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 )
 
 var (
@@ -73,20 +73,23 @@ var (
 	// and genesis verification.
 	ModuleBasics = module.NewBasicManager(
 		auth.AppModuleBasic{},
-		genutil.AppModuleBasic{},
 		bank.AppModuleBasic{},
 		capability.AppModuleBasic{},
 		params.AppModuleBasic{},
-		cparams.AppModuleBasic{},
 		crisis.AppModuleBasic{},
-		cslashing.AppModuleBasic{},
 		feegrant.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
+		slashing.AppModule{},
+
+		genutil.AppModuleBasic{},
 		perm.AppModuleBasic{},
 		identity.AppModuleBasic{},
 		node.AppModuleBasic{},
 		consensus.AppModuleBasic{},
+		cslashing.AppModuleBasic{},
+		cparams.AppModuleBasic{},
+		cupgrade.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -97,21 +100,6 @@ var (
 
 	// root admin address in consortium chain
 	rootAdmin string
-
-	// approved update params msg type urls for cparams module
-	msgTypeURLs = []string{
-		"/cosmos.auth.v1beta1.MsgUpdateParams",
-		"/cosmos.bank.v1beta1.MsgUpdateParams",
-		"/cosmos.consensus.v1.MsgUpdateParams",
-		"/cosmos.crisis.v1beta1.MsgUpdateParams",
-		"/irita.slashing.MsgUpdateParams",
-		"/irita.node.MsgUpdateParams",
-	}
-
-	//go:embed app.yaml
-	appConfigYaml []byte
-
-	AppConfig = appconfig.LoadYAML(appConfigYaml)
 )
 
 var (
@@ -130,13 +118,16 @@ type SimApp struct {
 	interfaceRegistry codectypes.InterfaceRegistry
 
 	// keepers
-	AccountKeeper   authkeeper.AccountKeeper
-	BankKeeper      bankkeeper.Keeper
-	SlashingKeeper  slashingkeeper.Keeper
-	CrisisKeeper    *crisiskeeper.Keeper
-	UpgradeKeeper   *upgradekeeper.Keeper
-	ParamsKeeper    paramskeeper.Keeper
-	EvidenceKeeper  evidencekeeper.Keeper
+	AccountKeeper  authkeeper.AccountKeeper
+	BankKeeper     bankkeeper.Keeper
+	CrisisKeeper   *crisiskeeper.Keeper
+	ParamsKeeper   paramskeeper.Keeper
+	EvidenceKeeper evidencekeeper.Keeper
+
+	UpgradeKeeper  *upgradekeeper.Keeper
+	SlashingKeeper slashingkeeper.Keeper
+	//CUpgradeKeeper  cupgradekeeper.Keeper
+	//CSlashingKeeper cslashingkeeper.Keeper
 	PermKeeper      permkeeper.Keeper
 	IdentityKeeper  identitykeeper.Keeper
 	NodeKeeper      nodekeeper.Keeper
@@ -158,6 +149,11 @@ func init() {
 
 	rootAdmin = sdk.AccAddress(tmhash.SumTruncated([]byte("rootAdmin"))).String()
 }
+
+//go:embed app.yaml
+var appConfigYaml []byte
+
+var AppConfig = appconfig.LoadYAML(appConfigYaml)
 
 // NewSimApp returns a reference to an initialized SimApp.
 func NewSimApp(
@@ -211,18 +207,21 @@ func NewSimApp(
 		&app.legacyAmino,
 		&app.txConfig,
 		&app.interfaceRegistry,
+		&app.ParamsKeeper,
+		&app.ConsensusKeeper,
 		&app.AccountKeeper,
 		&app.BankKeeper,
-		&app.SlashingKeeper,
 		&app.CrisisKeeper,
-		&app.UpgradeKeeper,
-		&app.ParamsKeeper,
+		&app.FeeGrantKeeper,
 		&app.EvidenceKeeper,
+		&app.NodeKeeper,
 		&app.PermKeeper,
 		&app.IdentityKeeper,
-		&app.NodeKeeper,
-		&app.FeeGrantKeeper,
-		&app.ConsensusKeeper,
+		&app.SlashingKeeper,
+		&app.UpgradeKeeper,
+		//&app.CUpgradeKeeper,
+		//&app.CSlashingKeeper,
+		&app.CParamsKeeper,
 	); err != nil {
 		panic(err)
 	}

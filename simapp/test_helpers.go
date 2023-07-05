@@ -51,7 +51,7 @@ func setup(withGenesis bool, invCheckPeriod uint) (*SimApp, GenesisState) {
 	appOptions[flags.FlagHome] = DefaultNodeHome
 	appOptions[server.FlagIndexEvents] = invCheckPeriod
 
-	app := NewSimApp(log.NewNopLogger(), db, nil, true, map[int64]bool{}, EmptyAppOptions{})
+	app := NewSimApp(log.NewNopLogger(), db, nil, true, EmptyAppOptions{})
 	if withGenesis {
 		return app, app.DefaultGenesis()
 	}
