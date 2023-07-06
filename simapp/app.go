@@ -130,8 +130,8 @@ var (
 		"/cosmos.bank.v1beta1.MsgUpdateParams",
 		"/cosmos.consensus.v1.MsgUpdateParams",
 		"/cosmos.crisis.v1beta1.MsgUpdateParams",
-		"/irita.slashing.MsgUpdateParams",
-		"/irita.node.MsgUpdateParams",
+		"/iritamod.slashing.MsgUpdateParams",
+		"/iritamod.node.MsgUpdateParams",
 	}
 )
 

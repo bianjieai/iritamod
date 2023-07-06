@@ -6,11 +6,11 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	modulev1 "github.com/bianjieai/iritamod/api/iritamod/slashing/module/v1"
+	cparamtypes "github.com/bianjieai/iritamod/modules/params/types"
 	"github.com/bianjieai/iritamod/modules/slashing/exported"
 	"github.com/bianjieai/iritamod/modules/slashing/keeper"
 	"github.com/bianjieai/iritamod/modules/slashing/types"
@@ -61,8 +61,7 @@ type SlashingOutputs struct {
 }
 
 func ProvideModule(in SlashingInputs) SlashingOutputs {
-	// default to governance authority if not provided
-	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
+	authority := authtypes.NewModuleAddress(cparamtypes.ModuleName)
 
 	k := keeper.NewKeeper(
 		in.Cdc,

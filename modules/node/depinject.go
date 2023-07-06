@@ -78,7 +78,6 @@ func ProvideModule(in NodeInputs) NodeOutputs {
 	}
 }
 
-// FIXME： where do staking hooks come from?
 func InvokeSetStakingHooks(
 	keeper *keeper.Keeper,
 	stakingHooks map[string]stakingtypes.StakingHooksWrapper) error {

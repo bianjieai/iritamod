@@ -14,9 +14,9 @@ import (
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 
 	modulev1 "github.com/bianjieai/iritamod/api/iritamod/upgrade/module/v1"
+	cparamtypes "github.com/bianjieai/iritamod/modules/params/types"
 	"github.com/bianjieai/iritamod/modules/upgrade/keeper"
 )
 
@@ -71,7 +71,7 @@ func ProvideModule(in UpgradeInputs) UpgradeOutputs {
 	}
 
 	// default to governance authority if not provided
-	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
+	authority := authtypes.NewModuleAddress(cparamtypes.ModuleName)
 	// set the governance module account as the authority for conducting upgrades
 	k := keeper.NewKeeper(skipUpgradeHeights, in.Key, in.Cdc, homePath, nil, authority.String())
 	baseappOpt := func(app *baseapp.BaseApp) {

@@ -37,6 +37,12 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ## [Unreleased]
 
+### Features
+
+- (bump-up) Bump Cosmos-SDK to v0.47.x.
+- (depinject) Build apps with dependency injection and declarative configuration.
+- (modules/cparam) [\#81](https://github.com/bianjieai/iritamod/pull/81) Refactor iritamod/param as separate cparam module as the entry to modify module params.
+
 ## [v1.3.0] - 2022-08-08
 
 ### Application
@@ -56,10 +62,12 @@ Ref: https://keepachangelog.com/en/1.0.0/
 - (modules/perm) [#33]  Add EVM contract permission management
 
 ## [v1.1.1] - 2021-12-07
+
 ### Improvements
 - (modules/identity) [#32] add `data` field, and the field length limit is only related to the block and transaction size limit.
 
 ## [v1.1.0] - 2021-10-27
+
 ### Bug Fixes
 - [#30] Bump Cosmos-SDK to v0.44.2
 
