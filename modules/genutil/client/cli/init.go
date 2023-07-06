@@ -30,14 +30,17 @@ const (
 )
 
 type printInfo struct {
-	Moniker    string          `json:"moniker" yaml:"moniker"`
-	ChainID    string          `json:"chain_id" yaml:"chain_id"`
-	NodeID     string          `json:"node_id" yaml:"node_id"`
-	GenTxsDir  string          `json:"gentxs_dir" yaml:"gentxs_dir"`
+	Moniker    string          `json:"moniker"     yaml:"moniker"`
+	ChainID    string          `json:"chain_id"    yaml:"chain_id"`
+	NodeID     string          `json:"node_id"     yaml:"node_id"`
+	GenTxsDir  string          `json:"gentxs_dir"  yaml:"gentxs_dir"`
 	AppMessage json.RawMessage `json:"app_message" yaml:"app_message"`
 }
 
-func newPrintInfo(moniker, chainID, nodeID, genTxsDir string, appMessage json.RawMessage) printInfo {
+func newPrintInfo(
+	moniker, chainID, nodeID, genTxsDir string,
+	appMessage json.RawMessage,
+) printInfo {
 	return printInfo{
 		Moniker:    moniker,
 		ChainID:    chainID,
@@ -124,7 +127,8 @@ func InitCmd(mbm module.BasicManager, defaultNodeHome string) *cobra.Command { /
 
 	cmd.Flags().String(cli.HomeFlag, defaultNodeHome, "node's home directory")
 	cmd.Flags().BoolP(flagOverwrite, "o", false, "overwrite the genesis.json file")
-	cmd.Flags().String(flags.FlagChainID, "", "genesis file chain-id, if left blank will be randomly created")
+	cmd.Flags().
+		String(flags.FlagChainID, "", "genesis file chain-id, if left blank will be randomly created")
 
 	return cmd
 }

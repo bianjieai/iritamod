@@ -44,7 +44,10 @@ func GetCmdQueryIdentity() *cobra.Command {
 				return err
 			}
 			queryClient := types.NewQueryClient(clientCtx)
-			res, err := queryClient.Identity(context.Background(), &types.QueryIdentityRequest{Id: args[0]})
+			res, err := queryClient.Identity(
+				context.Background(),
+				&types.QueryIdentityRequest{Id: args[0]},
+			)
 			if err != nil {
 				return err
 			}

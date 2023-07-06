@@ -97,7 +97,11 @@ func (k Keeper) UpdateIdentity(
 }
 
 // AddPubKey adds the given public key for the identity
-func (k Keeper) AddPubKey(ctx sdk.Context, identityID ctmbytes.HexBytes, pubKey *types.PubKeyInfo) error {
+func (k Keeper) AddPubKey(
+	ctx sdk.Context,
+	identityID ctmbytes.HexBytes,
+	pubKey *types.PubKeyInfo,
+) error {
 	pubKeyIdentityID, found := k.GetPubKeyIdentity(ctx, pubKey)
 	if found {
 		if !bytes.Equal(pubKeyIdentityID, identityID) {
@@ -111,7 +115,11 @@ func (k Keeper) AddPubKey(ctx sdk.Context, identityID ctmbytes.HexBytes, pubKey 
 }
 
 // AddCertificate adds the given certificate for the identity
-func (k Keeper) AddCertificate(ctx sdk.Context, identityID ctmbytes.HexBytes, certificate string) error {
+func (k Keeper) AddCertificate(
+	ctx sdk.Context,
+	identityID ctmbytes.HexBytes,
+	certificate string,
+) error {
 	cert := strings.TrimSpace(certificate)
 	certHash := tmhash.Sum([]byte(cert))
 
@@ -152,7 +160,10 @@ func (k Keeper) SetPubKey(ctx sdk.Context, identityID ctmbytes.HexBytes, pubKey 
 }
 
 // GetPubKeyIdentity gets the identity ID of the specified public key
-func (k Keeper) GetPubKeyIdentity(ctx sdk.Context, pubKey *types.PubKeyInfo) (ctmbytes.HexBytes, bool) {
+func (k Keeper) GetPubKeyIdentity(
+	ctx sdk.Context,
+	pubKey *types.PubKeyInfo,
+) (ctmbytes.HexBytes, bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	bz := store.Get(types.GetPubKeyIdentityKey(pubKey))
@@ -260,7 +271,10 @@ func (k Keeper) SetIdentity(ctx sdk.Context, identity types.Identity) error {
 }
 
 // GetIdentity retrieves the identity of the specified ID
-func (k Keeper) GetIdentity(ctx sdk.Context, id ctmbytes.HexBytes) (identity types.Identity, found bool) {
+func (k Keeper) GetIdentity(
+	ctx sdk.Context,
+	id ctmbytes.HexBytes,
+) (identity types.Identity, found bool) {
 	owner, found := k.GetOwner(ctx, id)
 	if !found {
 		return identity, false
@@ -317,7 +331,10 @@ func (k Keeper) IteratePubKeys(
 		pubKeyAlgo := types.PubKeyAlgorithm(binary.BigEndian.Uint32(pubKeyInfoKey[0:4]))
 		pubKey := pubKeyInfoKey[4:]
 
-		pubKeyInfo := types.PubKeyInfo{PubKey: ctmbytes.HexBytes(pubKey).String(), Algorithm: pubKeyAlgo}
+		pubKeyInfo := types.PubKeyInfo{
+			PubKey:    ctmbytes.HexBytes(pubKey).String(),
+			Algorithm: pubKeyAlgo,
+		}
 
 		if stop := op(pubKeyInfo); stop {
 			break

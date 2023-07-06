@@ -43,7 +43,10 @@ func NewGenesisStateFromTx(txJSONEncoder sdk.TxEncoder, genTxs []sdk.Tx) *Genesi
 }
 
 // GetGenesisStateFromAppState gets the genutil genesis state from the expected app state
-func GetGenesisStateFromAppState(cdc codec.JSONCodec, appState map[string]json.RawMessage) *GenesisState {
+func GetGenesisStateFromAppState(
+	cdc codec.JSONCodec,
+	appState map[string]json.RawMessage,
+) *GenesisState {
 	var genesisState GenesisState
 	if appState[ModuleName] != nil {
 		cdc.MustUnmarshalJSON(appState[ModuleName], &genesisState)
@@ -65,7 +68,9 @@ func SetGenesisStateInAppState(
 // for the application.
 //
 // NOTE: The pubkey input is this machines pubkey.
-func GenesisStateFromGenDoc(genDoc ctmtypes.GenesisDoc) (genesisState map[string]json.RawMessage, err error) {
+func GenesisStateFromGenDoc(
+	genDoc ctmtypes.GenesisDoc,
+) (genesisState map[string]json.RawMessage, err error) {
 	if err = json.Unmarshal(genDoc.AppState, &genesisState); err != nil {
 		return genesisState, err
 	}
@@ -76,7 +81,9 @@ func GenesisStateFromGenDoc(genDoc ctmtypes.GenesisDoc) (genesisState map[string
 // for the application.
 //
 // NOTE: The pubkey input is this machines pubkey.
-func GenesisStateFromGenFile(genFile string) (genesisState map[string]json.RawMessage, genDoc *ctmtypes.GenesisDoc, err error) {
+func GenesisStateFromGenFile(
+	genFile string,
+) (genesisState map[string]json.RawMessage, genDoc *ctmtypes.GenesisDoc, err error) {
 	if !tmos.FileExists(genFile) {
 		return genesisState, genDoc, fmt.Errorf("%s does not exist, run `init` first", genFile)
 	}

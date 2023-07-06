@@ -46,7 +46,12 @@ func (m MsgMint) ValidateBasic() error {
 	}
 
 	if _, err := sdk.AccAddressFromBech32(m.Recipient); err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid recipient %s: %s", m.Recipient, err)
+		return sdkerrors.Wrapf(
+			sdkerrors.ErrInvalidAddress,
+			"invalid recipient %s: %s",
+			m.Recipient,
+			err,
+		)
 	}
 
 	return nil
@@ -86,7 +91,12 @@ func (m MsgReclaim) Type() string {
 // ValidateBasic implements Msg.
 func (m MsgReclaim) ValidateBasic() error {
 	if _, err := sdk.AccAddressFromBech32(m.Operator); err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid operator %s: %s", m.Operator, err)
+		return sdkerrors.Wrapf(
+			sdkerrors.ErrInvalidAddress,
+			"invalid operator %s: %s",
+			m.Operator,
+			err,
+		)
 	}
 
 	if len(m.Denom) == 0 {
@@ -98,7 +108,12 @@ func (m MsgReclaim) ValidateBasic() error {
 	}
 
 	if _, err := sdk.AccAddressFromBech32(m.Recipient); err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "invalid recipient %s: %s", m.Recipient, err)
+		return sdkerrors.Wrapf(
+			sdkerrors.ErrInvalidAddress,
+			"invalid recipient %s: %s",
+			m.Recipient,
+			err,
+		)
 	}
 
 	return nil

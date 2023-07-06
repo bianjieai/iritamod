@@ -43,7 +43,12 @@ func (i Identity) Validate() error {
 	}
 
 	if len(i.Id) > IdLengthMax*2 || len(i.Id) < IdLengthMin*2 {
-		return sdkerrors.Wrapf(ErrInvalidID, "size of the ID must be %d ~ %d in bytes", IdLengthMin, IdLengthMax)
+		return sdkerrors.Wrapf(
+			ErrInvalidID,
+			"size of the ID must be %d ~ %d in bytes",
+			IdLengthMin,
+			IdLengthMax,
+		)
 	}
 	for _, pubKey := range i.PubKeys {
 		if err := pubKey.Validate(); err != nil {
@@ -58,7 +63,11 @@ func (i Identity) Validate() error {
 	}
 
 	if len(i.Credentials) > MaxURILength {
-		return sdkerrors.Wrapf(ErrInvalidCredentials, "length of the credentials uri must not be greater than %d", MaxURILength)
+		return sdkerrors.Wrapf(
+			ErrInvalidCredentials,
+			"length of the credentials uri must not be greater than %d",
+			MaxURILength,
+		)
 	}
 
 	return nil
@@ -93,17 +102,29 @@ func (pki PubKeyInfo) Validate() error {
 
 	case ECDSA:
 		if len(pubKey) != 33 {
-			return sdkerrors.Wrapf(ErrInvalidPubKey, "size of the ECDSA public key must be %d in bytes", 33)
+			return sdkerrors.Wrapf(
+				ErrInvalidPubKey,
+				"size of the ECDSA public key must be %d in bytes",
+				33,
+			)
 		}
 
 	case ED25519:
 		if len(pubKey) != ed25519.PubKeySize {
-			return sdkerrors.Wrapf(ErrInvalidPubKey, "size of the ED25519 public key must be %d in bytes", ed25519.PubKeySize)
+			return sdkerrors.Wrapf(
+				ErrInvalidPubKey,
+				"size of the ED25519 public key must be %d in bytes",
+				ed25519.PubKeySize,
+			)
 		}
 
 	case SM2:
 		if len(pubKey) != sm2.PubKeySize {
-			return sdkerrors.Wrapf(ErrInvalidPubKey, "size of the SM2 public key must be %d in bytes", sm2.PubKeySize)
+			return sdkerrors.Wrapf(
+				ErrInvalidPubKey,
+				"size of the SM2 public key must be %d in bytes",
+				sm2.PubKeySize,
+			)
 		}
 
 	default:

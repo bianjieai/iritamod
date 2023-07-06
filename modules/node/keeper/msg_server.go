@@ -23,7 +23,10 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 var _ types.MsgServer = msgServer{}
 
-func (m msgServer) CreateValidator(goCtx context.Context, msg *types.MsgCreateValidator) (*types.MsgCreateValidatorResponse, error) {
+func (m msgServer) CreateValidator(
+	goCtx context.Context,
+	msg *types.MsgCreateValidator,
+) (*types.MsgCreateValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	id := ctmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	if err := m.k.CreateValidator(ctx,
@@ -55,7 +58,10 @@ func (m msgServer) CreateValidator(goCtx context.Context, msg *types.MsgCreateVa
 	}, nil
 }
 
-func (m msgServer) UpdateValidator(goCtx context.Context, msg *types.MsgUpdateValidator) (*types.MsgUpdateValidatorResponse, error) {
+func (m msgServer) UpdateValidator(
+	goCtx context.Context,
+	msg *types.MsgUpdateValidator,
+) (*types.MsgUpdateValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	id, err := hex.DecodeString(msg.Id)
 	if err != nil {
@@ -87,7 +93,10 @@ func (m msgServer) UpdateValidator(goCtx context.Context, msg *types.MsgUpdateVa
 	return &types.MsgUpdateValidatorResponse{}, nil
 }
 
-func (m msgServer) RemoveValidator(goCtx context.Context, msg *types.MsgRemoveValidator) (*types.MsgRemoveValidatorResponse, error) {
+func (m msgServer) RemoveValidator(
+	goCtx context.Context,
+	msg *types.MsgRemoveValidator,
+) (*types.MsgRemoveValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	id, err := hex.DecodeString(msg.Id)
 	if err != nil {
@@ -112,7 +121,10 @@ func (m msgServer) RemoveValidator(goCtx context.Context, msg *types.MsgRemoveVa
 	return &types.MsgRemoveValidatorResponse{}, nil
 }
 
-func (m msgServer) GrantNode(goCtx context.Context, msg *types.MsgGrantNode) (*types.MsgGrantNodeResponse, error) {
+func (m msgServer) GrantNode(
+	goCtx context.Context,
+	msg *types.MsgGrantNode,
+) (*types.MsgGrantNodeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	id, err := m.k.AddNode(ctx, msg.Name, msg.Certificate)
@@ -135,7 +147,10 @@ func (m msgServer) GrantNode(goCtx context.Context, msg *types.MsgGrantNode) (*t
 	return &types.MsgGrantNodeResponse{}, nil
 }
 
-func (m msgServer) RevokeNode(goCtx context.Context, msg *types.MsgRevokeNode) (*types.MsgRevokeNodeResponse, error) {
+func (m msgServer) RevokeNode(
+	goCtx context.Context,
+	msg *types.MsgRevokeNode,
+) (*types.MsgRevokeNodeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	id, _ := hex.DecodeString(msg.Id)
@@ -160,7 +175,10 @@ func (m msgServer) RevokeNode(goCtx context.Context, msg *types.MsgRevokeNode) (
 
 // UpdateParams updates the slashing params.
 // WARN: must register perm access control for this method
-func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+func (m msgServer) UpdateParams(
+	goCtx context.Context,
+	msg *types.MsgUpdateParams,
+) (*types.MsgUpdateParamsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	if err := m.k.SetParams(ctx, msg.Params); err != nil {
 		return nil, err

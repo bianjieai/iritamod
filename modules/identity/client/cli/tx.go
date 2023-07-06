@@ -79,7 +79,9 @@ func NewCreateIdentityCmd() *cobra.Command {
 			if len(pubKeyStr) > 0 {
 				pubKeyInfo = new(types.PubKeyInfo)
 				pubKeyInfo.PubKey = pubKeyStr
-				pubKeyInfo.Algorithm = types.PubKeyAlgorithmFromString(viper.GetString(FlagPubKeyAlgo))
+				pubKeyInfo.Algorithm = types.PubKeyAlgorithmFromString(
+					viper.GetString(FlagPubKeyAlgo),
+				)
 			}
 
 			certFile := viper.GetString(FlagCertificateFile)
@@ -95,7 +97,14 @@ func NewCreateIdentityCmd() *cobra.Command {
 			credentials := viper.GetString(FlagCredentials)
 
 			data := viper.GetString(FlagData)
-			msg := types.NewMsgCreateIdentity(id, pubKeyInfo, string(cert), credentials, owner, data)
+			msg := types.NewMsgCreateIdentity(
+				id,
+				pubKeyInfo,
+				string(cert),
+				credentials,
+				owner,
+				data,
+			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}
@@ -147,7 +156,9 @@ func NewUpdateIdentityCmd() *cobra.Command {
 			if len(pubKeyStr) > 0 {
 				pubKeyInfo = new(types.PubKeyInfo)
 				pubKeyInfo.PubKey = pubKeyStr
-				pubKeyInfo.Algorithm = types.PubKeyAlgorithmFromString(viper.GetString(FlagPubKeyAlgo))
+				pubKeyInfo.Algorithm = types.PubKeyAlgorithmFromString(
+					viper.GetString(FlagPubKeyAlgo),
+				)
 			}
 
 			certFile := viper.GetString(FlagCertificateFile)
@@ -162,7 +173,14 @@ func NewUpdateIdentityCmd() *cobra.Command {
 
 			credentials := viper.GetString(FlagCredentials)
 			data := viper.GetString(FlagData)
-			msg := types.NewMsgUpdateIdentity(id, pubKeyInfo, string(cert), credentials, owner, data)
+			msg := types.NewMsgUpdateIdentity(
+				id,
+				pubKeyInfo,
+				string(cert),
+				credentials,
+				owner,
+				data,
+			)
 			if err := msg.ValidateBasic(); err != nil {
 				return err
 			}

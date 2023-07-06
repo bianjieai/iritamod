@@ -43,7 +43,10 @@ func GetCmdQueryRoles() *cobra.Command {
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
-			res, err := queryClient.Roles(context.Background(), &types.QueryRolesRequest{Address: args[0]})
+			res, err := queryClient.Roles(
+				context.Background(),
+				&types.QueryRolesRequest{Address: args[0]},
+			)
 			if err != nil {
 				return err
 			}
@@ -69,7 +72,10 @@ func GetCmdQueryAccountBlackList() *cobra.Command {
 
 			queryClient := types.NewQueryClient(clientCtx)
 
-			res, err := queryClient.AccountBlockList(context.Background(), &types.QueryBlockListRequest{})
+			res, err := queryClient.AccountBlockList(
+				context.Background(),
+				&types.QueryBlockListRequest{},
+			)
 			if err != nil {
 				return err
 			}

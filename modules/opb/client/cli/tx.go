@@ -87,7 +87,9 @@ func NewReclaimCmd() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:   "reclaim [denom] [to]",
 		Short: "Reclaim the native token of the specified denom",
-		Long:  strings.TrimSpace("Reclaim the native token of the specified denom from the corresponding escrow account"),
+		Long: strings.TrimSpace(
+			"Reclaim the native token of the specified denom from the corresponding escrow account",
+		),
 		Example: fmt.Sprintf(
 			"$ %s tx %s reclaim <denom> <to> --from mykey",
 			version.AppName, types.ModuleName,

@@ -7,7 +7,10 @@ import (
 )
 
 // NewGenesisState creates a new GenesisState instance
-func NewGenesisState(roleAccounts []RoleAccount, blackList, contractDenyList []string) *GenesisState {
+func NewGenesisState(
+	roleAccounts []RoleAccount,
+	blackList, contractDenyList []string,
+) *GenesisState {
 	return &GenesisState{
 		RoleAccounts:     roleAccounts,
 		BlackList:        blackList,
@@ -22,7 +25,10 @@ func DefaultGenesisState() *GenesisState {
 
 // GetGenesisStateFromAppState returns modules/perm GenesisState given raw application
 // genesis state.
-func GetGenesisStateFromAppState(cdc codec.JSONCodec, appState map[string]json.RawMessage) GenesisState {
+func GetGenesisStateFromAppState(
+	cdc codec.JSONCodec,
+	appState map[string]json.RawMessage,
+) GenesisState {
 	var genesisState GenesisState
 
 	if appState[ModuleName] != nil {

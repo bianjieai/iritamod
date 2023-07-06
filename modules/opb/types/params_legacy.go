@@ -20,7 +20,15 @@ func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 	return paramtypes.ParamSetPairs{
 		paramtypes.NewParamSetPair(KeyBaseTokenDenom, &p.BaseTokenDenom, validateBaseTokenDenom),
 		paramtypes.NewParamSetPair(KeyPointTokenDenom, &p.PointTokenDenom, validatePointTokenDenom),
-		paramtypes.NewParamSetPair(KeyBaseTokenManager, &p.BaseTokenManager, validateBaseTokenManager),
-		paramtypes.NewParamSetPair(KeyUnrestrictedTokenTransfer, &p.UnrestrictedTokenTransfer, validateUnrestrictedTokenTransfer),
+		paramtypes.NewParamSetPair(
+			KeyBaseTokenManager,
+			&p.BaseTokenManager,
+			validateBaseTokenManager,
+		),
+		paramtypes.NewParamSetPair(
+			KeyUnrestrictedTokenTransfer,
+			&p.UnrestrictedTokenTransfer,
+			validateUnrestrictedTokenTransfer,
+		),
 	}
 }

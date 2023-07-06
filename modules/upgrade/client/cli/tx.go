@@ -65,8 +65,10 @@ func GetCmdUpgradeSoftware() *cobra.Command {
 		},
 	}
 
-	cmd.Flags().Int64(upgradecli.FlagUpgradeHeight, 0, "The height at which the upgrade must happen (not to be used together with --upgrade-time)")
-	cmd.Flags().String(upgradecli.FlagUpgradeInfo, "", "Optional info for the planned upgrade such as commit hash, etc.")
+	cmd.Flags().
+		Int64(upgradecli.FlagUpgradeHeight, 0, "The height at which the upgrade must happen (not to be used together with --upgrade-time)")
+	cmd.Flags().
+		String(upgradecli.FlagUpgradeInfo, "", "Optional info for the planned upgrade such as commit hash, etc.")
 	_ = cmd.MarkFlagRequired(flags.FlagFrom)
 
 	flags.AddTxFlagsToCmd(cmd)

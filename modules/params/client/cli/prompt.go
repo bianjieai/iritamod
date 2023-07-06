@@ -41,14 +41,19 @@ func Prompt[T any](data T, namePrefix string) (T, error) {
 			// TODO(@julienrbrt) in the future we can add a recursive call to Prompt
 			continue
 		case reflect.Slice:
-			if v.Field(i).Type().Elem().Kind() != reflect.String && v.Field(i).Type().Elem().Kind() != reflect.Int {
+			if v.Field(i).Type().Elem().Kind() != reflect.String &&
+				v.Field(i).Type().Elem().Kind() != reflect.Int {
 				continue
 			}
 		}
 
 		// create prompts
 		prompt := promptui.Prompt{
-			Label:    fmt.Sprintf("Enter %s's %s", namePrefix, strings.ToLower(client.CamelCaseToString(v.Type().Field(i).Name))),
+			Label: fmt.Sprintf(
+				"Enter %s's %s",
+				namePrefix,
+				strings.ToLower(client.CamelCaseToString(v.Type().Field(i).Name)),
+			),
 			Validate: client.ValidatePromptNotEmpty,
 		}
 

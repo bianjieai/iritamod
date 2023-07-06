@@ -9,7 +9,10 @@ import (
 )
 
 // GetHistoricalInfo gets the historical info at a given height
-func (k Keeper) GetHistoricalInfo(ctx sdk.Context, height int64) (stakingtypes.HistoricalInfo, bool) {
+func (k Keeper) GetHistoricalInfo(
+	ctx sdk.Context,
+	height int64,
+) (stakingtypes.HistoricalInfo, bool) {
 	store := ctx.KVStore(k.storeKey)
 	key := types.GetHistoricalInfoKey(height)
 

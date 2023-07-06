@@ -21,7 +21,10 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 	return &msgServer{k: keeper}
 }
 
-func (m msgServer) UnjailValidator(goCtx context.Context, msg *types.MsgUnjailValidator) (*types.MsgUnjailValidatorResponse, error) {
+func (m msgServer) UnjailValidator(
+	goCtx context.Context,
+	msg *types.MsgUnjailValidator,
+) (*types.MsgUnjailValidatorResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	if err := m.k.HandleUnjail(ctx, *msg); err != nil {
 		return nil, err
@@ -31,7 +34,10 @@ func (m msgServer) UnjailValidator(goCtx context.Context, msg *types.MsgUnjailVa
 
 // UpdateParams updates the slashing params.
 // WARN： must register perm access control for this method.
-func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+func (m msgServer) UpdateParams(
+	goCtx context.Context,
+	msg *types.MsgUpdateParams,
+) (*types.MsgUpdateParamsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 
 	params := slashingtypes.Params{

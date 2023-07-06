@@ -22,7 +22,10 @@ type Querier struct {
 var _ types.QueryServer = Querier{}
 
 // Validator queries the validator by the given id
-func (q Querier) Validator(c context.Context, req *types.QueryValidatorRequest) (*types.QueryValidatorResponse, error) {
+func (q Querier) Validator(
+	c context.Context,
+	req *types.QueryValidatorRequest,
+) (*types.QueryValidatorResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -42,7 +45,10 @@ func (q Querier) Validator(c context.Context, req *types.QueryValidatorRequest) 
 }
 
 // Validators queries the validators
-func (q Querier) Validators(c context.Context, req *types.QueryValidatorsRequest) (*types.QueryValidatorsResponse, error) {
+func (q Querier) Validators(
+	c context.Context,
+	req *types.QueryValidatorsRequest,
+) (*types.QueryValidatorsResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -77,7 +83,10 @@ func (q Querier) Validators(c context.Context, req *types.QueryValidatorsRequest
 }
 
 // Params queries the parameters of the node module
-func (q Querier) Params(c context.Context, req *types.QueryParamsRequest) (*types.QueryParamsResponse, error) {
+func (q Querier) Params(
+	c context.Context,
+	req *types.QueryParamsRequest,
+) (*types.QueryParamsResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -89,7 +98,10 @@ func (q Querier) Params(c context.Context, req *types.QueryParamsRequest) (*type
 }
 
 // Node queries a node by id
-func (q Querier) Node(c context.Context, req *types.QueryNodeRequest) (*types.QueryNodeResponse, error) {
+func (q Querier) Node(
+	c context.Context,
+	req *types.QueryNodeRequest,
+) (*types.QueryNodeResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -112,7 +124,10 @@ func (q Querier) Node(c context.Context, req *types.QueryNodeRequest) (*types.Qu
 }
 
 // Nodes queries all nodes
-func (q Querier) Nodes(c context.Context, req *types.QueryNodesRequest) (*types.QueryNodesResponse, error) {
+func (q Querier) Nodes(
+	c context.Context,
+	req *types.QueryNodesRequest,
+) (*types.QueryNodesResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}
@@ -121,15 +136,19 @@ func (q Querier) Nodes(c context.Context, req *types.QueryNodesRequest) (*types.
 	nodes := make([]types.Node, 0)
 	store := ctx.KVStore(q.storeKey)
 	nodeStore := prefix.NewStore(store, types.NodeKey)
-	pageRes, err := query.Paginate(nodeStore, shapePageRequest(req.Pagination), func(key []byte, value []byte) error {
-		var node types.Node
-		err := q.cdc.Unmarshal(value, &node)
-		if err != nil {
-			return err
-		}
-		nodes = append(nodes, node)
-		return nil
-	})
+	pageRes, err := query.Paginate(
+		nodeStore,
+		shapePageRequest(req.Pagination),
+		func(key []byte, value []byte) error {
+			var node types.Node
+			err := q.cdc.Unmarshal(value, &node)
+			if err != nil {
+				return err
+			}
+			nodes = append(nodes, node)
+			return nil
+		},
+	)
 	if err != nil {
 		return nil, status.Errorf(codes.InvalidArgument, "paginate: %v", err)
 	}

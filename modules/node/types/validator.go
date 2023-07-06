@@ -34,7 +34,10 @@ func NewValidator(
 	var pkStr string
 	var err error
 	if pubKey != nil {
-		pkStr, err = bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(pubKey))
+		pkStr, err = bech32.ConvertAndEncode(
+			sdk.GetConfig().GetBech32ConsensusPubPrefix(),
+			legacy.Cdc.MustMarshal(pubKey),
+		)
 	}
 	if err != nil {
 		panic(err)

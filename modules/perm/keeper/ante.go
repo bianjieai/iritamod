@@ -18,11 +18,20 @@ func NewAuthDecorator(k Keeper) AuthDecorator {
 }
 
 // AnteHandle returns an AnteHandler that checks the auth to send msg
-func (ad AuthDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+func (ad AuthDecorator) AnteHandle(
+	ctx sdk.Context,
+	tx sdk.Tx,
+	simulate bool,
+	next sdk.AnteHandler,
+) (newCtx sdk.Context, err error) {
 	for _, msg := range tx.GetMsgs() {
 		for _, signer := range msg.GetSigners() {
 			if ad.k.GetBlockAccount(ctx, signer) {
-				return ctx, sdkerrors.Wrapf(types.ErrUnauthorizedOperation, "The sender %s has been blocked", signer)
+				return ctx, sdkerrors.Wrapf(
+					types.ErrUnauthorizedOperation,
+					"The sender %s has been blocked",
+					signer,
+				)
 			}
 			url := sdk.MsgTypeURL(msg)
 			if auth, ok := ad.k.AuthMap[url]; ok {

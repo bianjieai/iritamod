@@ -15,7 +15,12 @@ const (
 var ParamsKey = []byte{0x01}
 
 // Migrate migrates the node params from legacy x/params module to node module
-func Migrate(ctx sdk.Context, store sdk.KVStore, legacySubspace exported.Subspace, cdc codec.BinaryCodec) error {
+func Migrate(
+	ctx sdk.Context,
+	store sdk.KVStore,
+	legacySubspace exported.Subspace,
+	cdc codec.BinaryCodec,
+) error {
 	var params types.Params
 	legacySubspace.GetParamSet(ctx, &params)
 

@@ -6,5 +6,9 @@ import (
 
 var (
 	ErrInvalidMsgType            = sdkerrors.Register(ModuleName, 2, "invalid message type")
-	ErrUnroutableUpdateParamsMsg = sdkerrors.Register(ModuleName, 3, "msg handler not routed by router")
+	ErrUnroutableUpdateParamsMsg = sdkerrors.Register(
+		ModuleName,
+		3,
+		"msg handler not routed by router",
+	)
 )

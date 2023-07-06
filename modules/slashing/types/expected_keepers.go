@@ -18,12 +18,25 @@ type NodeKeeper interface {
 	IterateValidators(sdk.Context,
 		func(index int64, validator stakingtypes.ValidatorI) (stop bool))
 
-	Validator(sdk.Context, sdk.ValAddress) stakingtypes.ValidatorI            // get a particular validator by operator address
-	ValidatorByConsAddr(sdk.Context, sdk.ConsAddress) stakingtypes.ValidatorI // get a particular validator by consensus address
+	Validator(
+		sdk.Context,
+		sdk.ValAddress,
+	) stakingtypes.ValidatorI // get a particular validator by operator address
+	ValidatorByConsAddr(
+		sdk.Context,
+		sdk.ConsAddress,
+	) stakingtypes.ValidatorI // get a particular validator by consensus address
 
 	// slash the validator and delegators of the validator, specifying offence height, offence power, and slash fraction
 	Slash(sdk.Context, sdk.ConsAddress, int64, int64, sdk.Dec) math.Int
-	SlashWithInfractionReason(sdk.Context, sdk.ConsAddress, int64, int64, sdk.Dec, stakingtypes.Infraction) math.Int
+	SlashWithInfractionReason(
+		sdk.Context,
+		sdk.ConsAddress,
+		int64,
+		int64,
+		sdk.Dec,
+		stakingtypes.Infraction,
+	) math.Int
 	Jail(sdk.Context, sdk.ConsAddress)   // jail a validator
 	Unjail(sdk.Context, sdk.ConsAddress) // unjail a validator
 

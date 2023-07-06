@@ -131,7 +131,10 @@ func (k Keeper) UpdateValidator(ctx sdk.Context,
 		if err != nil {
 			return err
 		}
-		pkStr, err := bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(pubkey))
+		pkStr, err := bech32.ConvertAndEncode(
+			sdk.GetConfig().GetBech32ConsensusPubPrefix(),
+			legacy.Cdc.MustMarshal(pubkey),
+		)
 		consAddr, err := validator.GetConsAddr()
 		if err != nil {
 			return err
@@ -206,7 +209,10 @@ func (k Keeper) SetValidator(ctx sdk.Context, validator types.Validator) {
 }
 
 // GetValidator returns validator with id
-func (k Keeper) GetValidator(ctx sdk.Context, id ctmbytes.HexBytes) (validator types.Validator, found bool) {
+func (k Keeper) GetValidator(
+	ctx sdk.Context,
+	id ctmbytes.HexBytes,
+) (validator types.Validator, found bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	value := store.Get(types.GetValidatorIDKey(id))
@@ -233,7 +239,11 @@ func (k Keeper) DeleteValidator(ctx sdk.Context, validator types.Validator) {
 }
 
 // SetValidatorConsAddrIndex sets the validator index by pubkey
-func (k Keeper) SetValidatorConsAddrIndex(ctx sdk.Context, id ctmbytes.HexBytes, addr sdk.ConsAddress) {
+func (k Keeper) SetValidatorConsAddrIndex(
+	ctx sdk.Context,
+	id ctmbytes.HexBytes,
+	addr sdk.ConsAddress,
+) {
 	store := ctx.KVStore(k.storeKey)
 	bz := k.cdc.MustMarshal(&gogotypes.BytesValue{Value: id})
 	store.Set(types.GetValidatorConsAddrKey(addr), bz)
@@ -246,7 +256,10 @@ func (k Keeper) DeleteValidatorConsAddrIndex(ctx sdk.Context, addr sdk.ConsAddre
 }
 
 // GetValidatorByConsAddr returns validator with pubkey
-func (k Keeper) GetValidatorByConsAddr(ctx sdk.Context, addr sdk.ConsAddress) (validator types.Validator, found bool) {
+func (k Keeper) GetValidatorByConsAddr(
+	ctx sdk.Context,
+	addr sdk.ConsAddress,
+) (validator types.Validator, found bool) {
 	store := ctx.KVStore(k.storeKey)
 
 	value := store.Get(types.GetValidatorConsAddrKey(addr))
@@ -278,7 +291,10 @@ func (k Keeper) DequeueValidatorsUpdate(ctx sdk.Context, pubkey string) {
 }
 
 // IterateUpdateValidators iterates through the validators update queue
-func (k Keeper) IterateUpdateValidators(ctx sdk.Context, fn func(index int64, pubkey string, power int64) (stop bool)) {
+func (k Keeper) IterateUpdateValidators(
+	ctx sdk.Context,
+	fn func(index int64, pubkey string, power int64) (stop bool),
+) {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := sdk.KVStorePrefixIterator(store, types.ValidatorsUpdateQueueKey)
@@ -299,7 +315,10 @@ func (k Keeper) IterateUpdateValidators(ctx sdk.Context, fn func(index int64, pu
 }
 
 // IterateValidators iterates through the validator set and perform the provided function
-func (k Keeper) IterateValidators(ctx sdk.Context, fn func(index int64, validator staking.ValidatorI) (stop bool)) {
+func (k Keeper) IterateValidators(
+	ctx sdk.Context,
+	fn func(index int64, validator staking.ValidatorI) (stop bool),
+) {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := sdk.KVStorePrefixIterator(store, types.ValidatorsKey)
@@ -368,12 +387,25 @@ func (k Keeper) ValidatorByConsAddr(ctx sdk.Context, consAddr sdk.ConsAddress) s
 }
 
 // Slash not implement
-func (k Keeper) Slash(ctx sdk.Context, consAddr sdk.ConsAddress, i int64, i2 int64, dec sdk.Dec) math.Int {
+func (k Keeper) Slash(
+	ctx sdk.Context,
+	consAddr sdk.ConsAddress,
+	i int64,
+	i2 int64,
+	dec sdk.Dec,
+) math.Int {
 	return sdk.NewInt(0)
 }
 
 // SlashWithInfractionReason not implement
-func (k *Keeper) SlashWithInfractionReason(ctx sdk.Context, consAddr sdk.ConsAddress, i int64, i2 int64, dec sdk.Dec, _ staking.Infraction) math.Int {
+func (k *Keeper) SlashWithInfractionReason(
+	ctx sdk.Context,
+	consAddr sdk.ConsAddress,
+	i int64,
+	i2 int64,
+	dec sdk.Dec,
+	_ staking.Infraction,
+) math.Int {
 	return k.Slash(ctx, consAddr, i, i2, dec)
 }
 
@@ -406,7 +438,11 @@ func (k Keeper) Unjail(ctx sdk.Context, consAddr sdk.ConsAddress) {
 	k.EnqueueValidatorsUpdate(ctx, validator, validator.Power)
 }
 
-func (k Keeper) Delegation(context sdk.Context, accAddr sdk.AccAddress, consAddr sdk.ValAddress) staking.DelegationI {
+func (k Keeper) Delegation(
+	context sdk.Context,
+	accAddr sdk.AccAddress,
+	consAddr sdk.ValAddress,
+) staking.DelegationI {
 	return staking.Delegation{}
 }
 
@@ -432,7 +468,10 @@ func (k Keeper) GetLastValidators(ctx sdk.Context) (validators []types.Validator
 	return validators
 }
 
-func (k *Keeper) IterateBondedValidatorsByPower(ctx sdk.Context, fn func(index int64, validator staking.ValidatorI) (stop bool)) {
+func (k *Keeper) IterateBondedValidatorsByPower(
+	ctx sdk.Context,
+	fn func(index int64, validator staking.ValidatorI) (stop bool),
+) {
 	store := ctx.KVStore(k.storeKey)
 
 	iterator := sdk.KVStorePrefixIterator(store, types.ValidatorsKey)
@@ -483,7 +522,11 @@ func (k *Keeper) VerifyCert(ctx sdk.Context, certStr string) (cert cautil.Cert, 
 	}
 
 	if err = cert.VerifyCertFromRoot(rootCert); err != nil {
-		return cert, sdkerrors.Wrapf(types.ErrInvalidCert, "cannot be verified by root certificate, err: %s", err.Error())
+		return cert, sdkerrors.Wrapf(
+			types.ErrInvalidCert,
+			"cannot be verified by root certificate, err: %s",
+			err.Error(),
+		)
 	}
 
 	return cert, nil

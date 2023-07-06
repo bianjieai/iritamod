@@ -97,7 +97,10 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 	suite.keeper.IterateUpdateValidators(
 		suite.ctx,
 		func(index int64, pubkey string, power int64) bool {
-			pkStr, err := bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(cospk))
+			pkStr, err := bech32.ConvertAndEncode(
+				sdk.GetConfig().GetBech32ConsensusPubPrefix(),
+				legacy.Cdc.MustMarshal(cospk),
+			)
 			suite.Suite.NoError(err)
 			suite.Equal(int64(0), index)
 			suite.Equal(pkStr, pubkey)
@@ -137,11 +140,27 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	suite.NoError(err)
 
 	// error name
-	err = suite.keeper.UpdateValidator(suite.ctx, []byte{0x1}, name1, "", power1, details1, operator1.String())
+	err = suite.keeper.UpdateValidator(
+		suite.ctx,
+		[]byte{0x1},
+		name1,
+		"",
+		power1,
+		details1,
+		operator1.String(),
+	)
 	suite.Error(err)
 
 	msg2 := types.NewMsgUpdateValidator(id, "", details1, certStr1, power1, operator1)
-	err = suite.keeper.UpdateValidator(suite.ctx, id, "", certStr1, power1, details1, operator1.String())
+	err = suite.keeper.UpdateValidator(
+		suite.ctx,
+		id,
+		"",
+		certStr1,
+		power1,
+		details1,
+		operator1.String(),
+	)
 	suite.NoError(err)
 
 	validator, found := suite.keeper.GetValidator(suite.ctx, id)
@@ -165,24 +184,33 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	suite.Equal(validator, validators[1])
 
 	updatesTotal := 0
-	suite.keeper.IterateUpdateValidators(suite.ctx, func(index int64, pubkey string, power int64) bool {
-		pkStr, err := bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(cospk))
-		suite.Suite.NoError(err)
-		pkStr1, err1 := bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(cospk1))
-		suite.Suite.NoError(err1)
+	suite.keeper.IterateUpdateValidators(
+		suite.ctx,
+		func(index int64, pubkey string, power int64) bool {
+			pkStr, err := bech32.ConvertAndEncode(
+				sdk.GetConfig().GetBech32ConsensusPubPrefix(),
+				legacy.Cdc.MustMarshal(cospk),
+			)
+			suite.Suite.NoError(err)
+			pkStr1, err1 := bech32.ConvertAndEncode(
+				sdk.GetConfig().GetBech32ConsensusPubPrefix(),
+				legacy.Cdc.MustMarshal(cospk1),
+			)
+			suite.Suite.NoError(err1)
 
-		switch pubkey {
-		case pkStr:
-			updatesTotal++
-			suite.Equal(int64(0), power)
-		case pkStr1:
-			updatesTotal++
-			suite.Equal(power1, power)
-		default:
-			panic("unexpected case")
-		}
-		return false
-	})
+			switch pubkey {
+			case pkStr:
+				updatesTotal++
+				suite.Equal(int64(0), power)
+			case pkStr1:
+				updatesTotal++
+				suite.Equal(power1, power)
+			default:
+				panic("unexpected case")
+			}
+			return false
+		},
+	)
 	suite.Equal(2, updatesTotal)
 }
 

@@ -100,7 +100,10 @@ func SetupWithConsortiumGenesisValSet(t *testing.T, valSet *ctmtypes.ValidatorSe
 			panic("failed to convert pubkey")
 		}
 
-		pkStr, err := bech32.ConvertAndEncode(sdk.GetConfig().GetBech32ConsensusPubPrefix(), legacy.Cdc.MustMarshal(pk))
+		pkStr, err := bech32.ConvertAndEncode(
+			sdk.GetConfig().GetBech32ConsensusPubPrefix(),
+			legacy.Cdc.MustMarshal(pk),
+		)
 		if err != nil {
 			panic("failed to convert pubkey string")
 		}
@@ -143,11 +146,21 @@ func SetupWithConsortiumGenesisValSet(t *testing.T, valSet *ctmtypes.ValidatorSe
 // that also act as delegators. For simplicity, each validator is bonded with a delegation
 // of one consensus engine unit (10^6) in the default token of the simapp from first genesis
 // account. A Nop logger is set in SimApp.
-func SetupWithGenesisValSet(t *testing.T, valSet *ctmtypes.ValidatorSet, genAccs []authtypes.GenesisAccount, balances ...banktypes.Balance) *SimApp {
+func SetupWithGenesisValSet(
+	t *testing.T,
+	valSet *ctmtypes.ValidatorSet,
+	genAccs []authtypes.GenesisAccount,
+	balances ...banktypes.Balance,
+) *SimApp {
 	t.Helper()
 
 	app, genesisState := setup(true, 0)
-	genesisState, err := simtestutil.GenesisStateWithValSet(app.AppCodec(), genesisState, valSet, genAccs, balances...)
+	genesisState, err := simtestutil.GenesisStateWithValSet(
+		app.AppCodec(),
+		genesisState,
+		valSet,
+		genAccs,
+		balances...)
 	require.NoError(t, err)
 
 	stateBytes, err := json.MarshalIndent(genesisState, "", " ")
@@ -217,11 +230,22 @@ func AddTestAddrs(app *SimApp, ctx sdk.Context, accNum int, accAmt sdk.Int) []sd
 
 // AddTestAddrs constructs and returns accNum amount of accounts with an
 // initial balance of accAmt in random order
-func AddTestAddrsIncremental(app *SimApp, ctx sdk.Context, accNum int, accAmt sdk.Int) []sdk.AccAddress {
+func AddTestAddrsIncremental(
+	app *SimApp,
+	ctx sdk.Context,
+	accNum int,
+	accAmt sdk.Int,
+) []sdk.AccAddress {
 	return addTestAddrs(app, ctx, accNum, accAmt, createIncrementalAccounts)
 }
 
-func addTestAddrs(app *SimApp, ctx sdk.Context, accNum int, accAmt sdk.Int, strategy GenerateAccountStrategy) []sdk.AccAddress {
+func addTestAddrs(
+	app *SimApp,
+	ctx sdk.Context,
+	accNum int,
+	accAmt sdk.Int,
+	strategy GenerateAccountStrategy,
+) []sdk.AccAddress {
 	testAddrs := strategy(accNum)
 
 	initCoins := sdk.NewCoins(sdk.NewCoin(sdk.DefaultBondDenom, accAmt))
@@ -286,8 +310,15 @@ func CheckBalance(t *testing.T, app *SimApp, addr sdk.AccAddress, balances sdk.C
 // the parameter 'expPass' against the result. A corresponding result is
 // returned.
 func SignCheckDeliver(
-	t *testing.T, txCfg client.TxConfig, app *bam.BaseApp, header ctmproto.Header, msgs []sdk.Msg,
-	chainID string, accNums, accSeqs []uint64, expSimPass, expPass bool, priv ...cryptotypes.PrivKey,
+	t *testing.T,
+	txCfg client.TxConfig,
+	app *bam.BaseApp,
+	header ctmproto.Header,
+	msgs []sdk.Msg,
+	chainID string,
+	accNums, accSeqs []uint64,
+	expSimPass, expPass bool,
+	priv ...cryptotypes.PrivKey,
 ) (sdk.GasInfo, *sdk.Result, error) {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	tx, err := simtestutil.GenSignedMockTx(
@@ -379,8 +410,12 @@ func CreateTestPubKeys(numPubKeys int) []cryptotypes.PubKey {
 	// start at 10 to avoid changing 1 to 01, 2 to 02, etc
 	for i := 100; i < (numPubKeys + 100); i++ {
 		numString := strconv.Itoa(i)
-		buffer.WriteString("0B485CFC0EECC619440448436F8FC9DF40566F2369E72400281454CB552AF") // base pubkey string
-		buffer.WriteString(numString)                                                       // adding on final two digits to make pubkeys unique
+		buffer.WriteString(
+			"0B485CFC0EECC619440448436F8FC9DF40566F2369E72400281454CB552AF",
+		) // base pubkey string
+		buffer.WriteString(
+			numString,
+		) // adding on final two digits to make pubkeys unique
 		publicKeys = append(publicKeys, NewPubKeyFromHex(buffer.String()))
 		buffer.Reset()
 	}
