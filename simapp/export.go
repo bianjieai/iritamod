@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	ctmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
@@ -53,12 +54,12 @@ func (app *SimApp) prepForZeroHeightGenesis(ctx sdk.Context, jailAllowedAddrs []
 	/* Handle slashing state. */
 
 	// reset start height on signing infos
-	// app.SlashingKeeper.IterateValidatorSigningInfos(
-	// 	ctx,
-	// 	func(addr sdk.ConsAddress, info slashingtypes.ValidatorSigningInfo) (stop bool) {
-	// 		info.StartHeight = 0
-	// 		app.SlashingKeeper.SetValidatorSigningInfo(ctx, addr, info)
-	// 		return false
-	// 	},
-	// )
+	app.SlashingKeeper.IterateValidatorSigningInfos(
+		ctx,
+		func(addr sdk.ConsAddress, info slashingtypes.ValidatorSigningInfo) (stop bool) {
+			info.StartHeight = 0
+			app.SlashingKeeper.SetValidatorSigningInfo(ctx, addr, info)
+			return false
+		},
+	)
 }

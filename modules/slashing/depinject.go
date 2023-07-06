@@ -7,6 +7,8 @@ import (
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	modulev1 "github.com/bianjieai/iritamod/api/iritamod/slashing/module/v1"
 	"github.com/bianjieai/iritamod/modules/slashing/exported"
@@ -21,8 +23,12 @@ import (
 func init() {
 	appmodule.Register(
 		&modulev1.Module{},
-		appmodule.Provide(ProvideModule),
+		appmodule.Provide(ProvideModule, ProvideKeyTable),
 	)
+}
+
+func ProvideKeyTable() paramtypes.KeyTable {
+	return slashingtypes.ParamKeyTable() //nolint:staticcheck
 }
 
 var _ appmodule.AppModule = AppModule{}

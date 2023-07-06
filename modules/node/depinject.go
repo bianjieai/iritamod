@@ -5,6 +5,7 @@ import (
 
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/depinject"
+	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	store "github.com/cosmos/cosmos-sdk/store/types"
@@ -14,6 +15,7 @@ import (
 	modulev1 "github.com/bianjieai/iritamod/api/iritamod/node/module/v1"
 	"github.com/bianjieai/iritamod/modules/node/exported"
 	"github.com/bianjieai/iritamod/modules/node/keeper"
+	"github.com/bianjieai/iritamod/modules/node/types"
 )
 
 //
@@ -23,9 +25,13 @@ import (
 func init() {
 	appmodule.Register(
 		&modulev1.Module{},
-		appmodule.Provide(ProvideModule),
+		appmodule.Provide(ProvideModule, ProvideKeyTable),
 		appmodule.Invoke(InvokeSetStakingHooks),
 	)
+}
+
+func ProvideKeyTable() paramtypes.KeyTable {
+	return types.ParamKeyTable() //nolint:staticcheck
 }
 
 var _ appmodule.AppModule = AppModule{}

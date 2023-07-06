@@ -28,23 +28,6 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
-
-	"github.com/bianjieai/iritamod/modules/genutil"
-	"github.com/bianjieai/iritamod/modules/identity"
-	identitykeeper "github.com/bianjieai/iritamod/modules/identity/keeper"
-	"github.com/bianjieai/iritamod/modules/node"
-	nodekeeper "github.com/bianjieai/iritamod/modules/node/keeper"
-	cparams "github.com/bianjieai/iritamod/modules/params"
-	cparamskeeper "github.com/bianjieai/iritamod/modules/params/keeper"
-	"github.com/bianjieai/iritamod/modules/perm"
-	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
-	"github.com/bianjieai/iritamod/modules/upgrade"
-	upgradekeeper "github.com/bianjieai/iritamod/modules/upgrade/keeper"
-
-	"github.com/bianjieai/iritamod/modules/slashing"
-	slashingkeeper "github.com/bianjieai/iritamod/modules/slashing/keeper"
-	cupgrade "github.com/bianjieai/iritamod/modules/upgrade"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
 	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
@@ -58,11 +41,26 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
 	"github.com/cosmos/cosmos-sdk/x/evidence"
+	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 	feegrantkeeper "github.com/cosmos/cosmos-sdk/x/feegrant/keeper"
 	feegrant "github.com/cosmos/cosmos-sdk/x/feegrant/module"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+
+	"github.com/bianjieai/iritamod/modules/genutil"
+	"github.com/bianjieai/iritamod/modules/identity"
+	identitykeeper "github.com/bianjieai/iritamod/modules/identity/keeper"
+	"github.com/bianjieai/iritamod/modules/node"
+	nodekeeper "github.com/bianjieai/iritamod/modules/node/keeper"
+	cparams "github.com/bianjieai/iritamod/modules/params"
+	cparamskeeper "github.com/bianjieai/iritamod/modules/params/keeper"
+	"github.com/bianjieai/iritamod/modules/perm"
+	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
+	"github.com/bianjieai/iritamod/modules/slashing"
+	slashingkeeper "github.com/bianjieai/iritamod/modules/slashing/keeper"
+	"github.com/bianjieai/iritamod/modules/upgrade"
+	upgradekeeper "github.com/bianjieai/iritamod/modules/upgrade/keeper"
 )
 
 var (
@@ -89,7 +87,7 @@ var (
 		consensus.AppModuleBasic{},
 		slashing.AppModuleBasic{},
 		cparams.AppModuleBasic{},
-		cupgrade.AppModuleBasic{},
+		upgrade.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -118,16 +116,13 @@ type SimApp struct {
 	interfaceRegistry codectypes.InterfaceRegistry
 
 	// keepers
-	AccountKeeper  authkeeper.AccountKeeper
-	BankKeeper     bankkeeper.Keeper
-	CrisisKeeper   *crisiskeeper.Keeper
-	ParamsKeeper   paramskeeper.Keeper
-	EvidenceKeeper evidencekeeper.Keeper
-
-	UpgradeKeeper  *upgradekeeper.Keeper
-	SlashingKeeper slashingkeeper.Keeper
-	//CUpgradeKeeper  cupgradekeeper.Keeper
-	//CSlashingKeeper cslashingkeeper.Keeper
+	AccountKeeper   authkeeper.AccountKeeper
+	BankKeeper      bankkeeper.Keeper
+	CrisisKeeper    *crisiskeeper.Keeper
+	ParamsKeeper    paramskeeper.Keeper
+	EvidenceKeeper  evidencekeeper.Keeper
+	UpgradeKeeper   *upgradekeeper.Keeper
+	SlashingKeeper  slashingkeeper.Keeper
 	PermKeeper      permkeeper.Keeper
 	IdentityKeeper  identitykeeper.Keeper
 	NodeKeeper      *nodekeeper.Keeper
@@ -219,8 +214,6 @@ func NewSimApp(
 		&app.IdentityKeeper,
 		&app.SlashingKeeper,
 		&app.UpgradeKeeper,
-		//&app.CUpgradeKeeper,
-		//&app.CSlashingKeeper,
 		&app.CParamsKeeper,
 	); err != nil {
 		panic(err)
