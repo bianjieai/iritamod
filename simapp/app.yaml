@@ -12,6 +12,7 @@ modules:
       # NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
       begin_blockers:
         [
+          capability,
           perm,
           auth,
           node,
@@ -30,6 +31,7 @@ modules:
 
       end_blockers:
         [
+          capability,
           perm,
           auth,
           node,
@@ -48,6 +50,7 @@ modules:
 
       init_genesis:
         [
+          capability,
           perm,
           auth,
           node,

@@ -1,8 +1,11 @@
 package keeper
 
 import (
+	"github.com/cosmos/cosmos-sdk/codec"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
+	xp "github.com/cosmos/cosmos-sdk/x/upgrade/exported"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 
@@ -10,12 +13,19 @@ import (
 )
 
 type Keeper struct {
-	uk upgradekeeper.Keeper
+	uk *upgradekeeper.Keeper
 }
 
-func NewKeeper(uk upgradekeeper.Keeper) Keeper {
-	return Keeper{
-		uk: uk,
+func NewKeeper(
+	skipUpgradeHeights map[int64]bool,
+	storeKey storetypes.StoreKey,
+	cdc codec.BinaryCodec,
+	homePath string,
+	vs xp.ProtocolVersionSetter,
+	authority string,
+) *Keeper {
+	return &Keeper{
+		uk: upgradekeeper.NewKeeper(skipUpgradeHeights, storeKey, cdc, homePath, vs, authority),
 	}
 }
 
@@ -50,7 +60,7 @@ func (k Keeper) ClearUpgradePlan(ctx sdk.Context) error {
 }
 
 func (k Keeper) UpgradeKeeper() upgradekeeper.Keeper {
-	return k.uk
+	return *k.uk
 }
 
 // SetUpgradeHandler sets an UpgradeHandler for the upgrade specified by name. This handler will be called when the upgrade
@@ -71,4 +81,9 @@ func (k Keeper) ReadUpgradeInfoFromDisk() (upgradetypes.Plan, error) {
 // IsSkipHeight checks if the given height is part of skipUpgradeHeights
 func (k Keeper) IsSkipHeight(height int64) bool {
 	return k.uk.IsSkipHeight(height)
+}
+
+// SetVersionSetter sets the interface implemented by baseapp which allows setting baseapp's protocol version field
+func (k *Keeper) SetVersionSetter(vs xp.ProtocolVersionSetter) {
+	k.uk.SetVersionSetter(vs)
 }

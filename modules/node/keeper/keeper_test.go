@@ -53,7 +53,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	suite.cdc = app.AppCodec()
 	suite.ctx = app.BaseApp.NewContext(false, ctmproto.Header{})
 	suite.app = app
-	suite.keeper = &app.NodeKeeper
+	suite.keeper = app.NodeKeeper
 }
 
 func (suite *KeeperTestSuite) setNode() {
