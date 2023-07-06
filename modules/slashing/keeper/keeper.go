@@ -6,6 +6,8 @@ import (
 
 	"github.com/cometbft/cometbft/crypto"
 
+	"github.com/cosmos/cosmos-sdk/codec"
+	storetypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
@@ -20,16 +22,27 @@ type Keeper struct {
 }
 
 // NewKeeper creates a slashing keeper
-func NewKeeper(slashingKeeper slashingkeeper.Keeper, nodeKeeper types.NodeKeeper) Keeper {
+func NewKeeper(
+	cdc codec.BinaryCodec,
+	legacyAmino *codec.LegacyAmino,
+	key storetypes.StoreKey,
+	nodeKeeper types.NodeKeeper,
+	authority string,
+) Keeper {
 	return Keeper{
-		Keeper:     slashingKeeper,
+		Keeper:     slashingkeeper.NewKeeper(cdc, legacyAmino, key, nodeKeeper, authority),
 		nodeKeeper: nodeKeeper,
 	}
 }
 
 // HandleValidatorSignature handles a validator signature, must be called once per validator per block.
 // Block all subsequent logic if this validator has been removed.
-func (k Keeper) HandleValidatorSignature(ctx sdk.Context, addr crypto.Address, power int64, signed bool) {
+func (k Keeper) HandleValidatorSignature(
+	ctx sdk.Context,
+	addr crypto.Address,
+	power int64,
+	signed bool,
+) {
 	logger := k.Logger(ctx)
 
 	// fetch the validator public key

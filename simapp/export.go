@@ -7,7 +7,8 @@ import (
 
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
+
+	//slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	"github.com/bianjieai/iritamod/modules/node"
 )
@@ -32,7 +33,7 @@ func (app *SimApp) ExportAppStateAndValidators(forZeroHeight bool, jailAllowedAd
 		return servertypes.ExportedApp{}, err
 	}
 
-	validators := node.WriteValidators(ctx, app.NodeKeeper)
+	validators := node.WriteValidators(ctx, *app.NodeKeeper)
 	return servertypes.ExportedApp{
 		AppState:        appState,
 		Validators:      validators,
@@ -52,12 +53,12 @@ func (app *SimApp) prepForZeroHeightGenesis(ctx sdk.Context, jailAllowedAddrs []
 	/* Handle slashing state. */
 
 	// reset start height on signing infos
-	app.SlashingKeeper.IterateValidatorSigningInfos(
-		ctx,
-		func(addr sdk.ConsAddress, info slashingtypes.ValidatorSigningInfo) (stop bool) {
-			info.StartHeight = 0
-			app.SlashingKeeper.SetValidatorSigningInfo(ctx, addr, info)
-			return false
-		},
-	)
+	// app.SlashingKeeper.IterateValidatorSigningInfos(
+	// 	ctx,
+	// 	func(addr sdk.ConsAddress, info slashingtypes.ValidatorSigningInfo) (stop bool) {
+	// 		info.StartHeight = 0
+	// 		app.SlashingKeeper.SetValidatorSigningInfo(ctx, addr, info)
+	// 		return false
+	// 	},
+	// )
 }

@@ -27,10 +27,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/testutil/testdata_pulsar"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/cosmos/cosmos-sdk/x/slashing"
-	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
-	"github.com/cosmos/cosmos-sdk/x/upgrade"
-	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
+
+	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 
 	"github.com/bianjieai/iritamod/modules/genutil"
 	"github.com/bianjieai/iritamod/modules/identity"
@@ -41,7 +39,11 @@ import (
 	cparamskeeper "github.com/bianjieai/iritamod/modules/params/keeper"
 	"github.com/bianjieai/iritamod/modules/perm"
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
-	cslashing "github.com/bianjieai/iritamod/modules/slashing"
+	"github.com/bianjieai/iritamod/modules/upgrade"
+	upgradekeeper "github.com/bianjieai/iritamod/modules/upgrade/keeper"
+
+	"github.com/bianjieai/iritamod/modules/slashing"
+	slashingkeeper "github.com/bianjieai/iritamod/modules/slashing/keeper"
 	cupgrade "github.com/bianjieai/iritamod/modules/upgrade"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
@@ -56,7 +58,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
 	"github.com/cosmos/cosmos-sdk/x/evidence"
-	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
 	feegrantkeeper "github.com/cosmos/cosmos-sdk/x/feegrant/keeper"
 	feegrant "github.com/cosmos/cosmos-sdk/x/feegrant/module"
 	"github.com/cosmos/cosmos-sdk/x/params"
@@ -80,14 +81,13 @@ var (
 		feegrant.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
-		slashing.AppModule{},
 
 		genutil.AppModuleBasic{},
 		perm.AppModuleBasic{},
 		identity.AppModuleBasic{},
 		node.AppModuleBasic{},
 		consensus.AppModuleBasic{},
-		cslashing.AppModuleBasic{},
+		slashing.AppModuleBasic{},
 		cparams.AppModuleBasic{},
 		cupgrade.AppModuleBasic{},
 	)
@@ -130,7 +130,7 @@ type SimApp struct {
 	//CSlashingKeeper cslashingkeeper.Keeper
 	PermKeeper      permkeeper.Keeper
 	IdentityKeeper  identitykeeper.Keeper
-	NodeKeeper      nodekeeper.Keeper
+	NodeKeeper      *nodekeeper.Keeper
 	FeeGrantKeeper  feegrantkeeper.Keeper
 	ConsensusKeeper consensuskeeper.Keeper
 	CParamsKeeper   cparamskeeper.Keeper

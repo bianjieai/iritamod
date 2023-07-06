@@ -110,14 +110,11 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 
 // NewAppModule creates a new AppModule object
 func NewAppModule(
-	cdc codec.Codec, keeper Keeper, ak AccountKeeper,
-	bk BankKeeper, sk StakingKeeper, legacySubspace exported.Subspace,
+	cdc codec.Codec, keeper Keeper, sk StakingKeeper, legacySubspace exported.Subspace,
 ) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{cdc: cdc},
 		keeper:         keeper,
-		accountKeeper:  ak,
-		bankKeeper:     bk,
 		stakingKeeper:  sk,
 		legacySubspace: legacySubspace,
 	}
