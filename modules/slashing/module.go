@@ -55,7 +55,11 @@ func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 }
 
 // ValidateGenesis performs genesis state validation for the slashing module.
-func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
+func (AppModuleBasic) ValidateGenesis(
+	cdc codec.JSONCodec,
+	config client.TxEncodingConfig,
+	bz json.RawMessage,
+) error {
 	var data GenesisState
 	if err := cdc.UnmarshalJSON(bz, &data); err != nil {
 		return fmt.Errorf("failed to unmarshal %s genesis state: %w", ModuleName, err)
@@ -110,14 +114,11 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 
 // NewAppModule creates a new AppModule object
 func NewAppModule(
-	cdc codec.Codec, keeper Keeper, ak AccountKeeper,
-	bk BankKeeper, sk StakingKeeper, legacySubspace exported.Subspace,
+	cdc codec.Codec, keeper Keeper, sk StakingKeeper, legacySubspace exported.Subspace,
 ) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{cdc: cdc},
 		keeper:         keeper,
-		accountKeeper:  ak,
-		bankKeeper:     bk,
 		stakingKeeper:  sk,
 		legacySubspace: legacySubspace,
 	}
@@ -133,7 +134,11 @@ func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 // InitGenesis performs genesis initialization for the slashing module. It returns
 // no validator updates.
-func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
+func (am AppModule) InitGenesis(
+	ctx sdk.Context,
+	cdc codec.JSONCodec,
+	data json.RawMessage,
+) []abci.ValidatorUpdate {
 	var genesisState GenesisState
 	cdc.MustUnmarshalJSON(data, &genesisState)
 
@@ -170,7 +175,9 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 }
 
 // ProposalContents doesn't return any content functions for governance proposals.
-func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
+func (AppModule) ProposalContents(
+	simState module.SimulationState,
+) []simtypes.WeightedProposalContent {
 	return nil
 }
 
@@ -178,6 +185,8 @@ func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.We
 func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {}
 
 // WeightedOperations returns the all the slashing module operations with their respective weights.
-func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
+func (am AppModule) WeightedOperations(
+	simState module.SimulationState,
+) []simtypes.WeightedOperation {
 	return nil
 }

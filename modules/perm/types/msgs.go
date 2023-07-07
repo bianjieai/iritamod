@@ -236,7 +236,11 @@ func NewMsgBlockContract(contractAddr, from string) *MsgBlockContract {
 func (m MsgBlockContract) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(m.Operator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
+		return sdkerrors.Wrapf(
+			sdkerrors.ErrInvalidAddress,
+			"string could not be parsed as address: %v",
+			err,
+		)
 	}
 
 	if !IsHexAddress(m.ContractAddress) {
@@ -266,7 +270,11 @@ func NewMsgUnblockContract(contractAddr, from string) *MsgUnblockContract {
 func (m MsgUnblockContract) ValidateBasic() error {
 	_, err := sdk.AccAddressFromBech32(m.Operator)
 	if err != nil {
-		return sdkerrors.Wrapf(sdkerrors.ErrInvalidAddress, "string could not be parsed as address: %v", err)
+		return sdkerrors.Wrapf(
+			sdkerrors.ErrInvalidAddress,
+			"string could not be parsed as address: %v",
+			err,
+		)
 	}
 
 	if !IsHexAddress(m.ContractAddress) {

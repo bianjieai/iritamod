@@ -9,18 +9,21 @@ import (
 )
 
 type msgServer struct {
-	Keeper
+	*Keeper
 }
 
 var _ types.MsgServer = msgServer{}
 
 // NewMsgServerImpl returns an implementation of the bank MsgServer interface
 // for the provided Keeper.
-func NewMsgServerImpl(keeper Keeper) types.MsgServer {
+func NewMsgServerImpl(keeper *Keeper) types.MsgServer {
 	return &msgServer{Keeper: keeper}
 }
 
-func (m msgServer) UpgradeSoftware(goCtx context.Context, msg *types.MsgUpgradeSoftware) (*types.MsgUpgradeSoftwareResponse, error) {
+func (m msgServer) UpgradeSoftware(
+	goCtx context.Context,
+	msg *types.MsgUpgradeSoftware,
+) (*types.MsgUpgradeSoftwareResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	if err := m.ScheduleUpgrade(ctx, msg); err != nil {
 		return nil, err
@@ -35,7 +38,10 @@ func (m msgServer) UpgradeSoftware(goCtx context.Context, msg *types.MsgUpgradeS
 	return &types.MsgUpgradeSoftwareResponse{}, nil
 }
 
-func (m msgServer) CancelUpgrade(goCtx context.Context, msg *types.MsgCancelUpgrade) (*types.MsgCancelUpgradeResponse, error) {
+func (m msgServer) CancelUpgrade(
+	goCtx context.Context,
+	msg *types.MsgCancelUpgrade,
+) (*types.MsgCancelUpgradeResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	if err := m.ClearUpgradePlan(ctx); err != nil {
 		return nil, err

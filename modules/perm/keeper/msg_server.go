@@ -21,7 +21,10 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 var _ types.MsgServer = msgServer{}
 
-func (m msgServer) AssignRoles(goCtx context.Context, msg *types.MsgAssignRoles) (*types.MsgAssignRolesResponse, error) {
+func (m msgServer) AssignRoles(
+	goCtx context.Context,
+	msg *types.MsgAssignRoles,
+) (*types.MsgAssignRolesResponse, error) {
 	addr, err := sdk.AccAddressFromBech32(msg.Address)
 	if err != nil {
 		return nil, err
@@ -52,7 +55,10 @@ func (m msgServer) AssignRoles(goCtx context.Context, msg *types.MsgAssignRoles)
 	return &types.MsgAssignRolesResponse{}, nil
 }
 
-func (m msgServer) UnassignRoles(goCtx context.Context, msg *types.MsgUnassignRoles) (*types.MsgUnassignRolesResponse, error) {
+func (m msgServer) UnassignRoles(
+	goCtx context.Context,
+	msg *types.MsgUnassignRoles,
+) (*types.MsgUnassignRolesResponse, error) {
 	addr, err := sdk.AccAddressFromBech32(msg.Address)
 	if err != nil {
 		return nil, err
@@ -83,7 +89,10 @@ func (m msgServer) UnassignRoles(goCtx context.Context, msg *types.MsgUnassignRo
 	return &types.MsgUnassignRolesResponse{}, nil
 }
 
-func (m msgServer) BlockAccount(goCtx context.Context, msg *types.MsgBlockAccount) (*types.MsgBlockAccountResponse, error) {
+func (m msgServer) BlockAccount(
+	goCtx context.Context,
+	msg *types.MsgBlockAccount,
+) (*types.MsgBlockAccountResponse, error) {
 	addr, err := sdk.AccAddressFromBech32(msg.Address)
 	if err != nil {
 		return nil, err
@@ -108,7 +117,10 @@ func (m msgServer) BlockAccount(goCtx context.Context, msg *types.MsgBlockAccoun
 	return &types.MsgBlockAccountResponse{}, nil
 }
 
-func (m msgServer) UnblockAccount(goCtx context.Context, msg *types.MsgUnblockAccount) (*types.MsgUnblockAccountResponse, error) {
+func (m msgServer) UnblockAccount(
+	goCtx context.Context,
+	msg *types.MsgUnblockAccount,
+) (*types.MsgUnblockAccountResponse, error) {
 	addr, err := sdk.AccAddressFromBech32(msg.Address)
 	if err != nil {
 		return nil, err
@@ -132,10 +144,18 @@ func (m msgServer) UnblockAccount(goCtx context.Context, msg *types.MsgUnblockAc
 	})
 	return &types.MsgUnblockAccountResponse{}, nil
 }
-func (m msgServer) BlockContract(c context.Context, msg *types.MsgBlockContract) (*types.MsgBlockContractResponse, error) {
+
+func (m msgServer) BlockContract(
+	c context.Context,
+	msg *types.MsgBlockContract,
+) (*types.MsgBlockContractResponse, error) {
 	if !types.IsHexAddress(msg.ContractAddress) {
 		return &types.MsgBlockContractResponse{},
-			errors.Wrapf(types.ErrInvalidContractAddress, "contract Address %s is invalid", msg.ContractAddress)
+			errors.Wrapf(
+				types.ErrInvalidContractAddress,
+				"contract Address %s is invalid",
+				msg.ContractAddress,
+			)
 	}
 
 	ctx := sdk.UnwrapSDKContext(c)
@@ -157,10 +177,18 @@ func (m msgServer) BlockContract(c context.Context, msg *types.MsgBlockContract)
 	})
 	return &types.MsgBlockContractResponse{}, nil
 }
-func (m msgServer) UnblockContract(c context.Context, msg *types.MsgUnblockContract) (*types.MsgUnblockContractResponse, error) {
+
+func (m msgServer) UnblockContract(
+	c context.Context,
+	msg *types.MsgUnblockContract,
+) (*types.MsgUnblockContractResponse, error) {
 	if !types.IsHexAddress(msg.ContractAddress) {
 		return &types.MsgUnblockContractResponse{},
-			errors.Wrapf(types.ErrInvalidContractAddress, "contract Address %s is invalid", msg.ContractAddress)
+			errors.Wrapf(
+				types.ErrInvalidContractAddress,
+				"contract Address %s is invalid",
+				msg.ContractAddress,
+			)
 	}
 	ctx := sdk.UnwrapSDKContext(c)
 	err := m.Keeper.UnblockContract(ctx, msg.ContractAddress)

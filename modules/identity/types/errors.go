@@ -14,6 +14,10 @@ var (
 	ErrInvalidCredentials         = sdkerrors.Register(ModuleName, 7, "invalid credentials uri")
 	ErrIdentityExists             = sdkerrors.Register(ModuleName, 8, "identity already exists")
 	ErrUnknownIdentity            = sdkerrors.Register(ModuleName, 9, "unknown identity")
-	ErrUnsupportedPubKeyAlgorithm = sdkerrors.Register(ModuleName, 10, "unsupported public key algorithm; only RSA, DSA, ECDSA, ED25519 and SM2 supported")
-	ErrNotAuthorized              = sdkerrors.Register(ModuleName, 11, "owner not matching")
+	ErrUnsupportedPubKeyAlgorithm = sdkerrors.Register(
+		ModuleName,
+		10,
+		"unsupported public key algorithm; only RSA, DSA, ECDSA, ED25519 and SM2 supported",
+	)
+	ErrNotAuthorized = sdkerrors.Register(ModuleName, 11, "owner not matching")
 )

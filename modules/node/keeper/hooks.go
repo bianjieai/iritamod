@@ -25,7 +25,11 @@ func (k Keeper) BeforeValidatorModified(ctx sdk.Context, valAddr sdk.ValAddress)
 }
 
 // AfterValidatorRemoved - call hook if registered
-func (k Keeper) AfterValidatorRemoved(ctx sdk.Context, consAddr sdk.ConsAddress, valAddr sdk.ValAddress) error {
+func (k Keeper) AfterValidatorRemoved(
+	ctx sdk.Context,
+	consAddr sdk.ConsAddress,
+	valAddr sdk.ValAddress,
+) error {
 	if k.hooks != nil {
 		return k.hooks.AfterValidatorRemoved(ctx, consAddr, valAddr)
 	}
@@ -33,7 +37,11 @@ func (k Keeper) AfterValidatorRemoved(ctx sdk.Context, consAddr sdk.ConsAddress,
 }
 
 // AfterValidatorBonded - call hook if registered
-func (k Keeper) AfterValidatorBonded(ctx sdk.Context, consAddr sdk.ConsAddress, valAddr sdk.ValAddress) error {
+func (k Keeper) AfterValidatorBonded(
+	ctx sdk.Context,
+	consAddr sdk.ConsAddress,
+	valAddr sdk.ValAddress,
+) error {
 	if k.hooks != nil {
 		return k.hooks.AfterValidatorBonded(ctx, consAddr, valAddr)
 	}
@@ -41,7 +49,11 @@ func (k Keeper) AfterValidatorBonded(ctx sdk.Context, consAddr sdk.ConsAddress, 
 }
 
 // AfterValidatorBeginUnbonding - call hook if registered
-func (k Keeper) AfterValidatorBeginUnbonding(ctx sdk.Context, consAddr sdk.ConsAddress, valAddr sdk.ValAddress) error {
+func (k Keeper) AfterValidatorBeginUnbonding(
+	ctx sdk.Context,
+	consAddr sdk.ConsAddress,
+	valAddr sdk.ValAddress,
+) error {
 	if k.hooks != nil {
 		return k.hooks.AfterValidatorBeginUnbonding(ctx, consAddr, valAddr)
 	}
@@ -49,7 +61,11 @@ func (k Keeper) AfterValidatorBeginUnbonding(ctx sdk.Context, consAddr sdk.ConsA
 }
 
 // BeforeDelegationCreated - call hook if registered
-func (k Keeper) BeforeDelegationCreated(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) error {
+func (k Keeper) BeforeDelegationCreated(
+	ctx sdk.Context,
+	delAddr sdk.AccAddress,
+	valAddr sdk.ValAddress,
+) error {
 	if k.hooks != nil {
 		return k.hooks.BeforeDelegationCreated(ctx, delAddr, valAddr)
 	}
@@ -57,7 +73,11 @@ func (k Keeper) BeforeDelegationCreated(ctx sdk.Context, delAddr sdk.AccAddress,
 }
 
 // BeforeDelegationSharesModified - call hook if registered
-func (k Keeper) BeforeDelegationSharesModified(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) error {
+func (k Keeper) BeforeDelegationSharesModified(
+	ctx sdk.Context,
+	delAddr sdk.AccAddress,
+	valAddr sdk.ValAddress,
+) error {
 	if k.hooks != nil {
 		return k.hooks.BeforeDelegationSharesModified(ctx, delAddr, valAddr)
 	}
@@ -65,7 +85,11 @@ func (k Keeper) BeforeDelegationSharesModified(ctx sdk.Context, delAddr sdk.AccA
 }
 
 // BeforeDelegationRemoved - call hook if registered
-func (k Keeper) BeforeDelegationRemoved(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) error {
+func (k Keeper) BeforeDelegationRemoved(
+	ctx sdk.Context,
+	delAddr sdk.AccAddress,
+	valAddr sdk.ValAddress,
+) error {
 	if k.hooks != nil {
 		return k.hooks.BeforeDelegationRemoved(ctx, delAddr, valAddr)
 	}
@@ -73,7 +97,11 @@ func (k Keeper) BeforeDelegationRemoved(ctx sdk.Context, delAddr sdk.AccAddress,
 }
 
 // AfterDelegationModified - call hook if registered
-func (k Keeper) AfterDelegationModified(ctx sdk.Context, delAddr sdk.AccAddress, valAddr sdk.ValAddress) error {
+func (k Keeper) AfterDelegationModified(
+	ctx sdk.Context,
+	delAddr sdk.AccAddress,
+	valAddr sdk.ValAddress,
+) error {
 	if k.hooks != nil {
 		return k.hooks.AfterDelegationModified(ctx, delAddr, valAddr)
 	}
@@ -81,7 +109,11 @@ func (k Keeper) AfterDelegationModified(ctx sdk.Context, delAddr sdk.AccAddress,
 }
 
 // BeforeValidatorSlashed - call hook if registered
-func (k Keeper) BeforeValidatorSlashed(ctx sdk.Context, valAddr sdk.ValAddress, fraction sdk.Dec) error {
+func (k Keeper) BeforeValidatorSlashed(
+	ctx sdk.Context,
+	valAddr sdk.ValAddress,
+	fraction sdk.Dec,
+) error {
 	if k.hooks != nil {
 		return k.hooks.BeforeValidatorSlashed(ctx, valAddr, fraction)
 	}

@@ -43,7 +43,11 @@ func (AppModuleBasic) DefaultGenesis(cdc codec.JSONCodec) json.RawMessage {
 }
 
 // ValidateGenesis performs genesis state validation for the genutil module.
-func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncodingConfig, bz json.RawMessage) error {
+func (AppModuleBasic) ValidateGenesis(
+	cdc codec.JSONCodec,
+	config client.TxEncodingConfig,
+	bz json.RawMessage,
+) error {
 	var data GenesisState
 	if err := cdc.UnmarshalJSON(bz, &data); err != nil {
 		return fmt.Errorf("failed to unmarshal %s genesis state: %w", ModuleName, err)
@@ -53,7 +57,11 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncod
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the genutil module.
-func (a AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {}
+func (a AppModuleBasic) RegisterGRPCGatewayRoutes(
+	clientCtx client.Context,
+	mux *runtime.ServeMux,
+) {
+}
 
 // GetTxCmd returns no root tx command for the genutil module.
 func (AppModuleBasic) GetTxCmd() *cobra.Command { return nil }
@@ -84,7 +92,7 @@ func NewAppModule(
 	nodeKeeper types.NodeKeeper,
 	deliverTx deliverTxfn,
 	txEncodingConfig client.TxEncodingConfig,
-) module.AppModule {
+) module.GenesisOnlyAppModule {
 	return module.NewGenesisOnlyAppModule(AppModule{
 		AppModuleBasic:   AppModuleBasic{},
 		accountKeeper:    accountKeeper,
@@ -96,7 +104,11 @@ func NewAppModule(
 
 // InitGenesis performs genesis initialization for the genutil module. It returns
 // no validator updates.
-func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
+func (am AppModule) InitGenesis(
+	ctx sdk.Context,
+	cdc codec.JSONCodec,
+	data json.RawMessage,
+) []abci.ValidatorUpdate {
 	var genesisState GenesisState
 	cdc.MustUnmarshalJSON(data, &genesisState)
 	return InitGenesis(ctx, am.nodeKeeper, am.deliverTx, genesisState, am.txEncodingConfig)

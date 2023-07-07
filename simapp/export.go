@@ -4,17 +4,23 @@ import (
 	"encoding/json"
 
 	ctmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
+
+	//slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
 	"github.com/bianjieai/iritamod/modules/node"
 )
 
 // ExportAppStateAndValidators exports the state of the application for a genesis file.
 // TODO: decide which modules to export
-func (app *SimApp) ExportAppStateAndValidators(forZeroHeight bool, jailAllowedAddrs []string, modulesToExport []string) (servertypes.ExportedApp, error) {
+func (app *SimApp) ExportAppStateAndValidators(
+	forZeroHeight bool,
+	jailAllowedAddrs []string,
+	modulesToExport []string,
+) (servertypes.ExportedApp, error) {
 	// as if they could withdraw from the start of the next block
 	ctx := app.NewContext(true, ctmproto.Header{Height: app.LastBlockHeight()})
 
@@ -32,7 +38,7 @@ func (app *SimApp) ExportAppStateAndValidators(forZeroHeight bool, jailAllowedAd
 		return servertypes.ExportedApp{}, err
 	}
 
-	validators := node.WriteValidators(ctx, app.NodeKeeper)
+	validators := node.WriteValidators(ctx, *app.NodeKeeper)
 	return servertypes.ExportedApp{
 		AppState:        appState,
 		Validators:      validators,

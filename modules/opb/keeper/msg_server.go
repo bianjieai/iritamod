@@ -54,7 +54,10 @@ func (m msgServer) Mint(goCtx context.Context, msg *types.MsgMint) (*types.MsgMi
 	return &types.MsgMintResponse{}, nil
 }
 
-func (m msgServer) Reclaim(goCtx context.Context, msg *types.MsgReclaim) (*types.MsgReclaimResponse, error) {
+func (m msgServer) Reclaim(
+	goCtx context.Context,
+	msg *types.MsgReclaim,
+) (*types.MsgReclaimResponse, error) {
 	operator, err := sdk.AccAddressFromBech32(msg.Operator)
 	if err != nil {
 		return nil, err
@@ -89,7 +92,10 @@ func (m msgServer) Reclaim(goCtx context.Context, msg *types.MsgReclaim) (*types
 
 // UpdateParams updates the slashing params.
 // WARN： must register perm access control for this method.
-func (m msgServer) UpdateParams(goCtx context.Context, msg *types.MsgUpdateParams) (*types.MsgUpdateParamsResponse, error) {
+func (m msgServer) UpdateParams(
+	goCtx context.Context,
+	msg *types.MsgUpdateParams,
+) (*types.MsgUpdateParamsResponse, error) {
 	ctx := sdk.UnwrapSDKContext(goCtx)
 	if err := m.k.SetParams(ctx, msg.Params); err != nil {
 		return nil, err

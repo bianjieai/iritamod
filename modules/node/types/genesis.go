@@ -7,7 +7,12 @@ import (
 )
 
 // NewGenesisState creates a new GenesisState instance
-func NewGenesisState(rootCert string, params Params, validators []Validator, nodes []Node) *GenesisState {
+func NewGenesisState(
+	rootCert string,
+	params Params,
+	validators []Validator,
+	nodes []Node,
+) *GenesisState {
 	return &GenesisState{
 		RootCert:   rootCert,
 		Params:     params,
@@ -25,7 +30,10 @@ func DefaultGenesisState() *GenesisState {
 
 // GetGenesisStateFromAppState returns modules/validator GenesisState given raw application
 // genesis state.
-func GetGenesisStateFromAppState(cdc codec.JSONCodec, appState map[string]json.RawMessage) GenesisState {
+func GetGenesisStateFromAppState(
+	cdc codec.JSONCodec,
+	appState map[string]json.RawMessage,
+) GenesisState {
 	var genesisState GenesisState
 
 	if appState[ModuleName] != nil {

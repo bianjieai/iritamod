@@ -51,7 +51,12 @@ func GenAppStateFromConfig(
 		return appState, err
 	}
 
-	appGenesisState, err = AddGenTxsInAppGenesisState(cdc, txEncodingConfig.TxJSONEncoder(), appGenesisState, appGenTxs)
+	appGenesisState, err = AddGenTxsInAppGenesisState(
+		cdc,
+		txEncodingConfig.TxJSONEncoder(),
+		appGenesisState,
+		appGenTxs,
+	)
 	if err != nil {
 		return appState, err
 	}
@@ -121,19 +126,26 @@ func CollectTxs(
 		}
 		nodeAddrIP := memoTx.GetMemo()
 		if len(nodeAddrIP) == 0 {
-			return appGenTxs, persistentPeers, fmt.Errorf("failed to find node's address and IP in %s", fo.Name())
+			return appGenTxs, persistentPeers, fmt.Errorf(
+				"failed to find node's address and IP in %s",
+				fo.Name(),
+			)
 		}
 
 		// genesis transactions must be single-message
 		msgs := genTx.GetMsgs()
 		if len(msgs) != 1 {
-			return appGenTxs, persistentPeers, errors.New("each genesis transaction must provide a single genesis message")
+			return appGenTxs, persistentPeers, errors.New(
+				"each genesis transaction must provide a single genesis message",
+			)
 		}
 
 		// TODO abstract out validator message validation back to validator
 		msg, ok := msgs[0].(*nodetypes.MsgCreateValidator)
 		if !ok {
-			return appGenTxs, persistentPeers, errors.New("each genesis transaction must provide a validator creating message")
+			return appGenTxs, persistentPeers, errors.New(
+				"each genesis transaction must provide a validator creating message",
+			)
 		}
 		// exclude itself from persistent peers
 		if msg.Name != moniker {

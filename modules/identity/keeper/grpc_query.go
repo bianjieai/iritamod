@@ -16,7 +16,10 @@ import (
 var _ types.QueryServer = Keeper{}
 
 // Identity queries an identity by id
-func (k Keeper) Identity(c context.Context, req *types.QueryIdentityRequest) (*types.QueryIdentityResponse, error) {
+func (k Keeper) Identity(
+	c context.Context,
+	req *types.QueryIdentityRequest,
+) (*types.QueryIdentityResponse, error) {
 	if req == nil {
 		return nil, status.Errorf(codes.InvalidArgument, "empty request")
 	}

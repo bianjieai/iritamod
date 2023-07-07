@@ -21,7 +21,12 @@ import (
 )
 
 // InitGenesis - store genesis validator set
-func InitGenesis(ctx sdk.Context, cdc codec.Codec, k Keeper, data GenesisState) (res []abci.ValidatorUpdate) {
+func InitGenesis(
+	ctx sdk.Context,
+	cdc codec.Codec,
+	k Keeper,
+	data GenesisState,
+) (res []abci.ValidatorUpdate) {
 	if err := ValidateGenesis(data); err != nil {
 		panic(err.Error())
 	}
@@ -69,7 +74,12 @@ func InitGenesis(ctx sdk.Context, cdc codec.Codec, k Keeper, data GenesisState) 
 // ExportGenesis - output genesis valiadtor set
 func ExportGenesis(ctx sdk.Context, k Keeper) *GenesisState {
 	rootCert, _ := k.GetRootCert(ctx)
-	return NewGenesisState(rootCert, k.GetModuleParams(ctx), k.GetAllValidatorsLegacy(ctx), k.GetNodes(ctx))
+	return NewGenesisState(
+		rootCert,
+		k.GetModuleParams(ctx),
+		k.GetAllValidatorsLegacy(ctx),
+		k.GetNodes(ctx),
+	)
 }
 
 // WriteValidators returns a slice of bonded genesis validators.
@@ -127,24 +137,44 @@ func validateGenesisStateValidators(rootCert cautil.Cert, validators []Validator
 			}
 
 			if err = cautil.VerifyCertFromRoot(cert, rootCert); err != nil {
-				return sdkerrors.Wrapf(types.ErrInvalidCert, "cannot be verified by root certificate, err: %s", err.Error())
+				return sdkerrors.Wrapf(
+					types.ErrInvalidCert,
+					"cannot be verified by root certificate, err: %s",
+					err.Error(),
+				)
 			}
 		}
 
 		if _, ok := nameMap[val.Id]; ok {
-			return fmt.Errorf("duplicate validator id in genesis state: ID %v, pubkey %v", val.Id, val.Pubkey)
+			return fmt.Errorf(
+				"duplicate validator id in genesis state: ID %v, pubkey %v",
+				val.Id,
+				val.Pubkey,
+			)
 		}
 
 		if _, ok := idMap[val.Name]; ok {
-			return fmt.Errorf("duplicate validator name in genesis state: ID %v, pubkey %v", val.Id, val.Pubkey)
+			return fmt.Errorf(
+				"duplicate validator name in genesis state: ID %v, pubkey %v",
+				val.Id,
+				val.Pubkey,
+			)
 		}
 
 		if _, ok := pubkeyMap[val.Pubkey]; ok {
-			return fmt.Errorf("duplicate validator pubkey in genesis state: ID %v, pubkey %v", val.Id, val.Pubkey)
+			return fmt.Errorf(
+				"duplicate validator pubkey in genesis state: ID %v, pubkey %v",
+				val.Id,
+				val.Pubkey,
+			)
 		}
 
 		if val.Jailed {
-			return fmt.Errorf("validator is jailed in genesis state: name %v, ID %v", val.Id, val.Pubkey)
+			return fmt.Errorf(
+				"validator is jailed in genesis state: name %v, ID %v",
+				val.Id,
+				val.Pubkey,
+			)
 		}
 
 		pubkeyMap[val.Pubkey] = true

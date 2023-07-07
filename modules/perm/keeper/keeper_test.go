@@ -195,7 +195,12 @@ func (suite *KeeperTestSuite) TestBlockAccount() {
 }
 
 func (suite *KeeperTestSuite) TestPowerAdmin() {
-	err := suite.keeper.Authorize(suite.ctx, accountPowerUserAdmin, rootAdmin, types.RolePowerUserAdmin)
+	err := suite.keeper.Authorize(
+		suite.ctx,
+		accountPowerUserAdmin,
+		rootAdmin,
+		types.RolePowerUserAdmin,
+	)
 	suite.NoError(err)
 
 	// can not add the following roles
@@ -216,7 +221,12 @@ func (suite *KeeperTestSuite) TestPowerAdmin() {
 		suite.Error(err)
 	}
 
-	err = suite.keeper.Authorize(suite.ctx, accountPowerUser, accountPowerUserAdmin, types.RolePowerUser)
+	err = suite.keeper.Authorize(
+		suite.ctx,
+		accountPowerUser,
+		accountPowerUserAdmin,
+		types.RolePowerUser,
+	)
 	suite.NoError(err)
 
 }

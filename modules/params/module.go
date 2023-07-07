@@ -51,7 +51,11 @@ func (AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry) 
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the params module.
-func (b AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {}
+func (b AppModuleBasic) RegisterGRPCGatewayRoutes(
+	clientCtx client.Context,
+	mux *runtime.ServeMux,
+) {
+}
 
 // GetTxCmd returns the root tx command for the params module.
 func (AppModuleBasic) GetTxCmd() *cobra.Command {
@@ -69,7 +73,11 @@ func (AppModuleBasic) DefaultGenesis(codec.JSONCodec) json.RawMessage {
 }
 
 // ValidateGenesis performs genesis state validation for the params module.
-func (AppModuleBasic) ValidateGenesis(codec.JSONCodec, client.TxEncodingConfig, json.RawMessage) error {
+func (AppModuleBasic) ValidateGenesis(
+	codec.JSONCodec,
+	client.TxEncodingConfig,
+	json.RawMessage,
+) error {
 	return nil
 }
 
@@ -106,7 +114,11 @@ func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
 
 // InitGenesis performs genesis initialization for the params module. It returns
 // no params updates.
-func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
+func (am AppModule) InitGenesis(
+	ctx sdk.Context,
+	cdc codec.JSONCodec,
+	data json.RawMessage,
+) []abci.ValidatorUpdate {
 	return []abci.ValidatorUpdate{}
 }
 
@@ -134,7 +146,9 @@ func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.Val
 func (AppModule) GenerateGenesisState(simState *module.SimulationState) {}
 
 // ProposalContents doesn't return any content functions for governance proposals.
-func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
+func (AppModule) ProposalContents(
+	simState module.SimulationState,
+) []simtypes.WeightedProposalContent {
 	return nil
 }
 
@@ -142,6 +156,8 @@ func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.We
 func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {}
 
 // WeightedOperations returns the all the params module operations with their respective weights.
-func (am AppModule) WeightedOperations(simState module.SimulationState) []simtypes.WeightedOperation {
+func (am AppModule) WeightedOperations(
+	simState module.SimulationState,
+) []simtypes.WeightedOperation {
 	return nil
 }

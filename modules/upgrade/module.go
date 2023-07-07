@@ -45,7 +45,11 @@ func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the upgrade module.
 func (AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
-	_ = upgradetypes.RegisterQueryHandlerClient(context.Background(), mux, upgradetypes.NewQueryClient(clientCtx))
+	_ = upgradetypes.RegisterQueryHandlerClient(
+		context.Background(),
+		mux,
+		upgradetypes.NewQueryClient(clientCtx),
+	)
 }
 
 // GetQueryCmd returns the cli query commands for this module
@@ -65,11 +69,11 @@ func (b AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry
 // AppModule implements the sdk.AppModule interface
 type AppModule struct {
 	AppModuleBasic
-	keeper keeper.Keeper
+	keeper *keeper.Keeper
 }
 
 // NewAppModule creates a new AppModule object
-func NewAppModule(keeper keeper.Keeper) AppModule {
+func NewAppModule(keeper *keeper.Keeper) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{},
 		keeper:         keeper,
@@ -90,7 +94,11 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 }
 
 // InitGenesis is ignored, no sense in serializing future upgrades
-func (am AppModule) InitGenesis(_ sdk.Context, _ codec.JSONCodec, _ json.RawMessage) []abci.ValidatorUpdate {
+func (am AppModule) InitGenesis(
+	_ sdk.Context,
+	_ codec.JSONCodec,
+	_ json.RawMessage,
+) []abci.ValidatorUpdate {
 	return []abci.ValidatorUpdate{}
 }
 
@@ -100,7 +108,11 @@ func (AppModuleBasic) DefaultGenesis(_ codec.JSONCodec) json.RawMessage {
 }
 
 // ValidateGenesis is always successful, as we ignore the value
-func (AppModuleBasic) ValidateGenesis(_ codec.JSONCodec, config client.TxEncodingConfig, _ json.RawMessage) error {
+func (AppModuleBasic) ValidateGenesis(
+	_ codec.JSONCodec,
+	config client.TxEncodingConfig,
+	_ json.RawMessage,
+) error {
 	return nil
 }
 

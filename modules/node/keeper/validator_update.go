@@ -11,7 +11,9 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
-func (k Keeper) ApplyAndReturnValidatorSetUpdates(ctx sdk.Context) (updates []abci.ValidatorUpdate, err error) {
+func (k Keeper) ApplyAndReturnValidatorSetUpdates(
+	ctx sdk.Context,
+) (updates []abci.ValidatorUpdate, err error) {
 	k.IterateUpdateValidators(
 		ctx,
 		func(index int64, pubkey string, power int64) bool {

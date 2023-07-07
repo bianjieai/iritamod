@@ -18,7 +18,13 @@ func InitGenesis(
 
 	var validators []abci.ValidatorUpdate
 	if len(genesisState.GenTxs) > 0 {
-		validators = DeliverGenTxs(ctx, genesisState.GenTxs, nodeKeeper, deliverTx, txEncodingConfig)
+		validators = DeliverGenTxs(
+			ctx,
+			genesisState.GenTxs,
+			nodeKeeper,
+			deliverTx,
+			txEncodingConfig,
+		)
 	}
 
 	return validators

@@ -47,7 +47,10 @@ func GetCmdQueryValidator() *cobra.Command {
 			}
 
 			queryClient := types.NewQueryClient(clientCtx)
-			res, err := queryClient.Validator(context.Background(), &types.QueryValidatorRequest{Id: args[0]})
+			res, err := queryClient.Validator(
+				context.Background(),
+				&types.QueryValidatorRequest{Id: args[0]},
+			)
 			if err != nil {
 				return err
 			}

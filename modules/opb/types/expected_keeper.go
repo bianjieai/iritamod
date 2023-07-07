@@ -8,13 +8,24 @@ import (
 type TokenKeeper interface {
 	GetOwner(ctx sdk.Context, denom string) (sdk.AccAddress, error)
 	GetToken(ctx sdk.Context, denom string) (Token, error)
-	MintToken(ctx sdk.Context, symbol string, amount uint64, recipient sdk.AccAddress, owner sdk.AccAddress) error
+	MintToken(
+		ctx sdk.Context,
+		symbol string,
+		amount uint64,
+		recipient sdk.AccAddress,
+		owner sdk.AccAddress,
+	) error
 }
 
 // BankKeeper defines the expected bank keeper (noalias)
 type BankKeeper interface {
 	GetBalance(ctx sdk.Context, addr sdk.AccAddress, denom string) sdk.Coin
-	SendCoinsFromModuleToAccount(ctx sdk.Context, senderModule string, recipientAddr sdk.AccAddress, amt sdk.Coins) error
+	SendCoinsFromModuleToAccount(
+		ctx sdk.Context,
+		senderModule string,
+		recipientAddr sdk.AccAddress,
+		amt sdk.Coins,
+	) error
 }
 
 // AccountKeeper defines the expected account keeper (noalias)

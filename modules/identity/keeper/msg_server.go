@@ -21,7 +21,10 @@ func NewMsgServerImpl(keeper Keeper) types.MsgServer {
 
 var _ types.MsgServer = msgServer{}
 
-func (m msgServer) CreateIdentity(goCtx context.Context, msg *types.MsgCreateIdentity) (*types.MsgCreateIdentityResponse, error) {
+func (m msgServer) CreateIdentity(
+	goCtx context.Context,
+	msg *types.MsgCreateIdentity,
+) (*types.MsgCreateIdentityResponse, error) {
 	id, _ := hex.DecodeString(msg.Id)
 	owner, _ := sdk.AccAddressFromBech32(msg.Owner)
 
@@ -46,7 +49,10 @@ func (m msgServer) CreateIdentity(goCtx context.Context, msg *types.MsgCreateIde
 	return &types.MsgCreateIdentityResponse{}, nil
 }
 
-func (m msgServer) UpdateIdentity(goCtx context.Context, msg *types.MsgUpdateIdentity) (*types.MsgUpdateIdentityResponse, error) {
+func (m msgServer) UpdateIdentity(
+	goCtx context.Context,
+	msg *types.MsgUpdateIdentity,
+) (*types.MsgUpdateIdentityResponse, error) {
 	id, _ := hex.DecodeString(msg.Id)
 	owner, _ := sdk.AccAddressFromBech32(msg.Owner)
 

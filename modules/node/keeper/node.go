@@ -12,7 +12,11 @@ import (
 )
 
 // AddNode adds a node
-func (k Keeper) AddNode(ctx sdk.Context, name string, cert string) (id ctmbytes.HexBytes, err error) {
+func (k Keeper) AddNode(
+	ctx sdk.Context,
+	name string,
+	cert string,
+) (id ctmbytes.HexBytes, err error) {
 	pubKey, err := k.VerifyCertificate(ctx, cert)
 	if err != nil {
 		return nil, err

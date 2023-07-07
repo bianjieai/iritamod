@@ -12,7 +12,12 @@ var (
 )
 
 // NewMsgUpgradeSoftware creates a new MsgUpgradeSoftware instance.
-func NewMsgUpgradeSoftware(name string, height int64, info string, operator sdk.AccAddress) *MsgUpgradeSoftware {
+func NewMsgUpgradeSoftware(
+	name string,
+	height int64,
+	info string,
+	operator sdk.AccAddress,
+) *MsgUpgradeSoftware {
 	return &MsgUpgradeSoftware{
 		Name:     name,
 		Height:   height,

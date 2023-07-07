@@ -24,10 +24,12 @@ const (
 
 var (
 	// Keys for store prefixes
-	RootCertKey              = []byte{0x01} // prefix for root cert certificate
-	ValidatorsKey            = []byte{0x02} // prefix for each key to a validator id
-	ValidatorsNameKey        = []byte{0x03} // prefix for each key to a validator name
-	ValidatorsByConsAddrKey  = []byte{0x04} // prefix for each key to a validator index, by consensus addr
+	RootCertKey             = []byte{0x01} // prefix for root cert certificate
+	ValidatorsKey           = []byte{0x02} // prefix for each key to a validator id
+	ValidatorsNameKey       = []byte{0x03} // prefix for each key to a validator name
+	ValidatorsByConsAddrKey = []byte{
+		0x04,
+	} // prefix for each key to a validator index, by consensus addr
 	ValidatorsUpdateQueueKey = []byte{0x05} // prefix for each key of a validator to be updated
 	HistoricalInfoKey        = []byte{0x06} // prefix for each key of a validator to be updated
 	NodeKey                  = []byte{0x07} // prefix for node

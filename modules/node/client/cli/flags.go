@@ -32,7 +32,11 @@ func init() {
 
 	FsUpdateValidator.String(FlagCert, "", "The certificate file path of the validator identity")
 	FsUpdateValidator.Int64(FlagPower, 0, "The power of the validator")
-	FsUpdateValidator.String(FlagDescription, types.DoNotModifyDesc, "The validator's (optional) details")
+	FsUpdateValidator.String(
+		FlagDescription,
+		types.DoNotModifyDesc,
+		"The validator's (optional) details",
+	)
 	FsUpdateValidator.String(FlagName, types.DoNotModifyDesc, "The alias name of the validator")
 
 	FsGrantNode.String(FlagName, "", "The alias name of the node")

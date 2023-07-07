@@ -24,11 +24,21 @@ var (
 	testID = ctmbytes.HexBytes(uuid.NewV4().Bytes())
 
 	testPubKeySM2     = sm2.GenPrivKey().PubKey().Bytes()
-	testPubKeySM2Info = types.PubKeyInfo{PubKey: ctmbytes.HexBytes(testPubKeySM2).String(), Algorithm: types.SM2}
+	testPubKeySM2Info = types.PubKeyInfo{
+		PubKey:    ctmbytes.HexBytes(testPubKeySM2).String(),
+		Algorithm: types.SM2,
+	}
 
 	testPrivKeyECDSA, _ = ecdsa.GenerateKey(elliptic.P256(), rand.Reader)
-	testPubKeyECDSA     = elliptic.Marshal(testPrivKeyECDSA.PublicKey.Curve, testPrivKeyECDSA.X, testPrivKeyECDSA.Y)
-	testPubKeyECDSAInfo = types.PubKeyInfo{PubKey: ctmbytes.HexBytes(testPubKeyECDSA).String(), Algorithm: types.ECDSA}
+	testPubKeyECDSA     = elliptic.Marshal(
+		testPrivKeyECDSA.PublicKey.Curve,
+		testPrivKeyECDSA.X,
+		testPrivKeyECDSA.Y,
+	)
+	testPubKeyECDSAInfo = types.PubKeyInfo{
+		PubKey:    ctmbytes.HexBytes(testPubKeyECDSA).String(),
+		Algorithm: types.ECDSA,
+	}
 
 	testCredentials = "https://kyc.com/user/10001"
 	testOwner       = sdk.AccAddress([]byte("test-ownertest-owner"))
@@ -54,13 +64,28 @@ func (suite *KeeperTestSuite) SetupTest() {
 }
 
 func (suite *KeeperTestSuite) setIdentity() {
-	identity := types.NewIdentity(testID, []types.PubKeyInfo{testPubKeySM2Info}, []string{testCertificate}, testCredentials, testOwner, testData)
+	identity := types.NewIdentity(
+		testID,
+		[]types.PubKeyInfo{testPubKeySM2Info},
+		[]string{testCertificate},
+		testCredentials,
+		testOwner,
+		testData,
+	)
 	err := suite.keeper.SetIdentity(suite.ctx, identity)
 	suite.NoError(err)
 }
 
 func (suite *KeeperTestSuite) TestCreateIdentity() {
-	err := suite.keeper.CreateIdentity(suite.ctx, testID, &testPubKeySM2Info, testCertificate, testCredentials, testData, testOwner)
+	err := suite.keeper.CreateIdentity(
+		suite.ctx,
+		testID,
+		&testPubKeySM2Info,
+		testCertificate,
+		testCredentials,
+		testData,
+		testOwner,
+	)
 	suite.NoError(err)
 
 	identity, found := suite.keeper.GetIdentity(suite.ctx, testID)
@@ -82,7 +107,15 @@ func (suite *KeeperTestSuite) TestUpdateIdentity() {
 	newPubKey := testPubKeyECDSAInfo
 	newCredentials := "https://kyc.com/v2/user/10001"
 
-	err := suite.keeper.UpdateIdentity(suite.ctx, testID, &newPubKey, "", newCredentials, testData, testOwner)
+	err := suite.keeper.UpdateIdentity(
+		suite.ctx,
+		testID,
+		&newPubKey,
+		"",
+		newCredentials,
+		testData,
+		testOwner,
+	)
 	suite.NoError(err)
 
 	identity, found := suite.keeper.GetIdentity(suite.ctx, testID)

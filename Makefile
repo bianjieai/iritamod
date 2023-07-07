@@ -2,7 +2,6 @@
 
 PACKAGES_SIMTEST=$(shell go list ./... | grep '/simulation')
 PACKAGES_UNITTEST=$(shell go list ./... | grep -v '/simulation' | grep -v '/cli_test')
-
 DOCKER := $(shell which docker)
 
 all: tools lint
@@ -43,7 +42,7 @@ protoImage=$(DOCKER) run --rm -v $(CURDIR):/workspace --workdir /workspace $(pro
 proto-all: proto-format proto-lint proto-gen
 
 proto-gen:
-	@echo "Generating protobuf files"
+	@echo "Generating Protobuf files"
 	@$(protoImage) sh ./scripts/protocgen.sh
 
 proto-format:
@@ -65,15 +64,19 @@ test: test-unit
 test-unit:
 	@VERSION=$(VERSION) go test -mod=readonly -tags='ledger test_ledger_mock' ${PACKAGES_UNITTEST}
 
+###############################################################################
+###                                Linting                                  ###
+###############################################################################
+
 lint: golangci-lint
 	golangci-lint run
 	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./lite/*/statik.go" -not -path "*.pb.go" | xargs gofmt -d -s
 	go mod verify
 
 format:
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./lite/*/statik.go" -not -path "*.pb.go" | xargs gofmt -w -s
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./lite/*/statik.go" -not -path "*.pb.go" | xargs misspell -w
-	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./lite/*/statik.go" -not -path "*.pb.go" | xargs goimports -w -local github.com/bianjieai/iritamod
+	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./lite/*/statik.go" -not -path "*.pb.go" -not -path "*.pulsar.go" | xargs golines -w
+	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./lite/*/statik.go" -not -path "*.pb.go" -not -path "*.pulsar.go" | xargs misspell -w
+	find . -name '*.go' -type f -not -path "./vendor*" -not -path "*.git*" -not -path "./lite/*/statik.go" -not -path "*.pb.go" -not -path "*.pulsar.go" | xargs goimports -w -local github.com/bianjieai/iritamod
 
 benchmark:
 	@go test -mod=readonly -bench=. ./...

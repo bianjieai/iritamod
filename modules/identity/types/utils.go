@@ -50,7 +50,10 @@ func CheckCertificate(cert []byte) error {
 	}
 
 	if pubKeyAlgo == UnknownPubKeyAlgorithm {
-		return sdkerrors.Wrap(ErrUnsupportedPubKeyAlgorithm, "the public key algorithm of the certificate is not supported ")
+		return sdkerrors.Wrap(
+			ErrUnsupportedPubKeyAlgorithm,
+			"the public key algorithm of the certificate is not supported ",
+		)
 	}
 
 	if _, err := parseCertificate(certDERBlock.Bytes, pubKeyAlgo); err != nil {
@@ -84,7 +87,10 @@ func parseASN1Certificate(asn1Data []byte) (*certificate, error) {
 		return nil, sdkerrors.Wrap(ErrInvalidCertificate, err.Error())
 	}
 	if len(rest) > 0 {
-		return nil, sdkerrors.Wrap(ErrInvalidCertificate, asn1.SyntaxError{Msg: "trailing data"}.Error())
+		return nil, sdkerrors.Wrap(
+			ErrInvalidCertificate,
+			asn1.SyntaxError{Msg: "trailing data"}.Error(),
+		)
 	}
 
 	return &asn1Cert, nil
@@ -151,7 +157,10 @@ func getNamedCurveOID(keyData *publicKeyInfo) (*asn1.ObjectIdentifier, error) {
 
 	rest, err := asn1.Unmarshal(paramsData, namedCurveOID)
 	if err != nil {
-		return nil, sdkerrors.Wrap(ErrInvalidCertificate, "failed to parse ECDSA parameters as named curve")
+		return nil, sdkerrors.Wrap(
+			ErrInvalidCertificate,
+			"failed to parse ECDSA parameters as named curve",
+		)
 	}
 	if len(rest) != 0 {
 		return nil, sdkerrors.Wrap(ErrInvalidCertificate, "trailing data after ECDSA parameters")

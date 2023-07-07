@@ -34,7 +34,12 @@ func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey) Keeper {
 // Each role gets the access control
 func (k Keeper) RegisterMsgAuth(msg sdk.Msg, roles ...types.Role) {
 	if _, ok := k.AuthMap[sdk.MsgTypeURL(msg)]; ok {
-		panic(fmt.Sprintf("msg type or module name %s has already been initialized", sdk.MsgTypeURL(msg)))
+		panic(
+			fmt.Sprintf(
+				"msg type or module name %s has already been initialized",
+				sdk.MsgTypeURL(msg),
+			),
+		)
 	}
 	auth := types.AuthDefault
 	for _, r := range roles {
@@ -57,7 +62,11 @@ func (k *Keeper) RegisterModuleAuth(module string, roles ...types.Role) {
 }
 
 // Authorize assigns the specified roles to an address
-func (k *Keeper) Authorize(ctx sdk.Context, address, operator sdk.AccAddress, rs ...types.Role) error {
+func (k *Keeper) Authorize(
+	ctx sdk.Context,
+	address, operator sdk.AccAddress,
+	rs ...types.Role,
+) error {
 	if k.IsRootAdmin(ctx, address) {
 		return types.ErrOperateRootAdmin
 	}
@@ -73,7 +82,10 @@ func (k *Keeper) Authorize(ctx sdk.Context, address, operator sdk.AccAddress, rs
 		}
 
 		if r == types.RolePermAdmin && !k.IsRootAdmin(ctx, operator) {
-			return sdkerrors.Wrap(types.ErrUnauthorizedOperation, "can not add permission admin role")
+			return sdkerrors.Wrap(
+				types.ErrUnauthorizedOperation,
+				"can not add permission admin role",
+			)
 		}
 
 		if r != types.RolePowerUser && !k.IsAdminPerm(ctx, operator) {
@@ -90,7 +102,11 @@ func (k *Keeper) Authorize(ctx sdk.Context, address, operator sdk.AccAddress, rs
 }
 
 // Unauthorize unassigns the specified roles from an address
-func (k Keeper) Unauthorize(ctx sdk.Context, address, operator sdk.AccAddress, roles ...types.Role) error {
+func (k Keeper) Unauthorize(
+	ctx sdk.Context,
+	address, operator sdk.AccAddress,
+	roles ...types.Role,
+) error {
 	if k.IsRootAdmin(ctx, address) {
 		return types.ErrOperateRootAdmin
 	}

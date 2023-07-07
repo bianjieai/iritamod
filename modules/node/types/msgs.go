@@ -91,7 +91,11 @@ func (m MsgCreateValidator) GetSigners() []sdk.AccAddress {
 
 // NewMsgUpdateValidator creates a new MsgUpdateValidator instance.
 func NewMsgUpdateValidator(
-	id ctmbytes.HexBytes, name, description string, cert string, power int64, operator sdk.AccAddress,
+	id ctmbytes.HexBytes,
+	name, description string,
+	cert string,
+	power int64,
+	operator sdk.AccAddress,
 ) *MsgUpdateValidator {
 	return &MsgUpdateValidator{
 		Id:          id.String(),

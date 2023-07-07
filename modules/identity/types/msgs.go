@@ -149,7 +149,12 @@ func ValidateIdentityFields(
 	}
 
 	if len(id) > IdLengthMax*2 || len(id) < IdLengthMin*2 {
-		return sdkerrors.Wrapf(ErrInvalidID, "size of the ID must be %d ~ %d in bytes", IdLengthMin, IdLengthMax)
+		return sdkerrors.Wrapf(
+			ErrInvalidID,
+			"size of the ID must be %d ~ %d in bytes",
+			IdLengthMin,
+			IdLengthMax,
+		)
 	}
 
 	if _, err := hex.DecodeString(id); err != nil {
@@ -169,7 +174,11 @@ func ValidateIdentityFields(
 	}
 
 	if len(credentials) > MaxURILength {
-		return sdkerrors.Wrapf(ErrInvalidCredentials, "length of the credentials uri must not be greater than %d", MaxURILength)
+		return sdkerrors.Wrapf(
+			ErrInvalidCredentials,
+			"length of the credentials uri must not be greater than %d",
+			MaxURILength,
+		)
 	}
 
 	return nil

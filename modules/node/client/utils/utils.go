@@ -13,7 +13,10 @@ import (
 	"github.com/bianjieai/iritamod/modules/node/types"
 )
 
-func QueryValidator(clientCtx client.Context, param string) (validator types.Validator, height int64, err error) {
+func QueryValidator(
+	clientCtx client.Context,
+	param string,
+) (validator types.Validator, height int64, err error) {
 	queryValidator := func(id ctmbytes.HexBytes) (validator types.Validator, height int64, err error) {
 		res, height, err := clientCtx.QueryStore(types.GetValidatorIDKey(id), types.StoreKey)
 		if err != nil {
@@ -24,7 +27,8 @@ func QueryValidator(clientCtx client.Context, param string) (validator types.Val
 		return
 	}
 
-	if res, _, err := clientCtx.QueryStore(types.GetValidatorNameKey(param), types.StoreKey); err == nil && len(res) > 0 {
+	if res, _, err := clientCtx.QueryStore(types.GetValidatorNameKey(param), types.StoreKey); err == nil &&
+		len(res) > 0 {
 		var id gogotypes.BytesValue
 		if err := types.ModuleCdc.Unmarshal(res, &id); err != nil {
 			return validator, height, fmt.Errorf("no validator found %s", param)

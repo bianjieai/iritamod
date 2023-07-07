@@ -60,7 +60,8 @@ func NewCreateValidatorCmd() *cobra.Command {
 				return err
 			}
 
-			af := txf.WithTxConfig(clientCtx.TxConfig).WithAccountRetriever(clientCtx.AccountRetriever)
+			af := txf.WithTxConfig(clientCtx.TxConfig).
+				WithAccountRetriever(clientCtx.AccountRetriever)
 			_, msg, err := BuildCreateValidatorMsg(clientCtx, af)
 			if err != nil {
 				return err
@@ -74,7 +75,14 @@ func NewCreateValidatorCmd() *cobra.Command {
 		},
 	}
 
-	FsCreateValidator.String(FlagIP, "", fmt.Sprintf("The node's public IP. It takes effect only when used in combination with --%s", flags.FlagGenerateOnly))
+	FsCreateValidator.String(
+		FlagIP,
+		"",
+		fmt.Sprintf(
+			"The node's public IP. It takes effect only when used in combination with --%s",
+			flags.FlagGenerateOnly,
+		),
+	)
 	cmd.Flags().AddFlagSet(FsCreateValidator)
 
 	flags.AddTxFlagsToCmd(cmd)
@@ -251,7 +259,9 @@ func NewRevokeNodeCmd() *cobra.Command {
 
 // CreateValidatorMsgHelpers Return the flagset, particular flags, and a description of defaults
 // this is anticipated to be used with the gen-tx
-func CreateValidatorMsgHelpers(ipDefault string) (fs *flag.FlagSet, pubkeyFlag, powerFlag, defaultsDesc string) {
+func CreateValidatorMsgHelpers(
+	ipDefault string,
+) (fs *flag.FlagSet, pubkeyFlag, powerFlag, defaultsDesc string) {
 	fs = flag.NewFlagSet("", flag.ContinueOnError)
 	fs.String(FlagIP, ipDefault, "The node's public IP")
 
@@ -266,7 +276,10 @@ func CreateValidatorMsgHelpers(ipDefault string) (fs *flag.FlagSet, pubkeyFlag, 
 func PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID, chainID string, cert string) {
 	ip := viper.GetString(FlagIP)
 	if ip == "" {
-		_, _ = fmt.Fprintf(os.Stderr, "couldn't retrieve an external IP; the tx's memo field will be unset")
+		_, _ = fmt.Fprintf(
+			os.Stderr,
+			"couldn't retrieve an external IP; the tx's memo field will be unset",
+		)
 	}
 
 	if len(strings.TrimSpace(viper.GetString(FlagNodeID))) > 0 {
@@ -288,7 +301,10 @@ func PrepareFlagsForTxCreateValidator(config *cfg.Config, nodeID, chainID string
 }
 
 // BuildCreateValidatorMsg makes a new MsgCreateValidator.
-func BuildCreateValidatorMsg(clientCtx client.Context, txBldr tx.Factory) (tx.Factory, sdk.Msg, error) {
+func BuildCreateValidatorMsg(
+	clientCtx client.Context,
+	txBldr tx.Factory,
+) (tx.Factory, sdk.Msg, error) {
 	certPath := viper.GetString(FlagCert)
 
 	data, err := ioutil.ReadFile(certPath)
