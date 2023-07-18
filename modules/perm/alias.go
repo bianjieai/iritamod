@@ -27,6 +27,7 @@ const (
 	RoleRelayerUser         = types.RoleRelayerUser
 	RolePlatformUser        = types.RolePlatformUser
 	RolePowerUserAdmin      = types.RolePowerUserAdmin
+	RoleLayer2User          = types.RoleLayer2User
 )
 
 var (

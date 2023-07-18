@@ -1,6 +1,7 @@
 package simapp
 
 import (
+	sidechain "github.com/bianjieai/iritamod/modules/side-chain"
 	"io"
 	"net/http"
 	"os"
@@ -61,6 +62,8 @@ import (
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 
+	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+
 	"github.com/bianjieai/iritamod/modules/identity"
 	identitykeeper "github.com/bianjieai/iritamod/modules/identity/keeper"
 	identitytypes "github.com/bianjieai/iritamod/modules/identity/types"
@@ -72,7 +75,9 @@ import (
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
 	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	cslashing "github.com/bianjieai/iritamod/modules/slashing"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
+
+	sidechainkeeper "github.com/bianjieai/iritamod/modules/side-chain/keeper"
+	sidechaintypes "github.com/bianjieai/iritamod/modules/side-chain/types"
 )
 
 const appName = "SimApp"
@@ -102,12 +107,14 @@ var (
 		perm.AppModuleBasic{},
 		identity.AppModuleBasic{},
 		node.AppModuleBasic{},
+		sidechain.AppModuleBasic{},
 	)
 
 	// module account permissions
 	maccPerms = map[string][]string{
 		authtypes.FeeCollectorName: nil,
 		//gov.ModuleName:                  {authtypes.Burner},
+		sidechaintypes.ModuleName: nil,
 	}
 
 	// module accounts that are allowed to receive tokens
@@ -145,6 +152,7 @@ type SimApp struct {
 	IdentityKeeper identitykeeper.Keeper
 	NodeKeeper     nodekeeper.Keeper
 	FeeGrantKeeper feegrantkeeper.Keeper
+	Layer2Keeper   sidechainkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -194,6 +202,7 @@ func NewSimApp(
 		permtypes.StoreKey,
 		identitytypes.StoreKey,
 		nodetypes.StoreKey,
+		sidechaintypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -244,6 +253,8 @@ func NewSimApp(
 	app.PermKeeper = permkeeper.NewKeeper(appCodec, keys[permtypes.StoreKey])
 	app.IdentityKeeper = identitykeeper.NewKeeper(appCodec, keys[identitytypes.StoreKey])
 
+	app.Layer2Keeper = sidechainkeeper.NewKeeper(appCodec, keys[sidechaintypes.StoreKey], app.AccountKeeper)
+
 	/****  Module Options ****/
 
 	// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
@@ -266,6 +277,7 @@ func NewSimApp(
 		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
+		sidechain.NewAppModule(appCodec, app.Layer2Keeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -285,6 +297,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
+		sidechaintypes.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(
@@ -300,6 +313,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
+		sidechaintypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -320,6 +334,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
+		sidechaintypes.ModuleName,
 	)
 
 	app.mm.SetOrderMigrations(
@@ -335,6 +350,7 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
+		sidechaintypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)

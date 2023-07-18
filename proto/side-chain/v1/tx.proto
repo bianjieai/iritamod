@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package iritamod.side_chain.v1;
+
+import "gogoproto/gogo.proto";
+import "side-chain/v1/side-chain.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/side-chain/types";
+
+// Msg defines the side-chain module service
+service Msg {
+  // CreateSpace defines a method for creating a space
+  rpc CreateSpace(MsgCreateSpace) returns (MsgCreateSpaceResponse);
+
+  // TransferSpace defines a method for transferring a space
+  rpc TransferSpace(MsgTransferSpace) returns (MsgTransferSpaceResponse);
+
+  // CreateBlockHeader defines a method for creating a record
+  rpc CreateBlockHeader(MsgCreateBlockHeader) returns (MsgCreateBlockHeaderResponse);
+}
+
+// MsgCreateSpace defines the Msg/CreateSpace request type.
+message MsgCreateSpace {
+  string name = 1;
+  string uri = 2;
+  string sender = 3;
+}
+
+// MsgCreateSpaceResponse defines the Msg/CreateSpace response type.
+message MsgCreateSpaceResponse {
+  uint64 space_id = 1;
+}
+
+// MsgTransferSpace defines the Msg/TransferSpace request type.
+message MsgTransferSpace {
+  uint64 space_id = 1;
+  string recipient = 2;
+  string sender = 3;
+}
+
+// MsgTransferSpaceResponse defines the Msg/TransferSpace response type.
+message MsgTransferSpaceResponse {}
+
+// MsgCreateBlockHeader defines the Msg/CreateRecord request type.
+message MsgCreateBlockHeader {
+  uint64 space_id = 1;
+  uint64 height = 2;
+  string header = 3;
+  string sender = 4;
+}
+
+// MsgCreateBlockHeaderResponse defines the Msg/CreateRecord response type.
+message MsgCreateBlockHeaderResponse {}
