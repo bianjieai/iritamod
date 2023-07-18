@@ -1,11 +1,12 @@
 package simapp
 
 import (
-	sidechain "github.com/bianjieai/iritamod/modules/side-chain"
 	"io"
 	"net/http"
 	"os"
 	"path/filepath"
+
+	sidechain "github.com/bianjieai/iritamod/modules/side-chain"
 
 	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
