@@ -37,6 +37,18 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ## [Unreleased]
 
+## [v1.4.0] - 2023-07-18
+
+### Application
+
+* (iritamod) [\#74](https://github.com/bianjieai/iritamod/pull/73) add side-chain module
+
+
+### Bug Fixes
+
+* (iritamod) [\#69](https://github.com/bianjieai/iritamod/pull/69) blocked feegranter should be blocked
+
+
 ## [v1.3.0] - 2022-08-08
 
 ### Application
