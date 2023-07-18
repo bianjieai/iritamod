@@ -19,6 +19,20 @@ func NewAuthDecorator(k Keeper) AuthDecorator {
 
 // AnteHandle returns an AnteHandler that checks the auth to send msg
 func (ad AuthDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, simulate bool, next sdk.AnteHandler) (newCtx sdk.Context, err error) {
+	feeTx := tx.(sdk.FeeTx)
+	granter := feeTx.FeeGranter()
+	if granter != nil {
+		if ad.k.GetBlockAccount(ctx, granter) {
+			return ctx, sdkerrors.Wrapf(types.ErrUnauthorizedOperation, "The granter %s has been blocked", granter)
+		}
+	}
+
+	feePayer := feeTx.FeePayer()
+	if feePayer != nil {
+		if ad.k.GetBlockAccount(ctx, feePayer) {
+			return ctx, sdkerrors.Wrapf(types.ErrUnauthorizedOperation, "The feePayer %s has been blocked", feePayer)
+		}
+	}
 	for _, msg := range tx.GetMsgs() {
 		for _, signer := range msg.GetSigners() {
 			if ad.k.GetBlockAccount(ctx, signer) {
