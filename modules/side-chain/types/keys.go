@@ -22,7 +22,9 @@ var (
 	KeyPrefixSpaceOfOwner  = []byte{0x03}
 
 	// BlockHeader storekey prefix
-	KeyPrefixBlockHeader = []byte{0x04}
+	KeyPrefixBlockHeader             = []byte{0x04}
+	KeyPrefixBlockHeaderTxHash       = []byte{0x05}
+	KeyPrefixBlockHeaderLatestHeight = []byte{0x06}
 
 	Delimiter   = []byte{0x00}
 	Placeholder = []byte{0x01}
@@ -72,7 +74,7 @@ func SpaceOfOwnerByOwnerStoreKey(owner sdk.AccAddress) []byte {
 
 // record mappings store key
 
-// BlockHeaderStoreKey returns the byte representation of the record key
+// BlockHeaderStoreKey returns the byte representation of the block header key
 // Items are stored with the following key: values
 // <0x04><space_id><delimiter><block_height>
 func BlockHeaderStoreKey(spaceId, blockHeight uint64) []byte {
@@ -83,5 +85,30 @@ func BlockHeaderStoreKey(spaceId, blockHeight uint64) []byte {
 	copy(key[len(KeyPrefixBlockHeader):], spaceIdStr)
 	copy(key[len(KeyPrefixBlockHeader)+len(spaceIdStr):], Delimiter)
 	copy(key[len(KeyPrefixBlockHeader)+len(spaceIdStr)+len(Delimiter):], blockHeightStr)
+	return key
+}
+
+// BlockHeaderTxHashStoreKey returns the byte representation of the block header tx hash key
+// Items are stored with the following key: values
+// <0x05><space_id><delimiter><block_height>
+func BlockHeaderTxHashStoreKey(spaceId, blockHeight uint64) []byte {
+	spaceIdStr := strconv.FormatUint(spaceId, 10)
+	blockHeightStr := strconv.FormatUint(blockHeight, 10)
+	key := make([]byte, len(KeyPrefixBlockHeaderTxHash)+len(spaceIdStr)+len(Delimiter)+len(blockHeightStr))
+	copy(key, KeyPrefixBlockHeaderTxHash)
+	copy(key[len(KeyPrefixBlockHeaderTxHash):], spaceIdStr)
+	copy(key[len(KeyPrefixBlockHeaderTxHash)+len(spaceIdStr):], Delimiter)
+	copy(key[len(KeyPrefixBlockHeaderTxHash)+len(spaceIdStr)+len(Delimiter):], blockHeightStr)
+	return key
+}
+
+// BlockHeaderLatestHeightStoreKey returns the byte representation of the block header latest height key
+// Items are stored with the following key: values
+// <0x06><space_id>
+func BlockHeaderLatestHeightStoreKey(spaceId uint64) []byte {
+	spaceIdStr := strconv.FormatUint(spaceId, 10)
+	key := make([]byte, len(KeyPrefixBlockHeaderLatestHeight)+len(spaceIdStr))
+	copy(key, KeyPrefixBlockHeaderLatestHeight)
+	copy(key[len(KeyPrefixBlockHeaderLatestHeight):], spaceIdStr)
 	return key
 }

@@ -5,6 +5,7 @@ import (
 	"strconv"
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
+	"github.com/tendermint/tendermint/crypto/tmhash"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -52,6 +53,9 @@ func (k Keeper) CreateBlockHeader(ctx sdk.Context, spaceId, height uint64, heade
 	}
 
 	k.setBlockHeader(ctx, spaceId, height, header)
+	k.setBlockHeaderLatestHeight(ctx, spaceId, height)
+	k.setBlockHeaderTxHash(ctx, spaceId, height, string(tmhash.Sum(ctx.TxBytes())))
+
 	return nil
 }
 
@@ -179,6 +183,34 @@ func (k Keeper) HasBlockHeader(ctx sdk.Context, spaceId, height uint64) bool {
 func (k Keeper) setBlockHeader(ctx sdk.Context, spaceId, blockHeight uint64, header string) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.BlockHeaderStoreKey(spaceId, blockHeight), []byte(header))
+}
+
+func (k Keeper) GetBlockHeaderTxHash(ctx sdk.Context, spaceId, blockHeight uint64) (string, error) {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.BlockHeaderTxHashStoreKey(spaceId, blockHeight))
+	if bz == nil {
+		return "", sdkerrors.Wrapf(types.ErrBlockHeader, "create block header tx hash does not exist at height (%d) in space (%d)", blockHeight, spaceId)
+	}
+	return string(bz), nil
+}
+
+func (k Keeper) setBlockHeaderTxHash(ctx sdk.Context, spaceId, blockHeight uint64, txHash string) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.BlockHeaderTxHashStoreKey(spaceId, blockHeight), []byte(txHash))
+}
+
+func (k Keeper) GetBlockHeaderLatestHeight(ctx sdk.Context, spaceId uint64) (uint64, error) {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.BlockHeaderLatestHeightStoreKey(spaceId))
+	if bz == nil {
+		return 0, sdkerrors.Wrapf(types.ErrBlockHeader, "latest block header height does not exist in space (%d)", spaceId)
+	}
+	return sdk.BigEndianToUint64(bz), nil
+}
+
+func (k Keeper) setBlockHeaderLatestHeight(ctx sdk.Context, spaceId, blockHeight uint64) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.BlockHeaderLatestHeightStoreKey(spaceId), sdk.Uint64ToBigEndian(blockHeight))
 }
 
 func (k Keeper) getSpaceStore(ctx sdk.Context) prefix.Store {
