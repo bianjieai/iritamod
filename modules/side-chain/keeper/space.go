@@ -53,8 +53,20 @@ func (k Keeper) CreateBlockHeader(ctx sdk.Context, spaceId, height uint64, heade
 	}
 
 	k.setBlockHeader(ctx, spaceId, height, header)
-	k.setBlockHeaderLatestHeight(ctx, spaceId, height)
 	k.setBlockHeaderTxHash(ctx, spaceId, height, string(tmhash.Sum(ctx.TxBytes())))
+
+	// update the latest side chain height
+	if k.HasSpaceLatestHeight(ctx, spaceId) {
+		latestHeight, err := k.GetSpaceLatestHeight(ctx, spaceId)
+		if err != nil {
+			return sdkerrors.Wrapf(types.ErrBlockHeader, "fail to get latest block header height in space (%d)", spaceId)
+		}
+		if latestHeight < height {
+			k.setSpaceLatestHeight(ctx, spaceId, height)
+		}
+	} else {
+		k.setSpaceLatestHeight(ctx, spaceId, height)
+	}
 
 	return nil
 }
@@ -199,18 +211,44 @@ func (k Keeper) setBlockHeaderTxHash(ctx sdk.Context, spaceId, blockHeight uint6
 	store.Set(types.BlockHeaderTxHashStoreKey(spaceId, blockHeight), []byte(txHash))
 }
 
-func (k Keeper) GetBlockHeaderLatestHeight(ctx sdk.Context, spaceId uint64) (uint64, error) {
+func (k Keeper) GetSpaceLatestHeights(ctx sdk.Context) []types.SpaceLatestHeight {
+	latestHeights := make([]types.SpaceLatestHeight, 0)
 	store := ctx.KVStore(k.storeKey)
-	bz := store.Get(types.BlockHeaderLatestHeightStoreKey(spaceId))
+	iterator := sdk.KVStorePrefixIterator(store, types.KeyPrefixSpaceLatestHeight)
+	defer iterator.Close()
+
+	for ; iterator.Valid(); iterator.Next() {
+		ret := bytes.TrimPrefix(iterator.Key(), types.KeyPrefixSpaceLatestHeight)
+		spaceId, err := strconv.ParseUint(string(ret), 10, 64)
+		if err != nil {
+			panic("fail to convert spaceId to uint64")
+		}
+		latestHeight := sdk.BigEndianToUint64(iterator.Value())
+		latestHeights = append(latestHeights, types.SpaceLatestHeight{
+			Id:     spaceId,
+			Height: latestHeight,
+		})
+	}
+	return latestHeights
+}
+
+func (k Keeper) HasSpaceLatestHeight(ctx sdk.Context, spaceId uint64) bool {
+	store := ctx.KVStore(k.storeKey)
+	return store.Has(types.KeyPrefixSpaceLatestHeightStoreKey(spaceId))
+}
+
+func (k Keeper) GetSpaceLatestHeight(ctx sdk.Context, spaceId uint64) (uint64, error) {
+	store := ctx.KVStore(k.storeKey)
+	bz := store.Get(types.KeyPrefixSpaceLatestHeightStoreKey(spaceId))
 	if bz == nil {
-		return 0, sdkerrors.Wrapf(types.ErrBlockHeader, "latest block header height does not exist in space (%d)", spaceId)
+		return 0, sdkerrors.Wrapf(types.ErrInvalidSpaceId, "latest block header height does not exist in space (%d)", spaceId)
 	}
 	return sdk.BigEndianToUint64(bz), nil
 }
 
-func (k Keeper) setBlockHeaderLatestHeight(ctx sdk.Context, spaceId, blockHeight uint64) {
+func (k Keeper) setSpaceLatestHeight(ctx sdk.Context, spaceId, blockHeight uint64) {
 	store := ctx.KVStore(k.storeKey)
-	store.Set(types.BlockHeaderLatestHeightStoreKey(spaceId), sdk.Uint64ToBigEndian(blockHeight))
+	store.Set(types.KeyPrefixSpaceLatestHeightStoreKey(spaceId), sdk.Uint64ToBigEndian(blockHeight))
 }
 
 func (k Keeper) getSpaceStore(ctx sdk.Context) prefix.Store {

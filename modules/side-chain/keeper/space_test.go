@@ -40,7 +40,7 @@ func (s *TestSuite) TestCreateBlockHeader() {
 	s.Require().NoErrorf(err, "failed to get block header")
 	s.Require().Equal(header, resHeader)
 
-	h, err := s.keeper.GetBlockHeaderLatestHeight(s.ctx, avataSpaceId)
+	h, err := s.keeper.GetSpaceLatestHeight(s.ctx, avataSpaceId)
 	s.Require().NoErrorf(err, "failed to get block header latest height")
 	s.Require().Equal(height, h)
 

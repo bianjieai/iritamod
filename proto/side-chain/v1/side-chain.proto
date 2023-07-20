@@ -13,8 +13,15 @@ message Space {
   string owner = 4;
 }
 
+// SpaceLatestHeight defines the latest height of the side-chain.
+message SpaceLatestHeight {
+  uint64 id = 1;
+  uint64 height = 2;
+}
+
 message BlockHeader {
   uint64 space_id = 1;
   uint64 height = 2;
   string header = 3;
+  string tx_hash = 4; // TxHash for CreateBlockHeader message.
 }

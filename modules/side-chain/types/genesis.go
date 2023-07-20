@@ -11,17 +11,19 @@ import (
 // NewGenesisState creates a new GenesisState object
 func NewGenesisState(spaceSequence uint64,
 	spaces []Space,
-	blockHeaders []BlockHeader) *GenesisState {
+	blockHeaders []BlockHeader,
+	spaceLatestHeights []SpaceLatestHeight) *GenesisState {
 	return &GenesisState{
-		SpaceSequence: spaceSequence,
-		Spaces:        spaces,
-		BlockHeaders:  blockHeaders,
+		SpaceSequence:      spaceSequence,
+		Spaces:             spaces,
+		BlockHeaders:       blockHeaders,
+		SpaceLatestHeights: spaceLatestHeights,
 	}
 }
 
 // DefaultGenesisState creates a default GenesisState object
 func DefaultGenesisState() *GenesisState {
-	return NewGenesisState(0, []Space{}, []BlockHeader{})
+	return NewGenesisState(0, []Space{}, []BlockHeader{}, []SpaceLatestHeight{})
 }
 
 // ValidateGenesis validates the provided genesis state to ensure the
@@ -50,6 +52,7 @@ func ValidateGenesis(data GenesisState) error {
 
 	// validate BlockHeader
 	seenBlockHeaderMap := make(map[string]bool)
+	seenLatestHeight := make(map[uint64]uint64)
 	for _, header := range data.BlockHeaders {
 		if !seenSpaceIds[header.SpaceId] {
 			return sdkerrors.Wrapf(ErrInvalidSpaceId, "unknown space (%d) during validation", header.SpaceId)
@@ -61,6 +64,31 @@ func ValidateGenesis(data GenesisState) error {
 			return sdkerrors.Wrapf(ErrBlockHeader, "duplicate block header (%s) during validation", seenBlockHeader)
 		}
 		seenBlockHeaderMap[seenBlockHeader] = true
+
+		// record latest height
+		if _, ok := seenLatestHeight[header.SpaceId]; !ok {
+			seenLatestHeight[header.SpaceId] = header.Height
+		} else {
+			if seenLatestHeight[header.SpaceId] < header.Height {
+				seenLatestHeight[header.SpaceId] = header.Height
+			}
+		}
+	}
+
+	// validate SpaceLatestHeight
+	for _, latestHeight := range data.SpaceLatestHeights {
+		if !seenSpaceIds[latestHeight.Id] {
+			return sdkerrors.Wrapf(ErrInvalidSpaceId, "unknown space (%d) during validation", latestHeight.Id)
+		}
+
+		seenBlockHeader := fmt.Sprintf("%d-%d", latestHeight.Id, latestHeight.Height)
+		if !seenBlockHeaderMap[seenBlockHeader] {
+			return sdkerrors.Wrapf(ErrBlockHeader, "unknown block header (%s) during validation", seenBlockHeader)
+		}
+
+		if seenLatestHeight[latestHeight.Id] != latestHeight.Height {
+			return sdkerrors.Wrapf(ErrBlockHeader, "latest block header height mismatch (%d) during validation", latestHeight.Height)
+		}
 	}
 
 	return nil

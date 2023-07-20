@@ -10,4 +10,5 @@ message GenesisState {
   uint64 space_sequence = 1;
   repeated Space spaces = 2  [ (gogoproto.nullable) = false ];
   repeated BlockHeader block_headers = 3  [ (gogoproto.nullable) = false ];
+  repeated SpaceLatestHeight space_latest_heights = 4  [ (gogoproto.nullable) = false ];
 }

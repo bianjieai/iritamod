@@ -17,14 +17,14 @@ const (
 
 var (
 	// Space storekey prefix
-	KeyPrefixSpaceSequence = []byte{0x01}
-	KeyPrefixSpace         = []byte{0x02}
-	KeyPrefixSpaceOfOwner  = []byte{0x03}
+	KeyPrefixSpaceSequence     = []byte{0x01}
+	KeyPrefixSpace             = []byte{0x02}
+	KeyPrefixSpaceOfOwner      = []byte{0x03}
+	KeyPrefixSpaceLatestHeight = []byte{0x06}
 
 	// BlockHeader storekey prefix
-	KeyPrefixBlockHeader             = []byte{0x04}
-	KeyPrefixBlockHeaderTxHash       = []byte{0x05}
-	KeyPrefixBlockHeaderLatestHeight = []byte{0x06}
+	KeyPrefixBlockHeader       = []byte{0x04}
+	KeyPrefixBlockHeaderTxHash = []byte{0x05}
 
 	Delimiter   = []byte{0x00}
 	Placeholder = []byte{0x01}
@@ -102,13 +102,13 @@ func BlockHeaderTxHashStoreKey(spaceId, blockHeight uint64) []byte {
 	return key
 }
 
-// BlockHeaderLatestHeightStoreKey returns the byte representation of the block header latest height key
+// KeyPrefixSpaceLatestHeightStoreKey returns the byte representation of the block header latest height key
 // Items are stored with the following key: values
 // <0x06><space_id>
-func BlockHeaderLatestHeightStoreKey(spaceId uint64) []byte {
+func KeyPrefixSpaceLatestHeightStoreKey(spaceId uint64) []byte {
 	spaceIdStr := strconv.FormatUint(spaceId, 10)
-	key := make([]byte, len(KeyPrefixBlockHeaderLatestHeight)+len(spaceIdStr))
-	copy(key, KeyPrefixBlockHeaderLatestHeight)
-	copy(key[len(KeyPrefixBlockHeaderLatestHeight):], spaceIdStr)
+	key := make([]byte, len(KeyPrefixSpaceLatestHeight)+len(spaceIdStr))
+	copy(key, KeyPrefixSpaceLatestHeight)
+	copy(key[len(KeyPrefixSpaceLatestHeight):], spaceIdStr)
 	return key
 }
