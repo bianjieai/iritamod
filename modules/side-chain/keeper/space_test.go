@@ -1,6 +1,11 @@
 package keeper_test
 
-import "github.com/tendermint/tendermint/crypto/tmhash"
+import (
+	"fmt"
+
+	"github.com/tendermint/tendermint/crypto/tmhash"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+)
 
 func (s *TestSuite) TestCreateSpace() {
 	spaceName := "NewSpace"
@@ -44,7 +49,10 @@ func (s *TestSuite) TestCreateBlockHeader() {
 	s.Require().NoErrorf(err, "failed to get block header latest height")
 	s.Require().Equal(height, h)
 
+	var expected tmbytes.HexBytes = tmhash.Sum(s.ctx.TxBytes())
 	txHash, err := s.keeper.GetBlockHeaderTxHash(s.ctx, avataSpaceId, height)
 	s.Require().NoErrorf(err, "failed to get block header tx hash")
-	s.Require().Equal(string(tmhash.Sum(s.ctx.TxBytes())), txHash)
+	s.Require().Equal(expected.String(), txHash)
+
+	fmt.Println(txHash)
 }

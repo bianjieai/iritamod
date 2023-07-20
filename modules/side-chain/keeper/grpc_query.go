@@ -18,7 +18,7 @@ func (k Keeper) Space(goCtx context.Context, request *types.QuerySpaceRequest) (
 		return nil, err
 	}
 
-	// NOTE: history data didn't contain latest height, so return 0 if not exist.
+	// NOTE: history data didn't record latest height, so return 0 if not exist.
 	latestHeight := uint64(0)
 	if k.HasSpaceLatestHeight(ctx, request.SpaceId) {
 		lh, err := k.GetSpaceLatestHeight(ctx, request.SpaceId)
@@ -74,9 +74,14 @@ func (k Keeper) BlockHeader(goCtx context.Context, request *types.QueryBlockHead
 		return nil, err
 	}
 
-	txHash, err := k.GetBlockHeaderTxHash(ctx, request.SpaceId, request.Height)
-	if err != nil {
-		return nil, err
+	// NOTE: history data didn't record create block header tx hash, so return 0 if not exist.
+	txHash := "history create block header tx was not stored"
+	if k.HasBlockHeaderTxHash(ctx, request.SpaceId, request.Height) {
+		th, err := k.GetBlockHeaderTxHash(ctx, request.SpaceId, request.Height)
+		if err != nil {
+			return nil, err
+		}
+		txHash = th
 	}
 
 	return &types.QueryBlockHeaderResponse{

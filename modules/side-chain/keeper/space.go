@@ -6,6 +6,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/store/prefix"
 	"github.com/tendermint/tendermint/crypto/tmhash"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
@@ -53,7 +54,7 @@ func (k Keeper) CreateBlockHeader(ctx sdk.Context, spaceId, height uint64, heade
 	}
 
 	k.setBlockHeader(ctx, spaceId, height, header)
-	k.setBlockHeaderTxHash(ctx, spaceId, height, string(tmhash.Sum(ctx.TxBytes())))
+	k.setBlockHeaderTxHash(ctx, spaceId, height, tmhash.Sum(ctx.TxBytes()))
 
 	// update the latest side chain height
 	if k.HasSpaceLatestHeight(ctx, spaceId) {
@@ -197,6 +198,11 @@ func (k Keeper) setBlockHeader(ctx sdk.Context, spaceId, blockHeight uint64, hea
 	store.Set(types.BlockHeaderStoreKey(spaceId, blockHeight), []byte(header))
 }
 
+func (k Keeper) HasBlockHeaderTxHash(ctx sdk.Context, spaceId, blockHeight uint64) bool {
+	store := ctx.KVStore(k.storeKey)
+	return store.Has(types.BlockHeaderTxHashStoreKey(spaceId, blockHeight))
+}
+
 func (k Keeper) GetBlockHeaderTxHash(ctx sdk.Context, spaceId, blockHeight uint64) (string, error) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.BlockHeaderTxHashStoreKey(spaceId, blockHeight))
@@ -206,9 +212,9 @@ func (k Keeper) GetBlockHeaderTxHash(ctx sdk.Context, spaceId, blockHeight uint6
 	return string(bz), nil
 }
 
-func (k Keeper) setBlockHeaderTxHash(ctx sdk.Context, spaceId, blockHeight uint64, txHash string) {
+func (k Keeper) setBlockHeaderTxHash(ctx sdk.Context, spaceId, blockHeight uint64, txHash tmbytes.HexBytes) {
 	store := ctx.KVStore(k.storeKey)
-	store.Set(types.BlockHeaderTxHashStoreKey(spaceId, blockHeight), []byte(txHash))
+	store.Set(types.BlockHeaderTxHashStoreKey(spaceId, blockHeight), []byte(txHash.String()))
 }
 
 func (k Keeper) GetSpaceLatestHeights(ctx sdk.Context) []types.SpaceLatestHeight {
