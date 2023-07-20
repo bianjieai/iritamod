@@ -37,6 +37,11 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ## [Unreleased]
 
+## [v1.5.0] - 2023-07-20
+
+* (iritamod/sidechain) [\#90](https://github.com/bianjieai/iritamod/pull/90) enhance side-chain module query
+* (iritamod/perm) [\#90](https://github.com/bianjieai/iritamod/pull/90) correct name for side-chain user role
+
 ## [v1.4.0] - 2023-07-18
 
 ### Application
