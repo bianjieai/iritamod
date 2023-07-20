@@ -74,8 +74,8 @@ func (k Keeper) BlockHeader(goCtx context.Context, request *types.QueryBlockHead
 		return nil, err
 	}
 
-	// NOTE: history data didn't record create block header tx hash, so return 0 if not exist.
-	txHash := "history create block header tx was not stored"
+	// NOTE: history data didn't record create block header tx hash, so return empty if not exist.
+	txHash := ""
 	if k.HasBlockHeaderTxHash(ctx, request.SpaceId, request.Height) {
 		th, err := k.GetBlockHeaderTxHash(ctx, request.SpaceId, request.Height)
 		if err != nil {
