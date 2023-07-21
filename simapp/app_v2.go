@@ -57,6 +57,8 @@ import (
 	cparamskeeper "github.com/bianjieai/iritamod/modules/params/keeper"
 	"github.com/bianjieai/iritamod/modules/perm"
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
+	sidechain "github.com/bianjieai/iritamod/modules/side-chain"
+	sidechainkeeper "github.com/bianjieai/iritamod/modules/side-chain/keeper"
 	"github.com/bianjieai/iritamod/modules/slashing"
 	slashingkeeper "github.com/bianjieai/iritamod/modules/slashing/keeper"
 	"github.com/bianjieai/iritamod/modules/upgrade"
@@ -88,6 +90,7 @@ var (
 		slashing.AppModuleBasic{},
 		cparams.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
+		sidechain.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -129,6 +132,7 @@ type SimApp struct {
 	FeeGrantKeeper  feegrantkeeper.Keeper
 	ConsensusKeeper consensuskeeper.Keeper
 	CParamsKeeper   cparamskeeper.Keeper
+	SideChainKeeper sidechainkeeper.Keeper
 
 	// simulation manager
 	sm *module.SimulationManager
@@ -214,6 +218,7 @@ func NewSimApp(
 		&app.SlashingKeeper,
 		&app.UpgradeKeeper,
 		&app.CParamsKeeper,
+		&app.SideChainKeeper,
 	); err != nil {
 		panic(err)
 	}

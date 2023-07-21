@@ -1,0 +1,60 @@
+syntax = "proto3";
+package iritamod.side_chain.v1;
+
+import "iritamod/side-chain/v1/side-chain.proto";
+import "cosmos/msg/v1/msg.proto";
+import "cosmos_proto/cosmos.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/side-chain/types";
+
+// Msg defines the side-chain module service
+service Msg {
+  // CreateSpace defines a method for creating a space
+  rpc CreateSpace(MsgCreateSpace) returns (MsgCreateSpaceResponse);
+
+  // TransferSpace defines a method for transferring a space
+  rpc TransferSpace(MsgTransferSpace) returns (MsgTransferSpaceResponse);
+
+  // CreateBlockHeader defines a method for creating a record
+  rpc CreateBlockHeader(MsgCreateBlockHeader) returns (MsgCreateBlockHeaderResponse);
+}
+
+// MsgCreateSpace defines the Msg/CreateSpace request type.
+message MsgCreateSpace {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  string name = 1;
+  string uri = 2;
+  string sender = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgCreateSpaceResponse defines the Msg/CreateSpace response type.
+message MsgCreateSpaceResponse {
+  uint64 space_id = 1;
+}
+
+// MsgTransferSpace defines the Msg/TransferSpace request type.
+message MsgTransferSpace {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  uint64 space_id = 1;
+  string recipient = 2;
+  string sender = 3 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgTransferSpaceResponse defines the Msg/TransferSpace response type.
+message MsgTransferSpaceResponse {}
+
+// MsgCreateBlockHeader defines the Msg/CreateBlockHeader request type.
+message MsgCreateBlockHeader {
+  option (cosmos.msg.v1.signer) = "sender";
+
+  uint64 space_id = 1;
+  uint64 height = 2;
+  string header = 3;
+  string sender = 4 [(cosmos_proto.scalar) = "cosmos.AddressString"];
+}
+
+// MsgCreateBlockHeaderResponse defines the Msg/CreateBlockHeader response type.
+message MsgCreateBlockHeaderResponse {}
