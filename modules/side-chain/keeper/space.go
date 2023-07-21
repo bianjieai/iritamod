@@ -38,6 +38,11 @@ func (k Keeper) TransferSpace(ctx sdk.Context, spaceId uint64, from, to sdk.AccA
 	if err != nil {
 		return err
 	}
+
+	if !k.HasSpaceOfOwner(ctx, from, spaceId) {
+		return sdkerrors.Wrapf(types.ErrInvalidSpaceOwner, "space (%d) is not owned by (%s)", spaceId, from.String())
+	}
+
 	space.Owner = to.String()
 
 	k.setSpace(ctx, spaceId, space)
@@ -49,6 +54,10 @@ func (k Keeper) TransferSpace(ctx sdk.Context, spaceId uint64, from, to sdk.AccA
 
 // CreateBlockHeader creates a layer2 block header record
 func (k Keeper) CreateBlockHeader(ctx sdk.Context, spaceId, height uint64, header string, sender sdk.AccAddress) error {
+	if !k.HasSpaceOfOwner(ctx, sender, spaceId) {
+		return sdkerrors.Wrapf(types.ErrInvalidSpaceOwner, "space (%d) is not owned by (%s)", spaceId, sender.String())
+	}
+
 	if k.HasBlockHeader(ctx, spaceId, height) {
 		return sdkerrors.Wrapf(types.ErrBlockHeader, "block header already exists at height (%d) in space (%d)", height, spaceId)
 	}

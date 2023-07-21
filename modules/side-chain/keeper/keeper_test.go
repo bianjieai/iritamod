@@ -9,6 +9,8 @@ import (
 	"github.com/tendermint/tendermint/crypto/tmhash"
 	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
 
+	"github.com/bianjieai/iritamod/modules/perm"
+	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
 	"github.com/bianjieai/iritamod/modules/side-chain/keeper"
 	"github.com/bianjieai/iritamod/simapp"
 )
@@ -28,10 +30,11 @@ var (
 type TestSuite struct {
 	suite.Suite
 
-	ctx    sdk.Context
-	cdc    *codec.LegacyAmino
-	keeper keeper.Keeper
-	app    *simapp.SimApp
+	ctx        sdk.Context
+	cdc        *codec.LegacyAmino
+	keeper     keeper.Keeper
+	permKeeper perm.Keeper
+	app        *simapp.SimApp
 }
 
 func TestTestSuite(t *testing.T) {
@@ -48,8 +51,10 @@ func (s *TestSuite) SetupTest() {
 	s.cdc = app.LegacyAmino()
 	s.ctx = app.BaseApp.NewContext(false, tmproto.Header{})
 	s.app = app
-	s.keeper = app.Layer2Keeper
+	s.keeper = app.SideChainKeeper
+	s.permKeeper = app.PermKeeper
 
+	s.prepareRoles()
 	s.prepareSideChain()
 }
 
@@ -57,4 +62,15 @@ func (s *TestSuite) prepareSideChain() {
 	id, err := s.keeper.CreateSpace(s.ctx, avataSpaceName, avataSpaceUri, accAvata)
 	s.Require().NoError(err)
 	s.Require().Equal(avataSpaceId, id)
+}
+
+func (s *TestSuite) prepareRoles() {
+	err := s.permKeeper.Authorize(s.ctx, accAvata, rootAdmin, permtypes.RoleSideChainUser)
+	if err != nil {
+		panic("failed to authorize role")
+	}
+	err = s.permKeeper.Authorize(s.ctx, accXvata, rootAdmin, permtypes.RoleSideChainUser)
+	if err != nil {
+		panic("failed to authorize role")
+	}
 }
