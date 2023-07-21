@@ -71,7 +71,7 @@ func (dlt ValidateSideChainDecorator) validateSpaceOwnership(ctx sdk.Context, ad
 func (dlt ValidateSideChainDecorator) validateSideChainUserRole(ctx sdk.Context, addr string) error {
 	accAddr, _ := sdk.AccAddressFromBech32(addr)
 	if !dlt.permKeeper.HasSideChainUserRole(ctx, accAddr) {
-		return sdkerrors.Wrapf(types.ErrInvalidSideChainUser, "account (%s) does not have l2 user role", addr)
+		return sdkerrors.Wrapf(types.ErrInvalidSideChainUser, "account (%s) does not have side chain user role", addr)
 	}
 	return nil
 }

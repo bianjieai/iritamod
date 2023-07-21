@@ -15,8 +15,8 @@ import (
 
 var (
 	rootAdmin = sdk.AccAddress(tmhash.SumTruncated([]byte("rootAdmin")))
-	accAvata  = sdk.AccAddress(tmhash.SumTruncated([]byte("acc_avata"))) // l2 user: cosmos1j0898zyz64cyxy2s2km99t2c3s6tn5tzfppw9h
-	accXvata  = sdk.AccAddress(tmhash.SumTruncated([]byte("acc_xvata"))) // l2 user
+	accAvata  = sdk.AccAddress(tmhash.SumTruncated([]byte("acc_avata"))) // side chain user: cosmos1j0898zyz64cyxy2s2km99t2c3s6tn5tzfppw9h
+	accXvata  = sdk.AccAddress(tmhash.SumTruncated([]byte("acc_xvata"))) // side chain user
 	accAlice  = sdk.AccAddress(tmhash.SumTruncated([]byte("acc_alice"))) // cosmos16877jxzrdetmzsl3pntv4n402m8d0cpvwd74w7
 	accBob    = sdk.AccAddress(tmhash.SumTruncated([]byte("acc_bob")))   // cosmos1a53v8ksyd6x47sju572t48s3ynmqyan0n2c6kx
 
