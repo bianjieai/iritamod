@@ -83,6 +83,9 @@ import (
 	"github.com/bianjieai/iritamod/modules/perm"
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
 	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
+	sidechain "github.com/bianjieai/iritamod/modules/side-chain"
+	sidechainkeeper "github.com/bianjieai/iritamod/modules/side-chain/keeper"
+	sidechaintypes "github.com/bianjieai/iritamod/modules/side-chain/types"
 	cslashing "github.com/bianjieai/iritamod/modules/slashing"
 )
 
@@ -111,6 +114,7 @@ var (
 		identity.AppModuleBasic{},
 		node.AppModuleBasic{},
 		consensus.AppModuleBasic{},
+		sidechain.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -169,6 +173,7 @@ type SimApp struct {
 	FeeGrantKeeper  feegrantkeeper.Keeper
 	ConsensusKeeper consensuskeeper.Keeper
 	CParamsKeeper   cparamskeeper.Keeper
+	SideChainKeeper sidechain.Keeper
 
 	// the module manager
 	ModuleManager *module.Manager
@@ -227,6 +232,7 @@ func NewSimApp(
 		identitytypes.StoreKey,
 		nodetypes.StoreKey,
 		consensustypes.StoreKey,
+		sidechain.StoreKey,
 	)
 
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -334,6 +340,11 @@ func NewSimApp(
 	app.CParamsKeeper = cparamskeeper.NewKeeper(
 		app.AccountKeeper, app.MsgServiceRouter(), msgTypeURLs)
 
+	app.SideChainKeeper = sidechainkeeper.NewKeeper(
+		appCodec,
+		keys[sidechain.StoreKey],
+		app.AccountKeeper)
+
 	/****  Module Options ****/
 
 	// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
@@ -389,6 +400,7 @@ func NewSimApp(
 		node.NewAppModule(appCodec, app.NodeKeeper, app.GetSubspace(nodetypes.ModuleName)),
 		consensus.NewAppModule(appCodec, app.ConsensusKeeper),
 		cparams.NewAppModule(appCodec, app.CParamsKeeper),
+		sidechain.NewAppModule(appCodec, app.SideChainKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -410,6 +422,7 @@ func NewSimApp(
 		genutiltypes.ModuleName,
 		consensustypes.ModuleName,
 		cparamstypes.ModuleName,
+		sidechaintypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderEndBlockers(
@@ -427,6 +440,7 @@ func NewSimApp(
 		genutiltypes.ModuleName,
 		consensustypes.ModuleName,
 		cparamstypes.ModuleName,
+		sidechaintypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -449,6 +463,7 @@ func NewSimApp(
 		genutiltypes.ModuleName,
 		consensustypes.ModuleName,
 		cparamstypes.ModuleName,
+		sidechaintypes.ModuleName,
 	)
 
 	app.ModuleManager.SetOrderMigrations(
@@ -466,6 +481,7 @@ func NewSimApp(
 		genutiltypes.ModuleName,
 		consensustypes.ModuleName,
 		cparamstypes.ModuleName,
+		sidechaintypes.ModuleName,
 	)
 
 	app.ModuleManager.RegisterInvariants(app.CrisisKeeper)

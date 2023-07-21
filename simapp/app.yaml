@@ -27,6 +27,7 @@ modules:
           genutil,
           consensus,
           cparams,
+          sidechain,
         ]
 
       end_blockers:
@@ -46,6 +47,7 @@ modules:
           genutil,
           consensus,
           cparams,
+          sidechain,
         ]
 
       init_genesis:
@@ -65,6 +67,7 @@ modules:
           genutil,
           consensus,
           cparams,
+          sidechain,
         ]
 
       override_store_keys:
@@ -143,3 +146,7 @@ modules:
   - name: upgrade
     config:
       "@type": iritamod.upgrade.module.v1.Module
+
+  - name: sidechain
+    config:
+      "@type": iritamod.side_chain.module.v1.Module
