@@ -52,7 +52,6 @@ func ValidateGenesis(data GenesisState) error {
 
 	// validate BlockHeader
 	seenBlockHeaderMap := make(map[string]bool)
-	seenLatestHeight := make(map[uint64]uint64)
 	for _, header := range data.BlockHeaders {
 		if !seenSpaceIds[header.SpaceId] {
 			return sdkerrors.Wrapf(ErrInvalidSpaceId, "unknown space (%d) during validation", header.SpaceId)
@@ -64,15 +63,6 @@ func ValidateGenesis(data GenesisState) error {
 			return sdkerrors.Wrapf(ErrBlockHeader, "duplicate block header (%s) during validation", seenBlockHeader)
 		}
 		seenBlockHeaderMap[seenBlockHeader] = true
-
-		// record latest height
-		if _, ok := seenLatestHeight[header.SpaceId]; !ok {
-			seenLatestHeight[header.SpaceId] = header.Height
-		} else {
-			if seenLatestHeight[header.SpaceId] < header.Height {
-				seenLatestHeight[header.SpaceId] = header.Height
-			}
-		}
 	}
 
 	// validate SpaceLatestHeight
@@ -84,10 +74,6 @@ func ValidateGenesis(data GenesisState) error {
 		seenBlockHeader := fmt.Sprintf("%d-%d", latestHeight.Id, latestHeight.Height)
 		if !seenBlockHeaderMap[seenBlockHeader] {
 			return sdkerrors.Wrapf(ErrBlockHeader, "unknown block header (%s) during validation", seenBlockHeader)
-		}
-
-		if seenLatestHeight[latestHeight.Id] != latestHeight.Height {
-			return sdkerrors.Wrapf(ErrBlockHeader, "latest block header height mismatch (%d) during validation", latestHeight.Height)
 		}
 	}
 
