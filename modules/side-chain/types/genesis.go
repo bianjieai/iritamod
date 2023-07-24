@@ -67,11 +67,11 @@ func ValidateGenesis(data GenesisState) error {
 
 	// validate SpaceLatestHeight
 	for _, latestHeight := range data.SpaceLatestHeights {
-		if !seenSpaceIds[latestHeight.Id] {
-			return sdkerrors.Wrapf(ErrInvalidSpaceId, "unknown space (%d) during validation", latestHeight.Id)
+		if !seenSpaceIds[latestHeight.SpaceId] {
+			return sdkerrors.Wrapf(ErrInvalidSpaceId, "unknown space (%d) during validation", latestHeight.SpaceId)
 		}
 
-		seenBlockHeader := fmt.Sprintf("%d-%d", latestHeight.Id, latestHeight.Height)
+		seenBlockHeader := fmt.Sprintf("%d-%d", latestHeight.SpaceId, latestHeight.Height)
 		if !seenBlockHeaderMap[seenBlockHeader] {
 			return sdkerrors.Wrapf(ErrBlockHeader, "unknown block header (%s) during validation", seenBlockHeader)
 		}

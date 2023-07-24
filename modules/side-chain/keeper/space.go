@@ -243,8 +243,8 @@ func (k Keeper) GetSpaceLatestHeights(ctx sdk.Context) []types.SpaceLatestHeight
 		}
 		latestHeight := sdk.BigEndianToUint64(iterator.Value())
 		latestHeights = append(latestHeights, types.SpaceLatestHeight{
-			Id:     spaceId,
-			Height: latestHeight,
+			SpaceId: spaceId,
+			Height:  latestHeight,
 		})
 	}
 	return latestHeights
