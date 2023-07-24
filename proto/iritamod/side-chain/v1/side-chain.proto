@@ -15,7 +15,7 @@ message Space {
 
 // SpaceLatestHeight defines the latest height of the side-chain.
 message SpaceLatestHeight {
-  uint64 id = 1;
+  uint64 space_id = 1;
   uint64 height = 2;
 }
 

@@ -45,8 +45,8 @@ func (s *TestSuite) TestCreateBlockHeader() {
 	s.Require().NoErrorf(err, "failed to get block header")
 	s.Require().Equal(header, resHeader)
 
-	h, err := s.keeper.GetSpaceLatestHeight(s.ctx, avataSpaceId)
-	s.Require().NoErrorf(err, "failed to get block header latest height")
+	h, exist := s.keeper.GetSpaceLatestHeight(s.ctx, avataSpaceId)
+	s.Require().Equal(exist, true)
 	s.Require().Equal(height, h)
 
 	var expected tmbytes.HexBytes = tmhash.Sum(s.ctx.TxBytes())

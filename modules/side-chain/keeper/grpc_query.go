@@ -20,11 +20,8 @@ func (k Keeper) Space(goCtx context.Context, request *types.QuerySpaceRequest) (
 
 	// NOTE: history data didn't record latest height, so return 0 if not exist.
 	latestHeight := uint64(0)
-	if k.HasSpaceLatestHeight(ctx, request.SpaceId) {
-		lh, err := k.GetSpaceLatestHeight(ctx, request.SpaceId)
-		if err != nil {
-			return nil, err
-		}
+	lh, exist := k.GetSpaceLatestHeight(ctx, request.SpaceId)
+	if exist {
 		latestHeight = lh
 	}
 

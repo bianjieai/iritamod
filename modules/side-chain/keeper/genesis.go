@@ -23,7 +23,7 @@ func (k Keeper) InitGenesis(ctx sdk.Context, data types.GenesisState) {
 	}
 
 	for _, spaceLatestHeight := range data.SpaceLatestHeights {
-		k.setSpaceLatestHeight(ctx, spaceLatestHeight.Id, spaceLatestHeight.Height)
+		k.setSpaceLatestHeight(ctx, spaceLatestHeight.SpaceId, spaceLatestHeight.Height)
 	}
 }
 
