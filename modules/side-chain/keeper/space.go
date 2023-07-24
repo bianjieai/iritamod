@@ -66,15 +66,8 @@ func (k Keeper) CreateBlockHeader(ctx sdk.Context, spaceId, height uint64, heade
 	k.setBlockHeaderTxHash(ctx, spaceId, height, tmhash.Sum(ctx.TxBytes()))
 
 	// update the latest side chain height
-	if k.HasSpaceLatestHeight(ctx, spaceId) {
-		latestHeight, err := k.GetSpaceLatestHeight(ctx, spaceId)
-		if err != nil {
-			return sdkerrors.Wrapf(types.ErrBlockHeader, "fail to get latest block header height in space (%d)", spaceId)
-		}
-		if latestHeight < height {
-			k.setSpaceLatestHeight(ctx, spaceId, height)
-		}
-	} else {
+	latestHeight, exist := k.GetSpaceLatestHeight(ctx, spaceId)
+	if !exist || latestHeight < height {
 		k.setSpaceLatestHeight(ctx, spaceId, height)
 	}
 
@@ -187,13 +180,12 @@ func (k Keeper) GetBlockHeaders(ctx sdk.Context) []types.BlockHeader {
 	}
 
 	for i := 0; i < len(headers); i++ {
-		if k.HasBlockHeaderTxHash(ctx, headers[i].SpaceId, headers[i].Height) {
-			txHash, err := k.GetBlockHeaderTxHash(ctx, headers[i].SpaceId, headers[i].Height)
-			if err != nil {
-				panic("fail to get block header tx hash")
-			}
-			headers[i].TxHash = txHash
+		txHash, err := k.GetBlockHeaderTxHash(ctx, headers[i].SpaceId, headers[i].Height)
+		if err != nil {
+			panic("fail to get block header tx hash")
 		}
+		headers[i].TxHash = txHash
+
 	}
 
 	return headers
@@ -263,13 +255,13 @@ func (k Keeper) HasSpaceLatestHeight(ctx sdk.Context, spaceId uint64) bool {
 	return store.Has(types.KeyPrefixSpaceLatestHeightStoreKey(spaceId))
 }
 
-func (k Keeper) GetSpaceLatestHeight(ctx sdk.Context, spaceId uint64) (uint64, error) {
+func (k Keeper) GetSpaceLatestHeight(ctx sdk.Context, spaceId uint64) (uint64, bool) {
 	store := ctx.KVStore(k.storeKey)
 	bz := store.Get(types.KeyPrefixSpaceLatestHeightStoreKey(spaceId))
 	if bz == nil {
-		return 0, sdkerrors.Wrapf(types.ErrInvalidSpaceId, "latest block header height does not exist in space (%d)", spaceId)
+		return 0, false
 	}
-	return sdk.BigEndianToUint64(bz), nil
+	return sdk.BigEndianToUint64(bz), true
 }
 
 func (k Keeper) setSpaceLatestHeight(ctx sdk.Context, spaceId, blockHeight uint64) {

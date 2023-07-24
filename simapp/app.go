@@ -6,8 +6,6 @@ import (
 	"os"
 	"path/filepath"
 
-	sidechain "github.com/bianjieai/iritamod/modules/side-chain"
-
 	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
 	"github.com/spf13/cast"
@@ -75,10 +73,10 @@ import (
 	"github.com/bianjieai/iritamod/modules/perm"
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
 	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
-	cslashing "github.com/bianjieai/iritamod/modules/slashing"
-
+	sidechain "github.com/bianjieai/iritamod/modules/side-chain"
 	sidechainkeeper "github.com/bianjieai/iritamod/modules/side-chain/keeper"
 	sidechaintypes "github.com/bianjieai/iritamod/modules/side-chain/types"
+	cslashing "github.com/bianjieai/iritamod/modules/slashing"
 )
 
 const appName = "SimApp"
