@@ -37,6 +37,17 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ## [Unreleased]
 
+## [v1.5.0] - 2023-07-20
+
+### Improvements
+
+* (iritamod/sidechain) [\#90](https://github.com/bianjieai/iritamod/pull/90) enhance side-chain module query
+* (iritamod/perm) [\#90](https://github.com/bianjieai/iritamod/pull/90) correct name for side-chain user role
+
+### Bug Fixes
+
+* (iritamod/perm) [\#90](https://github.com/bianjieai/iritamod/pull/90) multiple transfer space msgs should fail 
+
 ## [v1.4.0] - 2023-07-18
 
 ### Application

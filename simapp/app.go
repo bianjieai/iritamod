@@ -1,7 +1,6 @@
 package simapp
 
 import (
-	sidechain "github.com/bianjieai/iritamod/modules/side-chain"
 	"io"
 	"net/http"
 	"os"
@@ -74,10 +73,10 @@ import (
 	"github.com/bianjieai/iritamod/modules/perm"
 	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
 	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
-	cslashing "github.com/bianjieai/iritamod/modules/slashing"
-
+	sidechain "github.com/bianjieai/iritamod/modules/side-chain"
 	sidechainkeeper "github.com/bianjieai/iritamod/modules/side-chain/keeper"
 	sidechaintypes "github.com/bianjieai/iritamod/modules/side-chain/types"
+	cslashing "github.com/bianjieai/iritamod/modules/slashing"
 )
 
 const appName = "SimApp"
@@ -144,15 +143,15 @@ type SimApp struct {
 	BankKeeper     bankkeeper.Keeper
 	SlashingKeeper slashingkeeper.Keeper
 	//govKeeper        gov.Keeper
-	CrisisKeeper   crisiskeeper.Keeper
-	UpgradeKeeper  upgradekeeper.Keeper
-	ParamsKeeper   paramskeeper.Keeper
-	EvidenceKeeper evidencekeeper.Keeper
-	PermKeeper     permkeeper.Keeper
-	IdentityKeeper identitykeeper.Keeper
-	NodeKeeper     nodekeeper.Keeper
-	FeeGrantKeeper feegrantkeeper.Keeper
-	Layer2Keeper   sidechainkeeper.Keeper
+	CrisisKeeper    crisiskeeper.Keeper
+	UpgradeKeeper   upgradekeeper.Keeper
+	ParamsKeeper    paramskeeper.Keeper
+	EvidenceKeeper  evidencekeeper.Keeper
+	PermKeeper      permkeeper.Keeper
+	IdentityKeeper  identitykeeper.Keeper
+	NodeKeeper      nodekeeper.Keeper
+	FeeGrantKeeper  feegrantkeeper.Keeper
+	SideChainKeeper sidechainkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -253,7 +252,7 @@ func NewSimApp(
 	app.PermKeeper = permkeeper.NewKeeper(appCodec, keys[permtypes.StoreKey])
 	app.IdentityKeeper = identitykeeper.NewKeeper(appCodec, keys[identitytypes.StoreKey])
 
-	app.Layer2Keeper = sidechainkeeper.NewKeeper(appCodec, keys[sidechaintypes.StoreKey], app.AccountKeeper)
+	app.SideChainKeeper = sidechainkeeper.NewKeeper(appCodec, keys[sidechaintypes.StoreKey], app.AccountKeeper)
 
 	/****  Module Options ****/
 
@@ -277,7 +276,7 @@ func NewSimApp(
 		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
-		sidechain.NewAppModule(appCodec, app.Layer2Keeper),
+		sidechain.NewAppModule(appCodec, app.SideChainKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that

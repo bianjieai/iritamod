@@ -50,7 +50,7 @@ func NewAssignRolesCmd() *cobra.Command {
 			types.RoleRelayerUser,
 			types.RolePlatformUser,
 			types.RolePowerUserAdmin,
-			types.RoleLayer2User,
+			types.RoleSideChainUser,
 		)),
 		Args: cobra.MinimumNArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -105,7 +105,7 @@ func NewUnassignRolesCmd() *cobra.Command {
 			types.RoleRelayerUser,
 			types.RolePlatformUser,
 			types.RolePowerUserAdmin,
-			types.RoleLayer2User,
+			types.RoleSideChainUser,
 		)),
 		Args: cobra.MinimumNArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {

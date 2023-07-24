@@ -11,17 +11,19 @@ import (
 // NewGenesisState creates a new GenesisState object
 func NewGenesisState(spaceSequence uint64,
 	spaces []Space,
-	blockHeaders []BlockHeader) *GenesisState {
+	blockHeaders []BlockHeader,
+	spaceLatestHeights []SpaceLatestHeight) *GenesisState {
 	return &GenesisState{
-		SpaceSequence: spaceSequence,
-		Spaces:        spaces,
-		BlockHeaders:  blockHeaders,
+		SpaceSequence:      spaceSequence,
+		Spaces:             spaces,
+		BlockHeaders:       blockHeaders,
+		SpaceLatestHeights: spaceLatestHeights,
 	}
 }
 
 // DefaultGenesisState creates a default GenesisState object
 func DefaultGenesisState() *GenesisState {
-	return NewGenesisState(0, []Space{}, []BlockHeader{})
+	return NewGenesisState(0, []Space{}, []BlockHeader{}, []SpaceLatestHeight{})
 }
 
 // ValidateGenesis validates the provided genesis state to ensure the
@@ -61,6 +63,18 @@ func ValidateGenesis(data GenesisState) error {
 			return sdkerrors.Wrapf(ErrBlockHeader, "duplicate block header (%s) during validation", seenBlockHeader)
 		}
 		seenBlockHeaderMap[seenBlockHeader] = true
+	}
+
+	// validate SpaceLatestHeight
+	for _, latestHeight := range data.SpaceLatestHeights {
+		if !seenSpaceIds[latestHeight.SpaceId] {
+			return sdkerrors.Wrapf(ErrInvalidSpaceId, "unknown space (%d) during validation", latestHeight.SpaceId)
+		}
+
+		seenBlockHeader := fmt.Sprintf("%d-%d", latestHeight.SpaceId, latestHeight.Height)
+		if !seenBlockHeaderMap[seenBlockHeader] {
+			return sdkerrors.Wrapf(ErrBlockHeader, "unknown block header (%s) during validation", seenBlockHeader)
+		}
 	}
 
 	return nil

@@ -52,7 +52,7 @@ func GetCmdSpaceCreate() *cobra.Command {
 		Use:  "create",
 		Long: "create a new side chain space",
 		Example: fmt.Sprintf(
-			"$ %s tx side-chain space create "+
+			"$ %s tx sidechain space create "+
 				"--name=<name> "+
 				"--uri=<uri>",
 			version.AppName),
@@ -96,7 +96,7 @@ func GetCmdSpaceTransfer() *cobra.Command {
 		Use:  "transfer [space-id] [recipient]",
 		Long: "transfer ownership of space from sender to recipient",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 space transfer [space-id] [recipient]",
+			"$ %s tx sidechain space transfer [space-id] [recipient]",
 			version.AppName),
 		Args: cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
@@ -130,7 +130,7 @@ func GetCmdCreateBlockHeader() *cobra.Command {
 		Use:  "create-blockheader [space-id] [height] [header]",
 		Long: "create a side chain block header record",
 		Example: fmt.Sprintf(
-			"$ %s tx layer2 create-blockheader [space-id] [height] [header]",
+			"$ %s tx sidechain create-blockheader [space-id] [height] [header]",
 			version.AppName),
 		Args: cobra.ExactArgs(3),
 		RunE: func(cmd *cobra.Command, args []string) error {

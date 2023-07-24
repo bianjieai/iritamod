@@ -49,7 +49,7 @@ func GetCmdQuerySpaceInfo() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "space [space-id]",
 		Long:    "query the space info of the given space-id",
-		Example: fmt.Sprintf("$ %s q layer2 space space [space-id]", version.AppName),
+		Example: fmt.Sprintf("$ %s q sidechain space space [space-id]", version.AppName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -84,7 +84,7 @@ func GetCmdQuerySpacesOfOwner() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "owner [owner]",
 		Long:    "query the spaces of the given owner",
-		Example: fmt.Sprintf("$ %s q layer2 space owner [owner]", version.AppName),
+		Example: fmt.Sprintf("$ %s q sidechain space owner [owner]", version.AppName),
 		Args:    cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)
@@ -124,7 +124,7 @@ func GetCmdQueryBlockHeader() *cobra.Command {
 	cmd := &cobra.Command{
 		Use:     "blockheader [space-id] [height]",
 		Long:    "query the side chain block header",
-		Example: fmt.Sprintf("$ %s q layer2 blockheader [space-id] [height]", version.AppName),
+		Example: fmt.Sprintf("$ %s q sidechain blockheader [space-id] [height]", version.AppName),
 		Args:    cobra.ExactArgs(2),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			clientCtx, err := client.GetClientQueryContext(cmd)

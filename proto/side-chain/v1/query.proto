@@ -35,6 +35,7 @@ message QuerySpaceRequest {
 // QuerySpaceResponse is the response type for the Query/Space RPC
 message QuerySpaceResponse {
   Space space = 1;
+  uint64 latest_height = 2;
 }
 
 // QuerySpaceOfOwnerRequest is the request type for the Query/SpaceOfOwner RPC
@@ -57,5 +58,6 @@ message QueryBlockHeaderRequest {
 
 // QueryBlockHeaderResponse is the response type for the Query/Record RPC
 message QueryBlockHeaderResponse {
+  string tx_hash = 1;
   string header = 2;
 }

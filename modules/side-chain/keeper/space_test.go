@@ -1,5 +1,12 @@
 package keeper_test
 
+import (
+	"fmt"
+
+	"github.com/tendermint/tendermint/crypto/tmhash"
+	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+)
+
 func (s *TestSuite) TestCreateSpace() {
 	spaceName := "NewSpace"
 	spaceUri := "NewSpaceUri"
@@ -28,7 +35,7 @@ func (s *TestSuite) TestTransferSpace() {
 	s.Require().Equal(accXvata.String(), space.Owner)
 }
 
-func (s *TestSuite) TestCreateL2BlockHeader() {
+func (s *TestSuite) TestCreateBlockHeader() {
 	height := uint64(1000)
 	header := "block header"
 	err := s.keeper.CreateBlockHeader(s.ctx, avataSpaceId, height, header, accAvata)
@@ -37,4 +44,15 @@ func (s *TestSuite) TestCreateL2BlockHeader() {
 	resHeader, err := s.keeper.GetBlockHeader(s.ctx, avataSpaceId, height)
 	s.Require().NoErrorf(err, "failed to get block header")
 	s.Require().Equal(header, resHeader)
+
+	h, exist := s.keeper.GetSpaceLatestHeight(s.ctx, avataSpaceId)
+	s.Require().Equal(exist, true)
+	s.Require().Equal(height, h)
+
+	var expected tmbytes.HexBytes = tmhash.Sum(s.ctx.TxBytes())
+	txHash, err := s.keeper.GetBlockHeaderTxHash(s.ctx, avataSpaceId, height)
+	s.Require().NoErrorf(err, "failed to get block header tx hash")
+	s.Require().Equal(expected.String(), txHash)
+
+	fmt.Println(txHash)
 }
