@@ -40,6 +40,9 @@ func (a Auth) Roles() (rs []Role) {
 	if a.Access(RolePowerUserAdmin.Auth()) {
 		rs = append(rs, RolePowerUserAdmin)
 	}
+	if a.Access(RoleSideChainUser.Auth()) {
+		rs = append(rs, RoleSideChainUser)
+	}
 
 	return rs
 }

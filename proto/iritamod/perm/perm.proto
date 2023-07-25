@@ -37,4 +37,6 @@ enum Role {
   // POWER_USER_ADMIN defines the power admin role index.
   POWER_USER_ADMIN = 10
       [ (gogoproto.enumvalue_customname) = "RolePowerUserAdmin" ];
+  // SIDE_CHAIN_USER defines the side chain user role index.
+  SIDE_CHAIN_USER = 11 [(gogoproto.enumvalue_customname) = "RoleSideChainUser"];
 }

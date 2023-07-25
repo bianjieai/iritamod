@@ -41,7 +41,8 @@ func ValidRole(role Role) bool {
 		role == RolePowerUser ||
 		role == RoleRelayerUser ||
 		role == RolePlatformUser ||
-		role == RolePowerUserAdmin {
+		role == RolePowerUserAdmin ||
+		role == RoleSideChainUser {
 		return true
 	}
 	return false
