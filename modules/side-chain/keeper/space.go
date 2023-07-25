@@ -180,12 +180,13 @@ func (k Keeper) GetBlockHeaders(ctx sdk.Context) []types.BlockHeader {
 	}
 
 	for i := 0; i < len(headers); i++ {
-		txHash, err := k.GetBlockHeaderTxHash(ctx, headers[i].SpaceId, headers[i].Height)
-		if err != nil {
-			panic("fail to get block header tx hash")
+		if k.HasBlockHeaderTxHash(ctx, headers[i].SpaceId, headers[i].Height) {
+			txHash, err := k.GetBlockHeaderTxHash(ctx, headers[i].SpaceId, headers[i].Height)
+			if err != nil {
+				panic("fail to get block header tx hash")
+			}
+			headers[i].TxHash = txHash
 		}
-		headers[i].TxHash = txHash
-
 	}
 
 	return headers
