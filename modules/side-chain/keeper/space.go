@@ -230,6 +230,11 @@ func (k Keeper) setBlockHeaderTxHash(ctx sdk.Context, spaceId, blockHeight uint6
 	store.Set(types.BlockHeaderTxHashStoreKey(spaceId, blockHeight), []byte(txHash.String()))
 }
 
+func (k Keeper) setBlockHeaderTxHashString(ctx sdk.Context, spaceId, blockHeight uint64, txHashStr string) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.BlockHeaderTxHashStoreKey(spaceId, blockHeight), []byte(txHashStr))
+}
+
 func (k Keeper) GetSpaceLatestHeights(ctx sdk.Context) []types.SpaceLatestHeight {
 	latestHeights := make([]types.SpaceLatestHeight, 0)
 	store := ctx.KVStore(k.storeKey)
