@@ -215,6 +215,7 @@ func (suite *KeeperTestSuite) TestPowerAdmin() {
 		types.RoleBaseM1Admin,
 		types.RolePlatformUser,
 		types.RolePowerUserAdmin,
+		types.RoleSideChainUser,
 	}
 	for _, role := range roles {
 		err = suite.keeper.Authorize(suite.ctx, accountPowerUser, accountPowerUserAdmin, role)
