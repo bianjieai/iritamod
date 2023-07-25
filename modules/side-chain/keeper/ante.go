@@ -27,7 +27,7 @@ func (dlt ValidateSideChainDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, sim
 				return ctx, err
 			}
 		case *types.MsgTransferSpace:
-			if err := dlt.validateSpaceOwnership(ctx, msg.Sender, msg.SpaceId); err != nil {
+			if err := dlt.validateOnlySpace(ctx, msg.SpaceId); err != nil {
 				return ctx, err
 			}
 			if err := dlt.validateSideChainUserRole(ctx, msg.Sender); err != nil {
@@ -37,7 +37,7 @@ func (dlt ValidateSideChainDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, sim
 				return ctx, err
 			}
 		case *types.MsgCreateBlockHeader:
-			if err := dlt.validateSpaceOwnership(ctx, msg.Sender, msg.SpaceId); err != nil {
+			if err := dlt.validateOnlySpace(ctx, msg.SpaceId); err != nil {
 				return ctx, err
 			}
 			if err := dlt.validateSideChainUserRole(ctx, msg.Sender); err != nil {
@@ -52,18 +52,6 @@ func (dlt ValidateSideChainDecorator) AnteHandle(ctx sdk.Context, tx sdk.Tx, sim
 func (dlt ValidateSideChainDecorator) validateOnlySpace(ctx sdk.Context, spaceId uint64) error {
 	if !dlt.keeper.HasSpace(ctx, spaceId) {
 		return sdkerrors.Wrapf(types.ErrInvalidSpaceId, "space (%d) does not exist", spaceId)
-	}
-	return nil
-}
-
-func (dlt ValidateSideChainDecorator) validateSpaceOwnership(ctx sdk.Context, addr string, spaceId uint64) error {
-	accAddr, _ := sdk.AccAddressFromBech32(addr)
-	if !dlt.keeper.HasSpace(ctx, spaceId) {
-		return sdkerrors.Wrapf(types.ErrInvalidSpaceId, "space (%d) does not exist", spaceId)
-	}
-
-	if !dlt.keeper.HasSpaceOfOwner(ctx, accAddr, spaceId) {
-		return sdkerrors.Wrapf(types.ErrInvalidSpaceOwner, "space (%d) is not owned by (%s)", spaceId, addr)
 	}
 	return nil
 }
