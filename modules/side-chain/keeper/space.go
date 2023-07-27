@@ -180,12 +180,13 @@ func (k Keeper) GetBlockHeaders(ctx sdk.Context) []types.BlockHeader {
 	}
 
 	for i := 0; i < len(headers); i++ {
-		txHash, err := k.GetBlockHeaderTxHash(ctx, headers[i].SpaceId, headers[i].Height)
-		if err != nil {
-			panic("fail to get block header tx hash")
+		if k.HasBlockHeaderTxHash(ctx, headers[i].SpaceId, headers[i].Height) {
+			txHash, err := k.GetBlockHeaderTxHash(ctx, headers[i].SpaceId, headers[i].Height)
+			if err != nil {
+				panic("fail to get block header tx hash")
+			}
+			headers[i].TxHash = txHash
 		}
-		headers[i].TxHash = txHash
-
 	}
 
 	return headers
@@ -227,6 +228,11 @@ func (k Keeper) GetBlockHeaderTxHash(ctx sdk.Context, spaceId, blockHeight uint6
 func (k Keeper) setBlockHeaderTxHash(ctx sdk.Context, spaceId, blockHeight uint64, txHash tmbytes.HexBytes) {
 	store := ctx.KVStore(k.storeKey)
 	store.Set(types.BlockHeaderTxHashStoreKey(spaceId, blockHeight), []byte(txHash.String()))
+}
+
+func (k Keeper) setBlockHeaderTxHashString(ctx sdk.Context, spaceId, blockHeight uint64, txHashStr string) {
+	store := ctx.KVStore(k.storeKey)
+	store.Set(types.BlockHeaderTxHashStoreKey(spaceId, blockHeight), []byte(txHashStr))
 }
 
 func (k Keeper) GetSpaceLatestHeights(ctx sdk.Context) []types.SpaceLatestHeight {

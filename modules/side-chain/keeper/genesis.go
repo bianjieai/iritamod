@@ -20,6 +20,9 @@ func (k Keeper) InitGenesis(ctx sdk.Context, data types.GenesisState) {
 
 	for _, blockHeader := range data.BlockHeaders {
 		k.setBlockHeader(ctx, blockHeader.SpaceId, blockHeader.Height, blockHeader.Header)
+		if blockHeader.TxHash != "" {
+			k.setBlockHeaderTxHashString(ctx, blockHeader.SpaceId, blockHeader.Height, blockHeader.TxHash)
+		}
 	}
 
 	for _, spaceLatestHeight := range data.SpaceLatestHeights {
