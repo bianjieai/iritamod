@@ -71,7 +71,7 @@ func (k Keeper) Mint(ctx sdk.Context, amount uint64, recipient, operator sdk.Acc
 	}
 
 	// get the base token
-	baseToken, err := k.tokenKeeper.GetToken(ctx, baseTokenDenom)
+	symbol, err := k.tokenKeeper.GetSymbol(ctx, baseTokenDenom)
 	if err != nil {
 		return sdkerrors.Wrapf(types.ErrInvalidDenom, "token for %s does not exist", baseTokenDenom)
 	}
@@ -79,7 +79,7 @@ func (k Keeper) Mint(ctx sdk.Context, amount uint64, recipient, operator sdk.Acc
 	// NOTE: empty owner
 	owner := sdk.AccAddress{}
 
-	return k.tokenKeeper.MintToken(ctx, baseToken.GetSymbol(), amount, recipient, owner)
+	return k.tokenKeeper.MintToken(ctx, symbol, amount, recipient, owner)
 }
 
 // Reclaim reclaims the native token of the specified denom from the corresponding escrow account
@@ -150,7 +150,7 @@ func (k Keeper) Reclaim(ctx sdk.Context, denom string, recipient, operator sdk.A
 
 // HasToken checks if the given token exists
 func (k Keeper) HasToken(ctx sdk.Context, denom string) bool {
-	if _, err := k.tokenKeeper.GetToken(ctx, denom); err != nil {
+	if _, err := k.tokenKeeper.GetSymbol(ctx, denom); err != nil {
 		return false
 	}
 

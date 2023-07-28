@@ -7,7 +7,7 @@ import (
 // TokenKeeper defines the expected token keeper (noalias)
 type TokenKeeper interface {
 	GetOwner(ctx sdk.Context, denom string) (sdk.AccAddress, error)
-	GetToken(ctx sdk.Context, denom string) (Token, error)
+	GetSymbol(ctx sdk.Context, denom string) (string, error)
 	MintToken(
 		ctx sdk.Context,
 		symbol string,
@@ -40,6 +40,6 @@ type PermKeeper interface {
 	IsPlatformUser(ctx sdk.Context, address sdk.AccAddress) bool
 }
 
-type Token interface {
-	GetSymbol() string
+type EVMKeeper interface {
+	GetBaseDenom(ctx sdk.Context) string
 }

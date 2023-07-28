@@ -12,23 +12,17 @@ type ValidateFn func(ctx sdk.Context, msg sdk.Msg) error
 
 // ValidateTokenTransferDecorator checks if the token transfer satisfies the underlying constraint
 type ValidateTokenTransferDecorator struct {
-	keeper      Keeper
-	tokenKeeper types.TokenKeeper
-	permKeeper  types.PermKeeper
-	validators  map[string]ValidateFn
+	keeper     Keeper
+	validators map[string]ValidateFn
 }
 
 // NewValidateTokenTransferDecorator constructs a new ValidateTokenTransferDecorator instance
 func NewValidateTokenTransferDecorator(
 	keeper Keeper,
-	tokenKeeper types.TokenKeeper,
-	permKeeper types.PermKeeper,
 ) *ValidateTokenTransferDecorator {
 	return &ValidateTokenTransferDecorator{
-		keeper:      keeper,
-		tokenKeeper: tokenKeeper,
-		permKeeper:  permKeeper,
-		validators:  make(map[string]ValidateFn),
+		keeper:     keeper,
+		validators: make(map[string]ValidateFn),
 	}
 }
 
@@ -152,7 +146,7 @@ func (vtd ValidateTokenTransferDecorator) getOwner(
 	if denom == baseTokenDenom {
 		owner = vtd.keeper.BaseTokenManager(ctx)
 	} else {
-		ownerAddr, err := vtd.tokenKeeper.GetOwner(ctx, denom)
+		ownerAddr, err := vtd.keeper.tokenKeeper.GetOwner(ctx, denom)
 		if err == nil {
 			owner = ownerAddr.String()
 		}
@@ -184,8 +178,9 @@ func (vtd ValidateTokenTransferDecorator) hasPlatformUserPerm(
 	ctx sdk.Context,
 	address sdk.AccAddress,
 ) bool {
-	return vtd.permKeeper.IsRootAdmin(ctx, address) || vtd.permKeeper.IsBaseM1Admin(ctx, address) ||
-		vtd.permKeeper.IsPlatformUser(ctx, address)
+	return vtd.keeper.permKeeper.IsRootAdmin(ctx, address) ||
+		vtd.keeper.permKeeper.IsBaseM1Admin(ctx, address) ||
+		vtd.keeper.permKeeper.IsPlatformUser(ctx, address)
 }
 
 // owned returns false if any address is not the owner of the denom among the given non-empty addresses
