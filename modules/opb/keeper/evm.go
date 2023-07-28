@@ -13,18 +13,14 @@ import (
 )
 
 type EVMTransferCreator struct {
-	opbKeeper   Keeper
-	tokenKeeper types.TokenKeeper
-	evmKeeper   types.EVMKeeper
-	permKeeper  types.PermKeeper
+	opbKeeper Keeper
+	evmKeeper types.EVMKeeper
 }
 
 func (k Keeper) NewEVMTransferCreator(evmKeeper types.EVMKeeper) *EVMTransferCreator {
 	return &EVMTransferCreator{
-		opbKeeper:   k,
-		tokenKeeper: k.tokenKeeper,
-		evmKeeper:   evmKeeper,
-		permKeeper:  k.permKeeper,
+		opbKeeper: k,
+		evmKeeper: evmKeeper,
 	}
 }
 
@@ -100,7 +96,7 @@ func (ov *EVMTransferCreator) getOwner(ctx sdk.Context, denom string) (owner str
 	if denom == baseTokenDenom {
 		owner = ov.opbKeeper.BaseTokenManager(ctx)
 	} else {
-		ownerAddr, err := ov.tokenKeeper.GetOwner(ctx, denom)
+		ownerAddr, err := ov.opbKeeper.tokenKeeper.GetOwner(ctx, denom)
 		if err == nil {
 			owner = ownerAddr.String()
 		}
@@ -125,6 +121,7 @@ func (ov *EVMTransferCreator) hasPlatformUserPermFromArr(ctx sdk.Context, addres
 
 // hasPlatformUserPerm determine whether the account is a platform user
 func (ov *EVMTransferCreator) hasPlatformUserPerm(ctx sdk.Context, address sdk.AccAddress) bool {
-	return ov.permKeeper.IsRootAdmin(ctx, address) || ov.permKeeper.IsBaseM1Admin(ctx, address) ||
-		ov.permKeeper.IsPlatformUser(ctx, address)
+	return ov.opbKeeper.permKeeper.IsRootAdmin(ctx, address) ||
+		ov.opbKeeper.permKeeper.IsBaseM1Admin(ctx, address) ||
+		ov.opbKeeper.permKeeper.IsPlatformUser(ctx, address)
 }
