@@ -19,15 +19,12 @@ type EVMTransferCreator struct {
 	permKeeper  types.PermKeeper
 }
 
-func (k Keeper) NewEVMTransferCreator(
-	evmKeeper types.EVMKeeper,
-	permKeeper types.PermKeeper,
-) *EVMTransferCreator {
+func (k Keeper) NewEVMTransferCreator(evmKeeper types.EVMKeeper) *EVMTransferCreator {
 	return &EVMTransferCreator{
 		opbKeeper:   k,
 		tokenKeeper: k.tokenKeeper,
 		evmKeeper:   evmKeeper,
-		permKeeper:  permKeeper,
+		permKeeper:  k.permKeeper,
 	}
 }
 
