@@ -37,6 +37,15 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ## [Unreleased]
 
+## [v1.5.0] - 2024-06-03
+
+### Deprecated
+
+* (iritamod/opb) [#100] iritamod module definition
+* (iritamod/perm) [#100] definition perm module
+* (iritamod/sidechain) [#100] iritamod module definition
+
+
 ## [v1.4.1] - 2023-07-20
 
 ### Improvements
@@ -46,7 +55,8 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 ### Bug Fixes
 
-* (iritamod/perm) [\#90](https://github.com/bianjieai/iritamod/pull/90) multiple transfer space msgs should fail 
+* (iritamod/perm) [\#90](https://github.com/bianjieai/iritamod/pull/90) multiple transfer space msgs should fail
+
 
 ## [v1.4.0] - 2023-07-18
 
@@ -93,12 +103,17 @@ Ref: https://keepachangelog.com/en/1.0.0/
 - Add modules `perm`, `params`, `node`, `slashing`, `identity`, `upgrade`.
 
 <!-- Release links -->
+[v1.5.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.5.0
+[v1.4.1]: https://github.com/bianjieai/iritamod/releases/tag/v1.4.1
+[v1.4.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.4.0
+[v1.3.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.3.0
 [v1.2.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.2.0
 [v1.1.1]: https://github.com/bianjieai/iritamod/releases/tag/v1.1.1
 [v1.1.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.1.0
 [v1.0.0]: https://github.com/bianjieai/iritamod/releases/tag/v1.0.0
 
 <!-- Pull request links -->
+[#100]: https://github.com/bianjieai/iritamod/pull/100
 [#33]: https://github.com/bianjieai/iritamod/pull/33
 [#32]: https://github.com/bianjieai/iritamod/pull/32
 [#30]: https://github.com/bianjieai/iritamod/pull/30
