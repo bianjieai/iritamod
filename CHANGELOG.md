@@ -35,8 +35,6 @@ Ref: https://keepachangelog.com/en/1.0.0/
 
 # Changelog
 
-## [Unreleased]
-
 ## [v1.4.1] - 2023-07-20
 
 ### Improvements
@@ -47,6 +45,7 @@ Ref: https://keepachangelog.com/en/1.0.0/
 ### Bug Fixes
 
 * (iritamod/perm) [\#90](https://github.com/bianjieai/iritamod/pull/90) multiple transfer space msgs should fail 
+
 
 ## [v1.4.0] - 2023-07-18
 
