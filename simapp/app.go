@@ -70,12 +70,6 @@ import (
 	nodekeeper "github.com/bianjieai/iritamod/modules/node/keeper"
 	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
 	cparams "github.com/bianjieai/iritamod/modules/params"
-	"github.com/bianjieai/iritamod/modules/perm"
-	permkeeper "github.com/bianjieai/iritamod/modules/perm/keeper"
-	permtypes "github.com/bianjieai/iritamod/modules/perm/types"
-	sidechain "github.com/bianjieai/iritamod/modules/side-chain"
-	sidechainkeeper "github.com/bianjieai/iritamod/modules/side-chain/keeper"
-	sidechaintypes "github.com/bianjieai/iritamod/modules/side-chain/types"
 	cslashing "github.com/bianjieai/iritamod/modules/slashing"
 )
 
@@ -103,21 +97,18 @@ var (
 		feegrantmodule.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
-		perm.AppModuleBasic{},
 		identity.AppModuleBasic{},
 		node.AppModuleBasic{},
-		sidechain.AppModuleBasic{},
 	)
 
 	// module account permissions
 	maccPerms = map[string][]string{
 		authtypes.FeeCollectorName: nil,
 		//gov.ModuleName:                  {authtypes.Burner},
-		sidechaintypes.ModuleName: nil,
 	}
 
 	// module accounts that are allowed to receive tokens
-	allowedReceivingModAcc = map[string]bool{}
+	//allowedReceivingModAcc = map[string]bool{}
 )
 
 var _ simapp.App = (*SimApp)(nil)
@@ -143,15 +134,13 @@ type SimApp struct {
 	BankKeeper     bankkeeper.Keeper
 	SlashingKeeper slashingkeeper.Keeper
 	//govKeeper        gov.Keeper
-	CrisisKeeper    crisiskeeper.Keeper
-	UpgradeKeeper   upgradekeeper.Keeper
-	ParamsKeeper    paramskeeper.Keeper
-	EvidenceKeeper  evidencekeeper.Keeper
-	PermKeeper      permkeeper.Keeper
-	IdentityKeeper  identitykeeper.Keeper
-	NodeKeeper      nodekeeper.Keeper
-	FeeGrantKeeper  feegrantkeeper.Keeper
-	SideChainKeeper sidechainkeeper.Keeper
+	CrisisKeeper   crisiskeeper.Keeper
+	UpgradeKeeper  upgradekeeper.Keeper
+	ParamsKeeper   paramskeeper.Keeper
+	EvidenceKeeper evidencekeeper.Keeper
+	IdentityKeeper identitykeeper.Keeper
+	NodeKeeper     nodekeeper.Keeper
+	FeeGrantKeeper feegrantkeeper.Keeper
 
 	// the module manager
 	mm *module.Manager
@@ -198,10 +187,8 @@ func NewSimApp(
 		upgradetypes.StoreKey,
 		feegrant.StoreKey,
 		evidencetypes.StoreKey,
-		permtypes.StoreKey,
 		identitytypes.StoreKey,
 		nodetypes.StoreKey,
-		sidechaintypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
 	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
@@ -249,10 +236,7 @@ func NewSimApp(
 	app.NodeKeeper = *app.NodeKeeper.SetHooks(
 		stakingtypes.NewMultiStakingHooks(app.SlashingKeeper.Hooks()),
 	)
-	app.PermKeeper = permkeeper.NewKeeper(appCodec, keys[permtypes.StoreKey])
 	app.IdentityKeeper = identitykeeper.NewKeeper(appCodec, keys[identitytypes.StoreKey])
-
-	app.SideChainKeeper = sidechainkeeper.NewKeeper(appCodec, keys[sidechaintypes.StoreKey], app.AccountKeeper)
 
 	/****  Module Options ****/
 
@@ -273,10 +257,8 @@ func NewSimApp(
 		upgrade.NewAppModule(app.UpgradeKeeper),
 		evidence.NewAppModule(app.EvidenceKeeper),
 		params.NewAppModule(app.ParamsKeeper),
-		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
-		sidechain.NewAppModule(appCodec, app.SideChainKeeper),
 	)
 
 	// During begin block slashing happens after distr.BeginBlocker so that
@@ -284,7 +266,6 @@ func NewSimApp(
 	// CanWithdrawInvariant invariant.
 	// NOTE: staking module is required if HistoricalEntries param > 0
 	app.mm.SetOrderBeginBlockers(
-		permtypes.ModuleName,
 		authtypes.ModuleName,
 		nodetypes.ModuleName,
 		banktypes.ModuleName,
@@ -296,11 +277,9 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
-		sidechaintypes.ModuleName,
 	)
 
 	app.mm.SetOrderEndBlockers(
-		permtypes.ModuleName,
 		authtypes.ModuleName,
 		nodetypes.ModuleName,
 		banktypes.ModuleName,
@@ -312,7 +291,6 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
-		sidechaintypes.ModuleName,
 	)
 
 	// NOTE: The genutils module must occur after staking so that pools are
@@ -321,7 +299,6 @@ func NewSimApp(
 	// so that other modules that want to create or claim capabilities afterwards in InitChain
 	// can do so safely.
 	app.mm.SetOrderInitGenesis(
-		permtypes.ModuleName,
 		authtypes.ModuleName,
 		nodetypes.ModuleName,
 		banktypes.ModuleName,
@@ -333,11 +310,9 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
-		sidechaintypes.ModuleName,
 	)
 
 	app.mm.SetOrderMigrations(
-		permtypes.ModuleName,
 		authtypes.ModuleName,
 		nodetypes.ModuleName,
 		banktypes.ModuleName,
@@ -349,7 +324,6 @@ func NewSimApp(
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
 		genutiltypes.ModuleName,
-		sidechaintypes.ModuleName,
 	)
 
 	app.mm.RegisterInvariants(&app.CrisisKeeper)
@@ -372,7 +346,6 @@ func NewSimApp(
 		cslashing.NewAppModule(appCodec, cslashing.NewKeeper(app.SlashingKeeper, app.NodeKeeper), app.AccountKeeper, app.BankKeeper, app.NodeKeeper),
 		params.NewAppModule(app.ParamsKeeper),
 		cparams.NewAppModule(appCodec, app.ParamsKeeper),
-		perm.NewAppModule(appCodec, app.PermKeeper),
 		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
 	)
@@ -415,8 +388,8 @@ func NewSimApp(
 // SimApp. It is useful for tests and clients who do not want to construct the
 // full SimApp
 func MakeCodecs() (codec.Codec, *codec.LegacyAmino) {
-	config := MakeEncodingConfig()
-	return config.Marshaler, config.Amino
+	encodingConfig := MakeEncodingConfig()
+	return encodingConfig.Marshaler, encodingConfig.Amino
 }
 
 // Name returns the name of the App
