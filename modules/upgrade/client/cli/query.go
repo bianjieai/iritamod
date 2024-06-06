@@ -14,6 +14,7 @@ func GetQueryCmd() *cobra.Command {
 	queryCmd.AddCommand(
 		upgradecli.GetCurrentPlanCmd(),
 		upgradecli.GetAppliedPlanCmd(),
+		upgradecli.GetModuleVersionsCmd(),
 	)
 	return queryCmd
 }
