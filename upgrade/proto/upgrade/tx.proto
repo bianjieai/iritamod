@@ -1,0 +1,43 @@
+syntax = "proto3";
+package iritamod.upgrade;
+
+option go_package = "github.com/bianjieai/iritamod/modules/upgrade/types";
+
+import "gogoproto/gogo.proto";
+import "google/protobuf/timestamp.proto";
+
+// Msg defines the ibc Msg service.
+service Msg {
+    // CreateClient defines a method for creating a light client.
+    rpc UpgradeSoftware(MsgUpgradeSoftware) returns (MsgUpgradeSoftwareResponse);
+
+    // CancelUpgrade defines a method for updating a light client state.
+    rpc CancelUpgrade(MsgCancelUpgrade) returns (MsgCancelUpgradeResponse);
+}
+
+// MsgUpgradeSoftware - struct for upgrade software
+message MsgUpgradeSoftware {
+    option (gogoproto.equal) = true;
+
+    string name = 1;
+
+    // The height at which the upgrade must be performed.
+    // Only used if Time is not set.
+    int64 height = 2;
+
+    // Any application specific upgrade info to be included on-chain
+    // such as a git commit that validators could automatically upgrade to
+    string info = 3;
+    string operator = 4;
+}
+
+// MsgUpgradeSoftwareResponse defines the Msg/UpgradeSoftware response type.
+message MsgUpgradeSoftwareResponse {}
+
+// MsgCancelUpgrade - struct for cancel software upgrade
+message MsgCancelUpgrade {
+    string operator = 1;
+}
+
+// MsgCancelUpgradeResponse defines the Msg/CancelUpgrade response type.
+message MsgCancelUpgradeResponse {}

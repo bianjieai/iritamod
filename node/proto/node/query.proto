@@ -1,0 +1,88 @@
+syntax = "proto3";
+package iritamod.node;
+
+import "node/node.proto";
+import "gogoproto/gogo.proto";
+import "google/api/annotations.proto";
+import "cosmos/query/pagination.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/node/types";
+
+// Query defines the gRPC querier service for node module
+service Query {
+    // Validator queries the validator by the given id
+    rpc Validator(QueryValidatorRequest) returns (QueryValidatorResponse) {
+        option (google.api.http).get = "/iritamod/node/validators/{id}";
+    }
+
+    // Validators queries the validators
+    rpc Validators(QueryValidatorsRequest) returns (QueryValidatorsResponse) {
+        option (google.api.http).get = "/iritamod/node/validators";
+    }
+
+    // Node queries the node by the given id
+    rpc Node(QueryNodeRequest) returns (QueryNodeResponse) {
+        option (google.api.http).get = "/iritamod/node/nodes/{id}";
+    }
+
+    // Nodes queries the nodes
+    rpc Nodes(QueryNodesRequest) returns (QueryNodesResponse) {
+        option (google.api.http).get = "/iritamod/node/nodes";
+    }
+
+    // Params queries the parameters of the node module
+    rpc Params(QueryParamsRequest) returns (QueryParamsResponse) {
+        option (google.api.http).get = "/iritamod/node/params";
+    }
+}
+
+
+// QueryValidatorRequest is the request type for the Query/Validator RPC method
+message QueryValidatorRequest {
+    string id = 1 ;
+}
+
+// QueryValidatorResponse is the response type for the Query/Validator RPC method
+message QueryValidatorResponse {
+    Validator validator = 1;
+}
+
+// QueryValidatorsRequest is the request type for the Query/Validators RPC method
+message QueryValidatorsRequest {
+    cosmos.query.PageRequest pagination = 1;
+}
+
+// QueryValidatorsResponse is the response type for the Query/Validators RPC method
+message QueryValidatorsResponse {
+    repeated Validator validators = 1 [ (gogoproto.nullable) = false ];
+    cosmos.query.PageResponse pagination = 2;
+}
+
+// QueryNodeRequest is the request type for the Query/Node RPC method
+message QueryNodeRequest {
+    string id = 1 ;
+}
+
+// QueryNodeResponse is the response type for the Query/Node RPC method
+message QueryNodeResponse {
+    Node node = 1;
+}
+
+// QueryNodesRequest is the request type for the Query/Nodes RPC method
+message QueryNodesRequest {
+    cosmos.query.PageRequest pagination = 1;
+}
+
+// QueryNodesResponse is the response type for the Query/Nodes RPC method
+message QueryNodesResponse {
+    repeated Node nodes = 1 [ (gogoproto.nullable) = false ];
+    cosmos.query.PageResponse pagination = 2;
+}
+
+// QueryParamsRequest is the request type for the Query/Params RPC method
+message QueryParamsRequest {}
+
+// QueryParamsResponse is the response type for the Query/Params RPC method
+message QueryParamsResponse {
+    Params params = 1 [ (gogoproto.nullable) = false ];
+}

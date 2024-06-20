@@ -1,0 +1,15 @@
+syntax = "proto3";
+package iritamod.node;
+
+import "node/node.proto";
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/node/types";
+
+// GenesisState defines the node module's genesis state.
+message GenesisState {
+    string root_cert = 1 [(gogoproto.moretags) = "yaml:\"root_cert\""];
+	Params params = 2 [(gogoproto.nullable) = false];
+	repeated Validator validators = 3 [(gogoproto.nullable) = false];
+	repeated Node nodes = 4 [(gogoproto.nullable) = false];
+}

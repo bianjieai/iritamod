@@ -1,6 +1,7 @@
 package keeper
 
 import (
+	"github.com/bianjieai/iritamod/node/utils/ca"
 	"github.com/tendermint/tendermint/crypto"
 	tmbytes "github.com/tendermint/tendermint/libs/bytes"
 
@@ -8,7 +9,6 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
 	"github.com/bianjieai/iritamod/node/types"
-	cautils "github.com/bianjieai/iritamod/utils/ca"
 )
 
 // AddNode adds a node
@@ -98,15 +98,15 @@ func (k Keeper) GetNodes(ctx sdk.Context) []types.Node {
 // VerifyCertificate verifies the given certificate against the root certificate
 // Ensure that the given certificate is a valid X.509 format
 func (k Keeper) VerifyCertificate(ctx sdk.Context, certificate string) (crypto.PubKey, error) {
-	cert, _ := cautils.ReadCertificateFromMem([]byte(certificate))
+	cert, _ := ca.ReadCertificateFromMem([]byte(certificate))
 
 	rootCertStr, _ := k.GetRootCert(ctx)
-	rootCert, _ := cautils.ReadCertificateFromMem([]byte(rootCertStr))
+	rootCert, _ := ca.ReadCertificateFromMem([]byte(rootCertStr))
 
-	if err := cautils.VerifyCertFromRoot(cert, rootCert); err != nil {
+	if err := ca.VerifyCertFromRoot(cert, rootCert); err != nil {
 		return nil, sdkerrors.Wrapf(types.ErrInvalidCert, "verification failed: %s", err)
 	}
 
-	pubKey, _ := cautils.GetPubkeyFromCert(cert)
+	pubKey, _ := ca.GetPubkeyFromCert(cert)
 	return pubKey, nil
 }

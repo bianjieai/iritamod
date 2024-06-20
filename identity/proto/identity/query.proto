@@ -1,0 +1,25 @@
+syntax = "proto3";
+package iritamod.identity;
+
+import "identity/identity.proto";
+import "google/api/annotations.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/identity/types";
+
+// Query defines the gRPC querier service for identity module
+service Query {
+    // Identity queries the identity by the given id
+    rpc Identity(QueryIdentityRequest) returns (QueryIdentityResponse) {
+        option (google.api.http).get = "/iritamod/identity/identities/{id}";
+    }
+}
+
+// QueryIdentityRequest is request type for the Query/Identity RPC method
+message QueryIdentityRequest {
+    string id = 1;
+}
+
+// QueryIdentityResponse is response type for the Query/Identity RPC method
+message QueryIdentityResponse {
+    Identity identity = 1;
+}

@@ -1,0 +1,23 @@
+syntax = "proto3";
+package iritamod.slashing;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/slashing/types";
+option (gogoproto.goproto_getters_all) = false;
+
+
+// Msg defines the bank Msg service.
+service Msg {
+    // Unjail defines a method for unjail a validator.
+    rpc UnjailValidator(MsgUnjailValidator) returns (MsgUnjailValidatorResponse);
+}
+
+// MsgUnjailValidator - struct for unjailing jailed validator
+message MsgUnjailValidator {
+    string id = 1 ;
+    string operator = 2 ;
+}
+
+// MsgUnjailValidatorResponse defines the Msg/Unjail response type.
+message MsgUnjailValidatorResponse { }

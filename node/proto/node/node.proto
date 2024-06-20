@@ -1,0 +1,46 @@
+syntax = "proto3";
+package iritamod.node;
+
+import "gogoproto/gogo.proto";
+import "tendermint/types/types.proto";
+
+option go_package = "github.com/bianjieai/iritamod/modules/node/types";
+option (gogoproto.goproto_getters_all) = false;
+
+// Request defines a standard for validator. The validator will participate the
+// blockchain consensus, power determines the probability of proposing a new block.
+message Validator {
+    option (gogoproto.equal) = true;
+
+    string id = 1;
+    string name = 2;
+    string pubkey = 3;
+    string certificate = 4;
+    int64 power = 5;
+    string description = 6;
+    bool jailed = 7;
+    string operator = 8;
+}
+
+// HistoricalInfo contains the historical information that gets stored at
+// each height.
+message HistoricalInfo {
+    tendermint.types.Header header = 1 [(gogoproto.nullable) = false];
+    repeated Validator valset = 2 [(gogoproto.nullable) = false];
+}
+
+// Node defines a struct to represent a node identity
+message Node {
+    option (gogoproto.equal) = true;
+    
+    string id = 1;
+    string name = 2;
+    string certificate = 3;
+}
+
+// Params defines the parameters for the node module.
+message Params {
+    option (gogoproto.equal) = true;
+
+    uint32 historical_entries = 1 [(gogoproto.moretags) = "yaml:\"historical_entries\""];
+}
