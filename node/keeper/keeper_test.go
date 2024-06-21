@@ -1,6 +1,7 @@
 package keeper_test
 
 import (
+	"github.com/bianjieai/iritamod/node/utils/ca"
 	"testing"
 
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
@@ -19,7 +20,6 @@ import (
 	"github.com/bianjieai/iritamod/node/keeper"
 	"github.com/bianjieai/iritamod/node/types"
 	"github.com/bianjieai/iritamod/simapp"
-	cautil "github.com/bianjieai/iritamod/utils/ca"
 )
 
 type KeeperTestSuite struct {
@@ -36,8 +36,8 @@ var (
 	details  = "test_details"
 	power    = int64(1)
 	operator = sdk.AccAddress(tmhash.SumTruncated([]byte("test_operator")))
-	cert, _  = cautil.ReadCertificateFromMem([]byte(certStr))
-	pk, _    = cautil.GetPubkeyFromCert(cert)
+	cert, _  = ca.ReadCertificateFromMem([]byte(certStr))
+	pk, _    = ca.GetPubkeyFromCert(cert)
 	cospk, _ = cryptocodec.FromTmPubKeyInterface(pk)
 	nodeID   = pk.Address()
 	nodeName = "test_node"
@@ -128,9 +128,9 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	power1 := int64(2)
 	operator1 := sdk.AccAddress("test_operator1")
 
-	cert1, err := cautil.ReadCertificateFromMem([]byte(certStr1))
+	cert1, err := ca.ReadCertificateFromMem([]byte(certStr1))
 	suite.NoError(err)
-	pk1, err := cautil.GetPubkeyFromCert(cert1)
+	pk1, err := ca.GetPubkeyFromCert(cert1)
 	suite.NoError(err)
 	cospk1, err := cryptocodec.FromTmPubKeyInterface(pk1)
 	suite.NoError(err)

@@ -1,26 +1,19 @@
-module github.com/bianjieai/iritamod
+module github.com/bianjieai/iritamod/simapp
 
 go 1.18
 
 require (
 	github.com/cosmos/cosmos-sdk v0.45.1
-	github.com/gogo/protobuf v1.3.3
-	github.com/golang/protobuf v1.5.2
 	github.com/gorilla/mux v1.8.0
-	github.com/grpc-ecosystem/grpc-gateway v1.16.0
-	github.com/pkg/errors v0.9.1
 	github.com/rakyll/statik v0.1.7
-	github.com/satori/go.uuid v1.2.0
 	github.com/spf13/cast v1.4.1
-	github.com/spf13/cobra v1.2.1
-	github.com/spf13/pflag v1.0.5
-	github.com/spf13/viper v1.9.0
 	github.com/stretchr/testify v1.7.0
 	github.com/tendermint/tendermint v0.34.14
 	github.com/tendermint/tm-db v0.6.4
-	github.com/tjfoc/gmsm v1.4.0
-	google.golang.org/genproto v0.0.0-20211116182654-e63d96a377c4
-	google.golang.org/grpc v1.42.0
+	github.com/bianjieai/iritamod/node v0.0.0-20240620080612-27daa6595cc2
+	github.com/bianjieai/iritamod/params v0.0.0-20240620080612-27daa6595cc2
+	github.com/bianjieai/iritamod/slashing v0.0.0-20240620080612-27daa6595cc2
+	github.com/bianjieai/iritamod/identity v0.0.0-20240620080612-27daa6595cc2
 )
 
 require (

@@ -2,13 +2,12 @@ package types
 
 import (
 	fmt "fmt"
+	"github.com/bianjieai/iritamod/node/utils/ca"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
-
-	cautil "github.com/bianjieai/iritamod/utils/ca"
 )
 
 const certStr = `-----BEGIN CERTIFICATE-----
@@ -23,8 +22,8 @@ Z0mOxdgj9wfO0t3voldCRUw3hCekjC+GEOoXH5ysDQ==
 -----END CERTIFICATE-----`
 
 var (
-	cert, _ = cautil.ReadCertificateFromMem([]byte(certStr))
-	pk, _   = cautil.GetPubkeyFromCert(cert)
+	cert, _ = ca.ReadCertificateFromMem([]byte(certStr))
+	pk, _   = ca.GetPubkeyFromCert(cert)
 	addr    = pk.Address()
 	accAddr = sdk.AccAddress(addr)
 
