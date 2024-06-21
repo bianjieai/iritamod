@@ -113,10 +113,10 @@ github.com/bianjieai/cosmos-sdk v0.44.2-irita-20211102.0.20220704061141-5884b3c7
 github.com/bianjieai/cosmos-sdk v0.44.2-irita-20211102.0.20220704061141-5884b3c7629f/go.mod h1:844fVGwl2JVfV8cxsr0+A0mtcYUkkPlEW3Q4skuEwaI=
 github.com/bianjieai/iritamod/identity v0.0.0-20240621084618-c7371ce7cb73 h1:GpOd9HkWYXBx+r+r+81+snrjuJJrBOPzr/TZlXCQoLw=
 github.com/bianjieai/iritamod/identity v0.0.0-20240621084618-c7371ce7cb73/go.mod h1:Vs4f1N0rs7bqa1EmyFoQP9EqwfavSFxAEAUcLs8jDb8=
+github.com/bianjieai/iritamod/node v0.0.0-20240621084618-c7371ce7cb73 h1:dRzL3UbmzfbxftMxEQEX3nhle2g516F71PJRLEyjNLM=
+github.com/bianjieai/iritamod/node v0.0.0-20240621084618-c7371ce7cb73/go.mod h1:RH8TlzoObcdJfBybRWzy6eaJBcWwhXZ5k7KpngYWmWs=
 github.com/bianjieai/iritamod/params v0.0.0-20240621084618-c7371ce7cb73 h1:71KoKUL41CyVI8eo2bQentNabxTbGzPycd4zp9t2coA=
 github.com/bianjieai/iritamod/params v0.0.0-20240621084618-c7371ce7cb73/go.mod h1:gLUAYd0HSzfdW3H6ns8o/GQS73cV2kYT4K08COypUOw=
-github.com/bianjieai/iritamod/simapp v0.0.0-20240621084618-c7371ce7cb73 h1:Lph7kLDkVDi5YZOK8jyKrjdmq37oW/t63LDsY5ukLvA=
-github.com/bianjieai/iritamod/simapp v0.0.0-20240621084618-c7371ce7cb73/go.mod h1:mACuoTn1m0EUh1A1sdYsuygy+8Hj0uyl8u2VTF2hstg=
 github.com/bianjieai/iritamod/slashing v0.0.0-20240621084618-c7371ce7cb73 h1:ckhMwmWsA2j/MRPeCBWIxWysHdJToDXu/opKBBgP0s4=
 github.com/bianjieai/iritamod/slashing v0.0.0-20240621084618-c7371ce7cb73/go.mod h1:j6Vtx8fW1DUeCWkap89UwdSrMpNWx5yVs8Qnf1nVu1I=
 github.com/bianjieai/tendermint v0.34.8-irita-210413.0.20210908054213-781a5fed16d6 h1:HH5nXXpB0kvoYZmKYWiUpAwMc8R7f7BYoj+plO/9EoA=
