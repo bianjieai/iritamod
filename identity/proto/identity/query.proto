@@ -4,7 +4,7 @@ package iritamod.identity;
 import "identity/identity.proto";
 import "google/api/annotations.proto";
 
-option go_package = "github.com/bianjieai/iritamod/modules/identity/types";
+option go_package = "github.com/bianjieai/iritamod/identity/types";
 
 // Query defines the gRPC querier service for identity module
 service Query {
