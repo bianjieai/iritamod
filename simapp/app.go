@@ -63,13 +63,9 @@ import (
 
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 
-	"github.com/bianjieai/iritamod/identity"
-	identitykeeper "github.com/bianjieai/iritamod/identity/keeper"
-	identitytypes "github.com/bianjieai/iritamod/identity/types"
 	"github.com/bianjieai/iritamod/node"
 	nodekeeper "github.com/bianjieai/iritamod/node/keeper"
 	nodetypes "github.com/bianjieai/iritamod/node/types"
-	cparams "github.com/bianjieai/iritamod/params"
 	cslashing "github.com/bianjieai/iritamod/slashing"
 )
 
@@ -91,13 +87,11 @@ var (
 		//	upgradeclient.ProposalHandler,
 		//),
 		params.AppModuleBasic{},
-		cparams.AppModuleBasic{},
 		crisis.AppModuleBasic{},
 		cslashing.AppModuleBasic{},
 		feegrantmodule.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
-		identity.AppModuleBasic{},
 		node.AppModuleBasic{},
 	)
 
@@ -138,7 +132,6 @@ type SimApp struct {
 	UpgradeKeeper  upgradekeeper.Keeper
 	ParamsKeeper   paramskeeper.Keeper
 	EvidenceKeeper evidencekeeper.Keeper
-	IdentityKeeper identitykeeper.Keeper
 	NodeKeeper     nodekeeper.Keeper
 	FeeGrantKeeper feegrantkeeper.Keeper
 
@@ -187,7 +180,6 @@ func NewSimApp(
 		upgradetypes.StoreKey,
 		feegrant.StoreKey,
 		evidencetypes.StoreKey,
-		identitytypes.StoreKey,
 		nodetypes.StoreKey,
 	)
 	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
@@ -236,7 +228,6 @@ func NewSimApp(
 	app.NodeKeeper = *app.NodeKeeper.SetHooks(
 		stakingtypes.NewMultiStakingHooks(app.SlashingKeeper.Hooks()),
 	)
-	app.IdentityKeeper = identitykeeper.NewKeeper(appCodec, keys[identitytypes.StoreKey])
 
 	/****  Module Options ****/
 
@@ -257,7 +248,6 @@ func NewSimApp(
 		upgrade.NewAppModule(app.UpgradeKeeper),
 		evidence.NewAppModule(app.EvidenceKeeper),
 		params.NewAppModule(app.ParamsKeeper),
-		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
 	)
 
@@ -272,7 +262,6 @@ func NewSimApp(
 		slashingtypes.ModuleName,
 		crisistypes.ModuleName,
 		evidencetypes.ModuleName,
-		identitytypes.ModuleName,
 		feegrant.ModuleName,
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
@@ -286,7 +275,6 @@ func NewSimApp(
 		slashingtypes.ModuleName,
 		crisistypes.ModuleName,
 		evidencetypes.ModuleName,
-		identitytypes.ModuleName,
 		feegrant.ModuleName,
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
@@ -305,7 +293,6 @@ func NewSimApp(
 		slashingtypes.ModuleName,
 		crisistypes.ModuleName,
 		evidencetypes.ModuleName,
-		identitytypes.ModuleName,
 		feegrant.ModuleName,
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
@@ -319,7 +306,6 @@ func NewSimApp(
 		slashingtypes.ModuleName,
 		crisistypes.ModuleName,
 		evidencetypes.ModuleName,
-		identitytypes.ModuleName,
 		feegrant.ModuleName,
 		upgradetypes.ModuleName,
 		paramstypes.ModuleName,
@@ -345,8 +331,6 @@ func NewSimApp(
 		//gov.NewAppModule(appCodec, app.govKeeper, app.AccountKeeper, app.BankKeeper),
 		cslashing.NewAppModule(appCodec, cslashing.NewKeeper(app.SlashingKeeper, app.NodeKeeper), app.AccountKeeper, app.BankKeeper, app.NodeKeeper),
 		params.NewAppModule(app.ParamsKeeper),
-		cparams.NewAppModule(appCodec, app.ParamsKeeper),
-		identity.NewAppModule(app.IdentityKeeper),
 		node.NewAppModule(appCodec, app.NodeKeeper),
 	)
 

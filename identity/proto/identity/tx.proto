@@ -4,7 +4,7 @@ package iritamod.identity;
 import "identity/identity.proto";
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/bianjieai/iritamod/modules/identity/types";
+option go_package = "github.com/bianjieai/iritamod/identity/types";
 option (gogoproto.goproto_getters_all) = false;
 
 // Msg defines the bank Msg service.
