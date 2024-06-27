@@ -3,8 +3,8 @@ module github.com/bianjieai/iritamod/slashing
 go 1.18
 
 require (
-	github.com/bianjieai/iritamod/node v0.0.0-20240621084618-c7371ce7cb73
-	github.com/bianjieai/iritamod/simapp v1.0.0
+	github.com/bianjieai/iritamod/node v0.0.0-20240627055706-054a877cea0a
+	github.com/bianjieai/iritamod/simapp v0.0.0-20240627055706-054a877cea0a
 	github.com/cosmos/cosmos-sdk v0.45.1
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.2
@@ -118,8 +118,6 @@ require (
 )
 
 replace (
-	github.com/bianjieai/iritamod/node => ../node
-	github.com/bianjieai/iritamod/simapp => ../simapp
 	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.44.2-irita-20211102.0.20220704061141-5884b3c7629f
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
 	github.com/tendermint/tendermint => github.com/bianjieai/tendermint v0.34.8-irita-210413.0.20210908054213-781a5fed16d6
