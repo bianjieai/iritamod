@@ -3,7 +3,7 @@ module github.com/bianjieai/iritamod/node
 go 1.18
 
 require (
-	github.com/bianjieai/iritamod/simapp v0.0.0-20240627055706-054a877cea0a
+	github.com/bianjieai/iritamod/simapp v0.0.0-20240627064152-e6ba840cd354
 	github.com/cosmos/cosmos-sdk v0.45.1
 	github.com/gogo/protobuf v1.3.3
 	github.com/golang/protobuf v1.5.2
@@ -27,7 +27,7 @@ require (
 	github.com/armon/go-metrics v0.3.9 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bgentry/speakeasy v0.1.0 // indirect
-	github.com/bianjieai/iritamod/slashing v0.0.0-20240627055706-054a877cea0a // indirect
+	github.com/bianjieai/iritamod/slashing v0.0.0-20240627063810-3c640d2b37cd // indirect
 	github.com/btcsuite/btcd v0.22.0-beta // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
