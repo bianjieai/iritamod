@@ -1,4 +1,4 @@
-package keeper_test
+package test
 
 import (
 	"github.com/bianjieai/iritamod/node/utils/ca"
@@ -36,7 +36,7 @@ var (
 	details  = "test_details"
 	power    = int64(1)
 	operator = sdk.AccAddress(tmhash.SumTruncated([]byte("test_operator")))
-	cert, _  = ca.ReadCertificateFromMem([]byte(certStr))
+	cert, _  = ca.ReadCertificateFromMem([]byte(CertStr))
 	pk, _    = ca.GetPubkeyFromCert(cert)
 	cospk, _ = cryptocodec.FromTmPubKeyInterface(pk)
 	nodeID   = pk.Address()
@@ -57,12 +57,12 @@ func (suite *KeeperTestSuite) SetupTest() {
 }
 
 func (suite *KeeperTestSuite) setNode() {
-	node := types.NewNode(nodeID, nodeName, certStr)
+	node := types.NewNode(nodeID, nodeName, CertStr)
 	suite.keeper.SetNode(suite.ctx, nodeID, node)
 }
 
 func (suite *KeeperTestSuite) TestCreateValidator() {
-	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
+	msg := types.NewMsgCreateValidator(name, details, CertStr, power, operator)
 	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	err := suite.keeper.CreateValidator(suite.ctx,
 		id,
@@ -107,7 +107,7 @@ func (suite *KeeperTestSuite) TestCreateValidator() {
 }
 
 func (suite *KeeperTestSuite) TestUpdateValidator() {
-	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
+	msg := types.NewMsgCreateValidator(name, details, CertStr, power, operator)
 	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	err := suite.keeper.CreateValidator(suite.ctx,
 		id,
@@ -128,7 +128,7 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	power1 := int64(2)
 	operator1 := sdk.AccAddress("test_operator1")
 
-	cert1, err := ca.ReadCertificateFromMem([]byte(certStr1))
+	cert1, err := ca.ReadCertificateFromMem([]byte(CertStr1))
 	suite.NoError(err)
 	pk1, err := ca.GetPubkeyFromCert(cert1)
 	suite.NoError(err)
@@ -139,8 +139,8 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 	err = suite.keeper.UpdateValidator(suite.ctx, []byte{0x1}, name1, "", power1, details1, operator1.String())
 	suite.Error(err)
 
-	msg2 := types.NewMsgUpdateValidator(id, "", details1, certStr1, power1, operator1)
-	err = suite.keeper.UpdateValidator(suite.ctx, id, "", certStr1, power1, details1, operator1.String())
+	msg2 := types.NewMsgUpdateValidator(id, "", details1, CertStr1, power1, operator1)
+	err = suite.keeper.UpdateValidator(suite.ctx, id, "", CertStr1, power1, details1, operator1.String())
 	suite.NoError(err)
 
 	validator, found := suite.keeper.GetValidator(suite.ctx, id)
@@ -186,7 +186,7 @@ func (suite *KeeperTestSuite) TestUpdateValidator() {
 }
 
 func (suite *KeeperTestSuite) TestRemoveValidator() {
-	msg := types.NewMsgCreateValidator(name, details, certStr, power, operator)
+	msg := types.NewMsgCreateValidator(name, details, CertStr, power, operator)
 	id := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
 	err := suite.keeper.CreateValidator(suite.ctx,
 		id,
@@ -231,14 +231,14 @@ func (suite *KeeperTestSuite) TestRemoveValidator() {
 }
 
 func (suite *KeeperTestSuite) TestAddNode() {
-	id, err := suite.keeper.AddNode(suite.ctx, nodeName, certStr)
+	id, err := suite.keeper.AddNode(suite.ctx, nodeName, CertStr)
 	suite.NoError(err)
 
 	node, found := suite.keeper.GetNode(suite.ctx, id)
 	suite.True(found)
 
 	suite.Equal(nodeID.String(), node.Id)
-	suite.Equal(certStr, node.Certificate)
+	suite.Equal(CertStr, node.Certificate)
 }
 
 func (suite *KeeperTestSuite) TestRemoveNode() {
@@ -252,7 +252,7 @@ func (suite *KeeperTestSuite) TestRemoveNode() {
 }
 
 const (
-	certStr = `-----BEGIN CERTIFICATE-----
+	CertStr = `-----BEGIN CERTIFICATE-----
 MIIBazCCAR0CFGTwvE8oG+N3uNm1gonJBh6pie5TMAUGAytlcDBYMQswCQYDVQQG
 EwJDTjENMAsGA1UECAwEcm9vdDENMAsGA1UEBwwEcm9vdDENMAsGA1UECgwEcm9v
 dDENMAsGA1UECwwEcm9vdDENMAsGA1UEAwwEcm9vdDAeFw0yMDA2MTkwNzAyMzla
@@ -262,7 +262,7 @@ VQQDDAR0ZXN0MCowBQYDK2VwAyEA27WvK0goa1sSjsp6eb/xCkgjBEoPC9vfL/6h
 f0hqjHYwBQYDK2VwA0EA0fo8y+saUl+8UiyKpKdjv2DsqYWqmqJDz9u3NaioOvrQ
 Z0mOxdgj9wfO0t3voldCRUw3hCekjC+GEOoXH5ysDQ==
 -----END CERTIFICATE-----`
-	certStr1 = `-----BEGIN CERTIFICATE-----
+	CertStr1 = `-----BEGIN CERTIFICATE-----
 MIIBazCCAR0CFGTwvE8oG+N3uNm1gonJBh6pie5UMAUGAytlcDBYMQswCQYDVQQG
 EwJDTjENMAsGA1UECAwEcm9vdDENMAsGA1UEBwwEcm9vdDENMAsGA1UECgwEcm9v
 dDENMAsGA1UECwwEcm9vdDENMAsGA1UEAwwEcm9vdDAeFw0yMDA2MTkwNzA2NTFa
