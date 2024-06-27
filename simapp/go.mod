@@ -3,8 +3,8 @@ module github.com/bianjieai/iritamod/simapp
 go 1.18
 
 require (
-	github.com/bianjieai/iritamod/node v0.0.0-20240627055258-ceb7b2cb42e6
-	github.com/bianjieai/iritamod/slashing v0.0.0-20240627055258-ceb7b2cb42e6
+	github.com/bianjieai/iritamod/node v0.0.0-20240627063810-3c640d2b37cd
+	github.com/bianjieai/iritamod/slashing v0.0.0-20240627063810-3c640d2b37cd
 	github.com/cosmos/cosmos-sdk v0.45.1
 	github.com/gorilla/mux v1.8.0
 	github.com/rakyll/statik v0.1.7

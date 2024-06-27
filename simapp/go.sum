@@ -111,10 +111,10 @@ github.com/bgentry/speakeasy v0.1.0 h1:ByYyxL9InA1OWqxJqqp2A5pYHUrCiAL6K3J+LKSsQ
 github.com/bgentry/speakeasy v0.1.0/go.mod h1:+zsyZBPWlz7T6j88CTgSN5bM796AkVf0kBD4zp0CCIs=
 github.com/bianjieai/cosmos-sdk v0.44.2-irita-20211102.0.20220704061141-5884b3c7629f h1:1DjxbUCU2hEvEv+s/AoE9jGZLT0F7+rxBm3oTkoNjOY=
 github.com/bianjieai/cosmos-sdk v0.44.2-irita-20211102.0.20220704061141-5884b3c7629f/go.mod h1:844fVGwl2JVfV8cxsr0+A0mtcYUkkPlEW3Q4skuEwaI=
-github.com/bianjieai/iritamod/node v0.0.0-20240627055258-ceb7b2cb42e6 h1:5pegYVz6nkdQTIiqJBExczQVTn1tv0Hk4A4b7eFHUM4=
-github.com/bianjieai/iritamod/node v0.0.0-20240627055258-ceb7b2cb42e6/go.mod h1:K8L+55YQQ8ge/2UbTWU/6/M6Hu4t6lZdIDlsCwEkYtI=
-github.com/bianjieai/iritamod/slashing v0.0.0-20240627055258-ceb7b2cb42e6 h1:ikHQLugXDsqmW4MYfgZkdS+j0kmE/HVchWx7TuMV6j4=
-github.com/bianjieai/iritamod/slashing v0.0.0-20240627055258-ceb7b2cb42e6/go.mod h1:d45BgoQl8DyzHQKR9VORziL8DXchSYgkRx/l9bl2saU=
+github.com/bianjieai/iritamod/node v0.0.0-20240627063810-3c640d2b37cd h1:FRdbXBBG7R1TgMluQwddPY16fNzTRLWclEibdDl521M=
+github.com/bianjieai/iritamod/node v0.0.0-20240627063810-3c640d2b37cd/go.mod h1:x2UTjqThZ7RIULVaJXoZYeTvqfvGaH0zS9yiFiNiK6A=
+github.com/bianjieai/iritamod/slashing v0.0.0-20240627063810-3c640d2b37cd h1:i4zSzAUyHW30c5rZbWwi8ZkRb6pFl4XVaYSAX62k5Uc=
+github.com/bianjieai/iritamod/slashing v0.0.0-20240627063810-3c640d2b37cd/go.mod h1:Uv5JVKuL6st7g69JUfI1kYG7jGDlpopAsJBRpNJZzLk=
 github.com/bianjieai/tendermint v0.34.8-irita-210413.0.20210908054213-781a5fed16d6 h1:HH5nXXpB0kvoYZmKYWiUpAwMc8R7f7BYoj+plO/9EoA=
 github.com/bianjieai/tendermint v0.34.8-irita-210413.0.20210908054213-781a5fed16d6/go.mod h1:10PswMTBUSfFZp3XUY9GV6qqw5NWTDJCQxWttwM9AHA=
 github.com/bketelsen/crypt v0.0.3-0.20200106085610-5cbc8cc4026c/go.mod h1:MKsuJmJgSg28kpZDP6UIiPt0e0Oz0kqKNGyRaWEPv84=
