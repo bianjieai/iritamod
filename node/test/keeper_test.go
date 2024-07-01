@@ -48,6 +48,7 @@ func TestKeeperTestSuite(t *testing.T) {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
+
 	app := simapp.Setup(false)
 
 	suite.cdc = app.AppCodec()
