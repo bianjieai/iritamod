@@ -9,7 +9,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
-	"github.com/bianjieai/iritamod/node"
+	"irita.bianjie.ai/modules/node"
 )
 
 // ExportAppStateAndValidators exports the state of the application for a genesis file.
