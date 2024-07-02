@@ -63,10 +63,10 @@ import (
 
 	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 
-	"github.com/bianjieai/iritamod/node"
-	nodekeeper "github.com/bianjieai/iritamod/node/keeper"
-	nodetypes "github.com/bianjieai/iritamod/node/types"
-	cslashing "github.com/bianjieai/iritamod/slashing"
+	cslashing "irita.bianjie.ai/modules/slashing"
+	"irita.bianjie.ai/modules/node"
+	nodekeeper "irita.bianjie.ai/modules/node/keeper"
+	nodetypes "irita.bianjie.ai/modules/node/types"
 )
 
 const appName = "SimApp"

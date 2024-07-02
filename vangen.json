@@ -1,0 +1,27 @@
+{
+  "domain": "irita.bianjie.ai",
+  "docsDomain": "pkg.go.dev",
+  "index": true,
+  "repositories": [
+    {
+      "prefix": "",
+      "subs": [
+        "api",
+        "simapp",
+        "modules/genutil",
+        "modules/identity",
+        "modules/node",
+        "modules/params",
+        "modules/slashing",`
+        "modules/upgrade",
+      ],
+      "type": "git",
+      "url": "https://github.com/bianjieai/iritamod",
+      "source": {
+        "home": "https://github.com/bianjieai/iritamod",
+        "dir": "https://github.com/bianjieai/iritamod/tree/main{/dir}",
+        "file": "https://github.com/bianjieai/iritamod/blob/main{/dir}/{file}#L{line}"
+      }
+    }
+  ]
+}
