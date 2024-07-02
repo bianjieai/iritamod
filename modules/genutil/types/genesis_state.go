@@ -5,13 +5,13 @@ import (
 	"errors"
 	"fmt"
 
-	tmos "github.com/tendermint/tendermint/libs/os"
-	tmtypes "github.com/tendermint/tendermint/types"
+	tmos "github.com/cometbft/cometbft/libs/os"
+	tmtypes "github.com/cometbft/cometbft/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	nodetypes "irita.bianjie.ai/modules/node/types"
+	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
 )
 
 // NewGenesisState creates a new GenesisState object

@@ -4,13 +4,13 @@ import (
 	"encoding/hex"
 	"fmt"
 
-	"github.com/tendermint/tendermint/crypto"
+	"github.com/cometbft/cometbft/crypto"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 
-	"irita.bianjie.ai/modules/slashing/types"
+	"github.com/bianjieai/iritamod/modules/slashing/types"
 )
 
 // Keeper define a slashing keeper

@@ -6,13 +6,13 @@ import (
 	"encoding/hex"
 	"strings"
 
-	"github.com/tendermint/tendermint/crypto/tmhash"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	"github.com/cometbft/cometbft/crypto/tmhash"
+	tmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"irita.bianjie.ai/modules/identity/types"
+	"github.com/bianjieai/iritamod/modules/identity/types"
 )
 
 // CreateIdentity creates an identity

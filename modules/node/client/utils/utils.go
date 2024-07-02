@@ -6,11 +6,11 @@ import (
 
 	gogotypes "github.com/gogo/protobuf/types"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	tmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	"github.com/cosmos/cosmos-sdk/client"
 
-	"irita.bianjie.ai/modules/node/types"
+	"github.com/bianjieai/iritamod/modules/node/types"
 )
 
 func QueryValidator(clientCtx client.Context, param string) (validator types.Validator, height int64, err error) {

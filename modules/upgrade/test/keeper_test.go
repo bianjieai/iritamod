@@ -2,6 +2,9 @@ package test
 
 import (
 	gocontext "context"
+	dbm "github.com/cometbft/cometbft-db"
+	"github.com/cometbft/cometbft/libs/log"
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -16,11 +19,8 @@ import (
 	uktype "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
-	"github.com/tendermint/tendermint/libs/log"
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
-	dbm "github.com/tendermint/tm-db"
-	"irita.bianjie.ai/modules/upgrade/keeper"
-	upgradetypes "irita.bianjie.ai/modules/upgrade/types"
+	"github.com/bianjieai/iritamod/modules/upgrade/keeper"
+	upgradetypes "github.com/bianjieai/iritamod/modules/upgrade/types"
 	"path/filepath"
 	"testing"
 	"time"

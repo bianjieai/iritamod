@@ -7,13 +7,13 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/libs/cli"
-	"github.com/tendermint/tendermint/libs/tempfile"
+	"github.com/cometbft/cometbft/crypto"
+	"github.com/cometbft/cometbft/libs/cli"
+	"github.com/cometbft/cometbft/libs/tempfile"
 
 	"github.com/cosmos/cosmos-sdk/server"
 
-	"irita.bianjie.ai/modules/genutil"
+	"github.com/bianjieai/iritamod/modules/genutil"
 )
 
 var (

@@ -5,10 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
-	"irita.bianjie.ai/modules/node/utils/ca"
+	"github.com/bianjieai/iritamod/modules/node/utils/ca"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmtypes "github.com/tendermint/tendermint/types"
+	abci "github.com/cometbft/cometbft/abci/types"
+	tmtypes "github.com/cometbft/cometbft/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
@@ -16,7 +16,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"irita.bianjie.ai/modules/node/types"
+	"github.com/bianjieai/iritamod/modules/node/types"
 )
 
 // InitGenesis - store genesis validator set

@@ -2,52 +2,42 @@ package simapp
 
 import (
 	"io"
+	//"github.com/bianjieai/iritamod/modules/node"
 	"net/http"
 	"os"
 	"path/filepath"
 
+	dbm "github.com/cometbft/cometbft-db"
+	abci "github.com/cometbft/cometbft/abci/types"
+	"github.com/cometbft/cometbft/libs/log"
 	"github.com/gorilla/mux"
 	"github.com/rakyll/statik/fs"
-	"github.com/spf13/cast"
-
-	abci "github.com/tendermint/tendermint/abci/types"
-	"github.com/tendermint/tendermint/libs/log"
-	tmos "github.com/tendermint/tendermint/libs/os"
-	dbm "github.com/tendermint/tm-db"
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/rpc"
 	"github.com/cosmos/cosmos-sdk/codec"
 	"github.com/cosmos/cosmos-sdk/codec/types"
+	"github.com/cosmos/cosmos-sdk/runtime"
 	"github.com/cosmos/cosmos-sdk/server/api"
 	"github.com/cosmos/cosmos-sdk/server/config"
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	"github.com/cosmos/cosmos-sdk/simapp"
-	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
-	"github.com/cosmos/cosmos-sdk/testutil/testdata"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
-	"github.com/cosmos/cosmos-sdk/version"
 	"github.com/cosmos/cosmos-sdk/x/auth"
-	"github.com/cosmos/cosmos-sdk/x/auth/ante"
 	authrest "github.com/cosmos/cosmos-sdk/x/auth/client/rest"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
-	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	bankkeeper "github.com/cosmos/cosmos-sdk/x/bank/keeper"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	"github.com/cosmos/cosmos-sdk/x/capability"
-	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
 	"github.com/cosmos/cosmos-sdk/x/crisis"
 	crisiskeeper "github.com/cosmos/cosmos-sdk/x/crisis/keeper"
-	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
 	"github.com/cosmos/cosmos-sdk/x/evidence"
 	evidencekeeper "github.com/cosmos/cosmos-sdk/x/evidence/keeper"
-	evidencetypes "github.com/cosmos/cosmos-sdk/x/evidence/types"
-	"github.com/cosmos/cosmos-sdk/x/feegrant"
 	feegrantkeeper "github.com/cosmos/cosmos-sdk/x/feegrant/keeper"
 	feegrantmodule "github.com/cosmos/cosmos-sdk/x/feegrant/module"
 	"github.com/cosmos/cosmos-sdk/x/genutil"
@@ -56,21 +46,13 @@ import (
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	"github.com/cosmos/cosmos-sdk/x/upgrade"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
-	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
-
-	cslashing "irita.bianjie.ai/modules/slashing"
-	"irita.bianjie.ai/modules/node"
-	nodekeeper "irita.bianjie.ai/modules/node/keeper"
-	nodetypes "irita.bianjie.ai/modules/node/types"
 )
 
 const appName = "SimApp"
 
+// cslashing
 var (
 	// DefaultNodeHome default home directories for the application daemon
 	DefaultNodeHome string
@@ -88,11 +70,11 @@ var (
 		//),
 		params.AppModuleBasic{},
 		crisis.AppModuleBasic{},
-		cslashing.AppModuleBasic{},
+		//cslashing.AppModuleBasic{},
 		feegrantmodule.AppModuleBasic{},
 		upgrade.AppModuleBasic{},
 		evidence.AppModuleBasic{},
-		node.AppModuleBasic{},
+		//node.AppModuleBasic{},
 	)
 
 	// module account permissions
@@ -106,11 +88,16 @@ var (
 )
 
 var _ simapp.App = (*SimApp)(nil)
+var (
+	_ runtime.AppI            = (*SimApp)(nil)
+	_ servertypes.Application = (*SimApp)(nil)
+)
 
 // SimApp extends an ABCI application, but with most of its parameters exported.
 // They are exported for convenience in creating helper functions, as object
 // capabilities aren't needed for testing.
 type SimApp struct {
+	*runtime.App
 	*baseapp.BaseApp
 	cdc               *codec.LegacyAmino
 	appCodec          codec.Codec
@@ -132,17 +119,17 @@ type SimApp struct {
 	UpgradeKeeper  upgradekeeper.Keeper
 	ParamsKeeper   paramskeeper.Keeper
 	EvidenceKeeper evidencekeeper.Keeper
-	NodeKeeper     nodekeeper.Keeper
+	//NodeKeeper     nodekeeper.Keeper
 	FeeGrantKeeper feegrantkeeper.Keeper
 
 	// the module manager
-	mm *module.Manager
+	//mm *module.Manager
 
 	// simulation manager
 	sm *module.SimulationManager
 
 	// module configurator
-	configurator module.Configurator
+	//configurator module.Configurator
 }
 
 func init() {
@@ -156,214 +143,335 @@ func init() {
 
 // NewSimApp returns a reference to an initialized NewSimApp.
 func NewSimApp(
-	logger log.Logger, db dbm.DB, traceStore io.Writer, loadLatest bool, skipUpgradeHeights map[int64]bool,
-	homePath string, invCheckPeriod uint, encodingConfig simappparams.EncodingConfig,
-	appOpts servertypes.AppOptions, baseAppOptions ...func(*baseapp.BaseApp),
+	logger log.Logger,
+	db dbm.DB,
+	traceStore io.Writer,
+	loadLatest bool,
+	depInjectOptions DepinjectOptions,
+	appOpts servertypes.AppOptions,
+	baseAppOptions ...func(*baseapp.BaseApp),
 ) *SimApp {
 
-	// TODO: RemoveValidator cdc in favor of appCodec once all modules are migrated.
-	appCodec := encodingConfig.Marshaler
-	cdc := encodingConfig.Amino
-	interfaceRegistry := encodingConfig.InterfaceRegistry
+	var (
+		app        = &SimApp{}
+		appBuilder *runtime.AppBuilder
 
-	bApp := baseapp.NewBaseApp(appName, logger, db, encodingConfig.TxConfig.TxDecoder(), baseAppOptions...)
-	bApp.SetCommitMultiStoreTracer(traceStore)
-	bApp.SetVersion(version.Version)
-	bApp.SetInterfaceRegistry(interfaceRegistry)
+		providers = append(depInjectOptions.Providers[:], appOpts)
+		// merge the AppConfig and other configuration in one config
+		appConfig = depinject.Configs(
+			depInjectOptions.Config,
+			depinject.Supply(
+				providers...,
 
-	keys := sdk.NewKVStoreKeys(
-		authtypes.StoreKey,
-		banktypes.StoreKey,
-		slashingtypes.StoreKey,
-		paramstypes.StoreKey,
-		//gov.StoreKey,
-		upgradetypes.StoreKey,
-		feegrant.StoreKey,
-		evidencetypes.StoreKey,
-		nodetypes.StoreKey,
+				// ADVANCED CONFIGURATION
+
+				//
+				// AUTH
+				//
+				// For providing a custom function required in auth to generate custom account types
+				// add it below. By default the auth module uses simulation.RandomGenesisAccounts.
+				//
+				// authtypes.RandomGenesisAccountsFn(simulation.RandomGenesisAccounts),
+
+				// For providing a custom a base account type add it below.
+				// By default the auth module uses authtypes.ProtoBaseAccount().
+				//
+				// func() authtypes.AccountI { return authtypes.ProtoBaseAccount() },
+
+				//
+				// MINT
+				//
+
+				// For providing a custom inflation function for x/mint add here your
+				// custom function that implements the minttypes.InflationCalculationFn
+				// interface.
+
+				// For providing a mock evm function for token module
+				// mocks.ProvideEVMKeeper(),
+				// mocks.ProvideICS20Keeper(),
+			),
+		)
 	)
-	tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
-	memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
 
-	app := &SimApp{
-		BaseApp:           bApp,
-		cdc:               cdc,
-		appCodec:          appCodec,
-		interfaceRegistry: interfaceRegistry,
-		invCheckPeriod:    invCheckPeriod,
-		keys:              keys,
-		tkeys:             tkeys,
-		memKeys:           memKeys,
+	consumer := append(depInjectOptions.Consumers[:],
+		&appBuilder,
+		&app.appCodec,
+		&app.cdc,
+		//&app.txConfig,
+		&app.interfaceRegistry,
+		&app.AccountKeeper,
+		&app.BankKeeper,
+		//&app.StakingKeeper,
+		&app.SlashingKeeper,
+		//&app.MintKeeper,
+		//&app.DistrKeeper,
+		//&app.GovKeeper,
+		&app.CrisisKeeper,
+		&app.CrisisKeeper,
+		&app.UpgradeKeeper,
+		&app.ParamsKeeper,
+		//&app.AuthzKeeper,
+		&app.EvidenceKeeper,
+		&app.FeeGrantKeeper,
+	)
+
+	if err := depinject.Inject(appConfig, consumer...); err != nil {
+		panic(err)
 	}
 
-	app.ParamsKeeper = initParamsKeeper(appCodec, cdc, keys[paramstypes.StoreKey], tkeys[paramstypes.TStoreKey])
+	// load state streaming if enabled
+	if _, _, err := streaming.LoadStreamingServices(app.App.BaseApp, appOpts, app.appCodec, logger, app.kvStoreKeys()); err != nil {
+		logger.Error("failed to load state streaming", "err", err)
+		os.Exit(1)
+	}
 
-	// set the BaseApp's parameter store
-	bApp.SetParamStore(app.ParamsKeeper.Subspace(baseapp.Paramspace).WithKeyTable(paramskeeper.ConsensusParamsKeyTable()))
-
-	// add keepers
-	app.AccountKeeper = authkeeper.NewAccountKeeper(
-		appCodec, keys[authtypes.StoreKey], app.GetSubspace(authtypes.ModuleName), authtypes.ProtoBaseAccount, maccPerms,
-	)
-	app.BankKeeper = bankkeeper.NewBaseKeeper(
-		appCodec, keys[banktypes.StoreKey], app.AccountKeeper, app.GetSubspace(banktypes.ModuleName), app.ModuleAccountAddrs(),
-	)
-	app.NodeKeeper = nodekeeper.NewKeeper(appCodec, keys[nodetypes.StoreKey], app.GetSubspace(nodetypes.ModuleName))
-	app.SlashingKeeper = slashingkeeper.NewKeeper(
-		appCodec, keys[slashingtypes.StoreKey], &app.NodeKeeper, app.GetSubspace(slashingtypes.ModuleName),
-	)
-	app.CrisisKeeper = crisiskeeper.NewKeeper(
-		app.GetSubspace(crisistypes.ModuleName), invCheckPeriod, app.BankKeeper, authtypes.FeeCollectorName,
-	)
-	app.FeeGrantKeeper = feegrantkeeper.NewKeeper(appCodec, keys[feegrant.StoreKey], app.AccountKeeper)
-	app.UpgradeKeeper = upgradekeeper.NewKeeper(skipUpgradeHeights, keys[upgradetypes.StoreKey], appCodec, homePath, app.BaseApp)
-
-	// create evidence keeper with router
-	EvidenceKeeper := evidencekeeper.NewKeeper(
-		appCodec, keys[evidencetypes.StoreKey], &app.NodeKeeper, app.SlashingKeeper,
-	)
-	// If evidence needs to be handled for the app, set routes in router here and seal
-	app.EvidenceKeeper = *EvidenceKeeper
-
-	app.NodeKeeper = *app.NodeKeeper.SetHooks(
-		stakingtypes.NewMultiStakingHooks(app.SlashingKeeper.Hooks()),
-	)
+	// initParamsKeeper(app.ParamsKeeper)
 
 	/****  Module Options ****/
 
-	// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
-	// we prefer to be more strict in what arguments the modules expect.
-	var skipGenesisInvariants = cast.ToBool(appOpts.Get(crisis.FlagSkipGenesisInvariants))
+	app.ModuleManager.RegisterInvariants(app.CrisisKeeper)
 
-	// NOTE: Any module instantiated in the module manager that is later modified
-	// must be passed by reference here.
-	app.mm = module.NewManager(
-		genutil.NewAppModule(app.AccountKeeper, app.NodeKeeper, app.BaseApp.DeliverTx, encodingConfig.TxConfig),
-		auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts),
-		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper),
-		crisis.NewAppModule(&app.CrisisKeeper, skipGenesisInvariants),
-		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
-		//gov.NewAppModule(appCodec, app.govKeeper, app.AccountKeeper, app.BankKeeper),
-		cslashing.NewAppModule(appCodec, cslashing.NewKeeper(app.SlashingKeeper, app.NodeKeeper), app.AccountKeeper, app.BankKeeper, app.NodeKeeper),
-		upgrade.NewAppModule(app.UpgradeKeeper),
-		evidence.NewAppModule(app.EvidenceKeeper),
-		params.NewAppModule(app.ParamsKeeper),
-		node.NewAppModule(appCodec, app.NodeKeeper),
-	)
-
-	// During begin block slashing happens after distr.BeginBlocker so that
-	// there is nothing left over in the validator fee pool, so as to keep the
-	// CanWithdrawInvariant invariant.
-	// NOTE: staking module is required if HistoricalEntries param > 0
-	app.mm.SetOrderBeginBlockers(
-		authtypes.ModuleName,
-		nodetypes.ModuleName,
-		banktypes.ModuleName,
-		slashingtypes.ModuleName,
-		crisistypes.ModuleName,
-		evidencetypes.ModuleName,
-		feegrant.ModuleName,
-		upgradetypes.ModuleName,
-		paramstypes.ModuleName,
-		genutiltypes.ModuleName,
-	)
-
-	app.mm.SetOrderEndBlockers(
-		authtypes.ModuleName,
-		nodetypes.ModuleName,
-		banktypes.ModuleName,
-		slashingtypes.ModuleName,
-		crisistypes.ModuleName,
-		evidencetypes.ModuleName,
-		feegrant.ModuleName,
-		upgradetypes.ModuleName,
-		paramstypes.ModuleName,
-		genutiltypes.ModuleName,
-	)
-
-	// NOTE: The genutils module must occur after staking so that pools are
-	// properly initialized with tokens from genesis accounts.
-	// NOTE: Capability module must occur first so that it can initialize any capabilities
-	// so that other modules that want to create or claim capabilities afterwards in InitChain
-	// can do so safely.
-	app.mm.SetOrderInitGenesis(
-		authtypes.ModuleName,
-		nodetypes.ModuleName,
-		banktypes.ModuleName,
-		slashingtypes.ModuleName,
-		crisistypes.ModuleName,
-		evidencetypes.ModuleName,
-		feegrant.ModuleName,
-		upgradetypes.ModuleName,
-		paramstypes.ModuleName,
-		genutiltypes.ModuleName,
-	)
-
-	app.mm.SetOrderMigrations(
-		authtypes.ModuleName,
-		nodetypes.ModuleName,
-		banktypes.ModuleName,
-		slashingtypes.ModuleName,
-		crisistypes.ModuleName,
-		evidencetypes.ModuleName,
-		feegrant.ModuleName,
-		upgradetypes.ModuleName,
-		paramstypes.ModuleName,
-		genutiltypes.ModuleName,
-	)
-
-	app.mm.RegisterInvariants(&app.CrisisKeeper)
-	app.mm.RegisterRoutes(app.Router(), app.QueryRouter(), encodingConfig.Amino)
-	app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
-	app.mm.RegisterServices(app.configurator)
+	// RegisterUpgradeHandlers is used for registering any on-chain upgrades.
+	// app.RegisterUpgradeHandlers()
 
 	// add test gRPC service for testing gRPC queries in isolation
-	testdata.RegisterQueryServer(app.GRPCQueryRouter(), testdata.QueryImpl{})
+	testdata_pulsar.RegisterQueryServer(app.GRPCQueryRouter(), testdata_pulsar.QueryImpl{})
 
 	// create the simulation manager and define the order of the modules for deterministic simulations
 	//
 	// NOTE: this is not required apps that don't use the simulator for fuzz testing
 	// transactions
-	app.sm = module.NewSimulationManager(
-		auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts),
-		bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper),
-		feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
-		//gov.NewAppModule(appCodec, app.govKeeper, app.AccountKeeper, app.BankKeeper),
-		cslashing.NewAppModule(appCodec, cslashing.NewKeeper(app.SlashingKeeper, app.NodeKeeper), app.AccountKeeper, app.BankKeeper, app.NodeKeeper),
-		params.NewAppModule(app.ParamsKeeper),
-		node.NewAppModule(appCodec, app.NodeKeeper),
-	)
+	overrideModules := map[string]module.AppModuleSimulation{
+		authtypes.ModuleName: auth.NewAppModule(
+			app.appCodec,
+			app.AccountKeeper,
+			authsims.RandomGenesisAccounts,
+			app.GetSubspace(authtypes.ModuleName),
+		),
+	}
+	app.sm = module.NewSimulationManagerFromAppModules(app.ModuleManager.Modules, overrideModules)
 
 	app.sm.RegisterStoreDecoders()
-
-	// initialize stores
-	app.MountKVStores(keys)
-	app.MountTransientStores(tkeys)
-	app.MountMemoryStores(memKeys)
-
-	// initialize BaseApp
 	app.SetInitChainer(app.InitChainer)
-	app.SetBeginBlocker(app.BeginBlocker)
-	anteHandler, err := ante.NewAnteHandler(
-		ante.HandlerOptions{
-			AccountKeeper:   app.AccountKeeper,
-			BankKeeper:      app.BankKeeper,
-			SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
-			FeegrantKeeper:  app.FeeGrantKeeper,
-			SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
-		},
-	)
-	if err != nil {
+
+	// A custom InitChainer can be set if extra pre-init-genesis logic is required.
+	// By default, when using app wiring enabled module, this is not required.
+	// For instance, the upgrade module will set automatically the module version map in its init genesis thanks to app wiring.
+	// However, when registering a module manually (i.e. that does not support app wiring), the module version map
+	// must be set manually as follow. The upgrade module will de-duplicate the module version map.
+	//
+	// app.SetInitChainer(func(ctx sdk.Context, req abci.RequestInitChain) abci.ResponseInitChain {
+	// 	app.UpgradeKeeper.SetModuleVersionMap(ctx, app.ModuleManager.GetVersionMap())
+	// 	return app.App.InitChainer(ctx, req)
+	// })
+
+	if err := app.Load(loadLatest); err != nil {
 		panic(err)
 	}
-	app.SetAnteHandler(anteHandler)
-	app.SetEndBlocker(app.EndBlocker)
 
-	if loadLatest {
-		if err := app.LoadLatestVersion(); err != nil {
-			tmos.Exit(err.Error())
-		}
-	}
+	// TODO: RemoveValidator cdc in favor of appCodec once all modules are migrated.
+	//appCodec := encodingConfig.Marshaler
+	//cdc := encodingConfig.Amino
+	//interfaceRegistry := encodingConfig.InterfaceRegistry
+	//
+	//bApp := baseapp.NewBaseApp(appName, logger, db, encodingConfig.TxConfig.TxDecoder(), baseAppOptions...)
+	//bApp.SetCommitMultiStoreTracer(traceStore)
+	//bApp.SetVersion(version.Version)
+	//bApp.SetInterfaceRegistry(interfaceRegistry)
+	//
+	//keys := sdk.NewKVStoreKeys(
+	//	authtypes.StoreKey,
+	//	banktypes.StoreKey,
+	//	slashingtypes.StoreKey,
+	//	paramstypes.StoreKey,
+	//	//gov.StoreKey,
+	//	upgradetypes.StoreKey,
+	//	feegrant.StoreKey,
+	//	evidencetypes.StoreKey,
+	//	//nodetypes.StoreKey,
+	//)
+	//tkeys := sdk.NewTransientStoreKeys(paramstypes.TStoreKey)
+	//memKeys := sdk.NewMemoryStoreKeys(capabilitytypes.MemStoreKey)
+	//
+	//app := &SimApp{
+	//	BaseApp:           bApp,
+	//	cdc:               cdc,
+	//	appCodec:          appCodec,
+	//	interfaceRegistry: interfaceRegistry,
+	//	invCheckPeriod:    invCheckPeriod,
+	//	keys:              keys,
+	//	tkeys:             tkeys,
+	//	memKeys:           memKeys,
+	//}
+	//
+	//app.ParamsKeeper = initParamsKeeper(appCodec, cdc, keys[paramstypes.StoreKey], tkeys[paramstypes.TStoreKey])
+	//
+	//// set the BaseApp's parameter store
+	//bApp.SetParamStore(app.ParamsKeeper.Subspace(baseapp.Paramspace).WithKeyTable(paramskeeper.ConsensusParamsKeyTable()))
+	//
+	//// add keepers
+	//app.AccountKeeper = authkeeper.NewAccountKeeper(
+	//	appCodec, keys[authtypes.StoreKey], app.GetSubspace(authtypes.ModuleName), authtypes.ProtoBaseAccount, maccPerms,
+	//)
+	//app.BankKeeper = bankkeeper.NewBaseKeeper(
+	//	appCodec, keys[banktypes.StoreKey], app.AccountKeeper, app.GetSubspace(banktypes.ModuleName), app.ModuleAccountAddrs(),
+	//)
+	////app.NodeKeeper = nodekeeper.NewKeeper(appCodec, keys[nodetypes.StoreKey], app.GetSubspace(nodetypes.ModuleName))
+	//app.SlashingKeeper = slashingkeeper.NewKeeper(
+	//	appCodec, keys[slashingtypes.StoreKey], &app.NodeKeeper, app.GetSubspace(slashingtypes.ModuleName),
+	//)
+	//app.CrisisKeeper = crisiskeeper.NewKeeper(
+	//	app.GetSubspace(crisistypes.ModuleName), invCheckPeriod, app.BankKeeper, authtypes.FeeCollectorName,
+	//)
+	//app.FeeGrantKeeper = feegrantkeeper.NewKeeper(appCodec, keys[feegrant.StoreKey], app.AccountKeeper)
+	//app.UpgradeKeeper = upgradekeeper.NewKeeper(skipUpgradeHeights, keys[upgradetypes.StoreKey], appCodec, homePath, app.BaseApp)
+	//
+	//// create evidence keeper with router
+	//EvidenceKeeper := evidencekeeper.NewKeeper(
+	//	appCodec, keys[evidencetypes.StoreKey], &app.NodeKeeper, app.SlashingKeeper,
+	//)
+	//// If evidence needs to be handled for the app, set routes in router here and seal
+	//app.EvidenceKeeper = *EvidenceKeeper
+	//
+	///*app.NodeKeeper = *app.NodeKeeper.SetHooks(
+	//	stakingtypes.NewMultiStakingHooks(app.SlashingKeeper.Hooks()),
+	//)*/
+	//
+	///****  Module Options ****/
+	//
+	//// NOTE: we may consider parsing `appOpts` inside module constructors. For the moment
+	//// we prefer to be more strict in what arguments the modules expect.
+	//var skipGenesisInvariants = cast.ToBool(appOpts.Get(crisis.FlagSkipGenesisInvariants))
+	//
+	//// NOTE: Any module instantiated in the module manager that is later modified
+	//// must be passed by reference here.
+	//app.mm = module.NewManager(
+	//	//genutil.NewAppModule(app.AccountKeeper, app.NodeKeeper, app.BaseApp.DeliverTx, encodingConfig.TxConfig),
+	//	auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts),
+	//	bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper),
+	//	crisis.NewAppModule(&app.CrisisKeeper, skipGenesisInvariants),
+	//	feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
+	//	//gov.NewAppModule(appCodec, app.govKeeper, app.AccountKeeper, app.BankKeeper),
+	//	//cslashing.NewAppModule(appCodec, cslashing.NewKeeper(app.SlashingKeeper, app.NodeKeeper), app.AccountKeeper, app.BankKeeper, app.NodeKeeper),
+	//	upgrade.NewAppModule(app.UpgradeKeeper),
+	//	evidence.NewAppModule(app.EvidenceKeeper),
+	//	params.NewAppModule(app.ParamsKeeper),
+	//	//node.NewAppModule(appCodec, app.NodeKeeper),
+	//)
+	//
+	//// During begin block slashing happens after distr.BeginBlocker so that
+	//// there is nothing left over in the validator fee pool, so as to keep the
+	//// CanWithdrawInvariant invariant.
+	//// NOTE: staking module is required if HistoricalEntries param > 0
+	//app.mm.SetOrderBeginBlockers(
+	//	authtypes.ModuleName,
+	//	//nodetypes.ModuleName,
+	//	banktypes.ModuleName,
+	//	slashingtypes.ModuleName,
+	//	crisistypes.ModuleName,
+	//	evidencetypes.ModuleName,
+	//	feegrant.ModuleName,
+	//	upgradetypes.ModuleName,
+	//	paramstypes.ModuleName,
+	//	genutiltypes.ModuleName,
+	//)
+	//
+	//app.mm.SetOrderEndBlockers(
+	//	authtypes.ModuleName,
+	//	//nodetypes.ModuleName,
+	//	banktypes.ModuleName,
+	//	slashingtypes.ModuleName,
+	//	crisistypes.ModuleName,
+	//	evidencetypes.ModuleName,
+	//	feegrant.ModuleName,
+	//	upgradetypes.ModuleName,
+	//	paramstypes.ModuleName,
+	//	genutiltypes.ModuleName,
+	//)
+	//
+	//// NOTE: The genutils module must occur after staking so that pools are
+	//// properly initialized with tokens from genesis accounts.
+	//// NOTE: Capability module must occur first so that it can initialize any capabilities
+	//// so that other modules that want to create or claim capabilities afterwards in InitChain
+	//// can do so safely.
+	//app.mm.SetOrderInitGenesis(
+	//	authtypes.ModuleName,
+	//	//types.ModuleName,
+	//	banktypes.ModuleName,
+	//	slashingtypes.ModuleName,
+	//	crisistypes.ModuleName,
+	//	evidencetypes.ModuleName,
+	//	feegrant.ModuleName,
+	//	upgradetypes.ModuleName,
+	//	paramstypes.ModuleName,
+	//	genutiltypes.ModuleName,
+	//)
+	//
+	//app.mm.SetOrderMigrations(
+	//	authtypes.ModuleName,
+	//	//nodetypes.ModuleName,
+	//	banktypes.ModuleName,
+	//	slashingtypes.ModuleName,
+	//	crisistypes.ModuleName,
+	//	evidencetypes.ModuleName,
+	//	feegrant.ModuleName,
+	//	upgradetypes.ModuleName,
+	//	paramstypes.ModuleName,
+	//	genutiltypes.ModuleName,
+	//)
+	//
+	//app.mm.RegisterInvariants(&app.CrisisKeeper)
+	//app.mm.RegisterRoutes(app.Router(), app.QueryRouter(), encodingConfig.Amino)
+	//app.configurator = module.NewConfigurator(app.appCodec, app.MsgServiceRouter(), app.GRPCQueryRouter())
+	//app.mm.RegisterServices(app.configurator)
+	//
+	//// add test gRPC service for testing gRPC queries in isolation
+	//testdata.RegisterQueryServer(app.GRPCQueryRouter(), testdata.QueryImpl{})
+	//
+	//// create the simulation manager and define the order of the modules for deterministic simulations
+	////
+	//// NOTE: this is not required apps that don't use the simulator for fuzz testing
+	//// transactions
+	//app.sm = module.NewSimulationManager(
+	//	auth.NewAppModule(appCodec, app.AccountKeeper, authsims.RandomGenesisAccounts),
+	//	bank.NewAppModule(appCodec, app.BankKeeper, app.AccountKeeper),
+	//	feegrantmodule.NewAppModule(appCodec, app.AccountKeeper, app.BankKeeper, app.FeeGrantKeeper, app.interfaceRegistry),
+	//	//gov.NewAppModule(appCodec, app.govKeeper, app.AccountKeeper, app.BankKeeper),
+	//	//cslashing.NewAppModule(appCodec, cslashing.NewKeeper(app.SlashingKeeper, app.NodeKeeper), app.AccountKeeper, app.BankKeeper, app.NodeKeeper),
+	//	params.NewAppModule(app.ParamsKeeper),
+	//	//node.NewAppModule(appCodec, app.NodeKeeper),
+	//)
+	//
+	//app.sm.RegisterStoreDecoders()
+	//
+	//// initialize stores
+	//app.MountKVStores(keys)
+	//app.MountTransientStores(tkeys)
+	//app.MountMemoryStores(memKeys)
+	//
+	//// initialize BaseApp
+	//app.SetInitChainer(app.InitChainer)
+	//app.SetBeginBlocker(app.BeginBlocker)
+	//anteHandler, err := ante.NewAnteHandler(
+	//	ante.HandlerOptions{
+	//		AccountKeeper:   app.AccountKeeper,
+	//		BankKeeper:      app.BankKeeper,
+	//		SignModeHandler: encodingConfig.TxConfig.SignModeHandler(),
+	//		FeegrantKeeper:  app.FeeGrantKeeper,
+	//		SigGasConsumer:  ante.DefaultSigVerificationGasConsumer,
+	//	},
+	//)
+	//if err != nil {
+	//	panic(err)
+	//}
+	//app.SetAnteHandler(anteHandler)
+	//app.SetEndBlocker(app.EndBlocker)
+	//
+	//if loadLatest {
+	//	if err := app.LoadLatestVersion(); err != nil {
+	//		tmos.Exit(err.Error())
+	//	}
+	//}
 
 	return app
 }
@@ -517,9 +625,9 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 
 	ParamsKeeper.Subspace(authtypes.ModuleName)
 	ParamsKeeper.Subspace(banktypes.ModuleName)
-	ParamsKeeper.Subspace(nodetypes.ModuleName)
+	//ParamsKeeper.Subspace(nodetypes.ModuleName)
 	ParamsKeeper.Subspace(slashingtypes.ModuleName)
-	ParamsKeeper.Subspace(crisistypes.ModuleName)
+	//ParamsKeeper.Subspace(crisistypes.ModuleName)
 
 	return ParamsKeeper
 }

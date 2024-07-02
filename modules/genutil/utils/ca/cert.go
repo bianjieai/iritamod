@@ -10,10 +10,10 @@ import (
 	"github.com/tjfoc/gmsm/sm2"
 	sm2x509 "github.com/tjfoc/gmsm/x509"
 
-	"github.com/tendermint/tendermint/crypto"
-	"github.com/tendermint/tendermint/crypto/algo"
-	ed25519util "github.com/tendermint/tendermint/crypto/ed25519"
-	tmsm2 "github.com/tendermint/tendermint/crypto/sm2"
+	"github.com/cometbft/cometbft/crypto"
+	"github.com/cometbft/cometbft/crypto/algo"
+	ed25519util "github.com/cometbft/cometbft/crypto/ed25519"
+	tmsm2 "github.com/cometbft/cometbft/crypto/sm2"
 )
 
 type Cert interface {

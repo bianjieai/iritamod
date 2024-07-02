@@ -3,7 +3,7 @@ package cli
 import (
 	flag "github.com/spf13/pflag"
 
-	"irita.bianjie.ai/modules/node/types"
+	"github.com/bianjieai/iritamod/modules/node/types"
 )
 
 const (

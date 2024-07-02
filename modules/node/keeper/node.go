@@ -1,14 +1,14 @@
 package keeper
 
 import (
-	"github.com/tendermint/tendermint/crypto"
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	"irita.bianjie.ai/modules/node/utils/ca"
+	"github.com/cometbft/cometbft/crypto"
+	tmbytes "github.com/cometbft/cometbft/libs/bytes"
+	"github.com/bianjieai/iritamod/modules/node/utils/ca"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"irita.bianjie.ai/modules/node/types"
+	"github.com/bianjieai/iritamod/modules/node/types"
 )
 
 // AddNode adds a node

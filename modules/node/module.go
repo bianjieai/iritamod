@@ -11,8 +11,8 @@ import (
 	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	cfg "github.com/tendermint/tendermint/config"
+	abci "github.com/cometbft/cometbft/abci/types"
+	cfg "github.com/cometbft/cometbft/config"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -22,10 +22,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"irita.bianjie.ai/modules/node/client/cli"
-	"irita.bianjie.ai/modules/node/client/rest"
-	"irita.bianjie.ai/modules/node/keeper"
-	"irita.bianjie.ai/modules/node/types"
+	"github.com/bianjieai/iritamod/modules/node/client/cli"
+	"github.com/bianjieai/iritamod/modules/node/client/rest"
+	"github.com/bianjieai/iritamod/modules/node/keeper"
+	"github.com/bianjieai/iritamod/modules/node/types"
 )
 
 var (

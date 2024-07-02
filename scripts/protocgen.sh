@@ -19,7 +19,7 @@ done
 cd ..
 
 # move proto files to the right places
-cp -r irita.bianjie.ai/* ./
-rm -rf irita.bianjie.ai
+cp -r github.com/bianjieai/iritamod/* ./
+rm -rf github.com/bianjieai/iritamod
 
 ./scripts/protocgen-pulsar.sh
