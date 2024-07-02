@@ -3,7 +3,7 @@ module github.com/bianjieai/iritamod/modules/genutil
 go 1.18
 
 require (
-	github.com/bianjieai/iritamod/modules/node 716b8b721e58261c55c7d0598380c343e70a630b
+	github.com/bianjieai/iritamod/modules/node 9115d135328c3b0a10d96ece6736bbf25b179ae4
 	github.com/cosmos/cosmos-sdk v0.47.12
 	github.com/gogo/protobuf v1.3.3
 	github.com/gorilla/mux v1.8.0
@@ -121,5 +121,4 @@ replace (
 	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.47.12-irita-20240701
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
 	github.com/cometbft/cometbft => github.com/bianjieai/cometbft v0.37.5-irita-240628
-	google.golang.org/grpc => google.golang.org/grpc v1.33.2
 )

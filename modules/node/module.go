@@ -4,9 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"math/rand"
-
-	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
@@ -23,7 +20,6 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
 	"github.com/bianjieai/iritamod/modules/node/client/cli"
-	"github.com/bianjieai/iritamod/modules/node/client/rest"
 	"github.com/bianjieai/iritamod/modules/node/keeper"
 	"github.com/bianjieai/iritamod/modules/node/types"
 )
@@ -65,9 +61,9 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncod
 }
 
 // RegisterRESTRoutes registers the REST routes for the node module.
-func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
-	rest.RegisterRoutes(clientCtx, rtr)
-}
+//func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
+//	rest.RegisterRoutes(clientCtx, rtr)
+//}
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the node module.
 func (a AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
@@ -140,19 +136,19 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
 
 // Route returns the message routing key for the node module.
-func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
-}
-
-// QuerierRoute returns the node module's querier route name.
-func (AppModule) QuerierRoute() string {
-	return QuerierRoute
-}
-
-// LegacyQuerierHandler returns the node module sdk.Querier.
-func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return keeper.NewQuerier(am.keeper, legacyQuerierCdc)
-}
+//func (am AppModule) Route() sdk.Route {
+//	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
+//}
+//
+//// QuerierRoute returns the node module's querier route name.
+//func (AppModule) QuerierRoute() string {
+//	return QuerierRoute
+//}
+//
+//// LegacyQuerierHandler returns the node module sdk.Querier.
+//func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
+//	return keeper.NewQuerier(am.keeper, legacyQuerierCdc)
+//}
 
 // InitGenesis performs genesis initialization for the node module. It returns
 // no validator updates.
@@ -194,9 +190,9 @@ func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.We
 }
 
 // RandomizedParams creates randomized node param changes for the simulator.
-func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
-	return nil
-}
+//func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+//	return nil
+//}
 
 // RegisterStoreDecoder registers a decoder for node module's types
 func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {}
