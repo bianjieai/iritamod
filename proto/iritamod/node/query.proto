@@ -4,7 +4,7 @@ package iritamod.node;
 import "iritamod/node/node.proto";
 import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
-import "cosmos/query/pagination.proto";
+import "cosmos/base/query/v1beta1/pagination.proto";
 
 option go_package = "irita.bianjie.ai/modules/node/types";
 
@@ -45,13 +45,13 @@ message QueryValidatorResponse { Validator validator = 1; }
 
 // QueryValidatorsRequest is the request type for the Query/Validators RPC
 // method
-message QueryValidatorsRequest { cosmos.query.PageRequest pagination = 1; }
+message QueryValidatorsRequest {  cosmos.base.query.v1beta1.PageRequest pagination = 1; }
 
 // QueryValidatorsResponse is the response type for the Query/Validators RPC
 // method
 message QueryValidatorsResponse {
   repeated Validator validators = 1 [ (gogoproto.nullable) = false ];
-  cosmos.query.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QueryNodeRequest is the request type for the Query/Node RPC method
@@ -61,12 +61,12 @@ message QueryNodeRequest { string id = 1; }
 message QueryNodeResponse { Node node = 1; }
 
 // QueryNodesRequest is the request type for the Query/Nodes RPC method
-message QueryNodesRequest { cosmos.query.PageRequest pagination = 1; }
+message QueryNodesRequest {  cosmos.base.query.v1beta1.PageRequest pagination = 1; }
 
 // QueryNodesResponse is the response type for the Query/Nodes RPC method
 message QueryNodesResponse {
   repeated Node nodes = 1 [ (gogoproto.nullable) = false ];
-  cosmos.query.PageResponse pagination = 2;
+  cosmos.base.query.v1beta1.PageResponse pagination = 2;
 }
 
 // QueryParamsRequest is the request type for the Query/Params RPC method

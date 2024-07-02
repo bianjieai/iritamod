@@ -3,7 +3,7 @@ module irita.bianjie.ai/modules/slashing
 go 1.18
 
 require (
-	irita.bianjie.ai/modules/node v0.0.0-20240621084618-c7371ce7cb73
+	irita.bianjie.ai/modules/node 716b8b721e58261c55c7d0598380c343e70a630b
 	github.com/cosmos/cosmos-sdk v0.45.1
 	github.com/gogo/protobuf v1.3.3
 	github.com/gorilla/mux v1.8.0
