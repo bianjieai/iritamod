@@ -3,13 +3,13 @@ package simapp
 import (
 	"encoding/json"
 
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
-	"irita.bianjie.ai/modules/node"
+	"github.com/bianjieai/iritamod/modules/node"
 )
 
 // ExportAppStateAndValidators exports the state of the application for a genesis file.

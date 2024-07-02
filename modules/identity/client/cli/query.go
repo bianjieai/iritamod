@@ -10,7 +10,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/version"
 
-	"irita.bianjie.ai/modules/identity/types"
+	"github.com/bianjieai/iritamod/modules/identity/types"
 )
 
 // GetQueryCmd returns the cli query commands for the module.

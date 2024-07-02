@@ -7,8 +7,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/client/tx"
 
-	"irita.bianjie.ai/modules/params/client/utils"
-	"irita.bianjie.ai/modules/params/types"
+	"github.com/bianjieai/iritamod/modules/params/client/utils"
+	"github.com/bianjieai/iritamod/modules/params/types"
 )
 
 func NewTxCmd() *cobra.Command {

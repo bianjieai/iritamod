@@ -3,12 +3,12 @@ package keeper
 import (
 	"fmt"
 
-	"github.com/tendermint/tendermint/libs/log"
+	"github.com/cometbft/cometbft/libs/log"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"irita.bianjie.ai/modules/identity/types"
+	"github.com/bianjieai/iritamod/modules/identity/types"
 )
 
 // Keeper defines the identity keeper

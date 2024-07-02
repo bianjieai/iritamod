@@ -9,7 +9,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/rest"
 
-	"irita.bianjie.ai/modules/genutil/types"
+	"github.com/bianjieai/iritamod/modules/genutil/types"
 )
 
 // QueryGenesisTxs writes the genesis transactions to the response if no error occurs.

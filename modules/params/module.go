@@ -3,12 +3,10 @@ package params
 import (
 	"context"
 	"encoding/json"
-	"math/rand"
-
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/cometbft/cometbft/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -18,9 +16,9 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/params/types/proposal"
 
-	"irita.bianjie.ai/modules/params/client/cli"
-	"irita.bianjie.ai/modules/params/keeper"
-	"irita.bianjie.ai/modules/params/types"
+	"github.com/bianjieai/iritamod/modules/params/client/cli"
+	"github.com/bianjieai/iritamod/modules/params/keeper"
+	"github.com/bianjieai/iritamod/modules/params/types"
 )
 
 var (
@@ -99,19 +97,19 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
 
 // Route returns the message routing key for the params module.
-func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
-}
-
-// QuerierRoute returns the params module's querier route name.
-func (AppModule) QuerierRoute() string {
-	return QuerierRoute
-}
-
-// LegacyQuerierHandler returns the params module sdk.Querier.
-func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return NewQuerier(am.keeper, legacyQuerierCdc)
-}
+//func (am AppModule) Route() sdk.Route {
+//	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
+//}
+//
+//// QuerierRoute returns the params module's querier route name.
+//func (AppModule) QuerierRoute() string {
+//	return QuerierRoute
+//}
+//
+//// LegacyQuerierHandler returns the params module sdk.Querier.
+//func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
+//	return NewQuerier(am.keeper, legacyQuerierCdc)
+//}
 
 // InitGenesis performs genesis initialization for the params module. It returns
 // no params updates.
@@ -148,9 +146,9 @@ func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.We
 }
 
 // RandomizedParams creates randomized params param changes for the simulator.
-func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
-	return nil
-}
+//func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+//	return nil
+//}
 
 // RegisterStoreDecoder registers a decoder for params module's types
 func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {}

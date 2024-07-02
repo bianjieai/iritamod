@@ -11,7 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
-	"irita.bianjie.ai/modules/slashing/types"
+	"github.com/bianjieai/iritamod/modules/slashing/types"
 )
 
 func NewTxCmd() *cobra.Command {

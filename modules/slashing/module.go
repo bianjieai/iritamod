@@ -11,7 +11,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/cometbft/cometbft/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -24,10 +24,10 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/slashing/simulation"
 	"github.com/cosmos/cosmos-sdk/x/slashing/types"
 
-	"irita.bianjie.ai/modules/slashing/client/cli"
-	"irita.bianjie.ai/modules/slashing/client/rest"
-	"irita.bianjie.ai/modules/slashing/keeper"
-	slashingtypes "irita.bianjie.ai/modules/slashing/types"
+	"github.com/bianjieai/iritamod/modules/slashing/client/cli"
+	"github.com/bianjieai/iritamod/modules/slashing/client/rest"
+	"github.com/bianjieai/iritamod/modules/slashing/keeper"
+	slashingtypes "github.com/bianjieai/iritamod/modules/slashing/types"
 )
 
 var (

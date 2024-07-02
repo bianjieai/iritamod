@@ -2,19 +2,19 @@ package test
 
 //
 //import (
-//	nodekeeper "irita.bianjie.ai/modules/node/keeper"
-//	"irita.bianjie.ai/modules/node/types"
-//	"irita.bianjie.ai/modules/node/utils/ca"
-//	"irita.bianjie.ai/modules/slashing/keeper"
-//	slashingtype "irita.bianjie.ai/modules/slashing/types"
-//	"irita.bianjie.ai/simapp"
+//	nodekeeper "github.com/bianjieai/iritamod/modules/node/keeper"
+//	"github.com/bianjieai/iritamod/modules/node/types"
+//	"github.com/bianjieai/iritamod/modules/node/utils/ca"
+//	"github.com/bianjieai/iritamod/modules/slashing/keeper"
+//	slashingtype "github.com/bianjieai/iritamod/modules/slashing/types"
+//	"github.com/bianjieai/iritamod/modules/simapp"
 //	"github.com/cosmos/cosmos-sdk/codec"
 //	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 //	sdk "github.com/cosmos/cosmos-sdk/types"
 //	"github.com/stretchr/testify/suite"
-//	"github.com/tendermint/tendermint/crypto/tmhash"
-//	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-//	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+//	"github.com/cometbft/cometbft/crypto/tmhash"
+//	tmbytes "github.com/cometbft/cometbft/libs/bytes"
+//	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 //	"testing"
 //	"time"
 //)

@@ -2,7 +2,7 @@ version: v1
 managed:
   enabled: true
   go_package_prefix:
-    default: irita.bianjie.ai/api
+    default: github.com/bianjieai/iritamod/api
     except:
       - buf.build/googleapis/googleapis
       - buf.build/cosmos/gogo-proto

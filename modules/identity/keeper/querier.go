@@ -3,13 +3,13 @@ package keeper
 import (
 	"encoding/hex"
 
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/cometbft/cometbft/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"irita.bianjie.ai/modules/identity/types"
+	"github.com/bianjieai/iritamod/modules/identity/types"
 )
 
 // NewQuerier creates a new identity Querier instance

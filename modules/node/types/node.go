@@ -2,10 +2,10 @@ package types
 
 import (
 	"encoding/hex"
-	"irita.bianjie.ai/modules/node/utils/ca"
+	"github.com/bianjieai/iritamod/modules/node/utils/ca"
 	"strings"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	tmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"

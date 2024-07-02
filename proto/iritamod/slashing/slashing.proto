@@ -5,7 +5,7 @@ import "gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "irita.bianjie.ai/modules/slashing/types";
+option go_package = "github.com/bianjieai/iritamod/modules/slashing/types";
 option (gogoproto.goproto_getters_all) = false;
 
 // ValidatorSigningInfo defines a validator's signing info for monitoring their

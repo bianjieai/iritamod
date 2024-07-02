@@ -4,13 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"math/rand"
-
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/cometbft/cometbft/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -19,10 +17,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"irita.bianjie.ai/modules/identity/client/cli"
-	"irita.bianjie.ai/modules/identity/client/rest"
-	"irita.bianjie.ai/modules/identity/keeper"
-	"irita.bianjie.ai/modules/identity/types"
+	"github.com/bianjieai/iritamod/modules/identity/client/cli"
+	"github.com/bianjieai/iritamod/modules/identity/keeper"
+	"github.com/bianjieai/iritamod/modules/identity/types"
 )
 
 var (
@@ -61,7 +58,7 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncod
 
 // RegisterRESTRoutes registers the REST routes for the identity module.
 func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
-	rest.RegisterRoutes(clientCtx, rtr)
+	//rest.RegisterRoutes(clientCtx, rtr)
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the identity module.
@@ -115,19 +112,19 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
 
 // Route returns the message routing key for the identity module.
-func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
-}
-
-// QuerierRoute returns the identity module's querier route name.
-func (AppModule) QuerierRoute() string {
-	return QuerierRoute
-}
-
-// LegacyQuerierHandler returns the identity module sdk.Querier.
-func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return keeper.NewQuerier(am.keeper, legacyQuerierCdc)
-}
+//func (am AppModule) Route() sdk.Route {
+//	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
+//}
+//
+//// QuerierRoute returns the identity module's querier route name.
+//func (AppModule) QuerierRoute() string {
+//	return QuerierRoute
+//}
+//
+//// LegacyQuerierHandler returns the identity module sdk.Querier.
+//func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
+//	return keeper.NewQuerier(am.keeper, legacyQuerierCdc)
+//}
 
 // InitGenesis performs genesis initialization for the identity module. It returns
 // no validator updates.
@@ -169,9 +166,9 @@ func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedP
 }
 
 // RandomizedParams creates randomized identity param changes for the simulator.
-func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
-	return nil
-}
+//func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+//	return nil
+//}
 
 // RegisterStoreDecoder registers a decoder for identity module's types
 func (AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {}

@@ -4,7 +4,7 @@ package cli
 import (
 	flag "github.com/spf13/pflag"
 
-	"irita.bianjie.ai/modules/identity/types"
+	"github.com/bianjieai/iritamod/modules/identity/types"
 )
 
 const (

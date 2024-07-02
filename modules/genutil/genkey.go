@@ -3,11 +3,11 @@ package genutil
 import (
 	"crypto/ed25519"
 	"errors"
-	"irita.bianjie.ai/modules/genutil/utils/ca"
+	"github.com/bianjieai/iritamod/modules/genutil/utils/ca"
 
-	"github.com/tendermint/tendermint/crypto"
-	ed25519util "github.com/tendermint/tendermint/crypto/ed25519"
-	"github.com/tendermint/tendermint/crypto/sm2"
+	"github.com/cometbft/cometbft/crypto"
+	ed25519util "github.com/cometbft/cometbft/crypto/ed25519"
+	"github.com/cometbft/cometbft/crypto/sm2"
 )
 
 func Genkey(privKey crypto.PrivKey) ([]byte, error) {

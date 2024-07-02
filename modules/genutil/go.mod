@@ -1,10 +1,10 @@
-module irita.bianjie.ai/modules/slashing
+module github.com/bianjieai/iritamod/modules/genutil
 
 go 1.18
 
 require (
-	irita.bianjie.ai/modules/node 716b8b721e58261c55c7d0598380c343e70a630b
-	github.com/cosmos/cosmos-sdk v0.45.1
+	github.com/bianjieai/iritamod/modules/node 716b8b721e58261c55c7d0598380c343e70a630b
+	github.com/cosmos/cosmos-sdk v0.47.12
 	github.com/gogo/protobuf v1.3.3
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
@@ -12,7 +12,7 @@ require (
 	github.com/spf13/cobra v1.2.1
 	github.com/spf13/viper v1.9.0
 	github.com/stretchr/testify v1.7.0
-	github.com/tendermint/tendermint v0.34.14
+	github.com/cometbft/cometbft v0.37.5
 	github.com/tjfoc/gmsm v1.4.0
 )
 
@@ -100,7 +100,7 @@ require (
 	github.com/tendermint/btcd v0.1.1 // indirect
 	github.com/tendermint/crypto v0.0.0-20191022145703-50d29ede1e15 // indirect
 	github.com/tendermint/go-amino v0.16.0 // indirect
-	github.com/tendermint/tm-db v0.6.4 // indirect
+	github.com/cometbft/cometbft-db v0.7.0 // indirect
 	github.com/zondax/hid v0.9.0 // indirect
 	go.etcd.io/bbolt v1.3.5 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
@@ -118,8 +118,8 @@ require (
 )
 
 replace (
-	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.44.2-irita-20211102.0.20220704061141-5884b3c7629f
+	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.47.12-irita-20240701
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
-	github.com/tendermint/tendermint => github.com/bianjieai/tendermint v0.34.8-irita-210413.0.20210908054213-781a5fed16d6
+	github.com/cometbft/cometbft => github.com/bianjieai/cometbft v0.37.5-irita-240628
 	google.golang.org/grpc => google.golang.org/grpc v1.33.2
 )
