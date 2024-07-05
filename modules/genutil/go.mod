@@ -3,9 +3,8 @@ module github.com/bianjieai/iritamod/modules/genutil
 go 1.18
 
 require (
-	github.com/bianjieai/iritamod/modules/node 9115d135328c3b0a10d96ece6736bbf25b179ae4
+	github.com/bianjieai/iritamod/modules/node fad8db27511fd0de3dbf383aea424094d1e28005
 	github.com/cosmos/cosmos-sdk v0.47.12
-	github.com/gogo/protobuf v1.3.3
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/pkg/errors v0.9.1
@@ -25,7 +24,6 @@ require (
 	github.com/armon/go-metrics v0.3.9 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bgentry/speakeasy v0.1.0 // indirect
-	github.com/btcsuite/btcd v0.22.0-beta // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
 	github.com/coinbase/rosetta-sdk-go v0.7.0 // indirect

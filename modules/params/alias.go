@@ -23,7 +23,7 @@ var (
 	ErrUnknownKey       = types.ErrUnknownKey
 
 	// NewQuerier alias cosmos-sdk/x/params/keeper.NewQuerier
-	NewQuerier = paramskeeper.NewQuerier
+	//NewQuerier = paramskeeper.NewQuerier
 )
 
 type (

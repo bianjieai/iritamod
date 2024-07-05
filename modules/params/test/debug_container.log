@@ -1,0 +1,311 @@
+Initializing logger
+Registering providers
+ Registering github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41)
+  Registering resolver for simple type types.InterfaceRegistry
+  Registering resolver for simple type codec.Codec
+  Registering resolver for simple type *codec.LegacyAmino
+  Registering resolver for simple type *runtime.AppBuilder
+  Registering resolver for simple type codec.ProtoCodecMarshaler
+  Registering resolver for simple type *baseapp.MsgServiceRouter
+ Registering module-scoped provider: github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+  Registering resolver for module-scoped type *types.KVStoreKey
+ Registering module-scoped provider: github.com/cosmos/cosmos-sdk/runtime.ProvideTransientStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:127)
+  Registering resolver for module-scoped type *types.TransientStoreKey
+ Registering module-scoped provider: github.com/cosmos/cosmos-sdk/runtime.ProvideMemoryStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:133)
+  Registering resolver for module-scoped type *types.MemoryStoreKey
+ Registering github.com/cosmos/cosmos-sdk/runtime.ProvideDeliverTx (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:139)
+  Registering resolver for simple type func(types.RequestDeliverTx) types.ResponseDeliverTx
+ Registering github.com/cosmos/cosmos-sdk/x/auth.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/module.go:222)
+  Registering resolver for simple type keeper.AccountKeeper
+  Registering resolver for one-per-module type appmodule.AppModule
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+ Registering github.com/cosmos/cosmos-sdk/x/auth/vesting.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/vesting/module.go:145)
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+ Implicitly registering resolver keeper.AccountKeeper for interface type types.AccountKeeper
+ Registering github.com/cosmos/cosmos-sdk/x/bank.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/bank/module.go:228)
+  Registering resolver for simple type keeper.BaseKeeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+ Implicitly registering resolver keeper.AccountKeeper for interface type types.AccountKeeper
+ Implicitly registering resolver keeper.BaseKeeper for interface type types.BankKeeper
+ Registering github.com/cosmos/cosmos-sdk/x/staking.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/staking/module.go:224)
+  Registering resolver for simple type *keeper.Keeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+ Implicitly registering resolver keeper.AccountKeeper for interface type types.AccountKeeper
+ Implicitly registering resolver keeper.BaseKeeper for interface type types.BankKeeper
+ Implicitly registering resolver *keeper.Keeper for interface type types.StakingKeeper
+ Registering github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/slashing/module.go:237)
+  Registering resolver for simple type keeper.Keeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+  Registering resolver for one-per-module type types.StakingHooksWrapper
+  Found resolver for types.StakingHooksWrapper: *depinject.onePerModuleResolver
+ Registering github.com/cosmos/cosmos-sdk/x/params.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:161)
+  Registering resolver for simple type keeper.Keeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+  Registering resolver for many-per-container type v1beta1.HandlerRoute
+  Found resolver for v1beta1.HandlerRoute: *depinject.groupResolver
+ Registering resolver for one-per-module type types.KeyTable
+ Registering module-scoped provider: github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178)
+  Registering resolver for module-scoped type types.Subspace
+ Implicitly registering resolver keeper.AccountKeeper for interface type ante.AccountKeeper
+ Implicitly registering resolver keeper.BaseKeeper for interface type types.BankKeeper
+ Registering github.com/cosmos/cosmos-sdk/x/auth/tx/config.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/tx/config/config.go:45)
+  Registering resolver for simple type client.TxConfig
+  Registering resolver for many-per-container type runtime.BaseAppOption
+  Found resolver for runtime.BaseAppOption: *depinject.groupResolver
+ Implicitly registering resolver keeper.AccountKeeper for interface type types.AccountKeeper
+ Implicitly registering resolver *keeper.Keeper for interface type types.StakingKeeper
+ Registering github.com/cosmos/cosmos-sdk/x/genutil.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/genutil/module.go:144)
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+ Implicitly registering resolver keeper.AccountKeeper for interface type authz.AccountKeeper
+ Implicitly registering resolver keeper.BaseKeeper for interface type authz.BankKeeper
+ Registering github.com/cosmos/cosmos-sdk/x/authz/module.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/authz/module/module.go:192)
+  Registering resolver for simple type keeper.Keeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+ Registering github.com/cosmos/cosmos-sdk/x/upgrade.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/upgrade/module.go:194)
+  Registering resolver for simple type *keeper.Keeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+  Found resolver for v1beta1.HandlerRoute: *depinject.groupResolver
+  Found resolver for runtime.BaseAppOption: *depinject.groupResolver
+ Implicitly registering resolver keeper.AccountKeeper for interface type types.AccountKeeper
+ Implicitly registering resolver keeper.BaseKeeper for interface type types.BankKeeper
+ Implicitly registering resolver *keeper.Keeper for interface type types.StakingKeeper
+ Implicitly registering resolver types.Subspace for interface type exported.Subspace
+ Registering github.com/cosmos/cosmos-sdk/x/distribution.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/distribution/module.go:237)
+  Registering resolver for simple type keeper.Keeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+  Found resolver for types.StakingHooksWrapper: *depinject.onePerModuleResolver
+ Registering github.com/cosmos/cosmos-sdk/x/capability.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/capability/module.go:202)
+  Registering resolver for simple type *keeper.Keeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+ Implicitly registering resolver *keeper.Keeper for interface type types.StakingKeeper
+ Implicitly registering resolver keeper.Keeper for interface type types.SlashingKeeper
+ Registering github.com/cosmos/cosmos-sdk/x/evidence.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/evidence/module.go:216)
+  Registering resolver for simple type keeper.Keeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+ Implicitly registering resolver types.Subspace for interface type exported.Subspace
+ Implicitly registering resolver keeper.AccountKeeper for interface type types.AccountKeeper
+ Implicitly registering resolver keeper.BaseKeeper for interface type types.BankKeeper
+ Implicitly registering resolver *keeper.Keeper for interface type types.StakingKeeper
+ Registering github.com/cosmos/cosmos-sdk/x/mint.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/mint/module.go:242)
+  Registering resolver for simple type keeper.Keeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+ Implicitly registering resolver keeper.AccountKeeper for interface type group.AccountKeeper
+ Implicitly registering resolver keeper.BaseKeeper for interface type group.BankKeeper
+ Registering github.com/cosmos/cosmos-sdk/x/group/module.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/group/module/module.go:219)
+  Registering resolver for simple type keeper.Keeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+ Implicitly registering resolver keeper.AccountKeeper for interface type feegrant.AccountKeeper
+ Implicitly registering resolver keeper.BaseKeeper for interface type feegrant.BankKeeper
+ Registering github.com/cosmos/cosmos-sdk/x/feegrant/module.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/feegrant/module/module.go:197)
+  Registering resolver for simple type keeper.Keeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+ Implicitly registering resolver keeper.AccountKeeper for interface type types.AccountKeeper
+ Implicitly registering resolver keeper.BaseKeeper for interface type types.BankKeeper
+ Implicitly registering resolver *keeper.Keeper for interface type types.StakingKeeper
+ Implicitly registering resolver types.Subspace for interface type types.ParamSubspace
+ Registering github.com/cosmos/cosmos-sdk/x/gov.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/gov/module.go:190)
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+  Registering resolver for simple type *keeper.Keeper
+  Found resolver for v1beta1.HandlerRoute: *depinject.groupResolver
+ Registering github.com/cosmos/cosmos-sdk/x/gov.ProvideKeyTable (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/gov/module.go:218)
+  Found resolver for types.KeyTable: *depinject.onePerModuleResolver
+ Implicitly registering resolver keeper.BaseKeeper for interface type types.SupplyKeeper
+ Implicitly registering resolver types.Subspace for interface type exported.Subspace
+ Registering github.com/cosmos/cosmos-sdk/x/crisis.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/crisis/module.go:215)
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+  Registering resolver for simple type *keeper.Keeper
+ Registering github.com/cosmos/cosmos-sdk/x/consensus.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/consensus/module.go:156)
+  Registering resolver for simple type keeper.Keeper
+  Found resolver for appmodule.AppModule: *depinject.onePerModuleResolver
+  Found resolver for runtime.BaseAppOption: *depinject.groupResolver
+ Registering github.com/bianjieai/iritamod/modules/params.ProvideModule (D:/workspace/github/iritamod/modules/params/depinject.go:40)
+  Registering resolver for simple type keeper.Keeper
+  Registering resolver for simple type params.AppModule
+Registering outputs
+ Implicitly registering resolver keeper.BaseKeeper for interface type keeper.Keeper
+ Registering github.com/bianjieai/iritamod/modules/simapp.NewSimApp (D:/workspace/github/iritamod/simapp/app.go:249)
+Building container
+Resolving dependencies for github.com/bianjieai/iritamod/modules/simapp.NewSimApp (D:/workspace/github/iritamod/simapp/app.go:249)
+ Providing keeper.Keeper from github.com/bianjieai/iritamod/modules/params.ProvideModule (D:/workspace/github/iritamod/modules/params/depinject.go:40) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Resolving dependencies for github.com/bianjieai/iritamod/modules/params.ProvideModule (D:/workspace/github/iritamod/modules/params/depinject.go:40)
+  Providing keeper.Keeper from github.com/cosmos/cosmos-sdk/x/params.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:161) to github.com/bianjieai/iritamod/modules/params.ProvideModule
+  Resolving dependencies for github.com/cosmos/cosmos-sdk/x/params.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:161)
+   Providing *types.KVStoreKey from github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112) to github.com/cosmos/cosmos-sdk/x/params.ProvideModule
+   Resolving dependencies for github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+    Supplying *runtimev1alpha1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+    Providing ModuleKey params
+    Providing *runtime.AppBuilder from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+    Resolving dependencies for github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41)
+    Calling github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41)
+   Calling github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+   Providing *types.TransientStoreKey from github.com/cosmos/cosmos-sdk/runtime.ProvideTransientStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:127) to github.com/cosmos/cosmos-sdk/x/params.ProvideModule
+   Resolving dependencies for github.com/cosmos/cosmos-sdk/runtime.ProvideTransientStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:127)
+    Providing ModuleKey params
+    Providing *runtime.AppBuilder from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/runtime.ProvideTransientStoreKey
+   Calling github.com/cosmos/cosmos-sdk/runtime.ProvideTransientStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:127)
+   Providing codec.Codec from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/params.ProvideModule
+   Providing *codec.LegacyAmino from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/params.ProvideModule
+  Calling github.com/cosmos/cosmos-sdk/x/params.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:161)
+  Providing codec.Codec from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/bianjieai/iritamod/modules/params.ProvideModule
+ Calling github.com/bianjieai/iritamod/modules/params.ProvideModule (D:/workspace/github/iritamod/modules/params/depinject.go:40)
+ Providing *runtime.AppBuilder from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Providing codec.Codec from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Providing *codec.LegacyAmino from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Providing types.InterfaceRegistry from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Providing client.TxConfig from github.com/cosmos/cosmos-sdk/x/auth/tx/config.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/tx/config/config.go:45) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Resolving dependencies for github.com/cosmos/cosmos-sdk/x/auth/tx/config.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/tx/config/config.go:45)
+  Supplying *configv1.Config from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/x/auth/tx/config.ProvideModule
+  Providing codec.ProtoCodecMarshaler from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/auth/tx/config.ProvideModule
+  Providing keeper.AccountKeeper from github.com/cosmos/cosmos-sdk/x/auth.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/module.go:222) to github.com/cosmos/cosmos-sdk/x/auth/tx/config.ProvideModule
+  Resolving dependencies for github.com/cosmos/cosmos-sdk/x/auth.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/module.go:222)
+   Supplying *modulev1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/x/auth.ProvideModule
+   Providing *types.KVStoreKey from github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112) to github.com/cosmos/cosmos-sdk/x/auth.ProvideModule
+   Resolving dependencies for github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+    Supplying *runtimev1alpha1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+    Providing ModuleKey auth
+    Providing *runtime.AppBuilder from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+   Calling github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+   Providing codec.Codec from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/auth.ProvideModule
+   Providing zero value for optional dependency types.RandomGenesisAccountsFn
+   Providing zero value for optional dependency func() types.AccountI
+   Implicitly registering resolver types.Subspace for interface type exported.Subspace
+   Providing types.Subspace from github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178) to github.com/cosmos/cosmos-sdk/x/auth.ProvideModule
+   Resolving dependencies for github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178)
+    Providing ModuleKey auth
+    Providing keeper.Keeper from github.com/cosmos/cosmos-sdk/x/params.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:161) to github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace
+    Providing one-per-module type map map[string]types.KeyTable to github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace from:
+     gov: github.com/cosmos/cosmos-sdk/x/gov.ProvideKeyTable (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/gov/module.go:218)
+    Resolving dependencies for github.com/cosmos/cosmos-sdk/x/gov.ProvideKeyTable (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/gov/module.go:218)
+    Calling github.com/cosmos/cosmos-sdk/x/gov.ProvideKeyTable (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/gov/module.go:218)
+   Calling github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178)
+  Calling github.com/cosmos/cosmos-sdk/x/auth.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/module.go:222)
+  Providing keeper.BaseKeeper from github.com/cosmos/cosmos-sdk/x/bank.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/bank/module.go:228) to github.com/cosmos/cosmos-sdk/x/auth/tx/config.ProvideModule
+  Resolving dependencies for github.com/cosmos/cosmos-sdk/x/bank.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/bank/module.go:228)
+   Supplying *modulev1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/x/bank.ProvideModule
+   Providing codec.Codec from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/bank.ProvideModule
+   Providing *types.KVStoreKey from github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112) to github.com/cosmos/cosmos-sdk/x/bank.ProvideModule
+   Resolving dependencies for github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+    Supplying *runtimev1alpha1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+    Providing ModuleKey bank
+    Providing *runtime.AppBuilder from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+   Calling github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+   Providing keeper.AccountKeeper from github.com/cosmos/cosmos-sdk/x/auth.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/module.go:222) to github.com/cosmos/cosmos-sdk/x/bank.ProvideModule
+   Implicitly registering resolver types.Subspace for interface type exported.Subspace
+   Providing types.Subspace from github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178) to github.com/cosmos/cosmos-sdk/x/bank.ProvideModule
+   Resolving dependencies for github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178)
+    Providing ModuleKey bank
+    Providing keeper.Keeper from github.com/cosmos/cosmos-sdk/x/params.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:161) to github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace
+    Providing one-per-module type map map[string]types.KeyTable to github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace from:
+     gov: github.com/cosmos/cosmos-sdk/x/gov.ProvideKeyTable (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/gov/module.go:218)
+   Calling github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178)
+  Calling github.com/cosmos/cosmos-sdk/x/bank.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/bank/module.go:228)
+  Providing keeper.Keeper from github.com/cosmos/cosmos-sdk/x/feegrant/module.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/feegrant/module/module.go:197) to github.com/cosmos/cosmos-sdk/x/auth/tx/config.ProvideModule
+  Resolving dependencies for github.com/cosmos/cosmos-sdk/x/feegrant/module.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/feegrant/module/module.go:197)
+   Providing *types.KVStoreKey from github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112) to github.com/cosmos/cosmos-sdk/x/feegrant/module.ProvideModule
+   Resolving dependencies for github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+    Supplying *runtimev1alpha1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+    Providing ModuleKey feegrant
+    Providing *runtime.AppBuilder from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+   Calling github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+   Providing codec.Codec from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/feegrant/module.ProvideModule
+   Providing keeper.AccountKeeper from github.com/cosmos/cosmos-sdk/x/auth.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/module.go:222) to github.com/cosmos/cosmos-sdk/x/feegrant/module.ProvideModule
+   Providing keeper.BaseKeeper from github.com/cosmos/cosmos-sdk/x/bank.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/bank/module.go:228) to github.com/cosmos/cosmos-sdk/x/feegrant/module.ProvideModule
+   Providing types.InterfaceRegistry from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/feegrant/module.ProvideModule
+  Calling github.com/cosmos/cosmos-sdk/x/feegrant/module.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/feegrant/module/module.go:197)
+ Calling github.com/cosmos/cosmos-sdk/x/auth/tx/config.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/tx/config/config.go:45)
+ Providing keeper.AccountKeeper from github.com/cosmos/cosmos-sdk/x/auth.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/module.go:222) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Providing keeper.BaseKeeper from github.com/cosmos/cosmos-sdk/x/bank.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/bank/module.go:228) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Providing keeper.Keeper from github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/slashing/module.go:237) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Resolving dependencies for github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/slashing/module.go:237)
+  Supplying *modulev1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule
+  Providing *types.KVStoreKey from github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112) to github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule
+  Resolving dependencies for github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+   Supplying *runtimev1alpha1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+   Providing ModuleKey slashing
+   Providing *runtime.AppBuilder from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+  Calling github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+  Providing codec.Codec from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule
+  Providing *codec.LegacyAmino from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule
+  Providing keeper.AccountKeeper from github.com/cosmos/cosmos-sdk/x/auth.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/module.go:222) to github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule
+  Providing keeper.BaseKeeper from github.com/cosmos/cosmos-sdk/x/bank.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/bank/module.go:228) to github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule
+  Providing *keeper.Keeper from github.com/cosmos/cosmos-sdk/x/staking.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/staking/module.go:224) to github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule
+  Resolving dependencies for github.com/cosmos/cosmos-sdk/x/staking.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/staking/module.go:224)
+   Supplying *modulev1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/x/staking.ProvideModule
+   Providing keeper.AccountKeeper from github.com/cosmos/cosmos-sdk/x/auth.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/auth/module.go:222) to github.com/cosmos/cosmos-sdk/x/staking.ProvideModule
+   Providing keeper.BaseKeeper from github.com/cosmos/cosmos-sdk/x/bank.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/bank/module.go:228) to github.com/cosmos/cosmos-sdk/x/staking.ProvideModule
+   Providing codec.Codec from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/staking.ProvideModule
+   Providing *types.KVStoreKey from github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112) to github.com/cosmos/cosmos-sdk/x/staking.ProvideModule
+   Resolving dependencies for github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+    Supplying *runtimev1alpha1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+    Providing ModuleKey staking
+    Providing *runtime.AppBuilder from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+   Calling github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+   Implicitly registering resolver types.Subspace for interface type exported.Subspace
+   Providing types.Subspace from github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178) to github.com/cosmos/cosmos-sdk/x/staking.ProvideModule
+   Resolving dependencies for github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178)
+    Providing ModuleKey staking
+    Providing keeper.Keeper from github.com/cosmos/cosmos-sdk/x/params.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:161) to github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace
+    Providing one-per-module type map map[string]types.KeyTable to github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace from:
+     gov: github.com/cosmos/cosmos-sdk/x/gov.ProvideKeyTable (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/gov/module.go:218)
+   Calling github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178)
+  Calling github.com/cosmos/cosmos-sdk/x/staking.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/staking/module.go:224)
+  Implicitly registering resolver types.Subspace for interface type exported.Subspace
+  Providing types.Subspace from github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178) to github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule
+  Resolving dependencies for github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178)
+   Providing ModuleKey slashing
+   Providing keeper.Keeper from github.com/cosmos/cosmos-sdk/x/params.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:161) to github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace
+   Providing one-per-module type map map[string]types.KeyTable to github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace from:
+    gov: github.com/cosmos/cosmos-sdk/x/gov.ProvideKeyTable (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/gov/module.go:218)
+  Calling github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178)
+ Calling github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/slashing/module.go:237)
+ Providing *keeper.Keeper from github.com/cosmos/cosmos-sdk/x/crisis.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/crisis/module.go:215) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Resolving dependencies for github.com/cosmos/cosmos-sdk/x/crisis.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/crisis/module.go:215)
+  Supplying *modulev1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/x/crisis.ProvideModule
+  Providing *types.KVStoreKey from github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112) to github.com/cosmos/cosmos-sdk/x/crisis.ProvideModule
+  Resolving dependencies for github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+   Supplying *runtimev1alpha1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+   Providing ModuleKey crisis
+   Providing *runtime.AppBuilder from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+  Calling github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+  Providing codec.Codec from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/crisis.ProvideModule
+  Implicitly registering resolver sims.AppOptionsMap for interface type types.AppOptions
+  Supplying sims.AppOptionsMap from github.com/bianjieai/iritamod/modules/simapp.NewSimApp (D:/workspace/github/iritamod/simapp/app.go:194) to github.com/cosmos/cosmos-sdk/x/crisis.ProvideModule
+  Providing keeper.BaseKeeper from github.com/cosmos/cosmos-sdk/x/bank.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/bank/module.go:228) to github.com/cosmos/cosmos-sdk/x/crisis.ProvideModule
+  Providing types.Subspace from github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178) to github.com/cosmos/cosmos-sdk/x/crisis.ProvideModule
+  Resolving dependencies for github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178)
+   Providing ModuleKey crisis
+   Providing keeper.Keeper from github.com/cosmos/cosmos-sdk/x/params.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:161) to github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace
+   Providing one-per-module type map map[string]types.KeyTable to github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace from:
+    gov: github.com/cosmos/cosmos-sdk/x/gov.ProvideKeyTable (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/gov/module.go:218)
+  Calling github.com/cosmos/cosmos-sdk/x/params.ProvideSubspace (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:178)
+ Calling github.com/cosmos/cosmos-sdk/x/crisis.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/crisis/module.go:215)
+ Providing *keeper.Keeper from github.com/cosmos/cosmos-sdk/x/crisis.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/crisis/module.go:215) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Providing *keeper.Keeper from github.com/cosmos/cosmos-sdk/x/upgrade.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/upgrade/module.go:194) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Resolving dependencies for github.com/cosmos/cosmos-sdk/x/upgrade.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/upgrade/module.go:194)
+  Supplying *modulev1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/x/upgrade.ProvideModule
+  Providing *types.KVStoreKey from github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112) to github.com/cosmos/cosmos-sdk/x/upgrade.ProvideModule
+  Resolving dependencies for github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+   Supplying *runtimev1alpha1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+   Providing ModuleKey upgrade
+   Providing *runtime.AppBuilder from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+  Calling github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+  Providing codec.Codec from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/upgrade.ProvideModule
+  Supplying sims.AppOptionsMap from github.com/bianjieai/iritamod/modules/simapp.NewSimApp (D:/workspace/github/iritamod/simapp/app.go:194) to github.com/cosmos/cosmos-sdk/x/upgrade.ProvideModule
+ Calling github.com/cosmos/cosmos-sdk/x/upgrade.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/upgrade/module.go:194)
+ Providing keeper.Keeper from github.com/cosmos/cosmos-sdk/x/params.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/params/module.go:161) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Providing keeper.Keeper from github.com/cosmos/cosmos-sdk/x/evidence.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/evidence/module.go:216) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+ Resolving dependencies for github.com/cosmos/cosmos-sdk/x/evidence.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/evidence/module.go:216)
+  Providing *types.KVStoreKey from github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112) to github.com/cosmos/cosmos-sdk/x/evidence.ProvideModule
+  Resolving dependencies for github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+   Supplying *runtimev1alpha1.Module from cosmossdk.io/core/appconfig.Compose (D:/path/go/pkg/mod/cosmossdk.io/core@v0.5.1/appconfig/config.go:97) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+   Providing ModuleKey evidence
+   Providing *runtime.AppBuilder from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey
+  Calling github.com/cosmos/cosmos-sdk/runtime.ProvideKVStoreKey (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:112)
+  Providing codec.Codec from github.com/cosmos/cosmos-sdk/runtime.ProvideApp (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/runtime/module.go:41) to github.com/cosmos/cosmos-sdk/x/evidence.ProvideModule
+  Providing *keeper.Keeper from github.com/cosmos/cosmos-sdk/x/staking.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/staking/module.go:224) to github.com/cosmos/cosmos-sdk/x/evidence.ProvideModule
+  Providing keeper.Keeper from github.com/cosmos/cosmos-sdk/x/slashing.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/slashing/module.go:237) to github.com/cosmos/cosmos-sdk/x/evidence.ProvideModule
+ Calling github.com/cosmos/cosmos-sdk/x/evidence.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/evidence/module.go:216)
+ Providing keeper.Keeper from github.com/cosmos/cosmos-sdk/x/feegrant/module.ProvideModule (D:/path/go/pkg/mod/github.com/bianjieai/cosmos-sdk@v0.47.12-irita-20240701/x/feegrant/module/module.go:197) to github.com/bianjieai/iritamod/modules/simapp.NewSimApp
+Calling github.com/bianjieai/iritamod/modules/simapp.NewSimApp (D:/workspace/github/iritamod/simapp/app.go:249)
+Error: error calling provider github.com/bianjieai/iritamod/modules/simapp.NewSimApp (D:/workspace/github/iritamod/simapp/app.go:249): depinject.Out struct <keeper.Keeper Value> on package can't have unexported field
+Saved graph of container to D:\workspace\github\iritamod\modules\params\test\debug_container.dot

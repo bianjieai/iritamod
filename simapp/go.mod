@@ -3,8 +3,8 @@ module github.com/bianjieai/iritamod/modules/simapp
 go 1.18
 
 require (
-	github.com/bianjieai/iritamod/modules/node v0.0.0-20240627063810-3c640d2b37cd
-	github.com/bianjieai/iritamod/modules/slashing v0.0.0-20240627063810-3c640d2b37cd
+	//github.com/bianjieai/iritamod/modules/node fad8db27511fd0de3dbf383aea424094d1e28005
+	//github.com/bianjieai/iritamod/modules/slashing fad8db27511fd0de3dbf383aea424094d1e28005
 	github.com/cosmos/cosmos-sdk v0.47.12
 	github.com/gorilla/mux v1.8.0
 	github.com/rakyll/statik v0.1.7
@@ -22,7 +22,6 @@ require (
 	github.com/armon/go-metrics v0.3.9 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bgentry/speakeasy v0.1.0 // indirect
-	github.com/btcsuite/btcd v0.22.0-beta // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
 	github.com/confio/ics23/go v0.6.6 // indirect
