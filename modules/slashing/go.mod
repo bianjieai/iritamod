@@ -3,9 +3,13 @@ module github.com/bianjieai/iritamod/modules/slashing
 go 1.18
 
 require (
-	github.com/bianjieai/iritamod/api v0.0.1
-    //github.com/bianjieai/iritamod/modules/simapp v0.0.1
+	cosmossdk.io/api v0.3.1
+    cosmossdk.io/core v0.5.1
+    cosmossdk.io/depinject v1.0.0-alpha.4
+    github.com/bianjieai/iritamod/api v0.0.1
+    github.com/bianjieai/iritamod/modules/simapp v0.0.1
     github.com/cometbft/cometbft v0.37.5
+    github.com/cometbft/cometbft-db v0.7.0
     github.com/cosmos/cosmos-sdk v0.47.12
     github.com/cosmos/gogoproto v1.4.10
 	github.com/gorilla/mux v1.8.0

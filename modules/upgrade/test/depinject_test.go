@@ -18,15 +18,17 @@ import (
 	govmodulev1 "cosmossdk.io/api/cosmos/gov/module/v1"
 	groupmodulev1 "cosmossdk.io/api/cosmos/group/module/v1"
 	mintmodulev1 "cosmossdk.io/api/cosmos/mint/module/v1"
+	paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
 	slashingmodulev1 "cosmossdk.io/api/cosmos/slashing/module/v1"
 	stakingmodulev1 "cosmossdk.io/api/cosmos/staking/module/v1"
 	txconfigv1 "cosmossdk.io/api/cosmos/tx/config/v1"
-	upgrademodulev1 "cosmossdk.io/api/cosmos/upgrade/module/v1"
 	vestingmodulev1 "cosmossdk.io/api/cosmos/vesting/module/v1"
 	"cosmossdk.io/core/appconfig"
-	paramsapi "github.com/bianjieai/iritamod/api/iritamod/params/module/v1"
-	_ "github.com/bianjieai/iritamod/modules/params"
-	"github.com/bianjieai/iritamod/modules/params/types"
+	"google.golang.org/protobuf/types/known/durationpb"
+
+	upgradeapi "github.com/bianjieai/iritamod/api/iritamod/upgrade/module/v1"
+	_ "github.com/bianjieai/iritamod/modules/upgrade"
+	upgradetypes "github.com/bianjieai/iritamod/modules/upgrade/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/cosmos/cosmos-sdk/x/authz"
@@ -41,10 +43,9 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/cosmos/cosmos-sdk/x/group"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
+	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-	"google.golang.org/protobuf/types/known/durationpb"
 )
 
 var (
@@ -58,9 +59,9 @@ var (
 	genesisModuleOrder = []string{
 		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName,
 		distrtypes.ModuleName, stakingtypes.ModuleName, slashingtypes.ModuleName, govtypes.ModuleName,
-		minttypes.ModuleName, crisistypes.ModuleName, types.ModuleName, genutiltypes.ModuleName, evidencetypes.ModuleName, authz.ModuleName,
-		feegrant.ModuleName, group.ModuleName, upgradetypes.ModuleName,
-		vestingtypes.ModuleName, consensustypes.ModuleName,
+		minttypes.ModuleName, crisistypes.ModuleName, genutiltypes.ModuleName, evidencetypes.ModuleName, authz.ModuleName,
+		feegrant.ModuleName, group.ModuleName, paramstypes.ModuleName,
+		vestingtypes.ModuleName, consensustypes.ModuleName, upgradetypes.ModuleName,
 	}
 
 	// module account permissions
@@ -71,7 +72,7 @@ var (
 		{Account: stakingtypes.BondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: stakingtypes.NotBondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: govtypes.ModuleName, Permissions: []string{authtypes.Burner}},
-		{Account: types.ModuleName},
+		{Account: upgradetypes.ModuleName},
 	}
 
 	// blocked account addresses
@@ -111,9 +112,9 @@ var (
 						authz.ModuleName,
 						feegrant.ModuleName,
 						group.ModuleName,
+						paramstypes.ModuleName,
 						vestingtypes.ModuleName,
 						consensustypes.ModuleName,
-						types.ModuleName,
 					},
 					EndBlockers: []string{
 						crisistypes.ModuleName,
@@ -130,10 +131,10 @@ var (
 						authz.ModuleName,
 						feegrant.ModuleName,
 						group.ModuleName,
+						paramstypes.ModuleName,
 						consensustypes.ModuleName,
 						upgradetypes.ModuleName,
 						vestingtypes.ModuleName,
-						types.ModuleName,
 					},
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
 						{
@@ -177,10 +178,10 @@ var (
 				Name:   slashingtypes.ModuleName,
 				Config: appconfig.WrapAny(&slashingmodulev1.Module{}),
 			},
-			/*{
+			{
 				Name:   paramstypes.ModuleName,
 				Config: appconfig.WrapAny(&paramsmodulev1.Module{}),
-			},*/
+			},
 			{
 				Name:   "tx",
 				Config: appconfig.WrapAny(&txconfigv1.Config{}),
@@ -193,10 +194,10 @@ var (
 				Name:   authz.ModuleName,
 				Config: appconfig.WrapAny(&authzmodulev1.Module{}),
 			},
-			{
-				Name:   upgradetypes.ModuleName,
-				Config: appconfig.WrapAny(&upgrademodulev1.Module{}),
-			},
+			//{
+			//	Name:   upgradetypes.ModuleName,
+			//	Config: appconfig.WrapAny(&upgrademodulev1.Module{}),
+			//},
 			{
 				Name:   distrtypes.ModuleName,
 				Config: appconfig.WrapAny(&distrmodulev1.Module{}),
@@ -239,8 +240,8 @@ var (
 				Config: appconfig.WrapAny(&consensusmodulev1.Module{}),
 			},
 			{
-				Name:   types.ModuleName,
-				Config: appconfig.WrapAny(&paramsapi.Module{}),
+				Name:   upgradetypes.ModuleName,
+				Config: appconfig.WrapAny(&upgradeapi.Module{}),
 			},
 		},
 	})

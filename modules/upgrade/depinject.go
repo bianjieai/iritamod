@@ -1,14 +1,14 @@
-package params
+package upgrade
 
 import (
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/depinject"
 	"github.com/cosmos/cosmos-sdk/codec"
+	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 
-	modulev1 "github.com/bianjieai/iritamod/api/iritamod/params/module/v1"
-	"github.com/bianjieai/iritamod/modules/params/keeper"
-	coamosparams "github.com/cosmos/cosmos-sdk/x/params"
-	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
+	modulev1 "github.com/bianjieai/iritamod/api/iritamod/upgrade/module/v1"
+	"github.com/bianjieai/iritamod/modules/upgrade/keeper"
+	"github.com/cosmos/cosmos-sdk/x/upgrade"
 )
 
 // App Wiring Setup
@@ -28,26 +28,24 @@ func (am AppModule) IsAppModule() {}
 
 type ParamsInputs struct {
 	depinject.In
-	Cosparams paramskeeper.Keeper
-	Cdc       codec.Codec
+	Cdc codec.Codec
 }
 
-type ParamsOutputs struct {
+type UpgradeOutputs struct {
 	depinject.Out
-	paramsKeeper keeper.Keeper
-	Module       appmodule.AppModule
+	UpgradeKeeper keeper.Keeper
 }
 
-func ProvideModule(in coamosparams.ParamsInputs) ParamsOutputs {
-	cosmosParamsKeeper := paramskeeper.NewKeeper(
+func ProvideModule(in upgrade.UpgradeInputs) UpgradeOutputs {
+	cosmosupgradekeeper := upgradekeeper.NewKeeper(
 		in.Cdc,
 		in.LegacyAmino,
 		in.TransientStoreKey,
 		in.KvStoreKey,
 	)
 	keeper := keeper.NewKeeper(
-		cosmosParamsKeeper,
+		cosmosupgradekeeper,
 	)
 	m := NewAppModule(in.Cdc, cosmosParamsKeeper)
-	return ParamsOutputs{paramsKeeper: keeper, Module: m}
+	return UpgradeOutputs{paramsKeeper: keeper, Module: m}
 }
