@@ -1,12 +1,11 @@
 package types
 
-import (
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-)
+import paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
 
 const (
 	// ModuleName is the name of the params module
 	ModuleName = paramtypes.ModuleName
+	//ModuleName = "cparams"
 
 	// StoreKey is the string store representation
 	StoreKey = ModuleName

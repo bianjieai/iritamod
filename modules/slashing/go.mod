@@ -3,16 +3,19 @@ module github.com/bianjieai/iritamod/modules/slashing
 go 1.18
 
 require (
-	//github.com/bianjieai/iritamod/modules/node v0.0.0-20240627063810-3c640d2b37cd
-	//github.com/bianjieai/iritamod/modules/simapp v0.0.0-20240627064152-e6ba840cd354
-	github.com/cosmos/cosmos-sdk v0.47.12
-	github.com/gogo/protobuf v1.3.3
-	github.com/golang/protobuf v1.5.3
+	cosmossdk.io/api v0.3.1
+    cosmossdk.io/core v0.5.1
+    cosmossdk.io/depinject v1.0.0-alpha.4
+    github.com/bianjieai/iritamod/api v0.0.1
+    github.com/bianjieai/iritamod/modules/simapp v0.0.1
+    github.com/cometbft/cometbft v0.37.5
+    github.com/cometbft/cometbft-db v0.7.0
+    github.com/cosmos/cosmos-sdk v0.47.12
+    github.com/cosmos/gogoproto v1.4.10
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
 	github.com/spf13/cobra v1.2.1
 	github.com/stretchr/testify v1.8.4
-	github.com/cometbft/cometbft v0.37.5
 	google.golang.org/grpc v1.62.1
 )
 
@@ -26,7 +29,6 @@ require (
 	github.com/armon/go-metrics v0.3.9 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/bgentry/speakeasy v0.1.0 // indirect
-	github.com/btcsuite/btcd v0.22.0-beta // indirect
 	github.com/cespare/xxhash v1.1.0 // indirect
 	github.com/cespare/xxhash/v2 v2.1.1 // indirect
 	github.com/confio/ics23/go v0.6.6 // indirect
@@ -96,7 +98,7 @@ require (
 	github.com/zondax/hid v0.9.0 // indirect
 	go.etcd.io/bbolt v1.3.5 // indirect
 	golang.org/x/crypto v0.18.0 // indirect
-	golang.org/x/exp v0.0.0-20231006140011-7918f672742d // indirect
+	golang.org/x/exp v0.0.0-20230711153332-06a737ee72cb // indirect
 	golang.org/x/net v0.20.0 // indirect
 	golang.org/x/sys v0.16.0 // indirect
 	golang.org/x/term v0.16.0 // indirect
@@ -113,4 +115,7 @@ replace (
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
 	github.com/cometbft/cometbft => github.com/bianjieai/cometbft v0.37.5-irita-240628
 	google.golang.org/grpc => google.golang.org/grpc v1.33.2
+	github.com/bianjieai/iritamod/api => ../../api
+    github.com/bianjieai/iritamod/modules/simapp => ../../simapp
+    golang.org/x/exp => golang.org/x/exp v0.0.0-20230711153332-06a737ee72cb
 )

@@ -13,9 +13,9 @@ type Keeper struct {
 	uk *upgradekeeper.Keeper
 }
 
-func NewKeeper(uk upgradekeeper.Keeper) Keeper {
+func NewKeeper(uk *upgradekeeper.Keeper) Keeper {
 	return Keeper{
-		uk: &uk,
+		uk: uk,
 	}
 }
 
