@@ -1,4 +1,4 @@
-module github.com/bianjieai/iritamod/api
+module iritamod.bianjie.ai/api
 
 go 1.19
 
