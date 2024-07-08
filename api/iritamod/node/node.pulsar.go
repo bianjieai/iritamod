@@ -2,8 +2,8 @@
 package node
 
 import (
+	types "cosmossdk.io/api/tendermint/types"
 	fmt "fmt"
-	types "github.com/bianjieai/iritamod/api/tendermint/types"
 	runtime "github.com/cosmos/cosmos-proto/runtime"
 	_ "github.com/cosmos/gogoproto/gogoproto"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
