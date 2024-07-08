@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	simtypes "github.com/bianjieai/iritamod/modules/simapp/types"
+	simtypes "github.com/bianjieai/iritamod/simapp/types"
 	"math/rand"
 	"os"
 	"strconv"
@@ -22,7 +22,7 @@ import (
 	"github.com/cosmos/gogoproto/proto"
 	"github.com/stretchr/testify/require"
 
-	utils "github.com/bianjieai/iritamod/modules/simapp/utils/ca"
+	utils "github.com/bianjieai/iritamod/simapp/utils/ca"
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -271,11 +271,13 @@ func genesisStateWithValSet(t *testing.T,
 	)
 	genesisState[stakingtypes.ModuleName] = app.AppCodec().MustMarshalJSON(stakingGenesis)
 
-	nodeGenesisStat := &simtypes.GenesisState{}
-	app.legacyAmino.MustUnmarshalJSON(genesisState["node"], &nodeGenesisStat)
-	nodeGenesisStat.RootCert = rootCert
-	validatorGenStateBz := app.appCodec.MustMarshalJSON(nodeGenesisStat)
-	genesisState["node"] = validatorGenStateBz
+	if genesisState["node"] != nil {
+		nodeGenesisStat := &simtypes.GenesisState{}
+		app.legacyAmino.MustUnmarshalJSON(genesisState["node"], &nodeGenesisStat)
+		nodeGenesisStat.RootCert = rootCert
+		validatorGenStateBz := app.appCodec.MustMarshalJSON(nodeGenesisStat)
+		genesisState["node"] = validatorGenStateBz
+	}
 
 	totalSupply := sdk.NewCoins()
 	for _, b := range balances {

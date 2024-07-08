@@ -8,7 +8,6 @@ import (
 
 	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 )
 
 // ExportAppStateAndValidators exports the state of the application for a genesis file.
@@ -51,12 +50,12 @@ func (app *SimApp) prepForZeroHeightGenesis(ctx sdk.Context, jailAllowedAddrs []
 	/* Handle slashing state. */
 
 	// reset start height on signing infos
-	app.SlashingKeeper.IterateValidatorSigningInfos(
-		ctx,
-		func(addr sdk.ConsAddress, info slashingtypes.ValidatorSigningInfo) (stop bool) {
-			info.StartHeight = 0
-			app.SlashingKeeper.SetValidatorSigningInfo(ctx, addr, info)
-			return false
-		},
-	)
+	//app.SlashingKeeper.IterateValidatorSigningInfos(
+	//	ctx,
+	//	func(addr sdk.ConsAddress, info slashingtypes.ValidatorSigningInfo) (stop bool) {
+	//		info.StartHeight = 0
+	//		app.SlashingKeeper.SetValidatorSigningInfo(ctx, addr, info)
+	//		return false
+	//	},
+	//)
 }

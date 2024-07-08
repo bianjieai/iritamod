@@ -9,6 +9,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/gov"
 	"github.com/cosmos/cosmos-sdk/x/mint"
 	"github.com/cosmos/cosmos-sdk/x/staking"
+	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	"io"
 
 	"os"
@@ -31,7 +32,6 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	"github.com/cosmos/cosmos-sdk/x/auth"
 	authkeeper "github.com/cosmos/cosmos-sdk/x/auth/keeper"
-	authsims "github.com/cosmos/cosmos-sdk/x/auth/simulation"
 	authtx "github.com/cosmos/cosmos-sdk/x/auth/tx"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	authzmodule "github.com/cosmos/cosmos-sdk/x/authz/module"
@@ -50,14 +50,10 @@ import (
 	groupmodule "github.com/cosmos/cosmos-sdk/x/group/module"
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramsclient "github.com/cosmos/cosmos-sdk/x/params/client"
-	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
-	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/cosmos/cosmos-sdk/x/slashing"
-	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 	stakingkeeper "github.com/cosmos/cosmos-sdk/x/staking/keeper"
 	"github.com/cosmos/cosmos-sdk/x/upgrade"
 	upgradeclient "github.com/cosmos/cosmos-sdk/x/upgrade/client"
-	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 )
 
 const appName = "SimApp"
@@ -141,14 +137,14 @@ type SimApp struct {
 	memKeys map[string]*storetypes.MemoryStoreKey
 
 	// keepers
-	AccountKeeper  authkeeper.AccountKeeper
-	BankKeeper     bankkeeper.Keeper
-	SlashingKeeper slashingkeeper.Keeper
-	StakingKeeper  *stakingkeeper.Keeper
+	AccountKeeper authkeeper.AccountKeeper
+	BankKeeper    bankkeeper.Keeper
+	//SlashingKeeper slashingkeeper.Keeper
+	StakingKeeper *stakingkeeper.Keeper
 	//govKeeper        gov.Keeper
-	CrisisKeeper   *crisiskeeper.Keeper
-	UpgradeKeeper  *upgradekeeper.Keeper
-	ParamsKeeper   paramskeeper.Keeper
+	CrisisKeeper  *crisiskeeper.Keeper
+	UpgradeKeeper *upgradekeeper.Keeper
+	//ParamsKeeper   paramskeeper.Keeper
 	EvidenceKeeper evidencekeeper.Keeper
 	//NodeKeeper     nodekeeper.Keeper
 	FeeGrantKeeper feegrantkeeper.Keeper
@@ -233,14 +229,14 @@ func NewSimApp(
 		&app.AccountKeeper,
 		&app.BankKeeper,
 		//&app.StakingKeeper,
-		&app.SlashingKeeper,
+		//&app.SlashingKeeper,
 		//&app.MintKeeper,
 		//&app.DistrKeeper,
 		//&app.GovKeeper,
 		&app.CrisisKeeper,
-		&app.CrisisKeeper,
-		&app.UpgradeKeeper,
-		&app.ParamsKeeper,
+		//&app.CrisisKeeper,
+		//&app.UpgradeKeeper,
+		//&app.ParamsKeeper,
 		//&app.AuthzKeeper,
 		&app.EvidenceKeeper,
 		&app.FeeGrantKeeper,
@@ -272,15 +268,15 @@ func NewSimApp(
 	//
 	// NOTE: this is not required apps that don't use the simulator for fuzz testing
 	// transactions
-	overrideModules := map[string]module.AppModuleSimulation{
-		authtypes.ModuleName: auth.NewAppModule(
-			app.appCodec,
-			app.AccountKeeper,
-			authsims.RandomGenesisAccounts,
-			app.GetSubspace(authtypes.ModuleName),
-		),
-	}
-	app.sm = module.NewSimulationManagerFromAppModules(app.ModuleManager.Modules, overrideModules)
+	//overrideModules := map[string]module.AppModuleSimulation{
+	//	authtypes.ModuleName: auth.NewAppModule(
+	//		app.appCodec,
+	//		app.AccountKeeper,
+	//		authsims.RandomGenesisAccounts,
+	//		app.GetSubspace(authtypes.ModuleName),
+	//	),
+	//}
+	app.sm = module.NewSimulationManagerFromAppModules(app.ModuleManager.Modules, nil)
 
 	app.sm.RegisterStoreDecoders()
 	app.SetInitChainer(app.InitChainer)
@@ -609,10 +605,10 @@ func (app *SimApp) kvStoreKeys() map[string]*storetypes.KVStoreKey {
 // GetSubspace returns a param subspace for a given module name.
 //
 // NOTE: This is solely to be used for testing purposes.
-func (app *SimApp) GetSubspace(moduleName string) paramstypes.Subspace {
+/*func (app *SimApp) GetSubspace(moduleName string) paramstypes.Subspace {
 	subspace, _ := app.ParamsKeeper.GetSubspace(moduleName)
 	return subspace
-}
+}*/
 
 // SimulationManager implements the SimulationApp interface
 func (app *SimApp) SimulationManager() *module.SimulationManager {
