@@ -2,10 +2,6 @@ package test
 
 import (
 	"fmt"
-	"github.com/bianjieai/iritamod/modules/params/client/utils"
-	"github.com/bianjieai/iritamod/modules/params/keeper"
-	iritamodparamstype "github.com/bianjieai/iritamod/modules/params/types"
-	"github.com/bianjieai/iritamod/modules/simapp"
 	dbm "github.com/cometbft/cometbft-db"
 	"github.com/cometbft/cometbft/libs/log"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
@@ -21,6 +17,10 @@ import (
 	paramstype "github.com/cosmos/cosmos-sdk/x/params/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
+	"iritamod.bianjie.ai/modules/params/client/utils"
+	"iritamod.bianjie.ai/modules/params/keeper"
+	iritamodparamstype "iritamod.bianjie.ai/modules/params/types"
+	"iritamod.bianjie.ai/simapp"
 	"testing"
 	"time"
 )
@@ -62,6 +62,10 @@ func (suite *KeeperTestSuite) SetupTest() {
 		Consumers: []interface{}{&suite.keeper},
 	}
 	app := simapp.Setup(suite.T(), isCheckTx, depInjectOptions)
+	ss := suite.keeper.Subspace("testsubspace")
+	suite.ss = ss.WithKeyTable(paramKeyTable())
+	encCfg := MakeTestEncodingConfig()
+	suite.encCfg = encCfg
 
 	suite.ctx = app.BaseApp.NewContext(false, tmproto.Header{})
 }

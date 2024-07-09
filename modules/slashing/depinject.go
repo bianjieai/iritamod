@@ -49,9 +49,6 @@ type SlashingOutputs struct {
 
 func ProvideModule(in SlashingInputs) SlashingOutputs {
 	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
-	//if in.Config.Authority != "" {
-	//	authority = authtypes.NewModuleAddressOrBech32Address(in.Config.Authority)
-	//}
 	cosmosSlashingKeeper := slashingkeeper.NewKeeper(in.Cdc, in.LegacyAmino, in.Key, in.StakingKeeper, authority.String())
 	keeper := keeper.NewKeeper(
 		cosmosSlashingKeeper,
