@@ -16,7 +16,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 
-	"github.com/bianjieai/iritamod/modules/genutil/types"
+	"iritamod.bianjie.ai/modules/genutil/types"
 )
 
 var (

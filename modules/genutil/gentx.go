@@ -11,7 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/bianjieai/iritamod/modules/genutil/types"
+	"iritamod.bianjie.ai/modules/genutil/types"
 )
 
 // AddGenTxsInAppGenesisState - add the genesis transactions in the app genesis state

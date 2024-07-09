@@ -6,7 +6,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/bianjieai/iritamod/modules/genutil/types"
+	"iritamod.bianjie.ai/modules/genutil/types"
 )
 
 // InitGenesis - initialize accounts and deliver genesis transactions

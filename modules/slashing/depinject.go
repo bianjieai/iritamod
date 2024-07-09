@@ -3,15 +3,15 @@ package slashing
 import (
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/depinject"
-	"github.com/bianjieai/iritamod/modules/slashing/types"
 	"github.com/cosmos/cosmos-sdk/codec"
+	store "github.com/cosmos/cosmos-sdk/store/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
-
-	modulev1 "github.com/bianjieai/iritamod/api/iritamod/params/module/v1"
-	"github.com/bianjieai/iritamod/modules/slashing/keeper"
-	coamosslashing "github.com/cosmos/cosmos-sdk/x/slashing"
 	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
+	"iritamod.bianjie.ai/modules/slashing/types"
+
+	modulev1 "iritamod.bianjie.ai/api/iritamod/slashing/module/v1"
+	"iritamod.bianjie.ai/modules/slashing/keeper"
 )
 
 // App Wiring Setup
@@ -29,29 +29,34 @@ func (am AppModule) IsOnePerModuleType() {}
 // IsAppModule implements the appmodule.AppModule interface.
 func (am AppModule) IsAppModule() {}
 
-type ParamsInputs struct {
+type SlashingInputs struct {
 	depinject.In
-	coamosslashing.SlashingInputs
-	NodeKeeper types.NodeKeeper
-	Cdc        codec.Codec
+	NodeKeeper    types.NodeKeeper
+	Key           *store.KVStoreKey
+	Cdc           codec.Codec
+	LegacyAmino   *codec.LegacyAmino
+	AccountKeeper AccountKeeper
+	BankKeeper    BankKeeper
+	StakingKeeper StakingKeeper
+	//Slashingkeeper slashingkeeper.Keeper
 }
 
-type ParamsOutputs struct {
+type SlashingOutputs struct {
 	depinject.Out
 	SlashingKeeper keeper.Keeper
 	Module         appmodule.AppModule
 }
 
-func ProvideModule(in ParamsInputs) ParamsOutputs {
+func ProvideModule(in SlashingInputs) SlashingOutputs {
 	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
-	if in.Config.Authority != "" {
-		authority = authtypes.NewModuleAddressOrBech32Address(in.Config.Authority)
-	}
+	//if in.Config.Authority != "" {
+	//	authority = authtypes.NewModuleAddressOrBech32Address(in.Config.Authority)
+	//}
 	cosmosSlashingKeeper := slashingkeeper.NewKeeper(in.Cdc, in.LegacyAmino, in.Key, in.StakingKeeper, authority.String())
 	keeper := keeper.NewKeeper(
 		cosmosSlashingKeeper,
 		in.NodeKeeper,
 	)
 	m := NewAppModule(in.Cdc, keeper, in.AccountKeeper, in.BankKeeper, in.StakingKeeper)
-	return ParamsOutputs{SlashingKeeper: keeper, Module: m}
+	return SlashingOutputs{SlashingKeeper: keeper, Module: m}
 }

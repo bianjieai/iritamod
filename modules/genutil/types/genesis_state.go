@@ -11,7 +11,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
+	nodetypes "iritamod.bianjie.ai/modules/node/types"
 )
 
 // NewGenesisState creates a new GenesisState object

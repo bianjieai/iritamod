@@ -1,7 +1,7 @@
 syntax = "proto3";
 package iritamod.upgrade;
 
-option go_package = "github.com/bianjieai/iritamod/modules/upgrade/types";
+option go_package = "iritamod.bianjie.ai/modules/upgrade/types";
 
 import "gogoproto/gogo.proto";
 import "google/protobuf/timestamp.proto";

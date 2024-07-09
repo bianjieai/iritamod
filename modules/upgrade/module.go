@@ -18,9 +18,9 @@ import (
 	cosmosupgrade "github.com/cosmos/cosmos-sdk/x/upgrade"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 
-	"github.com/bianjieai/iritamod/modules/upgrade/client/cli"
-	"github.com/bianjieai/iritamod/modules/upgrade/keeper"
-	"github.com/bianjieai/iritamod/modules/upgrade/types"
+	"iritamod.bianjie.ai/modules/upgrade/client/cli"
+	"iritamod.bianjie.ai/modules/upgrade/keeper"
+	"iritamod.bianjie.ai/modules/upgrade/types"
 )
 
 var (

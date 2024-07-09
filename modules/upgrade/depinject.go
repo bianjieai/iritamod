@@ -3,13 +3,13 @@ package upgrade
 import (
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/depinject"
-	modulev1 "github.com/bianjieai/iritamod/api/iritamod/upgrade/module/v1"
-	"github.com/bianjieai/iritamod/modules/upgrade/keeper"
 	"github.com/cosmos/cosmos-sdk/codec"
 	store "github.com/cosmos/cosmos-sdk/store/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
+	modulev1 "iritamod.bianjie.ai/api/iritamod/upgrade/module/v1"
+	"iritamod.bianjie.ai/modules/upgrade/keeper"
 )
 
 // App Wiring Setup
