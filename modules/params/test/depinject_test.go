@@ -1,8 +1,6 @@
 package test
 
 import (
-	"time"
-
 	runtimev1alpha1 "cosmossdk.io/api/cosmos/app/runtime/v1alpha1"
 	appv1alpha1 "cosmossdk.io/api/cosmos/app/v1alpha1"
 	authmodulev1 "cosmossdk.io/api/cosmos/auth/module/v1"
@@ -18,15 +16,13 @@ import (
 	govmodulev1 "cosmossdk.io/api/cosmos/gov/module/v1"
 	groupmodulev1 "cosmossdk.io/api/cosmos/group/module/v1"
 	mintmodulev1 "cosmossdk.io/api/cosmos/mint/module/v1"
+	//paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
 	slashingmodulev1 "cosmossdk.io/api/cosmos/slashing/module/v1"
 	stakingmodulev1 "cosmossdk.io/api/cosmos/staking/module/v1"
 	txconfigv1 "cosmossdk.io/api/cosmos/tx/config/v1"
 	upgrademodulev1 "cosmossdk.io/api/cosmos/upgrade/module/v1"
 	vestingmodulev1 "cosmossdk.io/api/cosmos/vesting/module/v1"
 	"cosmossdk.io/core/appconfig"
-	paramsapi "github.com/bianjieai/iritamod/api/iritamod/params/module/v1"
-	_ "github.com/bianjieai/iritamod/modules/params"
-	"github.com/bianjieai/iritamod/modules/params/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/cosmos/cosmos-sdk/x/authz"
@@ -45,6 +41,10 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	"google.golang.org/protobuf/types/known/durationpb"
+	paramsapi "iritamod.bianjie.ai/api/iritamod/params/module/v1"
+	_ "iritamod.bianjie.ai/modules/params"
+	"iritamod.bianjie.ai/modules/params/types"
+	"time"
 )
 
 var (
@@ -177,10 +177,14 @@ var (
 				Name:   slashingtypes.ModuleName,
 				Config: appconfig.WrapAny(&slashingmodulev1.Module{}),
 			},
-			/*{
-				Name:   paramstypes.ModuleName,
-				Config: appconfig.WrapAny(&paramsmodulev1.Module{}),
-			},*/
+			//{
+			//	Name:   "cosmosparams",
+			//	Config: appconfig.WrapAny(&paramsmodulev1.Module{}),
+			//},
+			{
+				Name:   types.ModuleName,
+				Config: appconfig.WrapAny(&paramsapi.Module{}),
+			},
 			{
 				Name:   "tx",
 				Config: appconfig.WrapAny(&txconfigv1.Config{}),
@@ -237,10 +241,6 @@ var (
 			{
 				Name:   consensustypes.ModuleName,
 				Config: appconfig.WrapAny(&consensusmodulev1.Module{}),
-			},
-			{
-				Name:   types.ModuleName,
-				Config: appconfig.WrapAny(&paramsapi.Module{}),
 			},
 		},
 	})

@@ -16,9 +16,9 @@ import (
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/params/types/proposal"
 
-	"github.com/bianjieai/iritamod/modules/params/client/cli"
-	"github.com/bianjieai/iritamod/modules/params/keeper"
-	"github.com/bianjieai/iritamod/modules/params/types"
+	"iritamod.bianjie.ai/modules/params/client/cli"
+	"iritamod.bianjie.ai/modules/params/keeper"
+	"iritamod.bianjie.ai/modules/params/types"
 )
 
 var (
