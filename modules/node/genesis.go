@@ -5,7 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
-	"github.com/bianjieai/iritamod/modules/node/utils/ca"
+	"iritamod.bianjie.ai/modules/node/utils/ca"
 
 	abci "github.com/cometbft/cometbft/abci/types"
 	tmtypes "github.com/cometbft/cometbft/types"
@@ -16,7 +16,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/bianjieai/iritamod/modules/node/types"
+	"iritamod.bianjie.ai/modules/node/types"
 )
 
 // InitGenesis - store genesis validator set

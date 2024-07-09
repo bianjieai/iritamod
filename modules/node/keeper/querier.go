@@ -13,7 +13,7 @@ package keeper
 //	sdk "github.com/cosmos/cosmos-sdk/types"
 //	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 //
-//	"github.com/bianjieai/iritamod/modules/node/types"
+//	"iritamod.bianjie.ai/modules/node/types"
 //)
 //
 //const DefaultLimit = 100

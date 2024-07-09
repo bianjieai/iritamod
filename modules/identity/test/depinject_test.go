@@ -27,9 +27,6 @@ import (
 	"cosmossdk.io/core/appconfig"
 	"google.golang.org/protobuf/types/known/durationpb"
 
-	identityapi "github.com/bianjieai/iritamod/api/iritamod/identity/module/v1"
-	_ "github.com/bianjieai/iritamod/modules/identity"
-	identitytypes "github.com/bianjieai/iritamod/modules/identity/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/cosmos/cosmos-sdk/x/authz"
@@ -48,6 +45,9 @@ import (
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
+	identityapi "iritamod.bianjie.ai/api/iritamod/identity/module/v1"
+	_ "iritamod.bianjie.ai/modules/identity"
+	identitytypes "iritamod.bianjie.ai/modules/identity/types"
 )
 
 var (

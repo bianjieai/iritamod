@@ -8,8 +8,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/bianjieai/iritamod/modules/identity/types"
 	storetypes "github.com/cosmos/cosmos-sdk/store/types"
+	"iritamod.bianjie.ai/modules/identity/types"
 )
 
 // Keeper defines the identity keeper

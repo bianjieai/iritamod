@@ -9,7 +9,7 @@ package rest
 //	"github.com/cosmos/cosmos-sdk/client"
 //	"github.com/cosmos/cosmos-sdk/types/rest"
 //
-//	"github.com/bianjieai/iritamod/modules/identity/types"
+//	"iritamod.bianjie.ai/modules/identity/types"
 //)
 //
 //func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {

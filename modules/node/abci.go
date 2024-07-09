@@ -5,7 +5,7 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/bianjieai/iritamod/modules/node/keeper"
+	"iritamod.bianjie.ai/modules/node/keeper"
 )
 
 // BeginBlocker will persist the current header and validator set as a historical entry

@@ -2,7 +2,7 @@ package types
 
 import (
 	fmt "fmt"
-	"github.com/bianjieai/iritamod/modules/node/utils/ca"
+	"iritamod.bianjie.ai/modules/node/utils/ca"
 	"testing"
 
 	"github.com/stretchr/testify/require"

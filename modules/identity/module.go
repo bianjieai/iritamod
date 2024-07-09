@@ -17,9 +17,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/bianjieai/iritamod/modules/identity/client/cli"
-	"github.com/bianjieai/iritamod/modules/identity/keeper"
-	"github.com/bianjieai/iritamod/modules/identity/types"
+	"iritamod.bianjie.ai/modules/identity/client/cli"
+	"iritamod.bianjie.ai/modules/identity/keeper"
+	"iritamod.bianjie.ai/modules/identity/types"
 )
 
 var (

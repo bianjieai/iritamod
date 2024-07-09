@@ -1,4 +1,4 @@
-module github.com/bianjieai/iritamod/modules/node
+module iritamod.bianjie.ai/modules/node
 
 go 1.18
 
@@ -6,8 +6,6 @@ require (
 	cosmossdk.io/api v0.3.1
 	cosmossdk.io/core v0.5.1
 	cosmossdk.io/depinject v1.0.0-alpha.4
-	github.com/bianjieai/iritamod/api v0.0.0-20240708104643-0a6305de1923
-	github.com/bianjieai/iritamod/simapp v0.0.0-20240708104643-0a6305de1923
 	github.com/cometbft/cometbft v0.37.5
 	github.com/cosmos/cosmos-sdk v0.47.12
 	github.com/cosmos/gogoproto v1.4.10
@@ -23,6 +21,8 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20240123012728-ef4313101c80
 	google.golang.org/grpc v1.62.1
 	google.golang.org/protobuf v1.33.0
+	iritamod.bianjie.ai/api v0.0.0-20240709020459-b21710d38ee1
+	iritamod.bianjie.ai/simapp v0.0.0-20240709021012-586a8e92ec70
 )
 
 require (

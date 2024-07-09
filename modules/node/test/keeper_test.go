@@ -1,7 +1,7 @@
 package test
 
 import (
-	"github.com/bianjieai/iritamod/modules/node/utils/ca"
+	"iritamod.bianjie.ai/modules/node/utils/ca"
 	"testing"
 
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
@@ -17,9 +17,9 @@ import (
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/bianjieai/iritamod/modules/node/keeper"
-	"github.com/bianjieai/iritamod/modules/node/types"
-	"github.com/bianjieai/iritamod/simapp"
+	"iritamod.bianjie.ai/modules/node/keeper"
+	"iritamod.bianjie.ai/modules/node/types"
+	"iritamod.bianjie.ai/simapp"
 )
 
 type KeeperTestSuite struct {

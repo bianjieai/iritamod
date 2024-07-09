@@ -10,8 +10,8 @@ package rest
 //	"github.com/cosmos/cosmos-sdk/client"
 //	"github.com/cosmos/cosmos-sdk/types/rest"
 //
-//	"github.com/bianjieai/iritamod/modules/node/client/utils"
-//	"github.com/bianjieai/iritamod/modules/node/types"
+//	"iritamod.bianjie.ai/modules/node/client/utils"
+//	"iritamod.bianjie.ai/modules/node/types"
 //)
 //
 //func registerQueryRoutes(clientCtx client.Context, r *mux.Router) {
