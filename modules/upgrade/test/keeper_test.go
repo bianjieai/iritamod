@@ -1,9 +1,9 @@
 package test
 
 import (
-	"github.com/bianjieai/iritamod/modules/simapp"
 	"github.com/bianjieai/iritamod/modules/upgrade/keeper"
 	uktype "github.com/bianjieai/iritamod/modules/upgrade/types"
+	"github.com/bianjieai/iritamod/simapp"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
@@ -53,60 +53,6 @@ func (suite *KeeperTestSuite) TestUpgrade() {
 	}
 	err := suite.keeper.ScheduleUpgrade(suite.ctx, msg)
 	suite.NoError(err)
-	//req := &upgradetypes.QueryCurrentPlanRequest{}
-	//result, err := suite.queryClient.CurrentPlan(gocontext.Background(), req)
-	//suite.Equal(msg.Height, result.Plan.Height)
 	err = suite.keeper.ClearUpgradePlan(suite.ctx)
 	suite.NoError(err)
-	//result, err = suite.queryClient.CurrentPlan(gocontext.Background(), req)
-	//suite.NoError(err)
-	//suite.Nil(result.Plan)
 }
-
-//type TestEncodingConfig struct {
-//	InterfaceRegistry types.InterfaceRegistry
-//	Codec             codec.Codec
-//	TxConfig          client.TxConfig
-//	Amino             *codec.LegacyAmino
-//}
-//
-//func MakeTestEncodingConfig(modules ...module.AppModuleBasic) TestEncodingConfig {
-//	cdc := codec.NewLegacyAmino()
-//	interfaceRegistry := types.NewInterfaceRegistry()
-//	codec := codec.NewProtoCodec(interfaceRegistry)
-//
-//	encCfg := TestEncodingConfig{
-//		InterfaceRegistry: interfaceRegistry,
-//		Codec:             codec,
-//		TxConfig:          tx.NewTxConfig(codec, tx.DefaultSignModes),
-//		Amino:             cdc,
-//	}
-//
-//	mb := module.NewBasicManager(modules...)
-//
-//	std.RegisterLegacyAminoCodec(encCfg.Amino)
-//	std.RegisterInterfaces(encCfg.InterfaceRegistry)
-//	mb.RegisterLegacyAminoCodec(encCfg.Amino)
-//	mb.RegisterInterfaces(encCfg.InterfaceRegistry)
-//
-//	return encCfg
-//}
-//
-//type TestContext struct {
-//	Ctx sdk.Context
-//	DB  *dbm.MemDB
-//	CMS store.CommitMultiStore
-//}
-//
-//func DefaultContextWithDB(t *testing.T, key storetypes.StoreKey, tkey storetypes.StoreKey) TestContext {
-//	db := dbm.NewMemDB()
-//	cms := store.NewCommitMultiStore(db)
-//	cms.MountStoreWithDB(key, storetypes.StoreTypeIAVL, db)
-//	cms.MountStoreWithDB(tkey, storetypes.StoreTypeTransient, db)
-//	err := cms.LoadLatestVersion()
-//	assert.NoError(t, err)
-//
-//	ctx := sdk.NewContext(cms, tmproto.Header{}, false, log.NewNopLogger())
-//
-//	return TestContext{ctx, db, cms}
-//}
