@@ -254,8 +254,6 @@ github.com/bianjieai/cometbft v0.37.5-irita-240628 h1:ztIGnCj1zQ+H4zbEwmjzaEnXcP
 github.com/bianjieai/cometbft v0.37.5-irita-240628/go.mod h1:IBMt2O+RVs6kVJQ4/2QYdAmHQtMSX5ynfRrTu9ghCeA=
 github.com/bianjieai/cosmos-sdk v0.47.12-irita-20240701 h1:P01Cf16brUHKfRCkTlyn1ufM8Fr0a8YCYtoPNKHBQ2E=
 github.com/bianjieai/cosmos-sdk v0.47.12-irita-20240701/go.mod h1:Gd3PnQWerNtAZEJT6FbdOfxILK68AT8L9zZSRb9WMok=
-github.com/bianjieai/iritamod/api v0.0.0-20240708103047-59438b6128c8 h1:ifindFnjEA1xHZLX6rIlD5dnTdWB6Vs4Lu4Hm2RnXDc=
-github.com/bianjieai/iritamod/api v0.0.0-20240708103047-59438b6128c8/go.mod h1:M83LVdnDfO+fEh30NU1/UQ75/2V3dUsNdGg23Pd+oZk=
 github.com/btcsuite/btcd/btcec/v2 v2.3.2 h1:5n0X6hX0Zk+6omWcihdYvdAlGf2DfasC0GMf7DClJ3U=
 github.com/btcsuite/btcd/btcec/v2 v2.3.2/go.mod h1:zYzJ8etWJQIv1Ogk7OzpWjowwOdXY1W/17j2MW85J04=
 github.com/btcsuite/btcd/btcutil v1.1.2 h1:XLMbX8JQEiwMcYft2EGi8zPUkoa0abKIU6/BJSRsjzQ=

@@ -6,7 +6,7 @@ import (
 	"encoding/hex"
 	"encoding/json"
 	"fmt"
-	simtypes "github.com/bianjieai/iritamod/simapp/types"
+	simtypes "iritamod.bianjie.ai/simapp/types"
 	"math/rand"
 	"os"
 	"strconv"
@@ -22,7 +22,6 @@ import (
 	"github.com/cosmos/gogoproto/proto"
 	"github.com/stretchr/testify/require"
 
-	utils "github.com/bianjieai/iritamod/simapp/utils/ca"
 	bam "github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -52,6 +51,7 @@ import (
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	utils "iritamod.bianjie.ai/simapp/utils/ca"
 )
 
 // SetupOptions defines arguments that are passed into `Simapp` constructor.
