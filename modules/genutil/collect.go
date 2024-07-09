@@ -20,7 +20,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/genutil/types"
 
-	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
+	nodetypes "iritamod.bianjie.ai/modules/node/types"
 )
 
 // GenAppStateFromConfig gets the genesis app state from the config

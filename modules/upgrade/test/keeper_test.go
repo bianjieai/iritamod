@@ -1,12 +1,12 @@
 package test
 
 import (
-	"github.com/bianjieai/iritamod/modules/upgrade/keeper"
-	uktype "github.com/bianjieai/iritamod/modules/upgrade/types"
-	"github.com/bianjieai/iritamod/simapp"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
+	"iritamod.bianjie.ai/modules/upgrade/keeper"
+	uktype "iritamod.bianjie.ai/modules/upgrade/types"
+	"iritamod.bianjie.ai/simapp"
 	"testing"
 )
 

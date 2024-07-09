@@ -1,6 +1,13 @@
 package test
 
 import (
+	paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
+	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	nodeapi "iritamod.bianjie.ai/api/iritamod/node/module/v1"
+	slashingapi "iritamod.bianjie.ai/api/iritamod/slashing/module/v1"
+	_ "iritamod.bianjie.ai/modules/node"
+	nodetypes "iritamod.bianjie.ai/modules/node/types"
+	slashingtypes "iritamod.bianjie.ai/modules/slashing/types"
 	"time"
 
 	runtimev1alpha1 "cosmossdk.io/api/cosmos/app/runtime/v1alpha1"
@@ -23,8 +30,6 @@ import (
 	upgrademodulev1 "cosmossdk.io/api/cosmos/upgrade/module/v1"
 	vestingmodulev1 "cosmossdk.io/api/cosmos/vesting/module/v1"
 	"cosmossdk.io/core/appconfig"
-	paramsapi "github.com/bianjieai/iritamod/api/iritamod/params/module/v1"
-	_ "github.com/bianjieai/iritamod/modules/slashing"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/cosmos/cosmos-sdk/x/authz"
@@ -42,6 +47,7 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	"google.golang.org/protobuf/types/known/durationpb"
+	_ "iritamod.bianjie.ai/modules/slashing"
 )
 
 var (
@@ -53,11 +59,11 @@ var (
 	// so that other modules that want to create or claim capabilities afterwards in InitChain
 	// can do so safely.
 	genesisModuleOrder = []string{
-		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName,
-		distrtypes.ModuleName, stakingtypes.ModuleName, "slashing", govtypes.ModuleName,
+		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName, paramstypes.ModuleName,
+		distrtypes.ModuleName, stakingtypes.ModuleName, slashingtypes.ModuleName, govtypes.ModuleName,
 		minttypes.ModuleName, crisistypes.ModuleName, genutiltypes.ModuleName, evidencetypes.ModuleName, authz.ModuleName,
 		feegrant.ModuleName, group.ModuleName, upgradetypes.ModuleName,
-		vestingtypes.ModuleName, consensustypes.ModuleName,
+		vestingtypes.ModuleName, consensustypes.ModuleName, nodetypes.ModuleName,
 	}
 
 	// module account permissions
@@ -68,7 +74,6 @@ var (
 		{Account: stakingtypes.BondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: stakingtypes.NotBondedPoolName, Permissions: []string{authtypes.Burner, stakingtypes.ModuleName}},
 		{Account: govtypes.ModuleName, Permissions: []string{authtypes.Burner}},
-		{Account: "slashing"},
 	}
 
 	// blocked account addresses
@@ -97,10 +102,11 @@ var (
 						capabilitytypes.ModuleName,
 						minttypes.ModuleName,
 						distrtypes.ModuleName,
-						"slashing",
+						slashingtypes.ModuleName,
 						evidencetypes.ModuleName,
 						stakingtypes.ModuleName,
 						authtypes.ModuleName,
+						paramstypes.ModuleName,
 						banktypes.ModuleName,
 						govtypes.ModuleName,
 						crisistypes.ModuleName,
@@ -110,6 +116,7 @@ var (
 						group.ModuleName,
 						vestingtypes.ModuleName,
 						consensustypes.ModuleName,
+						nodetypes.ModuleName,
 					},
 					EndBlockers: []string{
 						crisistypes.ModuleName,
@@ -119,8 +126,9 @@ var (
 						authtypes.ModuleName,
 						banktypes.ModuleName,
 						distrtypes.ModuleName,
-						"slashing",
+						slashingtypes.ModuleName,
 						minttypes.ModuleName,
+						paramstypes.ModuleName,
 						genutiltypes.ModuleName,
 						evidencetypes.ModuleName,
 						authz.ModuleName,
@@ -129,6 +137,7 @@ var (
 						consensustypes.ModuleName,
 						upgradetypes.ModuleName,
 						vestingtypes.ModuleName,
+						nodetypes.ModuleName,
 					},
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
 						{
@@ -168,10 +177,14 @@ var (
 				Name:   stakingtypes.ModuleName,
 				Config: appconfig.WrapAny(&stakingmodulev1.Module{}),
 			},
-			/*{
+			{
+				Name:   paramstypes.ModuleName,
+				Config: appconfig.WrapAny(&paramsmodulev1.Module{}),
+			},
+			{
 				Name:   slashingtypes.ModuleName,
-				Config: appconfig.WrapAny(&slashingmodulev1.Module{}),
-			},*/
+				Config: appconfig.WrapAny(&slashingapi.Module{}),
+			},
 			/*{
 				Name:   paramstypes.ModuleName,
 				Config: appconfig.WrapAny(&paramsmodulev1.Module{}),
@@ -234,8 +247,8 @@ var (
 				Config: appconfig.WrapAny(&consensusmodulev1.Module{}),
 			},
 			{
-				Name:   "slashing",
-				Config: appconfig.WrapAny(&paramsapi.Module{}),
+				Name:   nodetypes.ModuleName,
+				Config: appconfig.WrapAny(&nodeapi.Module{}),
 			},
 		},
 	})

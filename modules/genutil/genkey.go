@@ -3,7 +3,7 @@ package genutil
 import (
 	"crypto/ed25519"
 	"errors"
-	"github.com/bianjieai/iritamod/modules/genutil/utils/ca"
+	"iritamod.bianjie.ai/modules/genutil/utils/ca"
 
 	"github.com/cometbft/cometbft/crypto"
 	ed25519util "github.com/cometbft/cometbft/crypto/ed25519"

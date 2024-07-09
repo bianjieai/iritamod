@@ -20,10 +20,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/slashing/simulation"
 	"github.com/cosmos/cosmos-sdk/x/slashing/types"
 
-	"github.com/bianjieai/iritamod/modules/slashing/client/cli"
-	"github.com/bianjieai/iritamod/modules/slashing/client/rest"
-	"github.com/bianjieai/iritamod/modules/slashing/keeper"
-	slashingtypes "github.com/bianjieai/iritamod/modules/slashing/types"
+	"iritamod.bianjie.ai/modules/slashing/client/cli"
+	"iritamod.bianjie.ai/modules/slashing/keeper"
+	slashingtypes "iritamod.bianjie.ai/modules/slashing/types"
 )
 
 var (
@@ -64,7 +63,7 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncod
 
 // RegisterRESTRoutes registers the REST routes for the slashing module.
 func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
-	rest.RegisterRoutes(clientCtx, rtr)
+	//rest.RegisterRoutes(clientCtx, rtr)
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the slashing module.
@@ -138,9 +137,9 @@ func (am AppModule) NewHandler() sdk.Handler {
 }
 
 // QuerierRoute returns the slashing module's querier route name.
-func (AppModule) QuerierRoute() string {
-	return QuerierRoute
-}
+//func (AppModule) QuerierRoute() string {
+//	return QuerierRoute
+//}
 
 // LegacyQuerierHandler returns the slashing module sdk.Querier.
 /*func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {

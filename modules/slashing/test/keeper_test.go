@@ -1,15 +1,20 @@
 package test
 
 import (
-	"github.com/bianjieai/iritamod/modules/simapp"
-	"github.com/bianjieai/iritamod/modules/simapp/utils/ca"
-	"github.com/bianjieai/iritamod/modules/slashing/keeper"
-	slashingtype "github.com/bianjieai/iritamod/modules/slashing/types"
+	"fmt"
+	"github.com/cometbft/cometbft/crypto/tmhash"
+	tmbytes "github.com/cometbft/cometbft/libs/bytes"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/stretchr/testify/suite"
+	nodekeeper "iritamod.bianjie.ai/modules/node/keeper"
+	nodeTypes "iritamod.bianjie.ai/modules/node/types"
+	"iritamod.bianjie.ai/modules/slashing/keeper"
+	slashingtypes "iritamod.bianjie.ai/modules/slashing/types"
+	"iritamod.bianjie.ai/simapp"
+	"iritamod.bianjie.ai/simapp/utils/ca"
 	"testing"
 	"time"
 )
@@ -28,9 +33,11 @@ Z0mOxdgj9wfO0t3voldCRUw3hCekjC+GEOoXH5ysDQ==
 type KeeperTestSuite struct {
 	suite.Suite
 
-	cdc    codec.Codec
-	ctx    sdk.Context
-	keeper keeper.Keeper
+	cdc        codec.Codec
+	ctx        sdk.Context
+	keeper     keeper.Keeper
+	nodeKeeper nodekeeper.Keeper
+	//slashingKeeper cosmosslashingkeeper.Keeper
 	//nodekeeper nodekeeper.Keeper
 	app *simapp.SimApp
 }
@@ -54,44 +61,36 @@ func TestKeeperTestSuite(t *testing.T) {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	//app := simapp.Setup(false)
-	//
-	//suite.cdc = app.AppCodec()
-	//suite.ctx = app.BaseApp.NewContext(false, tmproto.Header{
-	//	Time: time.Now(),
-	//})
-	//suite.app = app
-	//suite.nodekeeper = app.NodeKeeper
-	//suite.keeper = keeper.NewKeeper(app.SlashingKeeper, suite.nodekeeper)
 	depInjectOptions := simapp.DepinjectOptions{
 		Config:    AppConfig,
 		Providers: []interface{}{},
-		Consumers: []interface{}{&suite.keeper},
+		Consumers: []interface{}{&suite.keeper, &suite.nodeKeeper},
 	}
 	app := simapp.Setup(suite.T(), isCheckTx, depInjectOptions)
-
 	suite.ctx = app.BaseApp.NewContext(false, tmproto.Header{})
+	suite.nodeKeeper.SetHooks(suite.keeper.Hooks())
 }
 
 func (suite *KeeperTestSuite) TestSlashing() {
-	//msg := types.NewMsgCreateValidator(name, details, CertStr, power, operator)
-	//validator := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
-	//err := suite.nodekeeper.CreateValidator(suite.ctx,
-	//	validator,
-	//	msg.Name,
-	//	msg.Certificate,
-	//	nil,
-	//	msg.Power,
-	//	msg.Description,
-	//	msg.Operator,
-	//)
-	//suite.NoError(err)
-	//validator1, found := suite.nodekeeper.GetValidator(suite.ctx, validator)
-	//suite.True(found)
-	//suite.Equal(validator.String(), validator1.Id)
-	//
-	//conAddr, err := validator1.GetConsAddr()
-	//suite.NoError(err)
+	msg := nodeTypes.NewMsgCreateValidator(name, details, CertStr, power, operator)
+	validator := tmbytes.HexBytes(tmhash.Sum(msg.GetSignBytes()))
+	err := suite.nodeKeeper.CreateValidator(suite.ctx,
+		validator,
+		msg.Name,
+		msg.Certificate,
+		nil,
+		msg.Power,
+		msg.Description,
+		msg.Operator,
+	)
+	suite.NoError(err)
+	validator1, found := suite.nodeKeeper.GetValidator(suite.ctx, validator)
+	suite.True(found)
+	suite.Equal(validator.String(), validator1.Id)
+
+	conAddr, err := validator1.GetConsAddr()
+	fmt.Println(conAddr)
+	suite.NoError(err)
 
 	height := int64(0)
 	target := int64(100)
@@ -104,10 +103,10 @@ func (suite *KeeperTestSuite) TestSlashing() {
 		suite.ctx = suite.ctx.WithBlockHeight(height)
 		suite.keeper.HandleValidatorSignature(suite.ctx, nodeID, int64(1), false)
 	}
-	//validator1, found = suite.nodekeeper.GetValidator(suite.ctx, validator)
-	//suite.True(found)
-	//suite.True(validator1.Jailed)
-	unjailmsg := slashingtype.MsgUnjailValidator{
+	validator1, found = suite.nodeKeeper.GetValidator(suite.ctx, validator)
+	suite.True(found)
+	suite.True(validator1.Jailed)
+	unjailmsg := slashingtypes.MsgUnjailValidator{
 		Id:       "1",
 		Operator: operator.String(),
 	}
@@ -121,7 +120,7 @@ func (suite *KeeperTestSuite) TestSlashing() {
 
 	err = suite.keeper.HandleUnjail(suite.ctx, unjailmsg)
 	suite.NoError(err)
-	validator1, found = suite.nodekeeper.GetValidator(suite.ctx, validator)
+	validator1, found = suite.nodeKeeper.GetValidator(suite.ctx, validator)
 	suite.True(found)
 	suite.False(validator1.Jailed)
 

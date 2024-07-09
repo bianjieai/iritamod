@@ -1,4 +1,4 @@
-module github.com/bianjieai/iritamod/modules/upgrade
+module iritamod.bianjie.ai/modules/upgrade
 
 go 1.18
 
@@ -6,8 +6,6 @@ require (
 	cosmossdk.io/api v0.3.1
 	cosmossdk.io/core v0.5.1
 	cosmossdk.io/depinject v1.0.0-alpha.4
-	github.com/bianjieai/iritamod/api v0.0.1
-	github.com/bianjieai/iritamod/simapp v0.0.1
 	github.com/cometbft/cometbft v0.37.5
 	github.com/cosmos/cosmos-sdk v0.47.12
 	github.com/cosmos/gogoproto v1.4.10
@@ -17,6 +15,8 @@ require (
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.62.1
 	google.golang.org/protobuf v1.33.0
+	iritamod.bianjie.ai/api v0.0.0-20240709020459-b21710d38ee1
+	iritamod.bianjie.ai/simapp v0.0.0-20240709021012-586a8e92ec70
 )
 
 require (
@@ -186,8 +186,6 @@ require (
 )
 
 replace (
-	github.com/bianjieai/iritamod/api => ../../api
-	github.com/bianjieai/iritamod/simapp => ../../simapp
 	github.com/cometbft/cometbft => github.com/bianjieai/cometbft v0.37.5-irita-240628
 	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.47.12-irita-20240701
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4

@@ -23,9 +23,6 @@ import (
 	txconfigv1 "cosmossdk.io/api/cosmos/tx/config/v1"
 	vestingmodulev1 "cosmossdk.io/api/cosmos/vesting/module/v1"
 	"cosmossdk.io/core/appconfig"
-	upgradeapi "github.com/bianjieai/iritamod/api/iritamod/upgrade/module/v1"
-	_ "github.com/bianjieai/iritamod/modules/upgrade"
-	upgradeType "github.com/bianjieai/iritamod/modules/upgrade/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/cosmos/cosmos-sdk/x/authz"
@@ -44,6 +41,9 @@ import (
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	"google.golang.org/protobuf/types/known/durationpb"
+	upgradeapi "iritamod.bianjie.ai/api/iritamod/upgrade/module/v1"
+	_ "iritamod.bianjie.ai/modules/upgrade"
+	upgradeType "iritamod.bianjie.ai/modules/upgrade/types"
 )
 
 var (

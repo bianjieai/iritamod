@@ -2,9 +2,9 @@ syntax = "proto3";
 package iritamod.node;
 
 import "gogoproto/gogo.proto";
-import "cometbft/types/v1/types.proto";
+import "tendermint/types/types.proto";
 
-option go_package = "github.com/bianjieai/iritamod/modules/node/types";
+option go_package = "iritamod.bianjie.ai/modules/node/types";
 option (gogoproto.goproto_getters_all) = false;
 
 // Request defines a standard for validator. The validator will participate the
@@ -26,7 +26,7 @@ message Validator {
 // HistoricalInfo contains the historical information that gets stored at
 // each height.
 message HistoricalInfo {
-  cometbft.types.v1.Header header = 1 [ (gogoproto.nullable) = false ];
+  tendermint.types.Header header = 1 [ (gogoproto.nullable) = false ];
   repeated Validator valset = 2 [ (gogoproto.nullable) = false ];
 }
 

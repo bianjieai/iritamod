@@ -3,8 +3,8 @@ package genutil
 //import (
 //	"cosmossdk.io/core/appmodule"
 //	"cosmossdk.io/depinject"
-//	modulev1 "github.com/bianjieai/iritamod/api/iritamod/genutil/module/v1"
-//	"github.com/bianjieai/iritamod/modules/genutil/types"
+//	modulev1 "iritamod.bianjie.ai/api/iritamod/genutil/module/v1"
+//	"iritamod.bianjie.ai/modules/genutil/types"
 //	"github.com/cosmos/cosmos-sdk/client"
 //	"github.com/cosmos/cosmos-sdk/x/genutil"
 //)

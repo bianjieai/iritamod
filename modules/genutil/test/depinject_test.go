@@ -2,15 +2,15 @@ package test
 
 import (
 	paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
-	genutilapi "github.com/bianjieai/iritamod/api/iritamod/genutil/module/v1"
-	nodeapi "github.com/bianjieai/iritamod/api/iritamod/node/module/v1"
-	slashingapi "github.com/bianjieai/iritamod/api/iritamod/slashing/module/v1"
-	_ "github.com/bianjieai/iritamod/modules/genutil"
-	genutiltype "github.com/bianjieai/iritamod/modules/genutil/types"
-	_ "github.com/bianjieai/iritamod/modules/node"
-	nodetypes "github.com/bianjieai/iritamod/modules/node/types"
+	genutilapi "iritamod.bianjie.ai/api/iritamod/genutil/module/v1"
+	nodeapi "iritamod.bianjie.ai/api/iritamod/node/module/v1"
+	slashingapi "iritamod.bianjie.ai/api/iritamod/slashing/module/v1"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
+	_ "iritamod.bianjie.ai/modules/genutil"
+	genutiltype "iritamod.bianjie.ai/modules/genutil/types"
+	_ "iritamod.bianjie.ai/modules/node"
+	nodetypes "iritamod.bianjie.ai/modules/node/types"
 	"time"
 
 	runtimev1alpha1 "cosmossdk.io/api/cosmos/app/runtime/v1alpha1"

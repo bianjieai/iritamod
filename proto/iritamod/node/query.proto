@@ -6,7 +6,7 @@ import "gogoproto/gogo.proto";
 import "google/api/annotations.proto";
 import "cosmos/base/query/v1beta1/pagination.proto";
 
-option go_package = "github.com/bianjieai/iritamod/modules/node/types";
+option go_package = "iritamod.bianjie.ai/modules/node/types";
 
 // Query defines the gRPC querier service for node module
 service Query {

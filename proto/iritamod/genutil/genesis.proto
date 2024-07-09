@@ -3,7 +3,7 @@ package iritamod.genutil;
 
 import "gogoproto/gogo.proto";
 
-option go_package = "github.com/bianjieai/iritamod/modules/genutil/types";
+option go_package = "iritamod.bianjie.ai/modules/genutil/types";
 
 // GenesisState defines the raw genesis transaction in JSON
 message GenesisState {
