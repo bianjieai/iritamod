@@ -7,8 +7,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec"
 	store "github.com/cosmos/cosmos-sdk/store/types"
 
-	modulev1 "github.com/bianjieai/iritamod/api/iritamod/identity/module/v1"
-	"github.com/bianjieai/iritamod/modules/identity/keeper"
+	modulev1 "iritamod.bianjie.ai/api/iritamod/identity/module/v1"
+	"iritamod.bianjie.ai/modules/identity/keeper"
 )
 
 // App Wiring Setup

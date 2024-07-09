@@ -3,7 +3,7 @@ package keeper
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/bianjieai/iritamod/modules/node/utils/ca"
+	"iritamod.bianjie.ai/modules/node/utils/ca"
 
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
@@ -18,7 +18,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/bianjieai/iritamod/modules/node/types"
+	"iritamod.bianjie.ai/modules/node/types"
 )
 
 // SetHooks sets the validator hooks

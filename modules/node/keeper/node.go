@@ -3,12 +3,12 @@ package keeper
 import (
 	"github.com/cometbft/cometbft/crypto"
 	tmbytes "github.com/cometbft/cometbft/libs/bytes"
-	"github.com/bianjieai/iritamod/modules/node/utils/ca"
+	"iritamod.bianjie.ai/modules/node/utils/ca"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/bianjieai/iritamod/modules/node/types"
+	"iritamod.bianjie.ai/modules/node/types"
 )
 
 // AddNode adds a node

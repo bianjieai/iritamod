@@ -1,8 +1,7 @@
 package test
 
 import (
-	"github.com/bianjieai/iritamod/modules/node/utils/ca"
-	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
+	"iritamod.bianjie.ai/modules/node/utils/ca"
 	"testing"
 
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
@@ -13,21 +12,23 @@ import (
 	"github.com/cometbft/cometbft/crypto/tmhash"
 	tmbytes "github.com/cometbft/cometbft/libs/bytes"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
+	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/bianjieai/iritamod/modules/node/keeper"
-	"github.com/bianjieai/iritamod/modules/node/types"
-	"github.com/bianjieai/iritamod/modules/simapp"
+	"iritamod.bianjie.ai/modules/node/keeper"
+	"iritamod.bianjie.ai/modules/node/types"
+	"iritamod.bianjie.ai/simapp"
 )
 
 type KeeperTestSuite struct {
 	suite.Suite
 
 	//cdc    codec.Codec
-	ctx    sdk.Context
-	keeper keeper.Keeper
+	ctx            sdk.Context
+	keeper         keeper.Keeper
+	slashingkeeprt slashingkeeper.Keeper
 }
 
 var (
@@ -55,11 +56,12 @@ func (suite *KeeperTestSuite) SetupTest() {
 	depInjectOptions := simapp.DepinjectOptions{
 		Config:    AppConfig,
 		Providers: []interface{}{},
-		Consumers: []interface{}{&suite.keeper},
+		Consumers: []interface{}{&suite.keeper, &suite.slashingkeeprt},
 	}
 	app := simapp.Setup(suite.T(), isCheckTx, depInjectOptions)
 	suite.ctx = app.BaseApp.NewContext(false, tmproto.Header{})
-	suite.keeper.SetHooks(stakingtypes.NewMultiStakingHooks(app.SlashingKeeper.Hooks()))
+	//suite.keeper.SetHooks(stakingtypes.NewMultiStakingHooks(app.SlashingKeeper.Hooks()))
+	suite.keeper.SetHooks(suite.slashingkeeprt.Hooks())
 }
 
 func (suite *KeeperTestSuite) setNode() {

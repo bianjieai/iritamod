@@ -1,8 +1,8 @@
 package node
 
 import (
-	"github.com/bianjieai/iritamod/modules/node/keeper"
-	"github.com/bianjieai/iritamod/modules/node/types"
+	"iritamod.bianjie.ai/modules/node/keeper"
+	"iritamod.bianjie.ai/modules/node/types"
 )
 
 const (

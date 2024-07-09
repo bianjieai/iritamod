@@ -2,7 +2,7 @@ package types
 
 import (
 	"encoding/hex"
-	"github.com/bianjieai/iritamod/modules/node/utils/ca"
+	"iritamod.bianjie.ai/modules/node/utils/ca"
 	"strings"
 
 	tmbytes "github.com/cometbft/cometbft/libs/bytes"
