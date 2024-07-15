@@ -86,7 +86,7 @@ linters-settings:
     sections:
       - standard # Standard section: captures all standard packages.
       - default # Default section: contains all imports that could not be matched to another section type.
-      - prefix(mods.irisnet.org)
+      - prefix(iritamod.bianjie.ai)
   revive:
     rules:
       - name: redefines-builtin-id

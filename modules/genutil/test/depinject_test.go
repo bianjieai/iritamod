@@ -2,11 +2,11 @@ package test
 
 import (
 	paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
+	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	genutilapi "iritamod.bianjie.ai/api/iritamod/genutil/module/v1"
 	nodeapi "iritamod.bianjie.ai/api/iritamod/node/module/v1"
 	slashingapi "iritamod.bianjie.ai/api/iritamod/slashing/module/v1"
-	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	_ "iritamod.bianjie.ai/modules/genutil"
 	genutiltype "iritamod.bianjie.ai/modules/genutil/types"
 	_ "iritamod.bianjie.ai/modules/node"
@@ -24,7 +24,6 @@ import (
 	distrmodulev1 "cosmossdk.io/api/cosmos/distribution/module/v1"
 	evidencemodulev1 "cosmossdk.io/api/cosmos/evidence/module/v1"
 	feegrantmodulev1 "cosmossdk.io/api/cosmos/feegrant/module/v1"
-	genutilmodulev1 "cosmossdk.io/api/cosmos/genutil/module/v1"
 	govmodulev1 "cosmossdk.io/api/cosmos/gov/module/v1"
 	groupmodulev1 "cosmossdk.io/api/cosmos/group/module/v1"
 	mintmodulev1 "cosmossdk.io/api/cosmos/mint/module/v1"
@@ -43,7 +42,6 @@ import (
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
 	evidencetypes "github.com/cosmos/cosmos-sdk/x/evidence/types"
 	"github.com/cosmos/cosmos-sdk/x/feegrant"
-	genutiltypes "github.com/cosmos/cosmos-sdk/x/genutil/types"
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/cosmos/cosmos-sdk/x/group"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
@@ -64,9 +62,9 @@ var (
 	genesisModuleOrder = []string{
 		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName, paramstypes.ModuleName,
 		distrtypes.ModuleName, stakingtypes.ModuleName, slashingtypes.ModuleName, govtypes.ModuleName,
-		minttypes.ModuleName, crisistypes.ModuleName, genutiltypes.ModuleName, evidencetypes.ModuleName, authz.ModuleName,
+		minttypes.ModuleName, crisistypes.ModuleName, genutiltype.ModuleName, evidencetypes.ModuleName, authz.ModuleName,
 		feegrant.ModuleName, group.ModuleName, upgradetypes.ModuleName,
-		vestingtypes.ModuleName, consensustypes.ModuleName, nodetypes.ModuleName, genutiltype.ModuleName,
+		vestingtypes.ModuleName, consensustypes.ModuleName, nodetypes.ModuleName,
 	}
 
 	// module account permissions
@@ -113,14 +111,13 @@ var (
 						banktypes.ModuleName,
 						govtypes.ModuleName,
 						crisistypes.ModuleName,
-						genutiltypes.ModuleName,
+						genutiltype.ModuleName,
 						authz.ModuleName,
 						feegrant.ModuleName,
 						group.ModuleName,
 						vestingtypes.ModuleName,
 						consensustypes.ModuleName,
 						nodetypes.ModuleName,
-						genutiltype.ModuleName,
 					},
 					EndBlockers: []string{
 						crisistypes.ModuleName,
@@ -133,7 +130,7 @@ var (
 						slashingtypes.ModuleName,
 						minttypes.ModuleName,
 						paramstypes.ModuleName,
-						genutiltypes.ModuleName,
+						genutiltype.ModuleName,
 						evidencetypes.ModuleName,
 						authz.ModuleName,
 						feegrant.ModuleName,
@@ -142,7 +139,6 @@ var (
 						upgradetypes.ModuleName,
 						vestingtypes.ModuleName,
 						nodetypes.ModuleName,
-						genutiltype.ModuleName,
 					},
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
 						{
@@ -199,8 +195,8 @@ var (
 				Config: appconfig.WrapAny(&txconfigv1.Config{}),
 			},
 			{
-				Name:   genutiltypes.ModuleName,
-				Config: appconfig.WrapAny(&genutilmodulev1.Module{}),
+				Name:   genutiltype.ModuleName,
+				Config: appconfig.WrapAny(&genutilapi.Module{}),
 			},
 			{
 				Name:   authz.ModuleName,
@@ -254,10 +250,6 @@ var (
 			{
 				Name:   nodetypes.ModuleName,
 				Config: appconfig.WrapAny(&nodeapi.Module{}),
-			},
-			{
-				Name:   genutiltype.ModuleName,
-				Config: appconfig.WrapAny(&genutilapi.Module{}),
 			},
 		},
 	})
