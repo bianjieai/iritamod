@@ -46,16 +46,6 @@ func TestKeeperTestSuite(t *testing.T) {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	//key := sdk.NewKVStoreKey(iritamodparamstype.StoreKey)
-	//tkey := sdk.NewTransientStoreKey("transient_test")
-	//testCtx := DefaultContextWithDB(suite.T(), key, tkey)
-	//suite.ctx = testCtx.Ctx.WithBlockHeader(tmproto.Header{Time: time.Now()})
-	//encCfg := MakeTestEncodingConfig()
-	//suite.encCfg = encCfg
-	//paramskeeper := paramskeeper.NewKeeper(encCfg.Codec, encCfg.Amino, key, tkey)
-	//suite.keeper = keeper.NewKeeper(paramskeeper)
-	//ss := suite.keeper.Subspace("testsubspace")
-	//suite.ss = ss.WithKeyTable(paramKeyTable())
 	depInjectOptions := simapp.DepinjectOptions{
 		Config:    AppConfig,
 		Providers: []interface{}{},

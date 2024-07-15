@@ -25,16 +25,6 @@ func TestKeeperTestSuite(t *testing.T) {
 }
 
 func (suite *KeeperTestSuite) SetupTest() {
-	/*homeDir := filepath.Join(suite.T().TempDir(), "x_upgrade_keeper_test")
-	key := sdk.NewKVStoreKey(upgradetypes.StoreKey)
-	testCtx := DefaultContextWithDB(suite.T(), key, sdk.NewTransientStoreKey("transient_test"))
-	suite.ctx = testCtx.Ctx.WithBlockHeader(tmproto.Header{Time: time.Now()})
-	encCfg := MakeTestEncodingConfig()
-	uk := upgradekeeper.NewKeeper(make(map[int64]bool), key, encCfg.Codec, homeDir, nil)
-	suite.keeper = keeper.NewKeeper(uk)
-	queryHelper := baseapp.NewQueryServerTestHelper(suite.ctx, suite.encCfg.InterfaceRegistry)
-	uktype.RegisterQueryServer(queryHelper, suite.keeper.UpgradeKeeper())
-	suite.queryClient = uktype.NewQueryClient(queryHelper)*/
 	depInjectOptions := simapp.DepinjectOptions{
 		Config:    AppConfig,
 		Providers: []interface{}{},
