@@ -186,6 +186,5 @@ require (
 replace (
 	github.com/cometbft/cometbft => github.com/bianjieai/cometbft v0.37.5-irita-240628
 	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.47.12-irita-20240701
-	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.2-alpha.regen.4
 	golang.org/x/exp => golang.org/x/exp v0.0.0-20230711153332-06a737ee72cb
 )
