@@ -9,4 +9,5 @@ message Module {
   option (cosmos.app.v1alpha1.module) = {
     go_import : "iritamod.bianjie.ai/modules/upgrade"
   };
+  string authority = 1;
 }
