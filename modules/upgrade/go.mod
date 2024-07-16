@@ -11,11 +11,12 @@ require (
 	github.com/cosmos/gogoproto v1.4.10
 	github.com/gorilla/mux v1.8.0
 	github.com/grpc-ecosystem/grpc-gateway v1.16.0
+	github.com/spf13/cast v1.6.0
 	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.62.1
 	google.golang.org/protobuf v1.33.0
-	iritamod.bianjie.ai/api v0.0.0-20240709020459-b21710d38ee1
+	iritamod.bianjie.ai/api v0.0.0-20240716102143-eceb2394fe33
 	iritamod.bianjie.ai/simapp v0.0.0-20240715024259-c9745cbb9d78
 )
 
@@ -143,7 +144,6 @@ require (
 	github.com/sasha-s/go-deadlock v0.3.1 // indirect
 	github.com/sourcegraph/conc v0.3.0 // indirect
 	github.com/spf13/afero v1.11.0 // indirect
-	github.com/spf13/cast v1.6.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/spf13/viper v1.18.2 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect

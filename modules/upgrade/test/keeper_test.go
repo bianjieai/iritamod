@@ -3,8 +3,6 @@ package test
 import (
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	sdkupgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	"github.com/stretchr/testify/suite"
 	"iritamod.bianjie.ai/modules/upgrade/keeper"
@@ -29,7 +27,7 @@ func TestKeeperTestSuite(t *testing.T) {
 func (suite *KeeperTestSuite) SetupTest() {
 	depInjectOptions := simapp.DepinjectOptions{
 		Config:    AppConfig,
-		Providers: []interface{}{authtypes.NewModuleAddress(govtypes.ModuleName)},
+		Providers: []interface{}{},
 		Consumers: []interface{}{&suite.keeper},
 	}
 	app := simapp.Setup(suite.T(), isCheckTx, depInjectOptions)

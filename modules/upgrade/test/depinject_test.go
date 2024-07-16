@@ -197,8 +197,10 @@ var (
 			//	Config: appconfig.WrapAny(&upgrademodulev1.Module{}),
 			//},
 			{
-				Name:   upgradeType.ModuleName,
-				Config: appconfig.WrapAny(&upgradeapi.Module{}),
+				Name: upgradeType.ModuleName,
+				Config: appconfig.WrapAny(&upgradeapi.Module{
+					Authority: "test_module_account",
+				}),
 			},
 			{
 				Name:   distrtypes.ModuleName,
