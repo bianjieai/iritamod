@@ -3,10 +3,11 @@ package test
 import (
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
+	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	sdkupgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	"github.com/stretchr/testify/suite"
 	"iritamod.bianjie.ai/modules/upgrade/keeper"
-	uktype "iritamod.bianjie.ai/modules/upgrade/types"
 	"iritamod.bianjie.ai/simapp"
 	"testing"
 )
@@ -28,7 +29,7 @@ func TestKeeperTestSuite(t *testing.T) {
 func (suite *KeeperTestSuite) SetupTest() {
 	depInjectOptions := simapp.DepinjectOptions{
 		Config:    AppConfig,
-		Providers: []interface{}{},
+		Providers: []interface{}{authtypes.NewModuleAddress(govtypes.ModuleName)},
 		Consumers: []interface{}{&suite.keeper},
 	}
 	app := simapp.Setup(suite.T(), isCheckTx, depInjectOptions)
@@ -37,25 +38,27 @@ func (suite *KeeperTestSuite) SetupTest() {
 }
 
 func (suite *KeeperTestSuite) TestUpgrade() {
-	msg := &uktype.MsgUpgradeSoftware{
+	plan := sdkupgradetypes.Plan{
 		Name:   "all-good",
 		Info:   "some text here",
 		Height: 123450000,
 	}
-	err := suite.keeper.ScheduleUpgrade(suite.ctx, msg)
+	err := suite.keeper.ScheduleUpgrade(suite.ctx, plan)
 	suite.NoError(err)
-	plan, has := suite.keeper.GetUpgradePlan(suite.ctx)
+	result, has := suite.keeper.GetUpgradePlan(suite.ctx)
 	suite.True(has)
-	suite.Equal(msg.Name, plan.Name)
-	suite.Equal(msg.Height, plan.Height)
-	plan, err = suite.keeper.ReadUpgradeInfoFromDisk()
+	suite.Equal(plan.Name, result.Name)
+	suite.Equal(plan.Height, result.Height)
+	_, err = suite.keeper.ReadUpgradeInfoFromDisk()
 	suite.NoError(err)
 	resp, err := suite.keeper.CurrentPlan(suite.ctx, &sdkupgradetypes.QueryCurrentPlanRequest{})
 	suite.NoError(err)
 	suite.NotNil(resp)
-	suite.Equal(msg.Name, resp.Plan.Name)
-	suite.Equal(msg.Height, resp.Plan.Height)
-	err = suite.keeper.ClearUpgradePlan(suite.ctx)
+	suite.Equal(plan.Name, resp.Plan.Name)
+	suite.Equal(plan.Height, resp.Plan.Height)
+	suite.keeper.ClearUpgradePlan(suite.ctx)
 	suite.NoError(err)
+	_, has = suite.keeper.GetUpgradePlan(suite.ctx)
+	suite.False(has)
 
 }

@@ -99,7 +99,7 @@ func (AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 // module-specific GRPC queries.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
-	upgradetypes.RegisterQueryServer(cfg.QueryServer(), am.keeper.UpgradeKeeper())
+	upgradetypes.RegisterQueryServer(cfg.QueryServer(), am.keeper.Keeper)
 }
 
 // InitGenesis is ignored, no sense in serializing future upgrades
@@ -129,7 +129,7 @@ func (AppModule) ConsensusVersion() uint64 { return 1 }
 //
 // CONTRACT: this is registered in BeginBlocker *before* all other modules' BeginBlock functions
 func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
-	cosmosupgrade.BeginBlocker(am.keeper.UpgradeKeeper(), ctx, req)
+	cosmosupgrade.BeginBlocker(am.keeper.Keeper, ctx, req)
 }
 
 // EndBlock does nothing

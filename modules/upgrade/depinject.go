@@ -5,8 +5,7 @@ import (
 	"cosmossdk.io/depinject"
 	"github.com/cosmos/cosmos-sdk/codec"
 	store "github.com/cosmos/cosmos-sdk/store/types"
-	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
+	sdk "github.com/cosmos/cosmos-sdk/types"
 	modulev1 "iritamod.bianjie.ai/api/iritamod/upgrade/module/v1"
 	"iritamod.bianjie.ai/modules/upgrade/keeper"
 )
@@ -28,8 +27,9 @@ func (am AppModule) IsAppModule() {}
 
 type UpgradeInputs struct {
 	depinject.In
-	Key *store.KVStoreKey
-	Cdc codec.Codec
+	Key       *store.KVStoreKey
+	Cdc       codec.Codec
+	Authority sdk.AccAddress
 }
 
 type UpgradeOutputs struct {
@@ -40,9 +40,9 @@ type UpgradeOutputs struct {
 
 func ProvideModule(in UpgradeInputs) UpgradeOutputs {
 	skipUpgradeHeights := make(map[int64]bool)
-	authority := authtypes.NewModuleAddress(govtypes.ModuleName)
+	//authority := authtypes.NewModuleAddress(govtypes.ModuleName)
 	//cosmosupgradekeeper := upgradekeeper.NewKeeper(skipUpgradeHeights, in.Key, in.Cdc, "/", nil, authority.String())
-	keeper := keeper.NewKeeper(skipUpgradeHeights, in.Key, in.Cdc, "/", nil, authority.String())
+	keeper := keeper.NewKeeper(skipUpgradeHeights, in.Key, in.Cdc, "/", nil, in.Authority.String())
 	m := NewAppModule(keeper)
 	return UpgradeOutputs{UpgradeKeeper: keeper, Module: m}
 }
