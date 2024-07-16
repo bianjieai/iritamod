@@ -40,8 +40,6 @@ type UpgradeOutputs struct {
 
 func ProvideModule(in UpgradeInputs) UpgradeOutputs {
 	skipUpgradeHeights := make(map[int64]bool)
-	//authority := authtypes.NewModuleAddress(govtypes.ModuleName)
-	//cosmosupgradekeeper := upgradekeeper.NewKeeper(skipUpgradeHeights, in.Key, in.Cdc, "/", nil, authority.String())
 	keeper := keeper.NewKeeper(skipUpgradeHeights, in.Key, in.Cdc, "/", nil, in.Authority.String())
 	m := NewAppModule(keeper)
 	return UpgradeOutputs{UpgradeKeeper: keeper, Module: m}
