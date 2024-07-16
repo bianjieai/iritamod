@@ -59,19 +59,19 @@ func (k Keeper) UpgradeKeeper() *upgradekeeper.Keeper {
 // SetUpgradeHandler sets an UpgradeHandler for the upgrade specified by name. This handler will be called when the upgrade
 // with this name is applied. In order for an upgrade with the given name to proceed, a handler for this upgrade
 // must be set even if it is a no-op function.
-func (k *Keeper) SetUpgradeHandler(name string, upgradeHandler upgradetypes.UpgradeHandler) {
-	k.Keeper.SetUpgradeHandler(name, upgradeHandler)
-}
+//func (k *Keeper) SetUpgradeHandler(name string, upgradeHandler upgradetypes.UpgradeHandler) {
+//	k.Keeper.SetUpgradeHandler(name, upgradeHandler)
+//}
 
 // ReadUpgradeInfoFromDisk returns the name and height of the upgrade
 // which is written to disk by the old binary when panic'ing
 // if there's an error in reading the info,
 // it assumes that the upgrade info is not available
-func (k Keeper) ReadUpgradeInfoFromDisk() (upgradetypes.Plan, error) {
-	return k.Keeper.ReadUpgradeInfoFromDisk()
-}
+//func (k Keeper) ReadUpgradeInfoFromDisk() (upgradetypes.Plan, error) {
+//	return k.Keeper.ReadUpgradeInfoFromDisk()
+//}
 
 // IsSkipHeight checks if the given height is part of skipUpgradeHeights
-func (k Keeper) IsSkipHeight(height int64) bool {
-	return k.Keeper.IsSkipHeight(height)
-}
+//func (k Keeper) IsSkipHeight(height int64) bool {
+//	return k.Keeper.IsSkipHeight(height)
+//}
