@@ -3,9 +3,12 @@ package upgrade
 import (
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/depinject"
+	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/codec"
+	servertypes "github.com/cosmos/cosmos-sdk/server/types"
 	store "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/spf13/cast"
 	modulev1 "iritamod.bianjie.ai/api/iritamod/upgrade/module/v1"
 	"iritamod.bianjie.ai/modules/upgrade/keeper"
 )
@@ -29,6 +32,7 @@ type UpgradeInputs struct {
 	depinject.In
 	Key       *store.KVStoreKey
 	Cdc       codec.Codec
+	AppOpts   servertypes.AppOptions
 	Authority sdk.AccAddress
 }
 
@@ -40,7 +44,7 @@ type UpgradeOutputs struct {
 
 func ProvideModule(in UpgradeInputs) UpgradeOutputs {
 	skipUpgradeHeights := make(map[int64]bool)
-	keeper := keeper.NewKeeper(skipUpgradeHeights, in.Key, in.Cdc, "/", nil, in.Authority.String())
+	keeper := keeper.NewKeeper(skipUpgradeHeights, in.Key, in.Cdc, cast.ToString(in.AppOpts.Get(flags.FlagHome)), nil, in.Authority.String())
 	m := NewAppModule(keeper)
 	return UpgradeOutputs{UpgradeKeeper: keeper, Module: m}
 }
