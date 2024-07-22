@@ -1,42 +1,23 @@
 package test
 
 import (
-	paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
-	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
-	genutilapi "iritamod.bianjie.ai/api/iritamod/genutil/module/v1"
-	nodeapi "iritamod.bianjie.ai/api/iritamod/node/module/v1"
-	slashingapi "iritamod.bianjie.ai/api/iritamod/slashing/module/v1"
-	_ "iritamod.bianjie.ai/modules/genutil"
-	genutiltype "iritamod.bianjie.ai/modules/genutil/types"
-	_ "iritamod.bianjie.ai/modules/node"
-	nodetypes "iritamod.bianjie.ai/modules/node/types"
-	"time"
-
 	runtimev1alpha1 "cosmossdk.io/api/cosmos/app/runtime/v1alpha1"
 	appv1alpha1 "cosmossdk.io/api/cosmos/app/v1alpha1"
 	authmodulev1 "cosmossdk.io/api/cosmos/auth/module/v1"
 	authzmodulev1 "cosmossdk.io/api/cosmos/authz/module/v1"
 	bankmodulev1 "cosmossdk.io/api/cosmos/bank/module/v1"
-	capabilitymodulev1 "cosmossdk.io/api/cosmos/capability/module/v1"
 	consensusmodulev1 "cosmossdk.io/api/cosmos/consensus/module/v1"
 	crisismodulev1 "cosmossdk.io/api/cosmos/crisis/module/v1"
-	distrmodulev1 "cosmossdk.io/api/cosmos/distribution/module/v1"
 	evidencemodulev1 "cosmossdk.io/api/cosmos/evidence/module/v1"
 	feegrantmodulev1 "cosmossdk.io/api/cosmos/feegrant/module/v1"
-	govmodulev1 "cosmossdk.io/api/cosmos/gov/module/v1"
-	groupmodulev1 "cosmossdk.io/api/cosmos/group/module/v1"
-	mintmodulev1 "cosmossdk.io/api/cosmos/mint/module/v1"
+	paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
 	stakingmodulev1 "cosmossdk.io/api/cosmos/staking/module/v1"
 	txconfigv1 "cosmossdk.io/api/cosmos/tx/config/v1"
-	upgrademodulev1 "cosmossdk.io/api/cosmos/upgrade/module/v1"
-	vestingmodulev1 "cosmossdk.io/api/cosmos/vesting/module/v1"
 	"cosmossdk.io/core/appconfig"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
 	vestingtypes "github.com/cosmos/cosmos-sdk/x/auth/vesting/types"
 	"github.com/cosmos/cosmos-sdk/x/authz"
 	banktypes "github.com/cosmos/cosmos-sdk/x/bank/types"
-	capabilitytypes "github.com/cosmos/cosmos-sdk/x/capability/types"
 	consensustypes "github.com/cosmos/cosmos-sdk/x/consensus/types"
 	crisistypes "github.com/cosmos/cosmos-sdk/x/crisis/types"
 	distrtypes "github.com/cosmos/cosmos-sdk/x/distribution/types"
@@ -45,10 +26,18 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/cosmos/cosmos-sdk/x/group"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
-	_ "github.com/cosmos/cosmos-sdk/x/slashing"
+	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
-	"google.golang.org/protobuf/types/known/durationpb"
+	genutilapi "iritamod.bianjie.ai/api/iritamod/genutil/module/v1"
+	nodeapi "iritamod.bianjie.ai/api/iritamod/node/module/v1"
+	slashingapi "iritamod.bianjie.ai/api/iritamod/slashing/module/v1"
+	_ "iritamod.bianjie.ai/modules/genutil"
+	genutiltype "iritamod.bianjie.ai/modules/genutil/types"
+	_ "iritamod.bianjie.ai/modules/node"
+	nodetypes "iritamod.bianjie.ai/modules/node/types"
+	_ "iritamod.bianjie.ai/modules/slashing"
+	slashingtype "iritamod.bianjie.ai/modules/slashing/types"
 )
 
 var (
@@ -60,11 +49,24 @@ var (
 	// so that other modules that want to create or claim capabilities afterwards in InitChain
 	// can do so safely.
 	genesisModuleOrder = []string{
-		capabilitytypes.ModuleName, authtypes.ModuleName, banktypes.ModuleName, paramstypes.ModuleName,
-		distrtypes.ModuleName, stakingtypes.ModuleName, slashingtypes.ModuleName, govtypes.ModuleName,
-		minttypes.ModuleName, crisistypes.ModuleName, genutiltype.ModuleName, evidencetypes.ModuleName, authz.ModuleName,
-		feegrant.ModuleName, group.ModuleName, upgradetypes.ModuleName,
-		vestingtypes.ModuleName, consensustypes.ModuleName, nodetypes.ModuleName,
+		authz.ModuleName,
+		nodetypes.ModuleName,
+		genutiltype.ModuleName,
+		authtypes.ModuleName,
+		banktypes.ModuleName,
+		paramstypes.ModuleName,
+		distrtypes.ModuleName,
+		stakingtypes.ModuleName,
+		slashingtype.ModuleName,
+		govtypes.ModuleName,
+		minttypes.ModuleName,
+		evidencetypes.ModuleName,
+		crisistypes.ModuleName,
+		feegrant.ModuleName,
+		group.ModuleName,
+		upgradetypes.ModuleName,
+		vestingtypes.ModuleName,
+		consensustypes.ModuleName,
 	}
 
 	// module account permissions
@@ -100,11 +102,9 @@ var (
 					// NOTE: capability module's beginblocker must come before any modules using capabilities (e.g. IBC)
 					BeginBlockers: []string{
 						upgradetypes.ModuleName,
-						capabilitytypes.ModuleName,
 						minttypes.ModuleName,
 						distrtypes.ModuleName,
-						slashingtypes.ModuleName,
-						evidencetypes.ModuleName,
+						slashingtype.ModuleName,
 						stakingtypes.ModuleName,
 						authtypes.ModuleName,
 						paramstypes.ModuleName,
@@ -118,20 +118,19 @@ var (
 						vestingtypes.ModuleName,
 						consensustypes.ModuleName,
 						nodetypes.ModuleName,
+						evidencetypes.ModuleName,
 					},
 					EndBlockers: []string{
 						crisistypes.ModuleName,
 						govtypes.ModuleName,
 						stakingtypes.ModuleName,
-						capabilitytypes.ModuleName,
 						authtypes.ModuleName,
 						banktypes.ModuleName,
 						distrtypes.ModuleName,
-						slashingtypes.ModuleName,
+						slashingtype.ModuleName,
 						minttypes.ModuleName,
 						paramstypes.ModuleName,
 						genutiltype.ModuleName,
-						evidencetypes.ModuleName,
 						authz.ModuleName,
 						feegrant.ModuleName,
 						group.ModuleName,
@@ -139,6 +138,7 @@ var (
 						upgradetypes.ModuleName,
 						vestingtypes.ModuleName,
 						nodetypes.ModuleName,
+						evidencetypes.ModuleName,
 					},
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
 						{
@@ -165,10 +165,6 @@ var (
 				}),
 			},
 			{
-				Name:   vestingtypes.ModuleName,
-				Config: appconfig.WrapAny(&vestingmodulev1.Module{}),
-			},
-			{
 				Name: banktypes.ModuleName,
 				Config: appconfig.WrapAny(&bankmodulev1.Module{
 					BlockedModuleAccountsOverride: blockAccAddrs,
@@ -183,13 +179,13 @@ var (
 				Config: appconfig.WrapAny(&paramsmodulev1.Module{}),
 			},
 			{
-				Name:   slashingtypes.ModuleName,
+				Name:   evidencetypes.ModuleName,
+				Config: appconfig.WrapAny(&evidencemodulev1.Module{}),
+			},
+			{
+				Name:   slashingtype.ModuleName,
 				Config: appconfig.WrapAny(&slashingapi.Module{}),
 			},
-			/*{
-				Name:   paramstypes.ModuleName,
-				Config: appconfig.WrapAny(&paramsmodulev1.Module{}),
-			},*/
 			{
 				Name:   "tx",
 				Config: appconfig.WrapAny(&txconfigv1.Config{}),
@@ -203,41 +199,8 @@ var (
 				Config: appconfig.WrapAny(&authzmodulev1.Module{}),
 			},
 			{
-				Name:   upgradetypes.ModuleName,
-				Config: appconfig.WrapAny(&upgrademodulev1.Module{}),
-			},
-			{
-				Name:   distrtypes.ModuleName,
-				Config: appconfig.WrapAny(&distrmodulev1.Module{}),
-			},
-			{
-				Name: capabilitytypes.ModuleName,
-				Config: appconfig.WrapAny(&capabilitymodulev1.Module{
-					SealKeeper: true,
-				}),
-			},
-			{
-				Name:   evidencetypes.ModuleName,
-				Config: appconfig.WrapAny(&evidencemodulev1.Module{}),
-			},
-			{
-				Name:   minttypes.ModuleName,
-				Config: appconfig.WrapAny(&mintmodulev1.Module{}),
-			},
-			{
-				Name: group.ModuleName,
-				Config: appconfig.WrapAny(&groupmodulev1.Module{
-					MaxExecutionPeriod: durationpb.New(time.Second * 1209600),
-					MaxMetadataLen:     255,
-				}),
-			},
-			{
 				Name:   feegrant.ModuleName,
 				Config: appconfig.WrapAny(&feegrantmodulev1.Module{}),
-			},
-			{
-				Name:   govtypes.ModuleName,
-				Config: appconfig.WrapAny(&govmodulev1.Module{}),
 			},
 			{
 				Name:   crisistypes.ModuleName,

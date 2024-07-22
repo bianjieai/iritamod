@@ -5,7 +5,7 @@ go 1.18
 require (
 	cosmossdk.io/api v0.3.1
 	cosmossdk.io/core v0.5.1
-	cosmossdk.io/depinject v1.0.0-alpha.4 // indirect
+	cosmossdk.io/depinject v1.0.0-alpha.4
 	github.com/cometbft/cometbft v0.37.5
 	github.com/cometbft/cometbft-db v0.7.0 // indirect
 	github.com/cosmos/cosmos-sdk v0.47.12
@@ -20,6 +20,7 @@ require (
 	google.golang.org/grpc v1.62.1 // indirect
 	iritamod.bianjie.ai/api v0.0.0-20240709020459-b21710d38ee1
 	iritamod.bianjie.ai/modules/node v0.0.0-20240715025905-5c05cef6d9d7
+	iritamod.bianjie.ai/modules/slashing v0.0.0-20240715030433-96110b2d4699
 	iritamod.bianjie.ai/simapp v0.0.0-20240715024259-c9745cbb9d78
 )
 
