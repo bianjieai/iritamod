@@ -3,13 +3,16 @@ package node
 import (
 	"cosmossdk.io/core/appmodule"
 	"cosmossdk.io/depinject"
-	paramtypes "github.com/cosmos/cosmos-sdk/x/params/types"
-
 	"github.com/cosmos/cosmos-sdk/codec"
 	store "github.com/cosmos/cosmos-sdk/store/types"
+	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
+	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
+	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 
 	modulev1 "iritamod.bianjie.ai/api/iritamod/node/module/v1"
 	"iritamod.bianjie.ai/modules/node/keeper"
+	"iritamod.bianjie.ai/modules/node/types"
 )
 
 // App Wiring Setup
@@ -29,10 +32,10 @@ func (am AppModule) IsAppModule() {}
 
 type NodeInputs struct {
 	depinject.In
-
-	Cdc        codec.Codec
-	Key        *store.KVStoreKey
-	Paramstore paramtypes.Subspace
+	Cdc            codec.Codec
+	Key            *store.KVStoreKey
+	Paramskeeper   paramskeeper.Keeper
+	Slashingkeeper slashingkeeper.Keeper
 }
 
 type NodeOutputs struct {
@@ -43,12 +46,21 @@ type NodeOutputs struct {
 }
 
 func ProvideModule(in NodeInputs) NodeOutputs {
-	keeper := keeper.NewKeeper(
+	var subspace paramstypes.Subspace
+	if space, ok := in.Paramskeeper.GetSubspace(types.ModuleName); ok {
+		subspace = space
+	} else {
+		subspace = in.Paramskeeper.Subspace(types.ModuleName)
+	}
+	nodekeeper := keeper.NewKeeper(
 		in.Cdc,
 		in.Key,
-		in.Paramstore,
+		subspace,
 	)
-	m := NewAppModule(in.Cdc, keeper)
+	nodekeeper = *nodekeeper.SetHooks(
+		stakingtypes.NewMultiStakingHooks(in.Slashingkeeper.Hooks()),
+	)
+	m := NewAppModule(in.Cdc, nodekeeper)
 
-	return NodeOutputs{NodeKeeper: keeper, Module: m}
+	return NodeOutputs{NodeKeeper: nodekeeper, Module: m}
 }

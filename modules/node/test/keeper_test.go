@@ -61,7 +61,7 @@ func (suite *KeeperTestSuite) SetupTest() {
 	app := simapp.Setup(suite.T(), isCheckTx, depInjectOptions)
 	suite.ctx = app.BaseApp.NewContext(false, tmproto.Header{})
 	//suite.keeper.SetHooks(stakingtypes.NewMultiStakingHooks(app.SlashingKeeper.Hooks()))
-	suite.keeper.SetHooks(suite.slashingkeeprt.Hooks())
+	//suite.keeper.SetHooks(suite.slashingkeeprt.Hooks())
 }
 
 func (suite *KeeperTestSuite) setNode() {
