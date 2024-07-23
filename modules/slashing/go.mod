@@ -15,7 +15,7 @@ require (
 	github.com/spf13/cobra v1.8.0
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/grpc v1.62.1
-	iritamod.bianjie.ai/api v0.0.0-20240709020459-b21710d38ee1
+	iritamod.bianjie.ai/api v0.0.0-20240723070221-5ee596ca7a47
 )
 
 require google.golang.org/protobuf v1.33.0
