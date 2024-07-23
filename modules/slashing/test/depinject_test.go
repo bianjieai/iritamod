@@ -3,10 +3,7 @@ package test
 import (
 	paramsmodulev1 "cosmossdk.io/api/cosmos/params/module/v1"
 	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
-	nodeapi "iritamod.bianjie.ai/api/iritamod/node/module/v1"
 	slashingapi "iritamod.bianjie.ai/api/iritamod/slashing/module/v1"
-	_ "iritamod.bianjie.ai/modules/node"
-	nodetypes "iritamod.bianjie.ai/modules/node/types"
 	slashingtypes "iritamod.bianjie.ai/modules/slashing/types"
 	"time"
 
@@ -63,7 +60,7 @@ var (
 		distrtypes.ModuleName, stakingtypes.ModuleName, slashingtypes.ModuleName, govtypes.ModuleName,
 		minttypes.ModuleName, crisistypes.ModuleName, genutiltypes.ModuleName, evidencetypes.ModuleName, authz.ModuleName,
 		feegrant.ModuleName, group.ModuleName, upgradetypes.ModuleName,
-		vestingtypes.ModuleName, consensustypes.ModuleName, nodetypes.ModuleName,
+		vestingtypes.ModuleName, consensustypes.ModuleName, //nodetypes.ModuleName,
 	}
 
 	// module account permissions
@@ -116,7 +113,7 @@ var (
 						group.ModuleName,
 						vestingtypes.ModuleName,
 						consensustypes.ModuleName,
-						nodetypes.ModuleName,
+						//nodetypes.ModuleName,
 					},
 					EndBlockers: []string{
 						crisistypes.ModuleName,
@@ -137,7 +134,7 @@ var (
 						consensustypes.ModuleName,
 						upgradetypes.ModuleName,
 						vestingtypes.ModuleName,
-						nodetypes.ModuleName,
+						//nodetypes.ModuleName,
 					},
 					OverrideStoreKeys: []*runtimev1alpha1.StoreKeyConfig{
 						{
@@ -246,10 +243,10 @@ var (
 				Name:   consensustypes.ModuleName,
 				Config: appconfig.WrapAny(&consensusmodulev1.Module{}),
 			},
-			{
-				Name:   nodetypes.ModuleName,
-				Config: appconfig.WrapAny(&nodeapi.Module{}),
-			},
+			//{
+			//	Name:   nodetypes.ModuleName,
+			//	Config: appconfig.WrapAny(&nodeapi.Module{}),
+			//},
 		},
 	})
 )

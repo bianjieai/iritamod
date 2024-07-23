@@ -22,6 +22,7 @@ require (
 	google.golang.org/grpc v1.62.1
 	google.golang.org/protobuf v1.33.0
 	iritamod.bianjie.ai/api v0.0.0-20240709020459-b21710d38ee1
+	iritamod.bianjie.ai/modules/params v0.0.0-20240722082141-08d88a40c224
 	iritamod.bianjie.ai/simapp v0.0.0-20240715024259-c9745cbb9d78
 )
 
@@ -135,7 +136,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_golang v1.14.0 // indirect
-	github.com/prometheus/client_model v0.3.0 // indirect
+	github.com/prometheus/client_model v0.5.0 // indirect
 	github.com/prometheus/common v0.42.0 // indirect
 	github.com/prometheus/procfs v0.9.0 // indirect
 	github.com/rakyll/statik v0.1.7 // indirect
