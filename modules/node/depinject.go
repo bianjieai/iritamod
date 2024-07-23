@@ -38,7 +38,7 @@ type NodeInputs struct {
 type NodeOutputs struct {
 	depinject.Out
 
-	NodeKeeper keeper.Keeper
+	NodeKeeper *keeper.Keeper
 	Module     appmodule.AppModule
 }
 
@@ -56,5 +56,5 @@ func ProvideModule(in NodeInputs) NodeOutputs {
 	)
 	m := NewAppModule(in.Cdc, nodekeeper)
 
-	return NodeOutputs{NodeKeeper: nodekeeper, Module: m}
+	return NodeOutputs{NodeKeeper: &nodekeeper, Module: m}
 }
