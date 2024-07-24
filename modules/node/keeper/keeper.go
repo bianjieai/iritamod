@@ -23,13 +23,13 @@ type Keeper struct {
 	hooks      staking.StakingHooks
 }
 
-func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey, ps paramtypes.Subspace) Keeper {
+func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey, ps paramtypes.Subspace) *Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
 		ps = ps.WithKeyTable(ParamKeyTable())
 	}
 
-	return Keeper{
+	return &Keeper{
 		cdc:        cdc,
 		storeKey:   storeKey,
 		paramstore: ps,
