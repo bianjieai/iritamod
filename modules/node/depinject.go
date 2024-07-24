@@ -70,7 +70,7 @@ func ProvideModule(in NodeInputs) NodeOutputs {
 		subspace,
 	)
 	//nodekeeper.SetHooks(in.StakingKeeper.Hooks())
-	m := NewAppModule(in.Cdc, *nodekeeper)
+	m := NewAppModule(in.Cdc, nodekeeper)
 
 	return NodeOutputs{NodeKeeper: nodekeeper, Module: m}
 }

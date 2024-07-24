@@ -110,11 +110,11 @@ func (AppModuleBasic) BuildCreateValidatorMsg(cliCtx client.Context, txBldr tx.F
 type AppModule struct {
 	AppModuleBasic
 
-	keeper Keeper
+	keeper *Keeper
 }
 
 // NewAppModule creates a new AppModule object
-func NewAppModule(cdc codec.Codec, keeper Keeper) AppModule {
+func NewAppModule(cdc codec.Codec, keeper *Keeper) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{cdc: cdc},
 		keeper:         keeper,
@@ -128,8 +128,8 @@ func (AppModule) Name() string {
 
 // RegisterServices registers module services.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
-	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
-	types.RegisterQueryServer(cfg.QueryServer(), keeper.Querier{Keeper: am.keeper})
+	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(*am.keeper))
+	types.RegisterQueryServer(cfg.QueryServer(), keeper.Querier{Keeper: *am.keeper})
 }
 
 // RegisterInvariants registers the node module invariants.
@@ -155,12 +155,12 @@ func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
 	var genesisState GenesisState
 	cdc.MustUnmarshalJSON(data, &genesisState)
-	return InitGenesis(ctx, am.cdc, am.keeper, genesisState)
+	return InitGenesis(ctx, am.cdc, *am.keeper, genesisState)
 }
 
 // ExportGenesis returns the exported genesis state as raw bytes for the node module.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	gs := ExportGenesis(ctx, am.keeper)
+	gs := ExportGenesis(ctx, *am.keeper)
 	return cdc.MustMarshalJSON(gs)
 }
 
@@ -169,12 +169,12 @@ func (AppModule) ConsensusVersion() uint64 { return 1 }
 
 // BeginBlock returns the begin blocker for the node module.
 func (am AppModule) BeginBlock(ctx sdk.Context, _ abci.RequestBeginBlock) {
-	BeginBlocker(ctx, am.keeper)
+	BeginBlocker(ctx, *am.keeper)
 }
 
 // EndBlock returns the end blocker for the node module. It returns no validator updates.
 func (am AppModule) EndBlock(ctx sdk.Context, _ abci.RequestEndBlock) []abci.ValidatorUpdate {
-	return EndBlocker(ctx, am.keeper)
+	return EndBlocker(ctx, *am.keeper)
 }
 
 // ____________________________________________________________________________
