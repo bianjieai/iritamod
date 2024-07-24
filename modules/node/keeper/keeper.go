@@ -26,7 +26,7 @@ type Keeper struct {
 func NewKeeper(cdc codec.Codec, storeKey storetypes.StoreKey, ps paramtypes.Subspace) *Keeper {
 	// set KeyTable if it has not already been set
 	if !ps.HasKeyTable() {
-		ps = ps.WithKeyTable(ParamKeyTable())
+		ps = ps.WithKeyTable(types.ParamKeyTable())
 	}
 
 	return &Keeper{

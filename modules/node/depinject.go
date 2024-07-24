@@ -5,30 +5,28 @@ import (
 	"cosmossdk.io/depinject"
 	"github.com/cosmos/cosmos-sdk/codec"
 	store "github.com/cosmos/cosmos-sdk/store/types"
-	cosmosparamstypes "github.com/cosmos/cosmos-sdk/x/params/types"
+	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
-	paramskeeper "iritamod.bianjie.ai/modules/params/keeper"
-
 	modulev1 "iritamod.bianjie.ai/api/iritamod/node/module/v1"
 	"iritamod.bianjie.ai/modules/node/keeper"
-	"iritamod.bianjie.ai/modules/node/types"
+	nodetypes "iritamod.bianjie.ai/modules/node/types"
 )
 
 // App Wiring Setup
 func init() {
 	appmodule.Register(&modulev1.Module{},
-		// appmodule.Provide(ProvideModule, ProvideKeyTable),
-		appmodule.Provide(ProvideModule),
+		appmodule.Provide(ProvideModule, ProvideKeyTable),
+		//appmodule.Provide(ProvideModule),
 		appmodule.Invoke(InvokeHooks),
 	)
 }
 
 var _ appmodule.AppModule = AppModule{}
 
-//func ProvideKeyTable() paramstypes.KeyTable {
-//	return keeper.ParamKeyTable()
-//}
+func ProvideKeyTable() paramstypes.KeyTable {
+	return nodetypes.ParamKeyTable()
+}
 
 // IsOnePerModuleType implements the depinject.OnePerModuleType interface.
 func (am AppModule) IsOnePerModuleType() {}
@@ -45,9 +43,9 @@ type HookInputs struct {
 
 type NodeInputs struct {
 	depinject.In
-	Cdc          codec.Codec
-	Key          *store.KVStoreKey
-	Paramskeeper paramskeeper.Keeper
+	Cdc            codec.Codec
+	Key            *store.KVStoreKey
+	LegacySubspace paramstypes.Subspace `optional:"true"`
 }
 
 type NodeOutputs struct {
@@ -58,18 +56,11 @@ type NodeOutputs struct {
 }
 
 func ProvideModule(in NodeInputs) NodeOutputs {
-	var subspace cosmosparamstypes.Subspace
-	if space, ok := in.Paramskeeper.GetSubspace(types.ModuleName); ok {
-		subspace = space
-	} else {
-		subspace = in.Paramskeeper.Subspace(types.ModuleName)
-	}
 	nodekeeper := keeper.NewKeeper(
 		in.Cdc,
 		in.Key,
-		subspace,
+		in.LegacySubspace,
 	)
-	//nodekeeper.SetHooks(in.StakingKeeper.Hooks())
 	m := NewAppModule(in.Cdc, nodekeeper)
 
 	return NodeOutputs{NodeKeeper: nodekeeper, Module: m}
