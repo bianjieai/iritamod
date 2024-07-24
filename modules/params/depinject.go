@@ -39,12 +39,7 @@ type ParamsOutputs struct {
 }
 
 func ProvideModule(in coamosparams.ParamsInputs) ParamsOutputs {
-	cosmosParamsKeeper := paramskeeper.NewKeeper(
-		in.Cdc,
-		in.LegacyAmino,
-		in.TransientStoreKey,
-		in.KvStoreKey,
-	)
+	cosmosParamsKeeper := paramskeeper.NewKeeper(in.Cdc, in.LegacyAmino, in.KvStoreKey, in.TransientStoreKey)
 	keeper := keeper.NewKeeper(cosmosParamsKeeper)
 	m := NewAppModule(in.Cdc, cosmosParamsKeeper)
 	return ParamsOutputs{ParamsKeeper: keeper, Module: m}
