@@ -20,7 +20,7 @@ import (
 )
 
 // InitGenesis - store genesis validator set
-func InitGenesis(ctx sdk.Context, cdc codec.Codec, k Keeper, data GenesisState) (res []abci.ValidatorUpdate) {
+func InitGenesis(ctx sdk.Context, cdc codec.Codec, k *Keeper, data GenesisState) (res []abci.ValidatorUpdate) {
 	if err := ValidateGenesis(data); err != nil {
 		panic(err.Error())
 	}
@@ -66,7 +66,7 @@ func InitGenesis(ctx sdk.Context, cdc codec.Codec, k Keeper, data GenesisState) 
 }
 
 // ExportGenesis - output genesis valiadtor set
-func ExportGenesis(ctx sdk.Context, k Keeper) *GenesisState {
+func ExportGenesis(ctx sdk.Context, k *Keeper) *GenesisState {
 	rootCert, _ := k.GetRootCert(ctx)
 	return NewGenesisState(rootCert, k.GetParams(ctx), k.GetAllValidators(ctx), k.GetNodes(ctx))
 }
