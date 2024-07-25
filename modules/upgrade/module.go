@@ -103,7 +103,19 @@ func (am AppModule) RegisterServices(cfg module.Configurator) {
 }
 
 // InitGenesis is ignored, no sense in serializing future upgrades
-func (am AppModule) InitGenesis(_ sdk.Context, _ codec.JSONCodec, _ json.RawMessage) []abci.ValidatorUpdate {
+func (am AppModule) InitGenesis(ctx sdk.Context, _ codec.JSONCodec, _ json.RawMessage) []abci.ValidatorUpdate {
+	// set version map automatically if available
+	if versionMap := am.keeper.GetInitVersionMap(); versionMap != nil {
+		// chains can still use a custom init chainer for setting the version map
+		// this means that we need to combine the manually wired modules version map with app wiring enabled modules version map
+		for name, version := range am.keeper.GetModuleVersionMap(ctx) {
+			if _, ok := versionMap[name]; !ok {
+				versionMap[name] = version
+			}
+		}
+
+		am.keeper.SetModuleVersionMap(ctx, versionMap)
+	}
 	return []abci.ValidatorUpdate{}
 }
 
