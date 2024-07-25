@@ -7,12 +7,21 @@ import (
 	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 )
 
+// Keeper of the upgrade module
 type Keeper struct {
 	*upgradekeeper.Keeper
 }
 
-func NewKeeper(skipUpgradeHeights map[int64]bool, storeKey storetypes.StoreKey, cdc codec.BinaryCodec, homePath string, vs xp.ProtocolVersionSetter, authority string) Keeper {
-	return Keeper{
+// NewKeeper creates a new upgrade Keeper instance
+func NewKeeper(
+	skipUpgradeHeights map[int64]bool, 
+	storeKey storetypes.StoreKey, 
+	cdc codec.BinaryCodec, 
+	homePath string, 
+	vs xp.ProtocolVersionSetter, 
+	authority string,
+	) *Keeper {
+	return &Keeper{
 		upgradekeeper.NewKeeper(skipUpgradeHeights, storeKey, cdc, homePath, vs, authority),
 	}
 }
