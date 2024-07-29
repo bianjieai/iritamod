@@ -12,8 +12,6 @@ import (
 	"github.com/cometbft/cometbft/crypto/tmhash"
 	tmbytes "github.com/cometbft/cometbft/libs/bytes"
 	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
-	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
-
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
@@ -26,9 +24,8 @@ type KeeperTestSuite struct {
 	suite.Suite
 
 	//cdc    codec.Codec
-	ctx            sdk.Context
-	keeper         keeper.Keeper
-	slashingkeeprt slashingkeeper.Keeper
+	ctx    sdk.Context
+	keeper *keeper.Keeper
 }
 
 var (
@@ -56,12 +53,10 @@ func (suite *KeeperTestSuite) SetupTest() {
 	depInjectOptions := simapp.DepinjectOptions{
 		Config:    AppConfig,
 		Providers: []interface{}{},
-		Consumers: []interface{}{&suite.keeper, &suite.slashingkeeprt},
+		Consumers: []interface{}{&suite.keeper},
 	}
 	app := simapp.Setup(suite.T(), isCheckTx, depInjectOptions)
 	suite.ctx = app.BaseApp.NewContext(false, tmproto.Header{})
-	//suite.keeper.SetHooks(stakingtypes.NewMultiStakingHooks(app.SlashingKeeper.Hooks()))
-	//suite.keeper.SetHooks(suite.slashingkeeprt.Hooks())
 }
 
 func (suite *KeeperTestSuite) setNode() {

@@ -15,7 +15,7 @@ var isCheckTx = false
 type KeeperTestSuite struct {
 	suite.Suite
 	ctx    sdk.Context
-	keeper keeper.Keeper
+	keeper *keeper.Keeper
 	//encCfg      TestEncodingConfig
 	//queryClient upgradetypes.QueryClient
 }

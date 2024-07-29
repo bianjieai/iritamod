@@ -42,13 +42,13 @@ import (
 	govtypes "github.com/cosmos/cosmos-sdk/x/gov/types"
 	"github.com/cosmos/cosmos-sdk/x/group"
 	minttypes "github.com/cosmos/cosmos-sdk/x/mint/types"
-	paramstypes "github.com/cosmos/cosmos-sdk/x/params/types"
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 	stakingtypes "github.com/cosmos/cosmos-sdk/x/staking/types"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 	nodeapi "iritamod.bianjie.ai/api/iritamod/node/module/v1"
 	_ "iritamod.bianjie.ai/modules/node"
 	nodetypes "iritamod.bianjie.ai/modules/node/types"
+	paramstypes "iritamod.bianjie.ai/modules/params/types"
 )
 
 var (

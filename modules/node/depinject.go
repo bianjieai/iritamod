@@ -11,6 +11,7 @@ import (
 	modulev1 "iritamod.bianjie.ai/api/iritamod/node/module/v1"
 	"iritamod.bianjie.ai/modules/node/keeper"
 	nodetypes "iritamod.bianjie.ai/modules/node/types"
+	paramskeeper "iritamod.bianjie.ai/modules/params/keeper"
 )
 
 // App Wiring Setup
@@ -43,9 +44,11 @@ type HookInputs struct {
 
 type NodeInputs struct {
 	depinject.In
-	Cdc            codec.Codec
-	Key            *store.KVStoreKey
-	LegacySubspace paramstypes.Subspace `optional:"true"`
+	Cdc          codec.Codec
+	Key          *store.KVStoreKey
+	ParamsKeeper paramskeeper.Keeper
+	KeyTables    map[string]paramstypes.KeyTable
+	//LegacySubspace paramstypes.Subspace `optional:"true"`
 }
 
 type NodeOutputs struct {
@@ -56,10 +59,16 @@ type NodeOutputs struct {
 }
 
 func ProvideModule(in NodeInputs) NodeOutputs {
+	subspace := in.ParamsKeeper.Subspace(in.Key.Name())
+	moduleName := in.Key.Name()
+	kt, exists := in.KeyTables[moduleName]
+	if exists {
+		subspace.WithKeyTable(kt)
+	}
 	nodekeeper := keeper.NewKeeper(
 		in.Cdc,
 		in.Key,
-		in.LegacySubspace,
+		subspace,
 	)
 	m := NewAppModule(in.Cdc, nodekeeper)
 

@@ -190,4 +190,5 @@ replace (
 	github.com/cometbft/cometbft => github.com/bianjieai/cometbft v0.37.5-irita-240628
 	github.com/cosmos/cosmos-sdk => github.com/bianjieai/cosmos-sdk v0.47.12-irita-20240701
 	golang.org/x/exp => golang.org/x/exp v0.0.0-20230711153332-06a737ee72cb
+	iritamod.bianjie.ai/simapp => ../../simapp
 )
