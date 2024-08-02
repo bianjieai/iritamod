@@ -3,13 +3,14 @@ package keeper
 import (
 	"encoding/hex"
 	"fmt"
+	"iritamod.bianjie.ai/modules/node/utils/ca"
 
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 
 	gogotypes "github.com/gogo/protobuf/types"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	tmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"
@@ -17,8 +18,7 @@ import (
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 	staking "github.com/cosmos/cosmos-sdk/x/staking/types"
 
-	"github.com/bianjieai/iritamod/modules/node/types"
-	cautil "github.com/bianjieai/iritamod/utils/ca"
+	"iritamod.bianjie.ai/modules/node/types"
 )
 
 // SetHooks sets the validator hooks
@@ -52,7 +52,7 @@ func (k Keeper) CreateValidator(ctx sdk.Context,
 			return err
 		}
 
-		pk, err := cautil.GetPubkeyFromCert(cert)
+		pk, err := ca.GetPubkeyFromCert(cert)
 		if err != nil {
 			return sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
 		}
@@ -121,7 +121,7 @@ func (k Keeper) UpdateValidator(ctx sdk.Context,
 		if err != nil {
 			return err
 		}
-		pk, err := cautil.GetPubkeyFromCert(cert)
+		pk, err := ca.GetPubkeyFromCert(cert)
 		if err != nil {
 			return sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
 		}
@@ -452,14 +452,14 @@ func (k *Keeper) IterateDelegations(
 ) {
 }
 
-func (k *Keeper) VerifyCert(ctx sdk.Context, certStr string) (cert cautil.Cert, err error) {
+func (k *Keeper) VerifyCert(ctx sdk.Context, certStr string) (cert ca.Cert, err error) {
 	rootCertStr, _ := k.GetRootCert(ctx)
-	rootCert, err := cautil.ReadCertificateFromMem([]byte(rootCertStr))
+	rootCert, err := ca.ReadCertificateFromMem([]byte(rootCertStr))
 	if err != nil {
 		return cert, sdkerrors.Wrap(types.ErrInvalidRootCert, err.Error())
 	}
 
-	cert, err = cautil.ReadCertificateFromMem([]byte(certStr))
+	cert, err = ca.ReadCertificateFromMem([]byte(certStr))
 	if err != nil {
 		return cert, sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
 	}

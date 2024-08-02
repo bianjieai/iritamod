@@ -1,0 +1,16 @@
+syntax = "proto3";
+package iritamod.params;
+
+import "gogoproto/gogo.proto";
+
+option go_package = "iritamod.bianjie.ai/modules/params/types";
+option (gogoproto.goproto_getters_all) = false;
+
+// ParamChange defines a parameter change.
+message ParamChange {
+  option (gogoproto.equal) = true;
+
+  string subspace = 1;
+  string key = 2;
+  string value = 3;
+}

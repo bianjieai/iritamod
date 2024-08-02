@@ -4,7 +4,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/params"
 	paramskeeper "github.com/cosmos/cosmos-sdk/x/params/keeper"
 
-	"github.com/bianjieai/iritamod/modules/params/types"
+	"iritamod.bianjie.ai/modules/params/types"
 )
 
 const (
@@ -23,7 +23,7 @@ var (
 	ErrUnknownKey       = types.ErrUnknownKey
 
 	// NewQuerier alias cosmos-sdk/x/params/keeper.NewQuerier
-	NewQuerier = paramskeeper.NewQuerier
+	//NewQuerier = paramskeeper.NewQuerier
 )
 
 type (

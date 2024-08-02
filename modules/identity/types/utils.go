@@ -11,7 +11,7 @@ import (
 	"math/big"
 	"time"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	tmbytes "github.com/cometbft/cometbft/libs/bytes"
 	"github.com/tjfoc/gmsm/sm2"
 	sm2x509 "github.com/tjfoc/gmsm/x509"
 

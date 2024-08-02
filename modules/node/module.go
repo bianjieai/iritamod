@@ -4,15 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"math/rand"
-
-	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 	flag "github.com/spf13/pflag"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	cfg "github.com/tendermint/tendermint/config"
+	abci "github.com/cometbft/cometbft/abci/types"
+	cfg "github.com/cometbft/cometbft/config"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/tx"
@@ -22,10 +19,9 @@ import (
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 
-	"github.com/bianjieai/iritamod/modules/node/client/cli"
-	"github.com/bianjieai/iritamod/modules/node/client/rest"
-	"github.com/bianjieai/iritamod/modules/node/keeper"
-	"github.com/bianjieai/iritamod/modules/node/types"
+	"iritamod.bianjie.ai/modules/node/client/cli"
+	"iritamod.bianjie.ai/modules/node/keeper"
+	"iritamod.bianjie.ai/modules/node/types"
 )
 
 var (
@@ -65,9 +61,9 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncod
 }
 
 // RegisterRESTRoutes registers the REST routes for the node module.
-func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
-	rest.RegisterRoutes(clientCtx, rtr)
-}
+//func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
+//	rest.RegisterRoutes(clientCtx, rtr)
+//}
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the node module.
 func (a AppModuleBasic) RegisterGRPCGatewayRoutes(clientCtx client.Context, mux *runtime.ServeMux) {
@@ -114,11 +110,11 @@ func (AppModuleBasic) BuildCreateValidatorMsg(cliCtx client.Context, txBldr tx.F
 type AppModule struct {
 	AppModuleBasic
 
-	keeper Keeper
+	keeper *Keeper
 }
 
 // NewAppModule creates a new AppModule object
-func NewAppModule(cdc codec.Codec, keeper Keeper) AppModule {
+func NewAppModule(cdc codec.Codec, keeper *Keeper) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{cdc: cdc},
 		keeper:         keeper,
@@ -132,27 +128,27 @@ func (AppModule) Name() string {
 
 // RegisterServices registers module services.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
-	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
-	types.RegisterQueryServer(cfg.QueryServer(), keeper.Querier{Keeper: am.keeper})
+	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(*am.keeper))
+	types.RegisterQueryServer(cfg.QueryServer(), keeper.Querier{Keeper: *am.keeper})
 }
 
 // RegisterInvariants registers the node module invariants.
 func (am AppModule) RegisterInvariants(ir sdk.InvariantRegistry) {}
 
 // Route returns the message routing key for the node module.
-func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
-}
-
-// QuerierRoute returns the node module's querier route name.
-func (AppModule) QuerierRoute() string {
-	return QuerierRoute
-}
-
-// LegacyQuerierHandler returns the node module sdk.Querier.
-func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return keeper.NewQuerier(am.keeper, legacyQuerierCdc)
-}
+//func (am AppModule) Route() sdk.Route {
+//	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
+//}
+//
+//// QuerierRoute returns the node module's querier route name.
+//func (AppModule) QuerierRoute() string {
+//	return QuerierRoute
+//}
+//
+//// LegacyQuerierHandler returns the node module sdk.Querier.
+//func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
+//	return keeper.NewQuerier(am.keeper, legacyQuerierCdc)
+//}
 
 // InitGenesis performs genesis initialization for the node module. It returns
 // no validator updates.
@@ -194,9 +190,9 @@ func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.We
 }
 
 // RandomizedParams creates randomized node param changes for the simulator.
-func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
-	return nil
-}
+//func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+//	return nil
+//}
 
 // RegisterStoreDecoder registers a decoder for node module's types
 func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {}

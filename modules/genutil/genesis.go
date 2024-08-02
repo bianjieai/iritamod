@@ -1,12 +1,12 @@
 package genutil
 
 import (
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/cometbft/cometbft/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 
-	"github.com/bianjieai/iritamod/modules/genutil/types"
+	"iritamod.bianjie.ai/modules/genutil/types"
 )
 
 // InitGenesis - initialize accounts and deliver genesis transactions

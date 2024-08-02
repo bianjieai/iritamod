@@ -4,11 +4,11 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
-
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
+	"iritamod.bianjie.ai/modules/node/utils/ca"
 
-	abci "github.com/tendermint/tendermint/abci/types"
-	tmtypes "github.com/tendermint/tendermint/types"
+	abci "github.com/cometbft/cometbft/abci/types"
+	tmtypes "github.com/cometbft/cometbft/types"
 
 	"github.com/cosmos/cosmos-sdk/codec"
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
@@ -16,12 +16,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/bianjieai/iritamod/modules/node/types"
-	cautil "github.com/bianjieai/iritamod/utils/ca"
+	"iritamod.bianjie.ai/modules/node/types"
 )
 
 // InitGenesis - store genesis validator set
-func InitGenesis(ctx sdk.Context, cdc codec.Codec, k Keeper, data GenesisState) (res []abci.ValidatorUpdate) {
+func InitGenesis(ctx sdk.Context, cdc codec.Codec, k *Keeper, data GenesisState) (res []abci.ValidatorUpdate) {
 	if err := ValidateGenesis(data); err != nil {
 		panic(err.Error())
 	}
@@ -67,7 +66,7 @@ func InitGenesis(ctx sdk.Context, cdc codec.Codec, k Keeper, data GenesisState) 
 }
 
 // ExportGenesis - output genesis valiadtor set
-func ExportGenesis(ctx sdk.Context, k Keeper) *GenesisState {
+func ExportGenesis(ctx sdk.Context, k *Keeper) *GenesisState {
 	rootCert, _ := k.GetRootCert(ctx)
 	return NewGenesisState(rootCert, k.GetParams(ctx), k.GetAllValidators(ctx), k.GetNodes(ctx))
 }
@@ -100,7 +99,7 @@ func ValidateGenesis(data GenesisState) error {
 		return errors.New("root certificate is not set in genesis state")
 	}
 
-	rootCert, err := cautil.ReadCertificateFromMem([]byte(data.RootCert))
+	rootCert, err := ca.ReadCertificateFromMem([]byte(data.RootCert))
 	if err != nil {
 		return fmt.Errorf("invalid root certificate in genesis state, %s", err.Error())
 	}
@@ -113,7 +112,7 @@ func ValidateGenesis(data GenesisState) error {
 	return validateNodes(data.Nodes)
 }
 
-func validateGenesisStateValidators(rootCert cautil.Cert, validators []Validator) error {
+func validateGenesisStateValidators(rootCert ca.Cert, validators []Validator) error {
 	nameMap := make(map[string]bool, len(validators))
 	pubkeyMap := make(map[string]bool, len(validators))
 	idMap := make(map[string]bool, len(validators))
@@ -121,12 +120,12 @@ func validateGenesisStateValidators(rootCert cautil.Cert, validators []Validator
 	for i := 0; i < len(validators); i++ {
 		val := validators[i]
 		if len(val.Certificate) > 0 {
-			cert, err := cautil.ReadCertificateFromMem([]byte(val.Certificate))
+			cert, err := ca.ReadCertificateFromMem([]byte(val.Certificate))
 			if err != nil {
 				return sdkerrors.Wrap(types.ErrInvalidCert, err.Error())
 			}
 
-			if err = cautil.VerifyCertFromRoot(cert, rootCert); err != nil {
+			if err = ca.VerifyCertFromRoot(cert, rootCert); err != nil {
 				return sdkerrors.Wrapf(types.ErrInvalidCert, "cannot be verified by root certificate, err: %s", err.Error())
 			}
 		}

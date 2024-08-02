@@ -3,8 +3,8 @@ package identity
 // nolint
 
 import (
-	"github.com/bianjieai/iritamod/modules/identity/keeper"
-	"github.com/bianjieai/iritamod/modules/identity/types"
+	"iritamod.bianjie.ai/modules/identity/keeper"
+	"iritamod.bianjie.ai/modules/identity/types"
 )
 
 const (
@@ -22,8 +22,8 @@ const (
 )
 
 var (
-	NewKeeper           = keeper.NewKeeper
-	NewQuerier          = keeper.NewQuerier
+	NewKeeper = keeper.NewKeeper
+	//NewQuerier          = keeper.NewQuerier
 	ModuleCdc           = types.ModuleCdc
 	DefaultGenesisState = types.DefaultGenesisState
 	ValidateGenesis     = types.ValidateGenesis
