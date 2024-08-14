@@ -65,6 +65,6 @@ func ProvideModule(in SlashingInputs) SlashingOutputs {
 		cosmosSlashingKeeper,
 		in.NodeKeeper,
 	)
-	m := NewAppModule(in.Cdc, keeper, in.AccountKeeper, in.BankKeeper, in.StakingKeeper)
+	m := NewAppModule(in.Cdc, keeper, in.AccountKeeper, in.BankKeeper, in.StakingKeeper, in.LegacySubspace)
 	return SlashingOutputs{SlashingKeeper: keeper, Module: m}
 }

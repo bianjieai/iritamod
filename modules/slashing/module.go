@@ -20,6 +20,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/x/slashing/simulation"
 	"github.com/cosmos/cosmos-sdk/x/slashing/types"
 
+	"github.com/cosmos/cosmos-sdk/x/slashing/exported"
+	cosmosslashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 	"iritamod.bianjie.ai/modules/slashing/client/cli"
 	"iritamod.bianjie.ai/modules/slashing/keeper"
 	slashingtypes "iritamod.bianjie.ai/modules/slashing/types"
@@ -96,18 +98,28 @@ type AppModule struct {
 	accountKeeper AccountKeeper
 	bankKeeper    BankKeeper
 	stakingKeeper StakingKeeper
+	// legacySubspace is used solely for migration of x/slashing managed parameters
+	legacySubspace exported.Subspace
 }
 
 // RegisterServices registers module services.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	slashingtypes.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
 	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
+	m := cosmosslashingkeeper.NewMigrator(am.keeper.Keeper, am.legacySubspace)
+	if err := cfg.RegisterMigration(types.ModuleName, 1, m.Migrate1to2); err != nil {
+		panic(fmt.Sprintf("failed to migrate x/%s from version 1 to 2: %v", types.ModuleName, err))
+	}
+
+	if err := cfg.RegisterMigration(types.ModuleName, 2, m.Migrate2to3); err != nil {
+		panic(fmt.Sprintf("failed to migrate x/%s from version 2 to 3: %v", types.ModuleName, err))
+	}
 }
 
 // NewAppModule creates a new AppModule object
 func NewAppModule(
 	cdc codec.Codec, keeper Keeper, ak AccountKeeper,
-	bk BankKeeper, sk StakingKeeper,
+	bk BankKeeper, sk StakingKeeper, legacySubspace exported.Subspace,
 ) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{cdc: cdc},
@@ -115,6 +127,7 @@ func NewAppModule(
 		accountKeeper:  ak,
 		bankKeeper:     bk,
 		stakingKeeper:  sk,
+		legacySubspace: legacySubspace,
 	}
 }
 
@@ -162,7 +175,7 @@ func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.Raw
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 1 }
+func (AppModule) ConsensusVersion() uint64 { return 3 }
 
 // BeginBlock returns the begin blocker for the slashing module.
 func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
