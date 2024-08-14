@@ -5,7 +5,7 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/tendermint/tendermint/crypto/sm2"
+	"github.com/cometbft/cometbft/crypto/sm2"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )

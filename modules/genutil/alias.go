@@ -5,7 +5,7 @@
 package genutil
 
 import (
-	"github.com/bianjieai/iritamod/modules/genutil/types"
+	"iritamod.bianjie.ai/modules/genutil/types"
 )
 
 const (

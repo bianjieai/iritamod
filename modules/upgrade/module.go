@@ -8,7 +8,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/cometbft/cometbft/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -16,13 +16,11 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	cosmosupgrade "github.com/cosmos/cosmos-sdk/x/upgrade"
-	"github.com/cosmos/cosmos-sdk/x/upgrade/client/rest"
-	upgradekeeper "github.com/cosmos/cosmos-sdk/x/upgrade/keeper"
 	upgradetypes "github.com/cosmos/cosmos-sdk/x/upgrade/types"
 
-	"github.com/bianjieai/iritamod/modules/upgrade/client/cli"
-	"github.com/bianjieai/iritamod/modules/upgrade/keeper"
-	"github.com/bianjieai/iritamod/modules/upgrade/types"
+	"iritamod.bianjie.ai/modules/upgrade/client/cli"
+	"iritamod.bianjie.ai/modules/upgrade/keeper"
+	"iritamod.bianjie.ai/modules/upgrade/types"
 )
 
 var (
@@ -46,7 +44,7 @@ func (AppModuleBasic) RegisterLegacyAminoCodec(cdc *codec.LegacyAmino) {
 // RegisterRESTRoutes registers all REST query handlers
 func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, r *mux.Router) {
 	//TODO
-	rest.RegisterRoutes(clientCtx, r)
+	//rest.RegisterRoutes(clientCtx, r)
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the upgrade module.
@@ -71,11 +69,11 @@ func (b AppModuleBasic) RegisterInterfaces(registry codectypes.InterfaceRegistry
 // AppModule implements the sdk.AppModule interface
 type AppModule struct {
 	AppModuleBasic
-	keeper keeper.Keeper
+	keeper *keeper.Keeper
 }
 
 // NewAppModule creates a new AppModule object
-func NewAppModule(keeper keeper.Keeper) AppModule {
+func NewAppModule(keeper *keeper.Keeper) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{},
 		keeper:         keeper,
@@ -85,27 +83,38 @@ func NewAppModule(keeper keeper.Keeper) AppModule {
 // RegisterInvariants does nothing, there are no invariants to enforce
 func (AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
-func (am AppModule) Route() sdk.Route {
-	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
-}
+//func (am AppModule) Route() sdk.Route {
+//	return sdk.NewRoute(types.RouterKey, NewHandler(am.keeper))
+//}
+//
+//// QuerierRoute returns the route we respond to for abci queries
+//func (AppModule) QuerierRoute() string { return types.QuerierKey }
+//
+//// LegacyQuerierHandler registers a query handler to respond to the module-specific queries
+//func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
+//	return upgradekeeper.NewQuerier(am.keeper.UpgradeKeeper(), legacyQuerierCdc)
+//}
 
-// QuerierRoute returns the route we respond to for abci queries
-func (AppModule) QuerierRoute() string { return types.QuerierKey }
-
-// LegacyQuerierHandler registers a query handler to respond to the module-specific queries
-func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
-	return upgradekeeper.NewQuerier(am.keeper.UpgradeKeeper(), legacyQuerierCdc)
-}
-
-// RegisterQueryService registers a GRPC query service to respond to the
-// module-specific GRPC queries.
+// RegisterServices registers module services
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	types.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
-	upgradetypes.RegisterQueryServer(cfg.QueryServer(), am.keeper.UpgradeKeeper())
+	upgradetypes.RegisterQueryServer(cfg.QueryServer(), am.keeper.Keeper)
 }
 
 // InitGenesis is ignored, no sense in serializing future upgrades
-func (am AppModule) InitGenesis(_ sdk.Context, _ codec.JSONCodec, _ json.RawMessage) []abci.ValidatorUpdate {
+func (am AppModule) InitGenesis(ctx sdk.Context, _ codec.JSONCodec, _ json.RawMessage) []abci.ValidatorUpdate {
+	// set version map automatically if available
+	if versionMap := am.keeper.GetInitVersionMap(); versionMap != nil {
+		// chains can still use a custom init chainer for setting the version map
+		// this means that we need to combine the manually wired modules version map with app wiring enabled modules version map
+		for name, version := range am.keeper.GetModuleVersionMap(ctx) {
+			if _, ok := versionMap[name]; !ok {
+				versionMap[name] = version
+			}
+		}
+
+		am.keeper.SetModuleVersionMap(ctx, versionMap)
+	}
 	return []abci.ValidatorUpdate{}
 }
 
@@ -131,7 +140,7 @@ func (AppModule) ConsensusVersion() uint64 { return 1 }
 //
 // CONTRACT: this is registered in BeginBlocker *before* all other modules' BeginBlock functions
 func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
-	cosmosupgrade.BeginBlocker(am.keeper.UpgradeKeeper(), ctx, req)
+	cosmosupgrade.BeginBlocker(am.keeper.Keeper, ctx, req)
 }
 
 // EndBlock does nothing

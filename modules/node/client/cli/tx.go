@@ -11,7 +11,7 @@ import (
 	flag "github.com/spf13/pflag"
 	"github.com/spf13/viper"
 
-	cfg "github.com/tendermint/tendermint/config"
+	cfg "github.com/cometbft/cometbft/config"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -19,7 +19,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
 
-	"github.com/bianjieai/iritamod/modules/node/types"
+	"iritamod.bianjie.ai/modules/node/types"
 )
 
 var defaultPower = 100
@@ -55,7 +55,12 @@ func NewCreateValidatorCmd() *cobra.Command {
 				return err
 			}
 
-			txf := tx.NewFactoryCLI(clientCtx, cmd.Flags()).WithTxConfig(clientCtx.TxConfig).WithAccountRetriever(clientCtx.AccountRetriever)
+			//txf
+			factory, err := tx.NewFactoryCLI(clientCtx, cmd.Flags())
+			if err != nil {
+				return err
+			}
+			txf := factory.WithTxConfig(clientCtx.TxConfig).WithAccountRetriever(clientCtx.AccountRetriever)
 
 			_, msg, err := BuildCreateValidatorMsg(clientCtx, txf)
 			if err != nil {

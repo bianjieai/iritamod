@@ -7,8 +7,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/codec/legacy"
 	"github.com/cosmos/cosmos-sdk/types/bech32"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
-	tmprotocrypto "github.com/tendermint/tendermint/proto/tendermint/crypto"
+	tmbytes "github.com/cometbft/cometbft/libs/bytes"
+	tmprotocrypto "github.com/cometbft/cometbft/proto/tendermint/crypto"
 
 	cryptocodec "github.com/cosmos/cosmos-sdk/crypto/codec"
 	cryptotypes "github.com/cosmos/cosmos-sdk/crypto/types"

@@ -26,6 +26,10 @@ func NewParams(historicalEntries uint32) Params {
 	return Params{HistoricalEntries: historicalEntries}
 }
 
+func ParamKeyTable() paramtypes.KeyTable {
+	return NewKeyTable().RegisterParamSet(&Params{})
+}
+
 // Implements params.ParamSet
 func (p *Params) ParamSetPairs() paramtypes.ParamSetPairs {
 	return paramtypes.ParamSetPairs{

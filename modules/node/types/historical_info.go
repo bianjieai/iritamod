@@ -3,7 +3,7 @@ package types
 import (
 	"sort"
 
-	tmproto "github.com/tendermint/tendermint/proto/tendermint/types"
+	tmproto "github.com/cometbft/cometbft/proto/tendermint/types"
 )
 
 // NewHistoricalInfo will create a historical information struct from header and valset

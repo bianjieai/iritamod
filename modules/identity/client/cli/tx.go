@@ -14,7 +14,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/tx"
 	"github.com/cosmos/cosmos-sdk/version"
 
-	"github.com/bianjieai/iritamod/modules/identity/types"
+	"iritamod.bianjie.ai/modules/identity/types"
 )
 
 // NewTxCmd returns the transaction commands for this module

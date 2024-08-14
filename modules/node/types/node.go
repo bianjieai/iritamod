@@ -2,14 +2,13 @@ package types
 
 import (
 	"encoding/hex"
+	"iritamod.bianjie.ai/modules/node/utils/ca"
 	"strings"
 
-	tmbytes "github.com/tendermint/tendermint/libs/bytes"
+	tmbytes "github.com/cometbft/cometbft/libs/bytes"
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
-
-	cautils "github.com/bianjieai/iritamod/utils/ca"
 )
 
 // NewNode contructs a new Node instance
@@ -61,7 +60,7 @@ func ValidateNodeID(id string) error {
 
 // ValidateCertificate validates the node certificate
 func ValidateCertificate(cert string) error {
-	_, err := cautils.ReadCertificateFromMem([]byte(cert))
+	_, err := ca.ReadCertificateFromMem([]byte(cert))
 	if err != nil {
 		return sdkerrors.Wrap(ErrInvalidCert, err.Error())
 	}

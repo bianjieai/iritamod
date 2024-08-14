@@ -5,11 +5,11 @@ import (
 	"path/filepath"
 	"time"
 
-	cfg "github.com/tendermint/tendermint/config"
-	tmos "github.com/tendermint/tendermint/libs/os"
-	"github.com/tendermint/tendermint/p2p"
-	"github.com/tendermint/tendermint/privval"
-	tmtypes "github.com/tendermint/tendermint/types"
+	cfg "github.com/cometbft/cometbft/config"
+	tmos "github.com/cometbft/cometbft/libs/os"
+	"github.com/cometbft/cometbft/p2p"
+	"github.com/cometbft/cometbft/privval"
+	tmtypes "github.com/cometbft/cometbft/types"
 )
 
 // ExportGenesisFile creates and writes the genesis configuration to disk. An

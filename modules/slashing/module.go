@@ -5,13 +5,11 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"math/rand"
-
 	"github.com/gorilla/mux"
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 
-	abci "github.com/tendermint/tendermint/abci/types"
+	abci "github.com/cometbft/cometbft/abci/types"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
@@ -19,15 +17,14 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
-	"github.com/cosmos/cosmos-sdk/x/slashing"
-	slashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
 	"github.com/cosmos/cosmos-sdk/x/slashing/simulation"
 	"github.com/cosmos/cosmos-sdk/x/slashing/types"
 
-	"github.com/bianjieai/iritamod/modules/slashing/client/cli"
-	"github.com/bianjieai/iritamod/modules/slashing/client/rest"
-	"github.com/bianjieai/iritamod/modules/slashing/keeper"
-	slashingtypes "github.com/bianjieai/iritamod/modules/slashing/types"
+	"github.com/cosmos/cosmos-sdk/x/slashing/exported"
+	cosmosslashingkeeper "github.com/cosmos/cosmos-sdk/x/slashing/keeper"
+	"iritamod.bianjie.ai/modules/slashing/client/cli"
+	"iritamod.bianjie.ai/modules/slashing/keeper"
+	slashingtypes "iritamod.bianjie.ai/modules/slashing/types"
 )
 
 var (
@@ -68,7 +65,7 @@ func (AppModuleBasic) ValidateGenesis(cdc codec.JSONCodec, config client.TxEncod
 
 // RegisterRESTRoutes registers the REST routes for the slashing module.
 func (AppModuleBasic) RegisterRESTRoutes(clientCtx client.Context, rtr *mux.Router) {
-	rest.RegisterRoutes(clientCtx, rtr)
+	//rest.RegisterRoutes(clientCtx, rtr)
 }
 
 // RegisterGRPCGatewayRoutes registers the gRPC Gateway routes for the slashing module.
@@ -101,18 +98,28 @@ type AppModule struct {
 	accountKeeper AccountKeeper
 	bankKeeper    BankKeeper
 	stakingKeeper StakingKeeper
+	// legacySubspace is used solely for migration of x/slashing managed parameters
+	legacySubspace exported.Subspace
 }
 
 // RegisterServices registers module services.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
 	slashingtypes.RegisterMsgServer(cfg.MsgServer(), keeper.NewMsgServerImpl(am.keeper))
 	types.RegisterQueryServer(cfg.QueryServer(), am.keeper)
+	m := cosmosslashingkeeper.NewMigrator(am.keeper.Keeper, am.legacySubspace)
+	if err := cfg.RegisterMigration(types.ModuleName, 1, m.Migrate1to2); err != nil {
+		panic(fmt.Sprintf("failed to migrate x/%s from version 1 to 2: %v", types.ModuleName, err))
+	}
+
+	if err := cfg.RegisterMigration(types.ModuleName, 2, m.Migrate2to3); err != nil {
+		panic(fmt.Sprintf("failed to migrate x/%s from version 2 to 3: %v", types.ModuleName, err))
+	}
 }
 
 // NewAppModule creates a new AppModule object
 func NewAppModule(
 	cdc codec.Codec, keeper Keeper, ak AccountKeeper,
-	bk BankKeeper, sk StakingKeeper,
+	bk BankKeeper, sk StakingKeeper, legacySubspace exported.Subspace,
 ) AppModule {
 	return AppModule{
 		AppModuleBasic: AppModuleBasic{cdc: cdc},
@@ -120,6 +127,7 @@ func NewAppModule(
 		accountKeeper:  ak,
 		bankKeeper:     bk,
 		stakingKeeper:  sk,
+		legacySubspace: legacySubspace,
 	}
 }
 
@@ -132,42 +140,42 @@ func (AppModule) Name() string {
 func (am AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
 // Route returns the message routing key for the slashing module.
-func (am AppModule) Route() sdk.Route {
+/*func (am AppModule) Route() sdk.Route {
 	return sdk.NewRoute(RouterKey, NewHandler(am.keeper))
 }
-
+*/
 // NewHandler returns an sdk.Handler for the slashing module.
 func (am AppModule) NewHandler() sdk.Handler {
 	return NewHandler(am.keeper)
 }
 
 // QuerierRoute returns the slashing module's querier route name.
-func (AppModule) QuerierRoute() string {
-	return QuerierRoute
-}
+//func (AppModule) QuerierRoute() string {
+//	return QuerierRoute
+//}
 
 // LegacyQuerierHandler returns the slashing module sdk.Querier.
-func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
+/*func (am AppModule) LegacyQuerierHandler(legacyQuerierCdc *codec.LegacyAmino) sdk.Querier {
 	return slashingkeeper.NewQuerier(am.keeper.Keeper, legacyQuerierCdc)
-}
+}*/
 
 // InitGenesis performs genesis initialization for the slashing module. It returns
 // no validator updates.
 func (am AppModule) InitGenesis(ctx sdk.Context, cdc codec.JSONCodec, data json.RawMessage) []abci.ValidatorUpdate {
 	var genesisState GenesisState
 	cdc.MustUnmarshalJSON(data, &genesisState)
-	slashing.InitGenesis(ctx, am.keeper.Keeper, am.stakingKeeper, &genesisState)
+	am.keeper.InitGenesis(ctx, am.stakingKeeper, &genesisState)
 	return []abci.ValidatorUpdate{}
 }
 
 // ExportGenesis returns the exported genesis state as raw bytes for the slashing module.
 func (am AppModule) ExportGenesis(ctx sdk.Context, cdc codec.JSONCodec) json.RawMessage {
-	gs := slashing.ExportGenesis(ctx, am.keeper.Keeper)
+	gs := am.keeper.ExportGenesis(ctx)
 	return cdc.MustMarshalJSON(gs)
 }
 
 // ConsensusVersion implements AppModule/ConsensusVersion.
-func (AppModule) ConsensusVersion() uint64 { return 1 }
+func (AppModule) ConsensusVersion() uint64 { return 3 }
 
 // BeginBlock returns the begin blocker for the slashing module.
 func (am AppModule) BeginBlock(ctx sdk.Context, req abci.RequestBeginBlock) {
@@ -194,10 +202,10 @@ func (AppModule) ProposalContents(simState module.SimulationState) []simtypes.We
 }
 
 // RandomizedParams creates randomized slashing param changes for the simulator.
-func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+/*func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
 	return simulation.ParamChanges(r)
 }
-
+*/
 // RegisterStoreDecoder registers a decoder for slashing module's types
 func (am AppModule) RegisterStoreDecoder(sdr sdk.StoreDecoderRegistry) {}
 

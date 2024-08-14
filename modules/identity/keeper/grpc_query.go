@@ -10,7 +10,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	sdkerrors "github.com/cosmos/cosmos-sdk/types/errors"
 
-	"github.com/bianjieai/iritamod/modules/identity/types"
+	"iritamod.bianjie.ai/modules/identity/types"
 )
 
 var _ types.QueryServer = Keeper{}

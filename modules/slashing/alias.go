@@ -5,8 +5,8 @@ package slashing
 import (
 	slashingtypes "github.com/cosmos/cosmos-sdk/x/slashing/types"
 
-	"github.com/bianjieai/iritamod/modules/slashing/keeper"
-	"github.com/bianjieai/iritamod/modules/slashing/types"
+	"iritamod.bianjie.ai/modules/slashing/keeper"
+	"iritamod.bianjie.ai/modules/slashing/types"
 )
 
 var (
@@ -20,7 +20,7 @@ var (
 	// ModuleName alias cosmos-sdk/x/slashing ModuleName
 	ModuleName = slashingtypes.ModuleName
 	// QuerierRoute alias cosmos-sdk/x/slashing QuerierRoute
-	QuerierRoute = slashingtypes.QuerierRoute
+	//QuerierRoute = slashingtypes.QuerierRoute
 	// DefaultGenesisState alias cosmos-sdk/x/slashing DefaultGenesisState
 	DefaultGenesisState = slashingtypes.DefaultGenesisState
 	// ValidateGenesis alias cosmos-sdk/x/slashing ValidateGenesis
